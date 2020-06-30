@@ -27,7 +27,16 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.get_by_reference_id';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
+    private const RESPONSE_KEY_CARRIERS = 'carriers';
     private const RESPONSE_KEY_ORDER_ID = 'order_id';
+
+    private const REQUEST_KEY_CARRIER_ID = 'carrier_id';
+    private const REQUEST_KEY_AGE_CHECK = 'age_check';
+    private const REQUEST_KEY_LARGE_FORMAT = 'large_format';
+    private const REQUEST_KEY_RETURN_IF_NOT_HOME = 'return_if_not_home';
+    private const REQUEST_KEY_REQUIRES_SIGNATURE = 'requires_signature';
+    private const REQUEST_KEY_ONLY_RECIPIENT = 'only_recipient';
+    private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
 
     /**
      * @var EntityRepositoryInterface
@@ -61,7 +70,11 @@ class ConsignmentController extends StorefrontController
      *
      * @return OrderEntity|null
      */
-    private function getOrder(string $orderId, string $versionId = null, Context $context = null): ?OrderEntity
+    private function getOrder(
+        string $orderId,
+        string $versionId = null,
+        Context $context = null
+    ): ?OrderEntity
     {
         $criteria = new Criteria([$orderId]);
 
@@ -81,6 +94,25 @@ class ConsignmentController extends StorefrontController
             ->search($criteria, $context ?? Context::createDefaultContext())->get($orderId);
     }
 
+    private function createConsignmentFromRequest(Request $request, OrderEntity $order): ?int
+    {
+        if ((string)$request->get(self::REQUEST_KEY_CARRIER_ID) === '') {
+            return null;
+        }
+
+        return $this->consignmentService->createConsignment(
+            $order,
+            $request->get(self::REQUEST_KEY_CARRIER_ID),
+            $request->get(self::REQUEST_KEY_AGE_CHECK),
+            $request->get(self::REQUEST_KEY_LARGE_FORMAT),
+            $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME),
+            $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE),
+            $request->get(self::REQUEST_KEY_ONLY_RECIPIENT),
+            $request->get(self::REQUEST_KEY_PACKAGE_TYPE)
+
+        );
+    }
+
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
@@ -89,8 +121,6 @@ class ConsignmentController extends StorefrontController
      *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
      *     methods={"GET"}
      *     )
-     *
-     * @param Request $request
      *
      * @return JsonResponse
      * @throws Exception
@@ -107,22 +137,21 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/create/{carrierId}",
+     *     "/api/v{version}/_action/myparcel/consignment/create",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
      *     )
      *
      * @param Request $request
-     * @param int     $carrierId
      *
      * @return JsonResponse
      * @throws Exception
      */
-    public function create(Request $request, int $carrierId): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         if (
-            (string) $request->get(self::RESPONSE_KEY_ORDER_ID) === ''
+            (string)$request->get(self::RESPONSE_KEY_ORDER_ID) === ''
         ) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
@@ -140,7 +169,7 @@ class ConsignmentController extends StorefrontController
         }
 
         try {
-            $consignmentId = $this->consignmentService->createConsignment($order, $carrierId);
+            $consignmentId = $this->createConsignmentFromRequest($request, $order);
             $success = true;
         } catch (MissingFieldException $e) {
             $success = false;

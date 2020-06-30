@@ -57,7 +57,7 @@ class ConsignmentService
      * @return string|null
      * @throws MissingFieldException
      */
-    public function createConsignment(
+    public function createConsignment( //NOSONAR
         OrderEntity $orderEntity,
         int $carrierId,
         bool $ageCheck = false,
@@ -102,12 +102,27 @@ class ConsignmentService
             )
             ->setPostalCode($shippingAddress->getZipcode())
             ->setCity($shippingAddress->getCity())
-            ->setEmail($orderEntity->getOrderCustomer()->getEmail())
-            ->setAgeCheck($ageCheck)
-            ->setLargeFormat($largeFormat)
-            ->setReturn($returnIfNotHome)
-            ->setSignature($requiresSignature)
-            ->setOnlyRecipient($onlyRecipient);
+            ->setEmail($orderEntity->getOrderCustomer()->getEmail());
+
+        if($ageCheck !== null)
+        {
+            $consignment->setAgeCheck($ageCheck);
+        }
+
+        if($largeFormat !== null)
+        {
+            $consignment->setLargeFormat($largeFormat);
+        }
+
+        if($requiresSignature !== null)
+        {
+            $consignment->setSignature($requiresSignature);
+        }
+
+        if($onlyRecipient !== null)
+        {
+            $consignment->setOnlyRecipient($onlyRecipient);
+        }
 
         if (
             $packageType !== null
@@ -118,6 +133,11 @@ class ConsignmentService
         }
 
         try {
+            if($returnIfNotHome !== null)
+            {
+                $consignment->setReturn($returnIfNotHome);
+            }
+
             $consignments = (new MyParcelCollection())
                 ->addConsignment($consignment)
                 ->setPdfOfLabels();
