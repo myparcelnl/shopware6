@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>"MyParcel integration for Shopware 6</title>
+        <title lang="nl-NL">"MyParcel integratiie voor Shopware 6</title>
+
+        <input-field>
+            <name>myParcelApiKey</name>
+            <label>MyParcel API Key</label>
+            <label lang="nl-NL">MyParcel API Key</label>
+        </input-field>
+    </card>
+</config>

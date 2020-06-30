@@ -1,0 +1,7 @@
+###> PhpStorm ###
+/.idea/
+###< PhpStorm ###
+
+###> symfony/framework-bundle ###
+/vendor/
+###< symfony/framework-bundle ###
