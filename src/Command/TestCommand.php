@@ -38,7 +38,6 @@ class TestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         //$this->testService->createConsignment();
-        var_dump($this->shippingMethodService->getMethods());
     }
 
 }
