@@ -14,7 +14,7 @@ use Shopware\Core\Checkout\Shipping\ShippingMethodDefinition as ShopwareShipping
 
 class ShippingMethodDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'kn_my_parcel_shipping_method';
+    public const ENTITY_NAME = 'kiener_my_parcel_shipping_method';
 
     public function getEntityName(): string
     {
