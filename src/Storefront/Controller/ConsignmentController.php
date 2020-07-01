@@ -27,6 +27,7 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.get_by_reference_id';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
+    private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_CARRIERS = 'carriers';
     private const RESPONSE_KEY_ORDER_ID = 'order_id';
 
@@ -94,7 +95,14 @@ class ConsignmentController extends StorefrontController
             ->search($criteria, $context ?? Context::createDefaultContext())->get($orderId);
     }
 
-    private function createConsignmentFromRequest(Request $request, OrderEntity $order): ?int
+    /**
+     * @param Request     $request
+     * @param OrderEntity $order
+     *
+     * @return string|null
+     * @throws MissingFieldException
+     */
+    private function createConsignmentFromRequest(Request $request, OrderEntity $order): ?string
     {
         if ((string)$request->get(self::REQUEST_KEY_CARRIER_ID) === '') {
             return null;
@@ -109,7 +117,6 @@ class ConsignmentController extends StorefrontController
             $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE),
             $request->get(self::REQUEST_KEY_ONLY_RECIPIENT),
             $request->get(self::REQUEST_KEY_PACKAGE_TYPE)
-
         );
     }
 
@@ -155,6 +162,7 @@ class ConsignmentController extends StorefrontController
         ) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => 'Request is missing a valid order id'
             ]);
         }
 

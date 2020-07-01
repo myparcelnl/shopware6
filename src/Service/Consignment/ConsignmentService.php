@@ -47,7 +47,7 @@ class ConsignmentService
     /**
      * @param OrderEntity $orderEntity
      * @param int         $carrierId
-     * @param bool        $ageCheck
+     * @param bool|null   $ageCheck
      * @param bool|null   $largeFormat
      * @param bool|null   $returnIfNotHome
      * @param bool|null   $requiresSignature
@@ -60,7 +60,7 @@ class ConsignmentService
     public function createConsignment( //NOSONAR
         OrderEntity $orderEntity,
         int $carrierId,
-        bool $ageCheck = false,
+        ?bool $ageCheck = false,
         ?bool $largeFormat = false,
         ?bool $returnIfNotHome = false,
         ?bool $requiresSignature = false,
