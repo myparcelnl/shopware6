@@ -30,7 +30,7 @@ class TestCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->testService->createConsignment();
+        //$this->testService->createConsignment();
     }
 
 }
