@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS `kiener_my_parcel_shipping_method` (
     `shipping_method_id` BINARY(16) NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3) NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk.shipping_method_id` FOREIGN KEY (`shipping_method_id`)
+        REFERENCES `shipping_method` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
 

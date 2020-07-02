@@ -3,6 +3,7 @@
 namespace Kiener\KienerMyParcel\Core\Content\ShippingMethod;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -37,7 +38,9 @@ class ShippingMethodDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
             (new StringField('carrier_name', 'carrierName'))->addFlags(new Required()),
-            (new OneToOneAssociationField('shippingMethod', 'shipping_method_id', 'id', ShopwareShippingMethodDefinition::class))->addFlags(new Required()),
+            (new FkField('shipping_method_id', 'shippingMethodId', ShopwareShippingMethodDefinition::class))->addFlags(new Required()),
+
+            (new OneToOneAssociationField('shippingMethod', 'shipping_method_id', 'id', ShopwareShippingMethodDefinition::class)),
         ]);
     }
 }

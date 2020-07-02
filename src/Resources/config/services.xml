@@ -20,7 +20,9 @@
 
         <service id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService">
             <argument type="service" id="logger" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
             <argument type="service" id="kn_my_parcel_shipping_method.repository" />
+            <argument type="service" id="shipping_method.repository" />
         </service>
 
         <!-- Entities -->
