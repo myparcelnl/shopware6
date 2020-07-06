@@ -1,0 +1,39 @@
+{% block sw_myparcel_index %}
+    <sw-page class="sw-myparcel">
+        {% block sw_myparcel_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block sw_myparcel_smart_bar_header_title %}
+                <h2>
+                    {% block sw_myparcel_smart_bar_header_title_text %}
+                        {{ $tc('sw-myparcel.index.title') }}
+                    {% endblock %}
+                </h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block sw_myparcel_smart_bar_actions %}
+            <template #smart-bar-actions>
+
+            </template>
+        {% endblock %}
+
+        {% block sw_myparcel_content %}
+            <template #content>
+                <sw-card class="sw-myparcel__card">
+                    <template #title>
+                        <div class="sw-myparcel-card__title sw-card__title">
+                            <div>
+                                {{ $tc('sw-myparcel.index.title') }}
+                            </div>
+                        </div>
+                    </template>
+
+                    <template #default>
+                        <div>Hallo!</div>
+                    </template>
+                </sw-card>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}

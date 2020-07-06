@@ -1,0 +1,13 @@
+{
+  "sw-myparcel": {
+    "general": {
+      "mainMenuItemGeneral": "MyParcel",
+      "shipmentsMenuItemGeneral": "Shipments",
+      "shippingMethodsMenuItemGeneral": "Shipping methods",
+      "descriptionTextModule": "Tagline for MyParcel"
+    },
+    "index": {
+      "title": "MyParcel"
+    }
+  }
+}
