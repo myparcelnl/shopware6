@@ -1,11 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
+namespace Kiener\KienerMyParcel\Core\Content\Shipment;
 
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition;
+use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -15,55 +14,40 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
-class ShippingOptionDefinition extends EntityDefinition
+class ShipmentDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'kiener_my_parcel_shipping_option';
+    public const ENTITY_NAME = 'kiener_my_parcel_shipment';
 
-    /**
-     * @return string
-     */
     public function getEntityName(): string
     {
         return self::ENTITY_NAME;
     }
 
-    /**
-     * @return string
-     */
-    public function getEntityClass(): string
-    {
-        return ShippingOptionEntity::class;
-    }
-
-    /**
-     * @return string
-     */
     public function getCollectionClass(): string
     {
-        return ShippingOptionCollection::class;
+        return ShipmentCollection::class;
     }
 
-    /**
-     * @return FieldCollection
-     */
+    public function getEntityClass(): string
+    {
+        return ShipmentEntity::class;
+    }
+
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
+            (new IntField('consignment_id', 'consignmentId')),
+            (new FkField('shipping_option_id', 'shippingOptionId', ShippingOptionDefinition::class))->addFlags(new CascadeDelete()),
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
-            (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
-            (new IntField('package_type', 'packageType'))->addFlags(new Required()),
-            (new BoolField('requires_age_check', 'requiresAgeCheck')),
-            (new BoolField('requires_signature', 'requiresSignature')),
-            (new BoolField('only_recipient', 'onlyRecipient')),
-            (new BoolField('return_if_not_home', 'returnIfNotHome')),
-            (new BoolField('large_format', 'largeFormat')),
+            (new StringField('label_url', 'labelUrl')),
 
+            (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class))->addFlags(new Required()),
             (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
-            (new OneToOneAssociationField('shipment', 'shipment_id', 'id', ShipmentDefinition::class)),
         ]);
     }
 }

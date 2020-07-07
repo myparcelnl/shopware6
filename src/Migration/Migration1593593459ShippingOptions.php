@@ -16,14 +16,22 @@ class Migration1593593459ShippingOptions extends MigrationStep
     {
         $connection->executeUpdate('
             CREATE TABLE IF NOT EXISTS `kiener_my_parcel_shipping_option` (
-              `id` BINARY(16) NOT NULL,
-              `carrier_id` INTEGER NOT NULL,
-              `package_type` INTEGER NOT NULL,
-              `requires_age_check` TINYINT NOT NULL,
-              `requires_signature` VARCHAR(255) NOT NULL,
-              `only_recipient` VARCHAR(255) NOT NULL,
-              `return_if_not_home` VARCHAR(255) NOT NULL,
-              PRIMARY KEY (`id`)
+                `id` BINARY(16) NOT NULL,
+                `order_id` BINARY(16) NOT NULL,
+                `order_version_id` BINARY(16) NOT NULL,
+                `shipment_id` BINARY(16) NULL,
+                `carrier_id` INT(11) NOT NULL,
+                `package_type` INT(11) NOT NULL,
+                `requires_age_check` TINYINT(1) NULL DEFAULT \'0\',
+                `requires_signature` TINYINT(1) NULL DEFAULT \'0\',
+                `only_recipient` TINYINT(1) NULL DEFAULT \'0\',
+                `return_if_not_home` TINYINT(1) NULL DEFAULT \'0\',
+                `large_format` TINYINT(1) NULL DEFAULT \'0\',
+                `created_at` DATETIME(3) NOT NULL,
+                `updated_at` DATETIME(3) NULL,
+                PRIMARY KEY (`id`),
+                KEY `fk.kiener_my_parcel_shipping_option.order_id` (`order_id`,`order_version_id`),
+                CONSTRAINT `fk.kiener_my_parcel_shipping_option.order_id` FOREIGN KEY (`order_id`,`order_version_id`) REFERENCES `order` (`id`,`version_id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ');
     }

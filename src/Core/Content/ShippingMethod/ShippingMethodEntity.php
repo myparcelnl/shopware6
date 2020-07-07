@@ -10,16 +10,30 @@ class ShippingMethodEntity extends Entity
 {
     use EntityIdTrait;
 
-    /** @var int */
+    public const FIELD_ID = 'id';
+    public const FIELD_CARRIER_ID = 'carrierId';
+    public const FIELD_CARRIER_NAME = 'carrierName';
+    public const FIELD_SHIPPING_METHOD = 'shippingMethod';
+    public const FIELD_SHIPPING_METHOD_ID = 'shippingMethodId';
+
+    /**
+     * @var int
+     */
     protected $carrierId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $carrierName;
 
-    /** @var ShopwareShippingMethodEntity */
+    /**
+     * @var ShopwareShippingMethodEntity
+     */
     protected $shippingMethod;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $shippingMethodId;
 
     /**

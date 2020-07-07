@@ -161,16 +161,16 @@ class ShippingMethodService
             $id = $existingShippingMethod->getId();
         }
 
-        $data = [
-            'id' => $id,
-            'carrierId' => $carrierId,
-            'carrierName' => $carrierName,
-            'shippingMethodId' => $shippingMethodId,
-        ];
-
         /** @var EntityWrittenEvent $event */
         $event = $this->myParcelShippingMethodRepository->upsert([
-            $data
+            [
+                'id' => $id,
+                'carrierId' => $carrierId,
+                'carrierName' => $carrierName,
+                'shippingMethod' => [
+                    'id' => $shippingMethodId
+                ],
+            ]
         ], $context);
 
         if (!empty($event->getErrors())) {
@@ -237,7 +237,7 @@ class ShippingMethodService
 
         if (!empty($event->getErrors())) {
             $this->logger->error(
-                implode(',', $event->getErrors()),
+                implode(', ', $event->getErrors()),
                 $event->getErrors()
             );
 
