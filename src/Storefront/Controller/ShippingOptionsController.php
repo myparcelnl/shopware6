@@ -7,6 +7,9 @@ namespace Kiener\KienerMyParcel\Storefront\Controller;
 use Exception;
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +20,7 @@ class ShippingOptionsController extends StorefrontController
 {
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipping_options.create';
 
+    public const REQUEST_KEY_ORDER_ID = 'order_id';
     public const REQUEST_KEY_CARRIER_ID = 'carrier_id';
     public const REQUEST_KEY_AGE_CHECK = 'age_check';
     public const REQUEST_KEY_LARGE_FORMAT = 'large_format';
@@ -39,39 +43,53 @@ class ShippingOptionsController extends StorefrontController
      * @return JsonResponse
      * @throws Exception
      */
-    public function saveForOrder(Request $request)
+    public function createForOrder(Request $request): ?ShippingOptionEntity
     {
-        $shippingOptions = new ShippingOptionEntity();
-
-        if ((string)$request->get(self::REQUEST_KEY_CARRIER_ID) === '') {
-            $shippingOptions->setCarrierId($request->get(self::REQUEST_KEY_CARRIER_ID));
+        if ((string)$request->get(self::REQUEST_KEY_ORDER_ID) === '') {
+            return null;
         }
 
-        if ((string)$request->get(self::REQUEST_KEY_AGE_CHECK) === '') {
+        $shippingOptions = new ShippingOptionEntity();
+
+        if ((string)$request->get(self::REQUEST_KEY_AGE_CHECK) !== '') {
             $shippingOptions->setRequiresAgeCheck($request->get(self::REQUEST_KEY_AGE_CHECK));
         }
 
-//        if ((string)$request->get(self::REQUEST_KEY_LARGE_FORMAT) === '') {
-//            $shippingOptions->setL($request->get(self::REQUEST_KEY_LARGE_FORMAT));
-//        }
+        if ((string)$request->get(self::REQUEST_KEY_LARGE_FORMAT) !== '') {
+            $shippingOptions->setLargeFormat($request->get(self::REQUEST_KEY_LARGE_FORMAT));
+        }
 
-        if ((string)$request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME) === '') {
+        if ((string)$request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME) !== '') {
             $shippingOptions->setReturnIfNotHome($request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME));
         }
 
-        if ((string)$request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE) === '') {
+        if ((string)$request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE) !== '') {
             $shippingOptions->setRequiresSignature($request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE));
         }
 
-        if ((string)$request->get(self::REQUEST_KEY_ONLY_RECIPIENT) === '') {
+        if ((string)$request->get(self::REQUEST_KEY_ONLY_RECIPIENT) !== '') {
             $shippingOptions->setOnlyRecipient($request->get(self::REQUEST_KEY_ONLY_RECIPIENT));
+        }
+
+        $carrierId = $request->get(self::REQUEST_KEY_CARRIER_ID);
+
+        if ((string)$carrierId !== ''
+            && is_int($carrierId)
+            && in_array($carrierId, [
+                BpostConsignment::CARRIER_ID,
+                DPDConsignment::CARRIER_ID,
+                PostNLConsignment::CARRIER_ID,
+            ], true)
+        ) {
+            $shippingOptions->setCarrierId($carrierId);
         }
 
         $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
 
-        if ((string)$packageType === ''
+        if ((string)$packageType !== ''
             && is_int($packageType)
-            && in_array($packageType, AbstractConsignment::PACKAGE_TYPES_IDS, true)) {
+            && in_array($packageType, AbstractConsignment::PACKAGE_TYPES_IDS, true)
+        ) {
             $shippingOptions->setPackageType($packageType);
         }
 
