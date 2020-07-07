@@ -24,8 +24,8 @@ class ConsignmentController extends StorefrontController
 {
     public const ROUTE_NAME_GET_CARRIERS = 'api.action.myparcel.carriers';
     public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package_types';
-    public const ROUTE_NAME_CREATE = 'api.action.myparcel.create';
-    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.get_by_reference_id';
+    public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
+    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
@@ -112,15 +112,7 @@ class ConsignmentController extends StorefrontController
         }
 
         return $this->consignmentService->createConsignment(
-            $order,
-            $request->get(self::REQUEST_KEY_CARRIER_ID),
-            $request->get(self::REQUEST_KEY_AGE_CHECK),
-            $request->get(self::REQUEST_KEY_LARGE_FORMAT),
-            $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME),
-            $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE),
-            $request->get(self::REQUEST_KEY_ONLY_RECIPIENT),
-            $request->get(self::REQUEST_KEY_PACKAGE_TYPE),
-            $request->get(self::REQUEST_KEY_LABEL_POSITIONS)
+            $order
         );
     }
 

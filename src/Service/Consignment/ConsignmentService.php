@@ -162,19 +162,19 @@ class ConsignmentService
             {
                 if(count($labelPositions) === 1)
                 {
-                    $myParcelCollection = $consignments->setPdfOfLabels($labelPositions[0]);
+                    $consignments->setPdfOfLabels($labelPositions[0]);
                 }
                 else
                 {
-                    $myParcelCollection = $consignments->setPdfOfLabels($labelPositions);
+                    $consignments->setPdfOfLabels($labelPositions);
                 }
             }
             else{
-                $myParcelCollection = $consignments->setPdfOfLabels(false);
+                $consignments->setPdfOfLabels(false);
             }
 
             // ToDo: Store label in Entity
-            // $myParcelCollection->getLinkOfLabels();
+            // $consignments->getLinkOfLabels();
 
             /** @var AbstractConsignment $firstConsignment */
             $firstConsignment = $consignments->first();
@@ -187,6 +187,23 @@ class ConsignmentService
         }
 
         return null;
+    }
+
+    public function createConsignments(array $orders)
+    {
+        $consignments = (new MyParcelCollection())
+            ->setUserAgent('Shopware', '6'); // ToDo: Hier naar kijken
+
+        /** @var OrderEntity $order */
+        foreach ($orders as $order)
+        {
+            if ($order instanceof OrderEntity)
+            {
+                $consignment = $this->createConsignment();
+
+                $consignments->addConsignment($consignment);
+            }
+        }
     }
 
     /**
