@@ -68,6 +68,7 @@ class ConsignmentService
      * @param bool|null   $requiresSignature
      * @param bool|null   $onlyRecipient
      * @param int|null    $packageType
+     * @param array|null  $labelPositions
      *
      * @return string|null
      * @throws MissingFieldException
@@ -80,7 +81,8 @@ class ConsignmentService
         ?bool $returnIfNotHome = false,
         ?bool $requiresSignature = false,
         ?bool $onlyRecipient = false,
-        ?int $packageType = null
+        ?int $packageType = null,
+        ?array $labelPositions = []
     ): ?string
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -154,10 +156,30 @@ class ConsignmentService
             }
 
             $consignments = (new MyParcelCollection())
-                ->addConsignment($consignment)
-                ->setPdfOfLabels();
+                ->addConsignment($consignment);
 
-            return $consignments->first()->getConsignmentId();
+            if(is_array($labelPositions) && !empty($labelPositions))
+            {
+                if(count($labelPositions) === 1)
+                {
+                    $myParcelCollection = $consignments->setPdfOfLabels($labelPositions[0]);
+                }
+                else
+                {
+                    $myParcelCollection = $consignments->setPdfOfLabels($labelPositions);
+                }
+            }
+            else{
+                $myParcelCollection = $consignments->setPdfOfLabels(false);
+            }
+
+            // ToDo: Store label in Entity
+            // $myParcelCollection->getLinkOfLabels();
+
+            /** @var AbstractConsignment $firstConsignment */
+            $firstConsignment = $consignments->first();
+
+            return $firstConsignment->getConsignmentId();
         } catch (MissingFieldException $e) {
             var_dump($e->getMessage());
         } catch (Exception $e) {

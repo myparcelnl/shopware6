@@ -40,6 +40,7 @@ class ConsignmentController extends StorefrontController
     private const REQUEST_KEY_REQUIRES_SIGNATURE = 'requires_signature';
     private const REQUEST_KEY_ONLY_RECIPIENT = 'only_recipient';
     private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
+    private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
 
     /**
      * @var EntityRepositoryInterface
@@ -118,7 +119,8 @@ class ConsignmentController extends StorefrontController
             $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME),
             $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE),
             $request->get(self::REQUEST_KEY_ONLY_RECIPIENT),
-            $request->get(self::REQUEST_KEY_PACKAGE_TYPE)
+            $request->get(self::REQUEST_KEY_PACKAGE_TYPE),
+            $request->get(self::REQUEST_KEY_LABEL_POSITIONS)
         );
     }
 
