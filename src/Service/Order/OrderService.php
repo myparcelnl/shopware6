@@ -69,21 +69,26 @@ class OrderService
     /**
      * Returns a order object from the database.
      *
-     * @param string  $id
-     * @param Context $context
+     * @param string     $id
+     * @param Context    $context
+     * @param array|null $associations
      *
      * @return OrderEntity|null
      */
-    public function getOrder(string $id, Context $context): ?OrderEntity
+    public function getOrder(string $id, Context $context, ?array $associations): ?OrderEntity
     {
         $criteria = new Criteria([$id]);
-        $criteria->addAssociation('currency');
-        $criteria->addAssociation('addresses');
-        $criteria->addAssociation('language');
-        $criteria->addAssociation('language.locale');
-        $criteria->addAssociation('lineItems');
-        $criteria->addAssociation('deliveries');
-        $criteria->addAssociation('deliveries.shippingOrderAddress');
+
+        if(is_array($associations) && !empty($associations))
+        {
+            foreach ($associations as $association)
+            {
+                if($association !== null && is_string($association))
+                {
+                    $criteria->addAssociation($association);
+                }
+            }
+        }
 
         return $this->orderRepository->search($criteria, $context)->get($id);
     }
