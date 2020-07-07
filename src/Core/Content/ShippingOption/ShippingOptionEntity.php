@@ -2,12 +2,33 @@
 
 namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
 
+use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ShippingOptionEntity extends Entity
 {
     use EntityIdTrait;
+
+    /**
+     * @var OrderEntity
+     */
+    protected $order;
+
+    /**
+     * @var string
+     */
+    protected $orderId;
+
+    /**
+     * @var string
+     */
+    protected $orderVersionId;
+
+    /**
+     * @var int|null
+     */
+    protected $shipmentId;
 
     /**
      * @var int
@@ -20,24 +41,105 @@ class ShippingOptionEntity extends Entity
     protected $packageType;
 
     /**
-     * @var int
+     * @var bool
      */
     protected $requiresAgeCheck;
 
     /**
-     * @var int
+     * @var bool
      */
     protected $requiresSignature;
 
     /**
-     * @var int
+     * @var bool
      */
     protected $onlyRecipient;
 
     /**
-     * @var int
+     * @var bool
      */
     protected $returnIfNotHome;
+
+    /**
+     * @var bool
+     */
+    protected $largeFormat;
+
+    /**
+     * @return OrderEntity
+     */
+    public function getOrder(): OrderEntity
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param OrderEntity $order
+     *
+     * @return self
+     */
+    public function setOrder(OrderEntity $order): self
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @param string $orderId
+     *
+     * @return self
+     */
+    public function setOrderId(string $orderId): self
+    {
+        $this->orderId = $orderId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderVersionId(): string
+    {
+        return $this->orderVersionId;
+    }
+
+    /**
+     * @param string $orderVersionId
+     *
+     * @return self
+     */
+    public function setOrderVersionId(string $orderVersionId): self
+    {
+        $this->orderVersionId = $orderVersionId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getShipmentId(): ?int
+    {
+        return $this->shipmentId;
+    }
+
+    /**
+     * @param int|null $shipmentId
+     *
+     * @return self
+     */
+    public function setShipmentId(?int $shipmentId): self
+    {
+        $this->shipmentId = $shipmentId;
+        return $this;
+    }
 
     /**
      * @return int
@@ -78,79 +180,97 @@ class ShippingOptionEntity extends Entity
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getRequiresAgeCheck(): int
+    public function getRequiresAgeCheck(): bool
     {
         return $this->requiresAgeCheck;
     }
 
     /**
-     * @param int $requiresAgeCheck
+     * @param bool $requiresAgeCheck
      *
      * @return ShippingOptionEntity
      */
-    public function setRequiresAgeCheck(int $requiresAgeCheck): ShippingOptionEntity
+    public function setRequiresAgeCheck(bool $requiresAgeCheck): ShippingOptionEntity
     {
         $this->requiresAgeCheck = $requiresAgeCheck;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getRequiresSignature(): int
+    public function getRequiresSignature(): bool
     {
         return $this->requiresSignature;
     }
 
     /**
-     * @param int $requiresSignature
+     * @param bool $requiresSignature
      *
      * @return ShippingOptionEntity
      */
-    public function setRequiresSignature(int $requiresSignature): ShippingOptionEntity
+    public function setRequiresSignature(bool $requiresSignature): ShippingOptionEntity
     {
         $this->requiresSignature = $requiresSignature;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getOnlyRecipient(): int
+    public function getOnlyRecipient(): bool
     {
         return $this->onlyRecipient;
     }
 
     /**
-     * @param int $onlyRecipient
+     * @param bool $onlyRecipient
      *
      * @return ShippingOptionEntity
      */
-    public function setOnlyRecipient(int $onlyRecipient): ShippingOptionEntity
+    public function setOnlyRecipient(bool $onlyRecipient): ShippingOptionEntity
     {
         $this->onlyRecipient = $onlyRecipient;
         return $this;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getReturnIfNotHome(): int
+    public function getReturnIfNotHome(): bool
     {
         return $this->returnIfNotHome;
     }
 
     /**
-     * @param int $returnIfNotHome
+     * @param bool $returnIfNotHome
      *
      * @return ShippingOptionEntity
      */
-    public function setReturnIfNotHome(int $returnIfNotHome): ShippingOptionEntity
+    public function setReturnIfNotHome(bool $returnIfNotHome): ShippingOptionEntity
     {
         $this->returnIfNotHome = $returnIfNotHome;
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    public function getLargeFormat(): bool
+    {
+        return $this->largeFormat;
+    }
+
+    /**
+     * @param bool $largeFormat
+     *
+     * @return self
+     */
+    public function setLargeFormat(bool $largeFormat): self
+    {
+        $this->largeFormat = $largeFormat;
+        return $this;
+    }
 }

@@ -10,16 +10,24 @@ class ShippingMethodEntity extends Entity
 {
     use EntityIdTrait;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $carrierId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $carrierName;
 
-    /** @var ShopwareShippingMethodEntity */
+    /**
+     * @var ShopwareShippingMethodEntity
+     */
     protected $shippingMethod;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $shippingMethodId;
 
     /**
