@@ -2,6 +2,7 @@
 
 namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
 
+use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -9,6 +10,20 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 class ShippingOptionEntity extends Entity
 {
     use EntityIdTrait;
+
+    public const FIELD_ID = 'id';
+    public const FIELD_ORDER = 'order';
+    public const FIELD_ORDER_ID = 'orderId';
+    public const FIELD_ORDER_VERSION_ID = 'orderVersionId';
+    public const FIELD_SHIPMENT = 'shipment';
+    public const FIELD_SHIPMENT_ID = 'shipmentId';
+    public const FIELD_CARRIER_ID = 'carrierId';
+    public const FIELD_PACKAGE_TYPE = 'packageType';
+    public const FIELD_REQUIRES_AGE_CHECK = 'requiresAgeCheck';
+    public const FIELD_REQUIRES_SIGNATURE = 'requiresSignature';
+    public const FIELD_ONLY_RECIPIENT = 'onlyRecipient';
+    public const FIELD_RETURN_IF_NOT_HOME = 'returnIfNotHome';
+    public const FIELD_LARGE_FORMAT = 'largeFormat';
 
     /**
      * @var OrderEntity
@@ -24,6 +39,11 @@ class ShippingOptionEntity extends Entity
      * @var string
      */
     protected $orderVersionId;
+
+    /**
+     * @var ShipmentEntity
+     */
+    protected $shipment;
 
     /**
      * @var int|null
@@ -119,6 +139,25 @@ class ShippingOptionEntity extends Entity
     public function setOrderVersionId(string $orderVersionId): self
     {
         $this->orderVersionId = $orderVersionId;
+        return $this;
+    }
+
+    /**
+     * @return ShipmentEntity|null
+     */
+    public function getShipment(): ?ShipmentEntity
+    {
+        return $this->shipment;
+    }
+
+    /**
+     * @param ShipmentEntity|null $shipment
+     *
+     * @return self
+     */
+    public function setShipment(?ShipmentEntity $shipment): self
+    {
+        $this->shipment = $shipment;
         return $this;
     }
 

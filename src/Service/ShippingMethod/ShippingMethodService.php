@@ -62,7 +62,6 @@ class ShippingMethodService
         ) {
             foreach ($carriers as $carrierName => $carrierId) {
                 // Create a Shopware shipping method
-                echo "Creating Shopware Shipping Method\n";
                 $shippingMethodId = $this->createShopwareShippingMethod(
                     $carrierId,
                     $carrierName,
@@ -71,16 +70,12 @@ class ShippingMethodService
 
                 // Connect the shipping method to a MyParcel carrier
                 if ($shippingMethodId !== null) {
-                    echo "Creating MyParcel Shipping Method\n";
-
-                    $isCreated = $this->createMyParcelShippingMethod(
+                    $this->createMyParcelShippingMethod(
                         $shippingMethodId,
                         $carrierId,
                         $carrierName,
                         $context
                     );
-
-                    echo "Created MyParcel Shipping Method:\n" . var_export($isCreated, true) . "\n";
 
                     // @todo Handle errors, so the merchant knows if any issues occur
                 }
@@ -242,7 +237,7 @@ class ShippingMethodService
 
         if (!empty($event->getErrors())) {
             $this->logger->error(
-                implode(',', $event->getErrors()),
+                implode(', ', $event->getErrors()),
                 $event->getErrors()
             );
 

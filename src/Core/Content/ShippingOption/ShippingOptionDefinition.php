@@ -51,9 +51,9 @@ class ShippingOptionDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
-            (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
             (new IntField('package_type', 'packageType'))->addFlags(new Required()),
             (new BoolField('requires_age_check', 'requiresAgeCheck')),
