@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
 
 namespace Kiener\KienerMyParcel\Service\Consignment;
 
@@ -7,9 +7,11 @@ use Kiener\KienerMyParcel\Helper\AddressHelper;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use RuntimeException;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -41,6 +43,19 @@ class ConsignmentService
             BpostConsignment::CARRIER_NAME => BpostConsignment::CARRIER_ID,
             DPDConsignment::CARRIER_NAME => DPDConsignment::CARRIER_ID,
             PostNLConsignment::CARRIER_NAME => PostNLConsignment::CARRIER_ID,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackageTypes(): array
+    {
+        return [
+            AbstractConsignment::PACKAGE_TYPE_PACKAGE => AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME,
+            AbstractConsignment::PACKAGE_TYPE_MAILBOX => AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME,
+            AbstractConsignment::PACKAGE_TYPE_LETTER => AbstractConsignment::PACKAGE_TYPE_LETTER_NAME,
+            AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP => AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
         ];
     }
 

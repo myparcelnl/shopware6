@@ -46,6 +46,7 @@ class ShippingOptionDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
+            // ToDo: Moet verwijzen naar nog te maken Shipment entity
             (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class))->addFlags(new Required()),
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
