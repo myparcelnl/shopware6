@@ -10,6 +10,15 @@ class ShipmentEntity
 {
     use EntityIdTrait;
 
+    public const FIELD_ID = 'id';
+    public const FIELD_CONSIGNMENT_ID = 'consignmentId';
+    public const FIELD_SHIPPING_OPTION = 'shippingOption';
+    public const FIELD_SHIPPING_OPTION_ID = 'shippingOptionId';
+    public const FIELD_ORDER = 'order';
+    public const FIELD_ORDER_ID = 'orderId';
+    public const FIELD_ORDER_VERSION_ID = 'orderVersionId';
+    public const FIELD_LABEL_URL = 'labelUrl';
+
     /**
      * @var int|null
      */
