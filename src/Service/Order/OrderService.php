@@ -7,6 +7,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 class OrderService
@@ -50,6 +51,10 @@ class OrderService
             $params['id'] = Uuid::randomHex();
         }
 
+        if (!isset($params['versionId'])) {
+            $params['versionId'] = Uuid::randomHex();
+        }
+
         // Upsert the data in the database
         $event = $this->orderRepository->upsert([$params], $context);
 
@@ -63,21 +68,23 @@ class OrderService
             return null;
         }
 
-        return $this->getOrder($params['id'], $context);
+        return $this->getOrder($params['id'], $params['versionId'], $context);
     }
 
     /**
      * Returns a order object from the database.
      *
      * @param string     $id
+     * @param string     $versionId
      * @param Context    $context
      * @param array|null $associations
      *
      * @return OrderEntity|null
      */
-    public function getOrder(string $id, Context $context, ?array $associations): ?OrderEntity
+    public function getOrder(string $id, string $versionId, Context $context, ?array $associations = null): ?OrderEntity
     {
         $criteria = new Criteria([$id]);
+        $criteria->addFilter(new EqualsFilter('versionId', $versionId));
 
         if(is_array($associations) && !empty($associations))
         {
