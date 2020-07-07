@@ -111,8 +111,10 @@ class ConsignmentController extends StorefrontController
             return null;
         }
 
-        return $this->consignmentService->createConsignment(
-            $order
+        return $this->consignmentService->createConsignments(
+            $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT),
+            $order,
+            []
         );
     }
 
