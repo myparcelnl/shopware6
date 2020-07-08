@@ -1,4 +1,4 @@
-import './page/sw-myparcel-index';
+import './page/sw-myparcel-orders';
 import './page/sw-myparcel-shipments';
 import './page/sw-myparcel-shipping-methods';
 import './extension/sw-settings-index';
@@ -26,22 +26,22 @@ Module.register('sw-myparcel', {
     },
 
     routes: {
-        index: {
-            component: 'sw-myparcel-index',
-            path: 'index'
+        orders: {
+            component: 'sw-myparcel-orders',
+            path: 'orders'
         },
         shipments: {
             component: 'sw-myparcel-shipments',
             path: 'shipments',
             meta: {
-                parentPath: 'sw.myparcel.index'
+                parentPath: 'sw.myparcel.orders'
             }
         },
         shippingMethods: {
             component: 'sw-myparcel-shipping-methods',
             path: 'shipping/methods',
             meta: {
-                parentPath: 'sw.myparcel.index'
+                parentPath: 'sw.myparcel.orders'
             }
         }
     },
@@ -51,9 +51,17 @@ Module.register('sw-myparcel', {
             id: 'sw-myparcel',
             label: 'sw-myparcel.general.mainMenuItemGeneral',
             color: '#0f5c47',
-            path: 'sw.myparcel.index',
+            path: 'sw.myparcel.orders',
             icon: 'default-shopping-paper-bag-product',
             position: 100
+        },
+        {
+            id: 'sw-myparcel-orders',
+            label: 'sw-myparcel.general.ordersMenuItemGeneral',
+            color: '#0f5c47',
+            path: 'sw.myparcel.orders',
+            position: 100,
+            parent: 'sw-myparcel'
         },
         {
             id: 'sw-myparcel-shipments',

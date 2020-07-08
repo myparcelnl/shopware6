@@ -8,6 +8,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
@@ -76,8 +77,25 @@ class ShippingOptionService
     public function getShippingOptions(string $id, Context $context): ?ShippingOptionEntity
     {
         $criteria = new Criteria([$id]);
+        $criteria->addAssociation('order');
+        $criteria->addAssociation('shipment');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->get($id);
+    }
+
+    /**
+     * @param string  $id
+     * @param Context $context
+     *
+     * @return array
+     */
+    public function getAllShippingOptions(Context $context): array
+    {
+        $criteria = new Criteria();
+        $criteria->addAssociation('kiener_my_parcel_shipping_option.order');
+        $criteria->addAssociation('kiener_my_parcel_shipping_option.shipment');
+
+        return $this->shippingOptionsRepository->search($criteria, $context)->getVars();
     }
 
     /**

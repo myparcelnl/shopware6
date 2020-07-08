@@ -41,12 +41,12 @@ class ShippingOptionEntity extends Entity
     protected $orderVersionId;
 
     /**
-     * @var ShipmentEntity
+     * @var ShipmentEntity|null
      */
     protected $shipment;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $shipmentId;
 
@@ -162,19 +162,19 @@ class ShippingOptionEntity extends Entity
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getShipmentId(): ?int
+    public function getShipmentId(): ?string
     {
         return $this->shipmentId;
     }
 
     /**
-     * @param int|null $shipmentId
+     * @param string|null $shipmentId
      *
      * @return self
      */
-    public function setShipmentId(?int $shipmentId): self
+    public function setShipmentId(?string $shipmentId): self
     {
         $this->shipmentId = $shipmentId;
         return $this;

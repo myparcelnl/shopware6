@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Service\Shipment;
+namespace Kiener\KienerMyParcel\Service\Order;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;

@@ -1,0 +1,130 @@
+{% block sw_myparcel_orders %}
+    <sw-page class="sw-myparcel">
+        {% block sw_myparcel_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block sw_myparcel_smart_bar_header_title %}
+                <h2>
+                    {% block sw_myparcel_smart_bar_header_title_text %}
+                        {{ $tc('sw-myparcel.general.mainMenuItemGeneral') }}: {{ $tc('sw-myparcel.orders.title') }}
+                    {% endblock %}
+                </h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block sw_myparcel_smart_bar_actions %}
+            <template #smart-bar-actions>
+
+            </template>
+        {% endblock %}
+
+        {% block sw_myparcel_content %}
+            <template #content>
+                <sw-grid
+                    :items="shippingOptions"
+                    :isFullpage="true"
+                    :table="true"
+                    :sortBy="sortBy"
+                    :sortDirection="sortDirection"
+                    @sw-grid-select-item="onSelectionChanged"
+                    @sw-grid-select-all="onSelectionChanged"
+                    @sort-column="onSortColumn">
+                    <template slot="columns" slot-scope="{ item }">
+                        <sw-grid-column flex="minmax(200px, 1fr)" label="Order" dataIndex="order.orderNumber" :sortable="true">
+                            {{ item.order.orderNumber }}
+                        </sw-grid-column>
+
+                        <sw-grid-column flex="minmax(200px, 1fr)" label="Aankoopdatum" dataIndex="order.orderDateTime" :sortable="true">
+                            {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit'}) }}
+                        </sw-grid-column>
+
+                        <sw-grid-column flex="minmax(200px, 1fr)" label="Totaalbedrag">
+                            {{ item.order.amountTotal | currency('EUR') }}
+                        </sw-grid-column>
+
+                        <sw-grid-column flex="minmax(200px, 1fr)" label="Status">
+                            {{ item.order.stateMachineState.name }}
+                        </sw-grid-column>
+
+                        <sw-grid-column flex="minmax(200px, 1fr)" label="Acties">
+                            <sw-context-button :showMenuOnStartup="false" :menuWidth="220" menuHorizontalAlign="right" menuVerticalAlign="bottom" icon="small-more" :disabled="false" :autoClose="true" :zIndex="9000">
+                                <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
+                                    {{ $tc('sw-myparcel.orders.buttons.viewOrder') }}
+                                </sw-context-menu-item>
+                                <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-shipment-action" @click="onOpenCreateSingleShipmentModal(item)">
+                                    {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
+                                </sw-context-menu-item>
+                            </sw-context-button>
+                        </sw-grid-column>
+                    </template>
+                </sw-grid>
+
+                <sw-modal v-if="createSingleShipment.showModal === true"
+                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleSingle')"
+                          @modal-close="onCloseSingleShipmentModal"
+                          variant="small">
+
+                    <form>
+                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading') }}</h3>
+
+                        <sw-radio-field name="myparcel[action_type]"
+                                        v-model="createSingleShipment.actionType"
+                                        :options="[
+                                {'value': 'download', 'name': $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') },
+                                {'value': 'create', 'name': $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }]">
+                        </sw-radio-field><br /><br /><br />
+                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading') }}</h3>
+                        <sw-radio-field name="myparcel[package_type]"
+                                        v-model="createSingleShipment.item.packageType"
+                                        :options="[
+                                {'value': 1, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') },
+                                {'value': 2, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') },
+                                {'value': 3, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') },
+                                {'value': 4, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }]">
+                        </sw-radio-field><br /><br /><br />
+                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.printPositionHeading') }}</h3>
+                        <br /><br /><br />
+                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.shippingOptionsHeading') }}</h3>
+                        <label>
+                            <input type="checkbox" name="myparcel[only_recipient]" value="1" v-model="createSingleShipment.item.onlyRecipient" />
+                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionOnlyRecipientLabel') }}
+                        </label><br />
+                        <label>
+                            <input type="checkbox" name="myparcel[requires_age_check]" value="1" v-model="createSingleShipment.item.requiresAgeCheck" />
+                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionRequiresAgeCheckLabel') }}
+                        </label><br />
+                        <label>
+                            <input type="checkbox" name="myparcel[requires_signature]" value="1" v-model="createSingleShipment.item.requiresSignature" />
+                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionRequiresSignatureLabel') }}
+                        </label><br />
+                        <label>
+                            <input type="checkbox" name="myparcel[return_if_not_home]" value="1" v-model="createSingleShipment.item.returnIfNotHome" />
+                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionReturnIfNotHomeLabel') }}
+                        </label><br />
+                        <label>
+                            <input type="checkbox" name="myparcel[large_package]" value="1" v-model="createSingleShipment.item.largePackage" />
+                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionLargePackageLabel') }}
+                        </label><br /><br /><br />
+                    </form>
+
+                    <template slot="modal-footer">
+                        <sw-button @click="onCloseSingleShipmentModal" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
+                        </sw-button>
+                        <sw-button @click="onCreateSingleShipment" variant="primary" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
+                        </sw-button>
+                    </template>
+                </sw-modal>
+            </template>
+
+            <template #pagination>
+                <sw-pagination :page="page"
+                               :limit="limit"
+                               :total="total"
+                               :total-visible="7">
+                </sw-pagination>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}
