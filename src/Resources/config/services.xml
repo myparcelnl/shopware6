@@ -9,6 +9,7 @@
         <!-- Services -->
         <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">
             <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService"/>
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionsService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
@@ -63,7 +64,7 @@
 
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ShippingOptionsController" public="true">
             <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionsService" />
         </service>
 
     </services>
