@@ -47,7 +47,7 @@ class ShipmentDefinition extends EntityDefinition
             (new StringField('label_url', 'labelUrl')),
 
             (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class))->addFlags(new Required()),
-            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
+            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', false))->addFlags(new Required(), new CascadeDelete()),
         ]);
     }
 }
