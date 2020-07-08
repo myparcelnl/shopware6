@@ -182,12 +182,21 @@ class ConsignmentService
      * @return MyParcelCollection
      * @throws MissingFieldException
      */
-    public function createConsignments(Context $context, array $orderIds, ?array $labelPositions): MyParcelCollection
+    public function createConsignments(Context $context, array $orderIds, ?array $labelPositions): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
 
         /** @var OrderEntity $order */
         foreach ($orderIds as $orderId) {
+
+            if(
+                !array_key_exists(self::FIELD_ORDER_ID, $orderId)
+                || !array_key_exists(self::FIELD_ORDER_VERSION_ID, $orderId)
+            )
+            {
+                continue;
+            }
+
             /** @var OrderEntity $order */
             $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, []);
 

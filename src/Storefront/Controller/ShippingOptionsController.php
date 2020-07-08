@@ -20,11 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class ShippingOptionsController extends StorefrontController
 {
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipping_options.create';
+    public const ROUTE_NAME_SHOW = 'api.action.myparcel.shipping_options.show';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
+    private const RESPONSE_KEY_SHIPPING_OPTIONS = 'shipping_options';
 
+    public const REQUEST_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
     public const REQUEST_KEY_ORDER_ID = 'order_id';
     public const REQUEST_KEY_ORDER_VERSION_ID = 'order_version_id';
     public const REQUEST_KEY_CARRIER_ID = 'carrier_id';
@@ -92,13 +95,13 @@ class ShippingOptionsController extends StorefrontController
 
         $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
 
-        $order = $this->orderService->getOrder($orderId,$orderVersionId,$context);
+        $order = $this->orderService->getOrder($orderId, $orderVersionId, $context);
 
         if ($order === null) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
                 self::RESPONSE_KEY_ERROR => sprintf(
-                    'RCould not find an order with id %s and version id %s',
+                    'Could not find an order with id %s and version id %s',
                     $orderId,
                     $orderVersionId
                 )
@@ -161,6 +164,40 @@ class ShippingOptionsController extends StorefrontController
             self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
             self::RESPONSE_KEY_SHIPPING_OPTIONS_ID => $shippingOptionsEntity ? $shippingOptionsEntity->getId() : null
         ]);
+    }
 
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping_options/show",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function show(Request $request): JsonResponse
+    {
+        $shippingOptionsId = $request->get(self::REQUEST_KEY_SHIPPING_OPTIONS_ID);
+
+        if ((string)$shippingOptionsId === '') {
+            return new JsonResponse([
+                self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => sprintf('Could not find Shipping Options with id %s', $shippingOptionsId)
+            ]);
+        }
+
+        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+
+        $shippingOptionsEntity = $this->shippingOptionsService->getShippingOptions($shippingOptionsId, $context);
+
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity
+        ]);
     }
 }

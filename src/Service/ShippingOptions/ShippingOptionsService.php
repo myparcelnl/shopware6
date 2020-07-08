@@ -1,10 +1,7 @@
 <?php
 
-
 namespace Kiener\KienerMyParcel\Service\ShippingOptions;
 
-
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
