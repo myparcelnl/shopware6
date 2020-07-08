@@ -56,6 +56,7 @@ class ShippingOptionDefinition extends EntityDefinition
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
             (new IntField('package_type', 'packageType')),
+            (new IntField('delivery_type', 'deliveryType')),
             (new BoolField('requires_age_check', 'requiresAgeCheck')),
             (new BoolField('requires_signature', 'requiresSignature')),
             (new BoolField('only_recipient', 'onlyRecipient')),

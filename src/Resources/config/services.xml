@@ -55,5 +55,16 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <!-- Controller -->
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ConsignmentController" public="true">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />
+        </service>
+
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ShippingOptionsController" public="true">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" />
+        </service>
+
     </services>
 </container>

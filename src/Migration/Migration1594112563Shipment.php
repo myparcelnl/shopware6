@@ -22,6 +22,7 @@ class Migration1594112563Shipment extends MigrationStep
                 `order_id` BINARY(16) NOT NULL,
                 `order_version_id` BINARY(16) NOT NULL,
                 `label_url` VARCHAR(255) NULL,
+                `insured_amount` DECIMAL(10,2) NULL,
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
                 PRIMARY KEY (`id`),
