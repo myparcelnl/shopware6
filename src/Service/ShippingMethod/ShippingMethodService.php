@@ -207,7 +207,7 @@ class ShippingMethodService
         $existingShippingMethod = $this->getShippingMethodByCarrierId($carrierId, $context);
 
         if ($existingShippingMethod !== null) {
-            $id = $existingShippingMethod->getShippingMethodId();
+            return $existingShippingMethod->getShippingMethodId();
         }
 
         // Create or update the shipping method
