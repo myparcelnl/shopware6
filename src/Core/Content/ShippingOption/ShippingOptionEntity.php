@@ -7,7 +7,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
-class ShippingOptionEntity extends Entity
+class ShippingOptionEntity extends Entity //NOSONAR
 {
     use EntityIdTrait;
 
@@ -19,6 +19,7 @@ class ShippingOptionEntity extends Entity
     public const FIELD_SHIPMENT_ID = 'shipmentId';
     public const FIELD_CARRIER_ID = 'carrierId';
     public const FIELD_PACKAGE_TYPE = 'packageType';
+    public const FIELD_DELIVERY_TYPE = 'deliveryType';
     public const FIELD_REQUIRES_AGE_CHECK = 'requiresAgeCheck';
     public const FIELD_REQUIRES_SIGNATURE = 'requiresSignature';
     public const FIELD_ONLY_RECIPIENT = 'onlyRecipient';
@@ -59,6 +60,11 @@ class ShippingOptionEntity extends Entity
      * @var int
      */
     protected $packageType;
+
+    /**
+     * @var int
+     */
+    protected $deliveryType;
 
     /**
      * @var bool
@@ -215,6 +221,25 @@ class ShippingOptionEntity extends Entity
     public function setPackageType(int $packageType): ShippingOptionEntity
     {
         $this->packageType = $packageType;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeliveryType(): int
+    {
+        return $this->deliveryType;
+    }
+
+    /**
+     * @param int $deliveryType
+     *
+     * @return ShippingOptionEntity
+     */
+    public function setDeliveryType(int $deliveryType): ShippingOptionEntity
+    {
+        $this->deliveryType = $deliveryType;
         return $this;
     }
 

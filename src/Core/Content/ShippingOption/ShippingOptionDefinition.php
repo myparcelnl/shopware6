@@ -55,15 +55,16 @@ class ShippingOptionDefinition extends EntityDefinition
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
-            (new IntField('package_type', 'packageType'))->addFlags(new Required()),
+            (new IntField('package_type', 'packageType')),
+            (new IntField('delivery_type', 'deliveryType')),
             (new BoolField('requires_age_check', 'requiresAgeCheck')),
             (new BoolField('requires_signature', 'requiresSignature')),
             (new BoolField('only_recipient', 'onlyRecipient')),
             (new BoolField('return_if_not_home', 'returnIfNotHome')),
             (new BoolField('large_format', 'largeFormat')),
 
-            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
-            (new OneToOneAssociationField('shipment', 'shipment_id', 'id', ShipmentDefinition::class)),
+            (new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, false))->addFlags(new Required(), new CascadeDelete()),
+            (new OneToOneAssociationField('shipment', 'shipment_id', 'id', ShipmentDefinition::class, false)),
         ]);
     }
 }

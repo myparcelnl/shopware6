@@ -29,6 +29,11 @@
             <argument type="service" id="shipping_method.repository"/>
         </service>
 
+        <service id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" public="true">
+            <argument type="service" id="logger"/>
+            <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
+        </service>
+
         <!-- Entities -->
         <service id="Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipment"/>
@@ -40,6 +45,25 @@
 
         <service id="Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipping_option"/>
+        </service>
+
+        <!-- Event Subscribers -->
+        <service id="Kiener\KienerMyParcel\Subscriber\OrderPlacedSubscriber">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" />
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Controller -->
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ConsignmentController" public="true">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />
+        </service>
+
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ShippingOptionsController" public="true">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" />
         </service>
 
     </services>

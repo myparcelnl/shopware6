@@ -4,7 +4,7 @@ namespace Kiener\KienerMyParcel\Storefront\Controller;
 
 use Exception;
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
-use Kiener\KienerMyParcel\Service\Shipment\OrderService;
+use Kiener\KienerMyParcel\Service\Order\OrderService;
 use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
@@ -26,6 +26,7 @@ class ShippingOptionsController extends StorefrontController
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
     private const RESPONSE_KEY_SHIPPING_OPTIONS = 'shipping_options';
+    private const RESPONSE_KEY_DELIVERY_TYPES = 'delivery_types';
 
     public const REQUEST_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
     public const REQUEST_KEY_ORDER_ID = 'order_id';
@@ -37,6 +38,7 @@ class ShippingOptionsController extends StorefrontController
     public const REQUEST_KEY_REQUIRES_SIGNATURE = 'requires_signature';
     public const REQUEST_KEY_ONLY_RECIPIENT = 'only_recipient';
     public const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
+    public const REQUEST_KEY_DELIVERY_TYPE = 'package_type';
 
     /**
      * @var OrderService
@@ -61,6 +63,27 @@ class ShippingOptionsController extends StorefrontController
     {
         $this->orderService = $orderService;
         $this->shippingOptionsService = $shippingOptionsService;
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/carriers",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getDeliveryTypes(): JsonResponse
+    {
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => true,
+            self::RESPONSE_KEY_DELIVERY_TYPES => $this->shippingOptionsService->getDeliveryTypes(),
+
+        ]);
     }
 
     /**
@@ -153,6 +176,15 @@ class ShippingOptionsController extends StorefrontController
             && in_array($packageType, AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $shippingOptions[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $packageType;
+        }
+
+        $deliveryType = $request->get(self::REQUEST_KEY_DELIVERY_TYPE);
+
+        if ((string)$deliveryType !== ''
+            && is_int($deliveryType)
+            && in_array($deliveryType, AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $shippingOptions[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $deliveryType;
         }
 
         $shippingOptionsEntity = $this->shippingOptionsService->createOrUpdateShippingOptions(
