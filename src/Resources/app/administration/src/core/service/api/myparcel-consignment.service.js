@@ -10,7 +10,7 @@ class MyParcelConsignmentService extends ApiService {
 
         return this.httpClient
             .post(
-                `_action/${this.getApiBasePath()}/myparcel/consignment/create-consignments`,
+                `_action/${this.getApiBasePath()}/consignment/create-consignments`,
                 JSON.stringify(data),
                 {
                     headers: headers

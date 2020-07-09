@@ -15,7 +15,8 @@ Component.register('sw-myparcel-orders', {
 
     inject: [
         'repositoryFactory',
-        'MyParcelShipmentService'
+        'MyParcelShipmentService',
+        'MyParcelConsignmentService'
     ],
 
     data() {
@@ -74,17 +75,39 @@ Component.register('sw-myparcel-orders', {
     },
 
     methods: {
-        saveSingleShipment(item) {
+        saveSingleShipment(item, labelPositions) {
             this.MyParcelShipmentService.createShipment({
                 order_id: item.order.id,
                 order_version_id: item.order.versionId,
                 shipping_option_id: item.id,
             })
-                .then((result) => {
-                    console.log(result);
+                .then((response) => {
+                    if (
+                        response.success
+                        && !!response.shipment
+                    ) {
+                        let order = {
+                            order_id: item.order.id,
+                            order_version_id: item.order.versionId
+                        };
+
+                        this.createConsignments([order], item.packageType, labelPositions, response.shipment);
+                    }
                 });
 
             this.createSingleShipment.showModal = false;
+        },
+
+        createConsignments(orderIds, packageType, labelPositions, shipment) {
+            this.MyParcelConsignmentService.createConsignments({
+                order_ids: orderIds,
+                label_positions: labelPositions,
+                package_type: packageType,
+                shipment_id: shipment.id
+            })
+                .then((response) => {
+                    console.log(response);
+                });
         },
 
         getList() {
@@ -149,7 +172,7 @@ Component.register('sw-myparcel-orders', {
             if (!!this.createSingleShipment.item) {
                 this.shippingOptionRepository.save(this.createSingleShipment.item, Shopware.Context.api)
                     .then(() => {
-                        this.saveSingleShipment(this.createSingleShipment.item);
+                        this.saveSingleShipment(this.createSingleShipment.item, this.createSingleShipment.printPosition);
                     })
                     .catch(() => {
                         //

@@ -10,6 +10,8 @@ use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
 use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use Shopware\Core\Framework\Api\Context\SystemSource;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -117,7 +119,7 @@ class ConsignmentController extends StorefrontController
      */
     public function createConsignments(Request $request): JsonResponse
     {
-        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+        $context = new Context(new SystemSource());
 
         if (
             $request->get(self::REQUEST_KEY_ORDER_IDS) === null
