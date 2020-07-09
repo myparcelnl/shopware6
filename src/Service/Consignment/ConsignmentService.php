@@ -4,7 +4,7 @@ namespace Kiener\KienerMyParcel\Service\Consignment;
 
 use Exception;
 use Kiener\KienerMyParcel\Helper\AddressHelper;
-use Kiener\KienerMyParcel\Service\Shipment\OrderService;
+use Kiener\KienerMyParcel\Service\Order\OrderService;
 use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;

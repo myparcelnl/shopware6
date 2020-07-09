@@ -36,7 +36,7 @@
 
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
-            <argument type="service" id="kiener_my_parcel_shipping_options.repository"/>
+            <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
         </service>
 
         <!-- Entities -->
@@ -53,6 +53,11 @@
         </service>
 
         <!-- Event Subscribers -->
+        <service id="Kiener\KienerMyParcel\Subscriber\CheckoutConfirmPageSubscriber">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <service id="Kiener\KienerMyParcel\Subscriber\OrderPlacedSubscriber">
             <argument type="service" id="request_stack" />
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />

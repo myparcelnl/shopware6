@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 class ShipmentService
@@ -81,5 +82,21 @@ class ShipmentService
         $criteria->addAssociation('kiener_my_parcel_shipment.order');
 
         return $this->shipmentRepository->search($criteria, $context)->get($id);
+    }
+
+    /**
+     * Returns a search result of shipments from the database.
+     *
+     * @param Context $context
+     *
+     * @return array
+     */
+    public function getShipments(Context $context): array
+    {
+        $criteria = new Criteria();
+        $criteria->addAssociation('kiener_my_parcel_shipment.shipping_option');
+        $criteria->addAssociation('kiener_my_parcel_shipment.order');
+
+        return $this->shipmentRepository->search($criteria, $context)->getElements();
     }
 }

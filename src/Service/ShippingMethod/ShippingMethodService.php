@@ -97,6 +97,27 @@ class ShippingMethodService
     }
 
     /**
+     * Returns MyParcel shipping methods ids.
+     *
+     * @param Context $context
+     *
+     * @return array
+     */
+    public function getMyParcelShippingMethodIds(Context $context): array
+    {
+        $shippingMethodIds = [];
+        $criteria = new Criteria();
+        $shippingMethods = $this->myParcelShippingMethodRepository->search($criteria, $context);
+
+        /** @var ShippingMethodEntity $shippingMethod */
+        foreach ($shippingMethods as $shippingMethod) {
+            $shippingMethodIds[] = $shippingMethod->getShippingMethodId();
+        }
+
+        return $shippingMethodIds;
+    }
+
+    /**
      * Returns a shipping method by carrier id.
      *
      * @param string  $shopwareShippingMethodId
@@ -168,9 +189,9 @@ class ShippingMethodService
                 'carrierId' => $carrierId,
                 'carrierName' => $carrierName,
                 'shippingMethod' => [
-                    'id' => $shippingMethodId
+                    'id' => $shippingMethodId,
                 ],
-            ]
+            ],
         ], $context);
 
         if (!empty($event->getErrors())) {
@@ -207,7 +228,7 @@ class ShippingMethodService
         $existingShippingMethod = $this->getShippingMethodByCarrierId($carrierId, $context);
 
         if ($existingShippingMethod !== null) {
-            $id = $existingShippingMethod->getShippingMethodId();
+            return $existingShippingMethod->getShippingMethodId();
         }
 
         // Create or update the shipping method
@@ -232,7 +253,7 @@ class ShippingMethodService
                         ],
                     ],
                 ],
-            ]
+            ],
         ], $context);
 
         if (!empty($event->getErrors())) {

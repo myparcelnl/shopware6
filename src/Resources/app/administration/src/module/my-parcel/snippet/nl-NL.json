@@ -1,0 +1,48 @@
+{
+  "sw-myparcel": {
+    "general": {
+      "mainMenuItemGeneral": "MyParcel",
+      "ordersMenuItemGeneral": "Orders",
+      "shipmentsMenuItemGeneral": "Shipments",
+      "shippingMethodsMenuItemGeneral": "Shipping methods",
+      "descriptionTextModule": "Tagline for MyParcel"
+    },
+    "orders": {
+      "title": "Bestellingen",
+      "modals": {
+        "createShipment": {
+          "titleSingle": "Maak verzending aan",
+          "titleMultiple": "Maak verzendingen aan",
+          "actionTypeDownloadLabel": "Download",
+          "actionTypeCreateLabel": "Maak zending",
+          "packageTypePackageLabel": "Pakket",
+          "packageTypeMailboxLabel": "Brievenbuspakket",
+          "packageTypeLetterLabel": "Briefpost",
+          "packageTypeDigitalStampLabel": "Digitale postzegel",
+          "optionOnlyRecipientLabel": "Alleen thuisadres",
+          "optionRequiresAgeCheckLabel": "Controle leeftijd 18+",
+          "optionRequiresSignatureLabel": "Handtekening nodig",
+          "optionReturnIfNotHomeLabel": "Retour bij niet aanwezig",
+          "optionLargePackageLabel": "Groot pakket",
+          "actionTypeHeading": "Type actie",
+          "packageTypeHeading": "Type pakket",
+          "numberOfLabelsHeading": "Aantal labels",
+          "printPositionHeading": "Printpositie",
+          "shippingOptionsHeading": "Verzendopties"
+        }
+      },
+      "buttons": {
+        "viewOrder": "Order bekijken",
+        "cancelButton": "Annuleren",
+        "createShipmentButton": "Verzending aanmaken",
+        "createShipmentsButton": "Verzendingen aanmaken"
+      }
+    },
+    "shipments": {
+      "title": "Verzendingen"
+    },
+    "shippingMethods": {
+      "title": "Verzendmethoden"
+    }
+  }
+}
