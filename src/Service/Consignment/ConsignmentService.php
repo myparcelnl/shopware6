@@ -22,6 +22,7 @@ class ConsignmentService
 {
     private const FIELD_ORDER_ID = 'order_id';
     private const FIELD_ORDER_VERSION_ID = 'order_version_id';
+    private const FIELD_PACKAGE_TYPE = 'package_type';
 
     /**
      * @var OrderService
@@ -85,13 +86,15 @@ class ConsignmentService
     /**
      * @param Context     $context
      * @param OrderEntity $orderEntity
+     * @param int         $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
      */
     private function createConsignment(
         Context $context,
-        OrderEntity $orderEntity
+        OrderEntity $orderEntity,
+        int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -157,7 +160,7 @@ class ConsignmentService
             && is_int($shippingOptions->getPackageType())
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
-            $consignment->setPackageType($shippingOptions->getPackageType());
+            $consignment->setPackageType($packageType ?? $shippingOptions->getPackageType());
         }
 
         try {
@@ -201,7 +204,19 @@ class ConsignmentService
             $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, []);
 
             if ($order !== null) {
-                $consignment = $this->createConsignment($context, $order);
+
+                $packageType = null;
+
+                if(
+                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderId)
+                    && in_array($orderId[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
+                )
+                {
+                    $packageType = $orderId[self::FIELD_PACKAGE_TYPE];
+                }
+
+
+                $consignment = $this->createConsignment($context, $order, $packageType);
 
                 if ($consignment !== null) {
                     $consignments->addConsignment($consignment);
