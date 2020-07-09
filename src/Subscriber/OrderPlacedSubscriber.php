@@ -37,6 +37,13 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     private $shippingOptionsService;
 
+    /**
+     * Creates a new instance of the order placed subscriber.
+     *
+     * @param RequestStack          $requestStack
+     * @param ShippingMethodService $shippingMethodService
+     * @param ShippingOptionService $shippingOptionService
+     */
     public function __construct(
         RequestStack $requestStack,
         ShippingMethodService $shippingMethodService,
@@ -48,6 +55,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
        $this->shippingOptionsService = $shippingOptionService;
     }
 
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return [
@@ -55,6 +67,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Creates a shipping option record in the database.
+     *
+     * @param CheckoutOrderPlacedEvent $event
+     */
     public function onOrderPlaced(CheckoutOrderPlacedEvent $event)
     {
         /** @var array $params */

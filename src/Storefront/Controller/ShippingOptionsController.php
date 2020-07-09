@@ -10,6 +10,8 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use Shopware\Core\Framework\Api\Context\SystemSource;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -19,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShippingOptionsController extends StorefrontController
 {
+    public const ROUTE_NAME_ALL = 'api.action.myparcel.shipping_options.all';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipping_options.create';
     public const ROUTE_NAME_SHOW = 'api.action.myparcel.shipping_options.show';
 
@@ -195,6 +198,25 @@ class ShippingOptionsController extends StorefrontController
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
             self::RESPONSE_KEY_SHIPPING_OPTIONS_ID => $shippingOptionsEntity ? $shippingOptionsEntity->getId() : null
+        ]);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     */
+    public function all(): JsonResponse
+    {
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => true,
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $this->shippingOptionsService->getAllShippingOptions(new Context(new SystemSource()))
         ]);
     }
 
