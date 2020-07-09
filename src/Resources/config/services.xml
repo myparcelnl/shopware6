@@ -7,6 +7,10 @@
     <services>
 
         <!-- Services -->
+        <service id="Kiener\KienerMyParcel\Service\Settings\SettingsService" class="Kiener\KienerMyParcel\Service\Settings\SettingsService">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+        </service>
+
         <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">
             <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService"/>
@@ -33,6 +37,7 @@
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService"/>
         </service>
 
         <!-- Entities -->
