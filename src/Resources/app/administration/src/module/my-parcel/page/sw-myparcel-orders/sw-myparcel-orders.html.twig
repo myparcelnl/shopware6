@@ -14,7 +14,9 @@
 
         {% block sw_myparcel_smart_bar_actions %}
             <template #smart-bar-actions>
-
+                <sw-button :disabled="false" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleShipmentsModal">
+                    {{ $tc('sw-myparcel.orders.buttons.createShipmentsButton') }}
+                </sw-button>
             </template>
         {% endblock %}
 
@@ -135,7 +137,7 @@
                 </sw-modal>
 
                 <sw-modal v-if="createMultipleShipments.showModal === true"
-                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleMultiple')"
+                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleMultiple', 0, { numberOfItems: selectedShippingOptionIds.length })"
                           @modal-close="onCloseMultipleShipmentsModal"
                           variant="small">
 
@@ -153,7 +155,7 @@
                         <sw-select-number-field
                                 :label="$tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading')"
                                 name="myparcel[package_type]"
-                                v-model="createMultipleShipments.item.packageType">
+                                v-model="createMultipleShipments.packageType">
 
                             <option value="1">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') }}</option>
                             <option value="2">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') }}</option>
@@ -180,7 +182,7 @@
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
                         <sw-button @click="onCreateMultipleShipments" variant="primary" size="small">
-                            {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
+                            {{ $tc('sw-myparcel.orders.buttons.createShipmentsButton') }}
                         </sw-button>
                     </template>
                 </sw-modal>

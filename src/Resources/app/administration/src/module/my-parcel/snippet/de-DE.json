@@ -12,7 +12,7 @@
       "modals": {
         "createShipment": {
           "titleSingle": "Create a shipment",
-          "titleMultiple": "Create shipments",
+          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
           "actionTypeCreateLabel": "Create consignment",
           "packageTypePackageLabel": "Package",

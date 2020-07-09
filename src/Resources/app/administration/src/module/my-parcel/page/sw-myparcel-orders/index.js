@@ -34,9 +34,12 @@ Component.register('sw-myparcel-orders', {
             createMultipleShipments: {
                 items: [],
                 actionType: 'download',
+                packageType: 1,
                 printPosition: [1,2,3,4],
                 showModal: false,
             },
+            selectedShippingOptions: null,
+            selectedShippingOptionIds: [],
         };
     },
 
@@ -93,7 +96,14 @@ Component.register('sw-myparcel-orders', {
         },
 
         onSelectionChanged(selected) {
-            console.log(selected);
+            this.selectedShippingOptions = selected;
+            this.selectedShippingOptionIds = [];
+
+            if (!!this.selectedShippingOptions) {
+                for (let id in this.selectedShippingOptions) {
+                    this.selectedShippingOptionIds.push(id);
+                }
+            }
         },
 
         onSortColumn(column) {
@@ -111,6 +121,7 @@ Component.register('sw-myparcel-orders', {
 
         onOpenCreateSingleShipmentModal(item) {
             this.createSingleShipment.item = item;
+            this.selectedShippingOptionIds = [item.id];
             this.createSingleShipment.showModal = true;
         },
 
@@ -122,9 +133,14 @@ Component.register('sw-myparcel-orders', {
             console.log(this.createSingleShipment.item);
         },
 
-        onOpenCreateMultipleShipmentsModal(item) {
-            this.createMultipleShipments.item = item;
-            this.createMultipleShipments.showModal = true;
+        onOpenCreateMultipleShipmentsModal() {
+            if (
+                !!this.selectedShippingOptionIds
+                && this.selectedShippingOptionIds.length
+            ) {
+                this.createMultipleShipments.items = this.selectedShippingOptions;
+                this.createMultipleShipments.showModal = true;
+            }
         },
 
         onCloseMultipleShipmentsModal() {
@@ -132,7 +148,7 @@ Component.register('sw-myparcel-orders', {
         },
 
         onCreateMultipleShipments() {
-            console.log(this.createMultipleShipments.item);
+            console.log(this.createMultipleShipments.items);
         },
     }
 });

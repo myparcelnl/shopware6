@@ -12,7 +12,7 @@
       "modals": {
         "createShipment": {
           "titleSingle": "Maak verzending aan",
-          "titleMultiple": "Maak verzendingen aan",
+          "titleMultiple": "Maak verzendingen aan ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
           "actionTypeCreateLabel": "Maak zending",
           "packageTypePackageLabel": "Pakket",
