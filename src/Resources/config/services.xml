@@ -5,15 +5,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Controllers -->
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ShippingOptionController" public="true">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService" />
-
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
 
         <!-- Services -->
         <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">
@@ -41,7 +32,7 @@
 
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
-            <argument type="service" id="kiener_my_parcel_shipping_options.repository"/>
+            <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
         </service>
 
         <!-- Entities -->
