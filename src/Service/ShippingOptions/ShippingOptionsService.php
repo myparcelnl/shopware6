@@ -1,8 +1,9 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Service\ShippingOption;
+namespace Kiener\KienerMyParcel\Service\ShippingOptions;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -12,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
-class ShippingOptionService
+class ShippingOptionsService
 {
     /**
      * @var LoggerInterface
@@ -111,5 +112,18 @@ class ShippingOptionService
             ->addFilter(new EqualsFilter('orderVersionId', $orderEntity->getVersionId()));
 
         return $this->shippingOptionsRepository->search($criteria, $context)->first();
+    }
+
+    /**
+     * @return array
+     */
+    public function getDeliveryTypes(): array
+    {
+        return [
+            AbstractConsignment::DELIVERY_TYPE_MORNING => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
+            AbstractConsignment::DELIVERY_TYPE_STANDARD => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+            AbstractConsignment::DELIVERY_TYPE_EVENING => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
+            AbstractConsignment::DELIVERY_TYPE_PICKUP => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+        ];
     }
 }

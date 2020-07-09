@@ -9,6 +9,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
@@ -45,6 +46,7 @@ class ShipmentDefinition extends EntityDefinition
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             (new StringField('label_url', 'labelUrl')),
+            (new FloatField('insured_amount', 'insuredAmount')),
 
             (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class))->addFlags(new Required()),
             (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', false))->addFlags(new Required(), new CascadeDelete()),

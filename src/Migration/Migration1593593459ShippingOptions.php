@@ -22,6 +22,7 @@ class Migration1593593459ShippingOptions extends MigrationStep
                 `shipment_id` BINARY(16) NULL,
                 `carrier_id` INT(11) NOT NULL,
                 `package_type` INT(11) NULL,
+                `delivery_type` INT(11) NULL,
                 `requires_age_check` TINYINT(1) NULL DEFAULT \'0\',
                 `requires_signature` TINYINT(1) NULL DEFAULT \'0\',
                 `only_recipient` TINYINT(1) NULL DEFAULT \'0\',

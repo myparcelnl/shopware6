@@ -3,17 +3,13 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-
 namespace Kiener\KienerMyParcel\Storefront\Controller;
 
 use Exception;
+use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
+use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
-use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,28 +20,18 @@ class ConsignmentController extends StorefrontController
 {
     public const ROUTE_NAME_GET_CARRIERS = 'api.action.myparcel.carriers';
     public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package_types';
-    public const ROUTE_NAME_CREATE = 'api.action.myparcel.create';
-    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.get_by_reference_id';
+    public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
+    public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
+    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
+
+    private const REQUEST_KEY_ORDER_IDS = 'order_ids';
+    private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
+    private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_CARRIERS = 'carriers';
     private const RESPONSE_KEY_PACKAGE_TYPES = 'package_types';
-    private const RESPONSE_KEY_ORDER_ID = 'order_id';
-
-    private const REQUEST_KEY_CARRIER_ID = 'carrier_id';
-    private const REQUEST_KEY_AGE_CHECK = 'age_check';
-    private const REQUEST_KEY_LARGE_FORMAT = 'large_format';
-    private const REQUEST_KEY_RETURN_IF_NOT_HOME = 'return_if_not_home';
-    private const REQUEST_KEY_REQUIRES_SIGNATURE = 'requires_signature';
-    private const REQUEST_KEY_ONLY_RECIPIENT = 'only_recipient';
-    private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
-    private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
-
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $orderRepository;
 
     /**
      * @var ConsignmentService
@@ -53,75 +39,23 @@ class ConsignmentController extends StorefrontController
     private $consignmentService;
 
     /**
+     * @var ShipmentService
+     */
+    private $shipmentService;
+
+    /**
      * ConsignmentController constructor.
      *
-     * @param EntityRepositoryInterface $orderRepository
-     * @param ConsignmentService        $consignmentService
+     * @param ConsignmentService $consignmentService
+     * @param ShipmentService    $shipmentService
      */
     public function __construct(
-        EntityRepositoryInterface $orderRepository,
-        ConsignmentService $consignmentService
+        ConsignmentService $consignmentService,
+        ShipmentService $shipmentService
     )
     {
-        $this->orderRepository = $orderRepository;
         $this->consignmentService = $consignmentService;
-    }
-
-    /**
-     * @param string       $orderId
-     * @param string|null  $versionId
-     * @param Context|null $context
-     *
-     * @return OrderEntity|null
-     */
-    private function getOrder(
-        string $orderId,
-        string $versionId = null,
-        Context $context = null
-    ): ?OrderEntity
-    {
-        $criteria = new Criteria([$orderId]);
-
-        if ($versionId !== null) {
-            $criteria->addFilter(new EqualsFilter('versionId', $versionId));
-        }
-
-        $criteria->addAssociation('lineItems')
-            ->addAssociation('orderCustomer')
-            ->addAssociation('orderCustomer.salutation')
-            ->addAssociation('deliveries')
-            ->addAssociation('deliveries.shippingOrderAddress')
-            ->addAssociation('deliveries.shippingOrderAddress.country')
-            ->addAssociation('deliveries.shippingOrderAddress.salutation');
-
-        return $this->orderRepository
-            ->search($criteria, $context ?? Context::createDefaultContext())->get($orderId);
-    }
-
-    /**
-     * @param Request     $request
-     * @param OrderEntity $order
-     *
-     * @return string|null
-     * @throws MissingFieldException
-     */
-    private function createConsignmentFromRequest(Request $request, OrderEntity $order): ?string
-    {
-        if ((string)$request->get(self::REQUEST_KEY_CARRIER_ID) === '') {
-            return null;
-        }
-
-        return $this->consignmentService->createConsignment(
-            $order,
-            $request->get(self::REQUEST_KEY_CARRIER_ID),
-            $request->get(self::REQUEST_KEY_AGE_CHECK),
-            $request->get(self::REQUEST_KEY_LARGE_FORMAT),
-            $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME),
-            $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE),
-            $request->get(self::REQUEST_KEY_ONLY_RECIPIENT),
-            $request->get(self::REQUEST_KEY_PACKAGE_TYPE),
-            $request->get(self::REQUEST_KEY_LABEL_POSITIONS)
-        );
+        $this->shipmentService = $shipmentService;
     }
 
     /**
@@ -169,9 +103,9 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/create",
+     *     "/api/v{version}/_action/myparcel/consignment/create_consignments",
      *     defaults={"auth_enabled"=true},
-     *     name=ConsignmentController::ROUTE_NAME_CREATE,
+     *     name=ConsignmentController::ROUTE_NAME_CREATE_CONSIGNMENTS,
      *     methods={"POST"}
      *     )
      *
@@ -180,37 +114,54 @@ class ConsignmentController extends StorefrontController
      * @return JsonResponse
      * @throws Exception
      */
-    public function create(Request $request): JsonResponse
+    public function createConsignments(Request $request): JsonResponse
     {
+        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+
         if (
-            (string)$request->get(self::RESPONSE_KEY_ORDER_ID) === ''
+            $request->get(self::REQUEST_KEY_ORDER_IDS) === null
+            || !is_array($request->get(self::REQUEST_KEY_ORDER_IDS))
+            || empty($request->get(self::REQUEST_KEY_ORDER_IDS))
         ) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => 'Request is missing a valid order id'
+                self::RESPONSE_KEY_ERROR => sprintf('Missing valid %s array with ids as parameter', self::REQUEST_KEY_ORDER_IDS)
             ]);
         }
-
-        $order = $this->getOrder($request->get(self::RESPONSE_KEY_ORDER_ID));
 
         if (
-            $order === null
+            $request->get(self::REQUEST_KEY_LABEL_POSITIONS) === null
+            || !is_array($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
+            || empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
-            return new JsonResponse([
-                self::RESPONSE_KEY_SUCCESS => false,
-            ]);
+            $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
         }
 
-        try {
-            $consignmentId = $this->createConsignmentFromRequest($request, $order);
-            $success = true;
-        } catch (MissingFieldException $e) {
-            $success = false;
+        $consignments = $this->consignmentService->createConsignments(
+            $context,
+            $request->get(self::REQUEST_KEY_ORDER_IDS),
+            $labelPositions ?? null
+        );
+
+        if (
+            (string)$request->get(self::REQUEST_KEY_SHIPMENT_ID) === ''
+        ) {
+            $shipment = $this->shipmentService->getShipment($request->get(self::REQUEST_KEY_SHIPMENT_ID), $context);
+
+            if ($shipment !== null)
+            {
+                $shipmentParameters = [
+                    ShipmentEntity::FIELD_ID => $shipment->getId(),
+                    ShipmentEntity::FIELD_LABEL_URL => $consignments->getLinkOfLabels()
+                ];
+
+                $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
+            }
+
         }
 
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => $success,
-            'id' => $consignmentId ?? null,
+            self::RESPONSE_KEY_SUCCESS => $consignments !== null,
         ]);
     }
 

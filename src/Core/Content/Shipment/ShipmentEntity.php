@@ -18,6 +18,7 @@ class ShipmentEntity
     public const FIELD_ORDER_ID = 'orderId';
     public const FIELD_ORDER_VERSION_ID = 'orderVersionId';
     public const FIELD_LABEL_URL = 'labelUrl';
+    public const FIELD_INSURED_AMOUNT= 'insuredAmount';
 
     /**
      * @var int|null
@@ -53,6 +54,11 @@ class ShipmentEntity
      * @var string|null
      */
     protected $labelUrl;
+
+    /**
+     * @var float
+     */
+    protected $insuredAmount = 0.0;
 
     /**
      * @return int|null
@@ -184,6 +190,25 @@ class ShipmentEntity
     public function setLabelUrl(?string $labelUrl): self
     {
         $this->labelUrl = $labelUrl;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getInsuredAmount(): float
+    {
+        return $this->insuredAmount ?? 0.0;
+    }
+
+    /**
+     * @param float $insuredAmount
+     *
+     * @return ShipmentEntity
+     */
+    public function setInsuredAmount(float $insuredAmount): ShipmentEntity
+    {
+        $this->insuredAmount = $insuredAmount;
         return $this;
     }
 }

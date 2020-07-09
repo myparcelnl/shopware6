@@ -5,7 +5,7 @@ namespace Kiener\KienerMyParcel\Subscriber;
 use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
-use Kiener\KienerMyParcel\Service\ShippingOption\ShippingOptionService;
+use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -33,9 +33,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private $shippingMethodService;
 
     /**
-     * @var ShippingOptionService
+     * @var ShippingOptionsService
      */
-    private $shippingOptionService;
+    private $shippingOptionsService;
 
     /**
      * Creates a new instance of the order placed subscriber.
@@ -47,12 +47,12 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     public function __construct(
         RequestStack $requestStack,
         ShippingMethodService $shippingMethodService,
-        ShippingOptionService $shippingOptionService
+        ShippingOptionsService $shippingOptionService
     )
     {
        $this->requestStack = $requestStack;
        $this->shippingMethodService = $shippingMethodService;
-       $this->shippingOptionService = $shippingOptionService;
+       $this->shippingOptionsService = $shippingOptionService;
     }
 
     /**
@@ -131,7 +131,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
             $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
 
-            $this->shippingOptionService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+            $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
         }
     }
 }
