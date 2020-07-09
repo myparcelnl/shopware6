@@ -37,6 +37,7 @@
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService"/>
         </service>
 
         <!-- Entities -->

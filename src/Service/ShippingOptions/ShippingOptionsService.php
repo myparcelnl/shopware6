@@ -3,18 +3,22 @@
 namespace Kiener\KienerMyParcel\Service\ShippingOptions;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
+use Kiener\KienerMyParcel\Service\Settings\SettingsService;
+use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 class ShippingOptionsService
 {
+    private const FIELD_NAME = 'name';
+    private const FIELD_COSTS = 'costs';
+
     /**
      * @var LoggerInterface
      */
@@ -26,18 +30,27 @@ class ShippingOptionsService
     private $shippingOptionsRepository;
 
     /**
+     * @var MyParcelSettingStruct
+     */
+    private $settings;
+
+
+    /**
      * ShippingOptionsService constructor.
      *
      * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shippingOptionsRepository
+     * @param SettingsService           $settingsService
      */
     public function __construct(
         LoggerInterface $logger,
-        EntityRepositoryInterface $shippingOptionsRepository
+        EntityRepositoryInterface $shippingOptionsRepository,
+        SettingsService $settingsService
     )
     {
         $this->logger = $logger;
         $this->shippingOptionsRepository = $shippingOptionsRepository;
+        $this->settings = $settingsService->getSettings();
     }
 
     /**
@@ -120,10 +133,22 @@ class ShippingOptionsService
     public function getDeliveryTypes(): array
     {
         return [
-            AbstractConsignment::DELIVERY_TYPE_MORNING => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
-            AbstractConsignment::DELIVERY_TYPE_STANDARD => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
-            AbstractConsignment::DELIVERY_TYPE_EVENING => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
-            AbstractConsignment::DELIVERY_TYPE_PICKUP => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+            AbstractConsignment::DELIVERY_TYPE_MORNING => [
+                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
+                self::FIELD_COSTS => $this->settings->getCostsDeliveryMorning(),
+            ],
+            AbstractConsignment::DELIVERY_TYPE_STANDARD => [
+                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                self::FIELD_COSTS => 0,
+            ],
+            AbstractConsignment::DELIVERY_TYPE_EVENING => [
+                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
+                self::FIELD_COSTS => $this->settings->getCostsDeliveryEvening(),
+            ],
+            AbstractConsignment::DELIVERY_TYPE_PICKUP => [
+                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+                self::FIELD_COSTS => 0,
+            ],
         ];
     }
 }
