@@ -91,7 +91,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping_options/create",
+     *     "/api/v{version}/_action/myparcel/shipping-options/create",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
@@ -118,7 +118,7 @@ class ShippingOptionsController extends StorefrontController
             ]);
         }
 
-        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+        $context = new Context(new SystemSource());
 
         $order = $this->orderService->getOrder($orderId, $orderVersionId, $context);
 
@@ -134,8 +134,10 @@ class ShippingOptionsController extends StorefrontController
         }
 
         $shippingOptions = [
-            ShippingOptionEntity::FIELD_ORDER_ID => $orderId,
-            ShippingOptionEntity::FIELD_ORDER_VERSION_ID => $orderVersionId,
+            ShippingOptionEntity::FIELD_ORDER => [
+                ShippingOptionEntity::FIELD_ORDER_ID => $orderId,
+                ShippingOptionEntity::FIELD_VERSION_ID => $orderVersionId,
+            ],
         ];
 
         $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
@@ -214,7 +216,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options",
+     *     "/api/v{version}/_action/myparcel/shipping-options/all",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_ALL,
      *     methods={"GET"}
@@ -233,7 +235,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping_options/show",
+     *     "/api/v{version}/_action/myparcel/shipping-options/show",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
      *     methods={"POST"}

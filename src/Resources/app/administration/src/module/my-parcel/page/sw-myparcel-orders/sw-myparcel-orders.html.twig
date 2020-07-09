@@ -14,7 +14,7 @@
 
         {% block sw_myparcel_smart_bar_actions %}
             <template #smart-bar-actions>
-                <sw-button :disabled="false" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleShipmentsModal">
+                <sw-button :disabled="!createMultipleShipmentsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleShipmentsModal">
                     {{ $tc('sw-myparcel.orders.buttons.createShipmentsButton') }}
                 </sw-button>
             </template>

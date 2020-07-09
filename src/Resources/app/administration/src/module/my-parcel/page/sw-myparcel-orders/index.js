@@ -15,7 +15,7 @@ Component.register('sw-myparcel-orders', {
 
     inject: [
         'repositoryFactory',
-        'MyParcelShippingOptionService'
+        'MyParcelShipmentService'
     ],
 
     data() {
@@ -54,6 +54,10 @@ Component.register('sw-myparcel-orders', {
     },
 
     computed: {
+        createMultipleShipmentsAvailable() {
+            return !!this.selectedShippingOptionIds && this.selectedShippingOptionIds.length > 0 || false;
+        },
+
         shippingOptionRepository() {
             return this.repositoryFactory.create('kiener_my_parcel_shipping_option');
         },
@@ -64,13 +68,25 @@ Component.register('sw-myparcel-orders', {
             criteria.setTerm(this.term);
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
             criteria.addAssociation('order');
-            criteria.addAssociation('shipment');
 
             return criteria;
         },
     },
 
     methods: {
+        saveSingleShipment(item) {
+            this.MyParcelShipmentService.createShipment({
+                order_id: item.order.id,
+                order_version_id: item.order.versionId,
+                shipping_option_id: item.id,
+            })
+                .then((result) => {
+                    console.log(result);
+                });
+
+            this.createSingleShipment.showModal = false;
+        },
+
         getList() {
             this.isLoading = true;
 
@@ -130,7 +146,15 @@ Component.register('sw-myparcel-orders', {
         },
 
         onCreateSingleShipment() {
-            console.log(this.createSingleShipment.item);
+            if (!!this.createSingleShipment.item) {
+                this.shippingOptionRepository.save(this.createSingleShipment.item, Shopware.Context.api)
+                    .then(() => {
+                        this.saveSingleShipment(this.createSingleShipment.item);
+                    })
+                    .catch(() => {
+                        //
+                    });
+            }
         },
 
         onOpenCreateMultipleShipmentsModal() {
