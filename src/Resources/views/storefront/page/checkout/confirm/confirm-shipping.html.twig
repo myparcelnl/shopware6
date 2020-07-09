@@ -11,7 +11,7 @@
 
     {# Todo: only show this form when a myparcel shipping method is selected #}
 
-    <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}">
+    <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">
         <label class="d-block">
             <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1"> Ochtendlevering
         </label>

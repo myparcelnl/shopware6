@@ -17,7 +17,9 @@ export default class ShippingOptions extends Plugin {
                 deliveryOptionInputs.forEach(function (deliveryOptionInput) {
                     deliveryOptionInput.addEventListener('change', function() {
                         let targetName = deliveryOptionInput.getAttribute('data-target');
-                        console.log(targetName);
+                        let targetElement = document.querySelector(targetName);
+
+                        targetElement.value = deliveryOptionInput.value;
                     });
                 });
 
