@@ -3,6 +3,9 @@ import template from './sw-myparcel-orders.html.twig';
 const { Component, Mixin } = Shopware;
 const { Criteria } = Shopware.Data;
 
+const DELIVERY_TYPE_MORNING = 1;
+const DELIVERY_TYPE_EVENING = 3;
+
 Component.register('sw-myparcel-orders', {
     template: template,
 
@@ -23,12 +26,15 @@ Component.register('sw-myparcel-orders', {
             sortDirection: 'ASC',
             createSingleShipment: {
                 item: null,
-                actionType: null,
+                actionType: 'download',
+                printPosition: [1,2,3,4],
+                numberOfLabels: 1,
                 showModal: false,
             },
-            createMultipleShipment: {
+            createMultipleShipments: {
                 items: [],
-                actionType: null,
+                actionType: 'download',
+                printPosition: [1,2,3,4],
                 showModal: false,
             },
         };
@@ -76,6 +82,16 @@ Component.register('sw-myparcel-orders', {
             });
         },
 
+        onlyRecipientChecked(item) {
+            return this.onlyRecipientDisabled(item) === true
+                || item.onlyRecipient;
+        },
+
+        onlyRecipientDisabled(item) {
+            return item.deliveryType === DELIVERY_TYPE_MORNING
+                || item.deliveryType === DELIVERY_TYPE_EVENING;
+        },
+
         onSelectionChanged(selected) {
             console.log(selected);
         },
@@ -104,6 +120,19 @@ Component.register('sw-myparcel-orders', {
 
         onCreateSingleShipment() {
             console.log(this.createSingleShipment.item);
+        },
+
+        onOpenCreateMultipleShipmentsModal(item) {
+            this.createMultipleShipments.item = item;
+            this.createMultipleShipments.showModal = true;
+        },
+
+        onCloseMultipleShipmentsModal() {
+            this.createMultipleShipments.showModal = false;
+        },
+
+        onCreateMultipleShipments() {
+            console.log(this.createMultipleShipments.item);
         },
     }
 });

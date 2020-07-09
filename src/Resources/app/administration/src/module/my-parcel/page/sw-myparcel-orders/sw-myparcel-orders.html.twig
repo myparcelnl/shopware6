@@ -65,46 +65,63 @@
                           variant="small">
 
                     <form>
-                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading') }}</h3>
 
-                        <sw-radio-field name="myparcel[action_type]"
-                                        v-model="createSingleShipment.actionType"
-                                        :options="[
-                                {'value': 'download', 'name': $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') },
-                                {'value': 'create', 'name': $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }]">
-                        </sw-radio-field><br /><br /><br />
-                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading') }}</h3>
-                        <sw-radio-field name="myparcel[package_type]"
-                                        v-model="createSingleShipment.item.packageType"
-                                        :options="[
-                                {'value': 1, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') },
-                                {'value': 2, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') },
-                                {'value': 3, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') },
-                                {'value': 4, 'name': $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }]">
-                        </sw-radio-field><br /><br /><br />
-                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.printPositionHeading') }}</h3>
-                        <br /><br /><br />
-                        <h3>{{ $tc('sw-myparcel.orders.modals.createShipment.shippingOptionsHeading') }}</h3>
-                        <label>
-                            <input type="checkbox" name="myparcel[only_recipient]" value="1" v-model="createSingleShipment.item.onlyRecipient" />
-                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionOnlyRecipientLabel') }}
-                        </label><br />
-                        <label>
-                            <input type="checkbox" name="myparcel[requires_age_check]" value="1" v-model="createSingleShipment.item.requiresAgeCheck" />
-                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionRequiresAgeCheckLabel') }}
-                        </label><br />
-                        <label>
-                            <input type="checkbox" name="myparcel[requires_signature]" value="1" v-model="createSingleShipment.item.requiresSignature" />
-                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionRequiresSignatureLabel') }}
-                        </label><br />
-                        <label>
-                            <input type="checkbox" name="myparcel[return_if_not_home]" value="1" v-model="createSingleShipment.item.returnIfNotHome" />
-                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionReturnIfNotHomeLabel') }}
-                        </label><br />
-                        <label>
-                            <input type="checkbox" name="myparcel[large_package]" value="1" v-model="createSingleShipment.item.largePackage" />
-                            {{ $tc('sw-myparcel.orders.modals.createShipment.optionLargePackageLabel') }}
-                        </label><br /><br /><br />
+                        <sw-select-field
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading')"
+                                name="myparcel[action_type]"
+                                v-model="createSingleShipment.actionType">
+
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') }}</option>
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }}</option>
+                        </sw-select-field>
+
+                        <sw-select-number-field
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading')"
+                                name="myparcel[package_type]"
+                                v-model="createSingleShipment.item.packageType">
+
+                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') }}</option>
+                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') }}</option>
+                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') }}</option>
+                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }}</option>
+                        </sw-select-number-field>
+
+                        <sw-multi-select
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.printPositionHeading')"
+                                name="myparcel[print_position]"
+                                v-model="createSingleShipment.printPosition"
+                                :options="[
+                                { value: 1, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomRightLabel') },
+                            ]">
+                        </sw-multi-select>
+
+                        <sw-number-field
+                            :label="$tc('sw-myparcel.orders.modals.createShipment.numberOfLabelsHeading')"
+                            name="myparcel[number_of_labels]"
+                            numberType="int"
+                            :min="1"
+                            :step="1"
+                            v-model="createSingleShipment.numberOfLabels" />
+
+                        <template v-if="createSingleShipment.item.packageType === 1">
+                            <sw-base-field :label="$tc('sw-myparcel.orders.modals.createShipment.shippingOptionsHeading')" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionOnlyRecipientLabel')" name="myparcel[only_recipient]" value="1" v-model="createSingleShipment.item.onlyRecipient" :checked="onlyRecipientChecked(createSingleShipment.item)" :disabled="onlyRecipientDisabled(createSingleShipment.item)" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionRequiresAgeCheckLabel')" name="myparcel[requires_age_check]" value="1" v-model="createSingleShipment.item.requiresAgeCheck" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionRequiresSignatureLabel')" name="myparcel[requires_signature]" value="1" v-model="createSingleShipment.item.requiresSignature" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionReturnIfNotHomeLabel')" name="myparcel[return_if_not_home]" value="1" v-model="createSingleShipment.item.returnIfNotHome" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionLargePackageLabel')" name="myparcel[large_package]" value="1" v-model="createSingleShipment.item.largePackage" /><br />
+                        </template>
+
+                        <template v-else>
+                            <input type="hidden" name="myparcel[requires_age_check]" value="0" />
+                            <input type="hidden" name="myparcel[requires_signature]" value="0" />
+                            <input type="hidden" name="myparcel[return_if_not_home]" value="0" />
+                            <input type="hidden" name="myparcel[large_package]" value="0" />
+                        </template>
+
                     </form>
 
                     <template slot="modal-footer">
@@ -112,6 +129,57 @@
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
                         <sw-button @click="onCreateSingleShipment" variant="primary" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
+                        </sw-button>
+                    </template>
+                </sw-modal>
+
+                <sw-modal v-if="createMultipleShipments.showModal === true"
+                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleMultiple')"
+                          @modal-close="onCloseMultipleShipmentsModal"
+                          variant="small">
+
+                    <form>
+
+                        <sw-select-field
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading')"
+                                name="myparcel[action_type]"
+                                v-model="createMultipleShipments.actionType">
+
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') }}</option>
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }}</option>
+                        </sw-select-field>
+
+                        <sw-select-number-field
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading')"
+                                name="myparcel[package_type]"
+                                v-model="createMultipleShipments.item.packageType">
+
+                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') }}</option>
+                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') }}</option>
+                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') }}</option>
+                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }}</option>
+                        </sw-select-number-field>
+
+                        <sw-multi-select
+                                :label="$tc('sw-myparcel.orders.modals.createShipment.printPositionHeading')"
+                                name="myparcel[print_position]"
+                                v-model="createMultipleShipments.printPosition"
+                                :options="[
+                                { value: 1, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomRightLabel') },
+                            ]">
+                        </sw-multi-select>
+
+                    </form>
+
+                    <template slot="modal-footer">
+                        <sw-button @click="onCloseMultipleShipmentsModal" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
+                        </sw-button>
+                        <sw-button @click="onCreateMultipleShipments" variant="primary" size="small">
                             {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
                         </sw-button>
                     </template>
