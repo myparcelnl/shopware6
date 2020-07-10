@@ -6,17 +6,21 @@ const { Criteria } = Shopware.Data;
 const DELIVERY_TYPE_MORNING = 1;
 const DELIVERY_TYPE_EVENING = 3;
 
+const ACTION_TYPE_DOWNLOAD = 'download';
+const ACTION_TYPE_CREATE = 'create';
+
 Component.register('sw-myparcel-orders', {
     template: template,
 
     mixins: [
-        Mixin.getByName('listing')
+        Mixin.getByName('listing'),
+        Mixin.getByName('notification')
     ],
 
     inject: [
         'repositoryFactory',
         'MyParcelShipmentService',
-        'MyParcelConsignmentService'
+        'MyParcelConsignmentService',
     ],
 
     data() {
@@ -27,14 +31,14 @@ Component.register('sw-myparcel-orders', {
             sortDirection: 'ASC',
             createSingleShipment: {
                 item: null,
-                actionType: 'download',
+                actionType: ACTION_TYPE_DOWNLOAD,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
             },
             createMultipleShipments: {
                 items: [],
-                actionType: 'download',
+                actionType: ACTION_TYPE_DOWNLOAD,
                 packageType: 1,
                 printPosition: [1,2,3,4],
                 showModal: false,
@@ -75,11 +79,11 @@ Component.register('sw-myparcel-orders', {
     },
 
     methods: {
-        saveSingleShipment(item, labelPositions) {
+        saveSingleShipment(shipmentData) {
             this.MyParcelShipmentService.createShipment({
-                order_id: item.order.id,
-                order_version_id: item.order.versionId,
-                shipping_option_id: item.id,
+                order_id: shipmentData.item.order.id,
+                order_version_id: shipmentData.item.order.versionId,
+                shipping_option_id: shipmentData.item.id,
             })
                 .then((response) => {
                     if (
@@ -87,25 +91,27 @@ Component.register('sw-myparcel-orders', {
                         && !!response.shipment
                     ) {
                         let order = {
-                            order_id: item.order.id,
-                            order_version_id: item.order.versionId
+                            order_id: shipmentData.item.order.id,
+                            order_version_id: shipmentData.item.order.versionId
                         };
 
-                        this.createConsignments([order], item.packageType, labelPositions, response.shipment);
+                        this.createConsignments([order], shipmentData, response.shipment);
                     }
                 });
 
             this.createSingleShipment.showModal = false;
         },
 
-        createConsignments(orderIds, packageType, labelPositions, shipment) {
+        createConsignments(orderIds, shipmentData, shipment) {
             this.MyParcelConsignmentService.createConsignments({
                 order_ids: orderIds,
-                label_positions: labelPositions,
-                package_type: packageType,
+                label_positions: shipmentData.printPosition,
+                package_type: shipmentData.packageType,
+                number_of_labels: shipmentData.numberOfLabels,
                 shipment_id: shipment.id
             })
                 .then((response) => {
+                    // shipmentData.actionType
                     console.log(response);
                 });
         },
@@ -172,7 +178,7 @@ Component.register('sw-myparcel-orders', {
             if (!!this.createSingleShipment.item) {
                 this.shippingOptionRepository.save(this.createSingleShipment.item, Shopware.Context.api)
                     .then(() => {
-                        this.saveSingleShipment(this.createSingleShipment.item, this.createSingleShipment.printPosition);
+                        this.saveSingleShipment(this.createSingleShipment);
                     })
                     .catch(() => {
                         //

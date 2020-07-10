@@ -30,21 +30,23 @@
                 @sw-grid-select-all="onSelectionChanged"
                 @sort-column="onSortColumn">
             <template slot="columns" slot-scope="{ item }">
-                <sw-grid-column flex="minmax(200px, 1fr)" label="Order" dataIndex="order.orderNumber" :sortable="true">
+                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.orderColumn')" dataIndex="order.orderNumber" :sortable="true">
                     {{ item.order.orderNumber }}
                 </sw-grid-column>
 
-                <sw-grid-column flex="minmax(200px, 1fr)" label="Aankoopdatum" dataIndex="order.orderDateTime" :sortable="true">
+                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.orderDateColumn')" dataIndex="order.orderDateTime" :sortable="true">
                     {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit'}) }}
                 </sw-grid-column>
 
-                <sw-grid-column flex="minmax(200px, 1fr)" label="Totaalbedrag">
+                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.packageTypeColumn')">
                     {{ item.shippingOption.packageType }}
                 </sw-grid-column>
 
-                <sw-grid-column flex="minmax(200px, 1fr)" label="Acties">
+                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.actionsColumn')">
                     <sw-context-button :showMenuOnStartup="false" :menuWidth="220" menuHorizontalAlign="right" menuVerticalAlign="bottom" icon="small-more" :disabled="false" :autoClose="true" :zIndex="9000">
-
+                        <sw-context-menu-item :disabled="!item.labelUrl" class="sw-myparcel-shipping-options-list__create-shipment-action" @click="onDownloadLabel(item)">
+                            {{ $tc('sw-myparcel.orders.buttons.downloadLabel') }}
+                        </sw-context-menu-item>
                     </sw-context-button>
                 </sw-grid-column>
             </template>

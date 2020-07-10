@@ -5,7 +5,7 @@ class MyParcelConsignmentService extends ApiService {
         super(httpClient, loginService, apiEndpoint);
     }
 
-    createConsignments(data = { order_ids: null, label_positions: null, package_type: null, shipment_id: null }) {
+    createConsignments(data = { order_ids: null, label_positions: null, number_of_labels: null, package_type: null, shipment_id: null }) {
         const headers = this.getBasicHeaders();
 
         return this.httpClient

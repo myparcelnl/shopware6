@@ -88,5 +88,11 @@ Component.register('sw-myparcel-shipments', {
             this.sortDirection = sortDirection;
             this.getList();
         },
+
+        onDownloadLabel(item) {
+            if (!!item.labelUrl) {
+                window.open(item.labelUrl);
+            }
+        }
     }
 });

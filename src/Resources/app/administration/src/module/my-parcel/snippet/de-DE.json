@@ -7,6 +7,15 @@
       "shippingMethodsMenuItemGeneral": "Shipping methods",
       "descriptionTextModule": "Tagline for MyParcel"
     },
+    "columns": {
+      "orderColumn": "Order",
+      "orderDateColumn": "Order date",
+      "totalAmountColumn": "Total amount",
+      "statusColumn": "Status",
+      "actionsColumn": "Actions",
+      "packageTypeColumn": "Package type",
+      "carrierColumn": "Carrier"
+    },
     "orders": {
       "title": "Orders",
       "modals": {
@@ -39,7 +48,13 @@
         "viewOrder": "View the order",
         "cancelButton": "Cancel",
         "createShipmentButton": "Create shipment",
-        "createShipmentsButton": "Create shipments"
+        "createShipmentsButton": "Create shipments",
+        "viewShippingMethod": "View shipping method",
+        "downloadLabel": "Download label"
+      },
+      "messages": {
+        "error": "An error has occurred",
+        "shipmentSuccess": "The shipment is successfully created"
       }
     },
     "shipments": {
