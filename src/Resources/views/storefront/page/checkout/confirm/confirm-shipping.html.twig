@@ -2,30 +2,32 @@
 
 {% block page_checkout_confirm_shipping_form_input %}
     {{ parent() }}
-
-    {# Todo: add is-myparcel-shipping-option class #}
+{#     Todo: add is-myparcel-shipping-option class #}
 {% endblock %}
 
 {% block page_checkout_confirm_shipping_form_label %}
     {{ parent() }}
-
     {# Todo: only show this form when a myparcel shipping method is selected #}
-
-    <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">
-        <label class="d-block">
-            <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1"> Ochtendlevering
-        </label>
-        <label class="d-block">
-            <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="2"> Standaardlevering
-        </label>
-        <label class="d-block">
-            <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="3"> Avondlevering
-        </label>
-        <label class="d-block">
-            <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1"> Handtekening voor ontvangst
-        </label>
-        <label class="d-block">
-            <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1"> Niet bij de buren bezorgen
-        </label>
-    </form>
+    {% if shipping.id in page.myparcel_shipping_method_ids %}
+        <div class="myparcel_shipping_form" data-myparcel-option="true" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">
+            {# can't have a from inside a form #}
+{#            <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">#}
+                <label class="d-block">
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1"> Ochtendlevering
+                </label>
+                <label class="d-block">
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="2"> Standaardlevering
+                </label>
+                <label class="d-block">
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="3"> Avondlevering
+                </label>
+                <label class="d-block">
+                    <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1"> Handtekening voor ontvangst
+                </label>
+                <label class="d-block">
+                    <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1"> Niet bij de buren bezorgen
+                </label>
+{#            </form>#}
+        </div>
+    {% endif %}
 {% endblock %}

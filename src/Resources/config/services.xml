@@ -5,6 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
+            <argument id="Shopware\Storefront\Page\GenericPageLoader" type="service"/>
+            <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
+        </service>
+
 
         <!-- Services -->
         <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">

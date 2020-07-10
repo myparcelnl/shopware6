@@ -1,0 +1,10 @@
+Shopware\Core\Framework\Validation\DataBag\RequestDataBag Object
+(
+    [parameters:protected] => Array
+        (
+            [_csrf_token] => eS1xvpuJcnrnaP5W9-bpfhfYOsQk2ZqvJu-ASlgLv8g
+            [redirectTo] => frontend.checkout.confirm.page
+            [shippingMethodId] => bd08a080903c4c938edb9835e9c5d4b7
+        )
+
+)

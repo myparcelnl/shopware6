@@ -46,5 +46,6 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
         $args->getPage()->assign([
             'myparcel_shipping_method_ids' => $this->shippingMethodService->getMyParcelShippingMethodIds($args->getContext()),
         ]);
+
     }
 }
