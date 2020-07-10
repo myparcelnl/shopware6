@@ -139,6 +139,14 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        if (
+            $shippingOptions->getPackageType() !== null
+            && is_int($shippingOptions->getPackageType())
+            && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
+        ) {
+            $consignment->setPackageType($shippingOptions->getPackageType());
+        }
+
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
             $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
         }
@@ -153,14 +161,6 @@ class ConsignmentService
 
         if ($shippingOptions->getOnlyRecipient() !== null) {
             $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
-        }
-
-        if (
-            $shippingOptions->getPackageType() !== null
-            && is_int($shippingOptions->getPackageType())
-            && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
-        ) {
-            $consignment->setPackageType($packageType ?? $shippingOptions->getPackageType());
         }
 
         try {
@@ -201,7 +201,12 @@ class ConsignmentService
             }
 
             /** @var OrderEntity $order */
-            $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, []);
+            $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, [
+                'addresses',
+                'deliveries',
+                'deliveries.shippingOrderAddress',
+                'deliveries.shippingOrderAddress.country',
+            ]);
 
             if ($order !== null) {
 

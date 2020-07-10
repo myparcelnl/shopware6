@@ -8,6 +8,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 class ShipmentService
@@ -78,10 +79,28 @@ class ShipmentService
     public function getShipment(string $id, Context $context): ?ShipmentEntity
     {
         $criteria = new Criteria([$id]);
-        $criteria->addAssociation('kiener_my_parcel_shipment.shipping_option');
-        $criteria->addAssociation('kiener_my_parcel_shipment.order');
+        $criteria->addAssociation('shipping_option');
+        $criteria->addAssociation('order');
 
         return $this->shipmentRepository->search($criteria, $context)->get($id);
+    }
+
+    /**
+     * Returns a shipment object from the database by the shipping option id.
+     *
+     * @param string  $shippingOptionId
+     * @param Context $context
+     *
+     * @return ShipmentEntity|null
+     */
+    public function getShipmentByShippingOptionId(string $shippingOptionId, Context $context): ?ShipmentEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('shippingOptionId', $shippingOptionId));
+        $criteria->addAssociation('shipping_option');
+        $criteria->addAssociation('order');
+
+        return $this->shipmentRepository->search($criteria, $context)->first();
     }
 
     /**

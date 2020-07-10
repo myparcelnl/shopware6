@@ -7,12 +7,21 @@
       "shippingMethodsMenuItemGeneral": "Shipping methods",
       "descriptionTextModule": "Tagline for MyParcel"
     },
+    "columns": {
+      "orderColumn": "Order",
+      "orderDateColumn": "Aankoopdatum",
+      "totalAmountColumn": "Totaalbedrag",
+      "statusColumn": "Status",
+      "actionsColumn": "Acties",
+      "packageTypeColumn": "Type pakket",
+      "carrierColumn": "Carrier"
+    },
     "orders": {
       "title": "Bestellingen",
       "modals": {
         "createShipment": {
           "titleSingle": "Maak verzending aan",
-          "titleMultiple": "Maak verzendingen aan",
+          "titleMultiple": "Maak verzendingen aan ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
           "actionTypeCreateLabel": "Maak zending",
           "packageTypePackageLabel": "Pakket",
@@ -24,6 +33,10 @@
           "optionRequiresSignatureLabel": "Handtekening nodig",
           "optionReturnIfNotHomeLabel": "Retour bij niet aanwezig",
           "optionLargePackageLabel": "Groot pakket",
+          "positionTopLeftLabel": "Linksboven",
+          "positionTopRightLabel": "Rechtsboven",
+          "positionBottomLeftLabel": "Linksonder",
+          "positionBottomRightLabel": "Rechtsonder",
           "actionTypeHeading": "Type actie",
           "packageTypeHeading": "Type pakket",
           "numberOfLabelsHeading": "Aantal labels",
@@ -35,7 +48,13 @@
         "viewOrder": "Order bekijken",
         "cancelButton": "Annuleren",
         "createShipmentButton": "Verzending aanmaken",
-        "createShipmentsButton": "Verzendingen aanmaken"
+        "createShipmentsButton": "Verzendingen aanmaken",
+        "viewShippingMethod": "Bekijk verzendmethod",
+        "downloadLabel": "Label downloaden"
+      },
+      "messages": {
+        "error": "Er heeft een fout plaatsgevonden",
+        "shipmentSuccess": "De verzending is succesvol aangemaakt"
       }
     },
     "shipments": {

@@ -92,7 +92,6 @@ class ShippingOptionsService
     {
         $criteria = new Criteria([$id]);
         $criteria->addAssociation('order');
-        $criteria->addAssociation('shipment');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->get($id);
     }
@@ -106,8 +105,7 @@ class ShippingOptionsService
     public function getAllShippingOptions(Context $context): array
     {
         $criteria = new Criteria();
-        $criteria->addAssociation('kiener_my_parcel_shipping_option.order');
-        $criteria->addAssociation('kiener_my_parcel_shipping_option.shipment');
+        $criteria->addAssociation('order');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->getVars();
     }

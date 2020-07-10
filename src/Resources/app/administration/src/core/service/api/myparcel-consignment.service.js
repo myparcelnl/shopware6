@@ -1,16 +1,17 @@
 const ApiService = Shopware.Classes.ApiService;
 
-class MyParcelShippingOptionService extends ApiService {
+class MyParcelConsignmentService extends ApiService {
     constructor(httpClient, loginService, apiEndpoint = 'myparcel') {
         super(httpClient, loginService, apiEndpoint);
     }
 
-    getShippingOptions() {
+    createConsignments(data = { order_ids: null, label_positions: null, number_of_labels: null, package_type: null, shipment_id: null }) {
         const headers = this.getBasicHeaders();
 
         return this.httpClient
-            .get(
-                `_action/${this.getApiBasePath()}/shipping-options`,
+            .post(
+                `_action/${this.getApiBasePath()}/consignment/create-consignments`,
+                JSON.stringify(data),
                 {
                     headers: headers
                 }
@@ -21,4 +22,4 @@ class MyParcelShippingOptionService extends ApiService {
     }
 }
 
-export default MyParcelShippingOptionService;
+export default MyParcelConsignmentService;

@@ -7,12 +7,21 @@
       "shippingMethodsMenuItemGeneral": "Shipping methods",
       "descriptionTextModule": "Tagline for MyParcel"
     },
+    "columns": {
+      "orderColumn": "Order",
+      "orderDateColumn": "Order date",
+      "totalAmountColumn": "Total amount",
+      "statusColumn": "Status",
+      "actionsColumn": "Actions",
+      "packageTypeColumn": "Package type",
+      "carrierColumn": "Carrier"
+    },
     "orders": {
       "title": "Orders",
       "modals": {
         "createShipment": {
           "titleSingle": "Create a shipment",
-          "titleMultiple": "Create shipments",
+          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
           "actionTypeCreateLabel": "Create consignment",
           "packageTypePackageLabel": "Package",
@@ -24,6 +33,10 @@
           "optionRequiresSignatureLabel": "Requires signature",
           "optionReturnIfNotHomeLabel": "Return if not home",
           "optionLargePackageLabel": "Large package",
+          "positionTopLeftLabel": "Top left",
+          "positionTopRightLabel": "Top right",
+          "positionBottomLeftLabel": "Bottom left",
+          "positionBottomRightLabel": "Bottom right",
           "actionTypeHeading": "Action type",
           "packageTypeHeading": "Package type",
           "numberOfLabelsHeading": "Number of labels",
@@ -35,7 +48,13 @@
         "viewOrder": "View the order",
         "cancelButton": "Cancel",
         "createShipmentButton": "Create shipment",
-        "createShipmentsButton": "Create shipments"
+        "createShipmentsButton": "Create shipments",
+        "viewShippingMethod": "View shipping method",
+        "downloadLabel": "Download label"
+      },
+      "messages": {
+        "error": "An error has occurred",
+        "shipmentSuccess": "The shipment is successfully created"
       }
     },
     "shipments": {
