@@ -30,7 +30,9 @@
         <service id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService"/>
+            <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="kiener_my_parcel_shipping_method.repository"/>
+            <argument type="service" id="rule_condition.repository"/>
             <argument type="service" id="shipping_method.repository"/>
         </service>
 

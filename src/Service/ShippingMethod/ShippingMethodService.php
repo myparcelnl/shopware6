@@ -5,8 +5,10 @@ namespace Kiener\KienerMyParcel\Service\ShippingMethod;
 use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
 use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
 use Psr\Log\LoggerInterface;
-use Shopware\Core\Checkout\Cart\Rule\CartAmountRule;
+use Shopware\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity as ShopwareShippingMethodEntity;
+use Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
+use Shopware\Core\Content\Rule\RuleEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -31,7 +33,17 @@ class ShippingMethodService
     /**
      * @var EntityRepositoryInterface
      */
+    private $deliveryTimeRepository;
+
+    /**
+     * @var EntityRepositoryInterface
+     */
     private $myParcelShippingMethodRepository;
+
+    /**
+     * @var EntityRepositoryInterface
+     */
+    private $ruleConditionRepository;
 
     /**
      * @var EntityRepositoryInterface
@@ -41,13 +53,17 @@ class ShippingMethodService
     public function __construct(
         LoggerInterface $logger,
         ConsignmentService $consignmentService,
+        EntityRepositoryInterface $deliveryTimeRepository,
         EntityRepositoryInterface $myParcelShippingMethodRepository,
+        EntityRepositoryInterface $ruleConditionRepository,
         EntityRepositoryInterface $shopwareShippingMethodRepository
     )
     {
         $this->logger = $logger;
         $this->consignmentService = $consignmentService;
+        $this->deliveryTimeRepository = $deliveryTimeRepository;
         $this->myParcelShippingMethodRepository = $myParcelShippingMethodRepository;
+        $this->ruleConditionRepository = $ruleConditionRepository;
         $this->shopwareShippingMethodRepository = $shopwareShippingMethodRepository;
     }
 
@@ -231,27 +247,58 @@ class ShippingMethodService
             return $existingShippingMethod->getShippingMethodId();
         }
 
+        // Build an array of availability rule data
+        $availabilityRuleData = [
+            'name' => 'Always valid (Default)',
+            'priority' => 100,
+            'type' => (new AlwaysValidRule())->getName(),
+        ];
+
+        // Get the id of the default rule
+        $rule = $this->getAlwaysValidRule($context);
+
+        if ($rule !== null) {
+            $availabilityRuleData = [
+                'id' => $rule->getId(),
+            ];
+        }
+
+        // Build an array of delivery time data
+        $deliveryTimeData = [
+            'min' => 1,
+            'max' => 3,
+            'unit' => DeliveryTimeEntity::DELIVERY_TIME_DAY,
+            'name' => '1 - 3 days',
+            'translations' => [
+                Defaults::LANGUAGE_SYSTEM => [
+                    'name' => '1 - 3 days',
+                ],
+            ],
+        ];
+
+        $existingDeliveryTime = $this->getExistingDeliveryTime($context);
+
+        if ($existingDeliveryTime !== null) {
+            $deliveryTimeData = [
+                'id' => $existingDeliveryTime->getId(),
+            ];
+        }
+
         // Create or update the shipping method
         $event = $this->shopwareShippingMethodRepository->upsert([
             [
                 'id' => $id,
                 'name' => $carrierName,
                 'active' => false,
-                'availabilityRule' => [
-                    'name' => 'Cart >= 0',
-                    'priority' => 1,
-                    'type' => (new CartAmountRule())->getName(),
-                ],
-                'deliveryTime' => [
-                    'min' => 1,
-                    'max' => 3,
-                    'unit' => DeliveryTimeEntity::DELIVERY_TIME_DAY,
-                    'name' => '1 - 3 days',
-                    'translations' => [
-                        Defaults::LANGUAGE_SYSTEM => [
-                            'name' => '1 - 3 days',
-                        ],
-                    ],
+                'availabilityRule' => $availabilityRuleData,
+                'deliveryTime' => $deliveryTimeData,
+                'prices' => [
+                    [
+                        'calculation' => 1,
+                        'currencyId' => $context->getCurrencyId(),
+                        'price' => 0.0,
+                        'quantityStart' => 1,
+                    ]
                 ],
             ],
         ], $context);
@@ -266,5 +313,43 @@ class ShippingMethodService
         }
 
         return $id;
+    }
+
+    /**
+     * Returns the always valid rule.
+     *
+     * @param Context $context
+     *
+     * @return RuleEntity|null
+     */
+    private function getAlwaysValidRule(Context $context): ?RuleEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('type', (new AlwaysValidRule())->getName()));
+        $criteria->addAssociation('rule');
+
+        /** @var RuleConditionEntity|null $ruleCondition */
+        $ruleCondition = $this->ruleConditionRepository->search($criteria, $context)->first();
+
+        if (
+            $ruleCondition !== null
+            && $ruleCondition->getRule() !== null
+        ) {
+            return $ruleCondition->getRule();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns an existing delivery time.
+     *
+     * @param Context $context
+     *
+     * @return DeliveryTimeEntity|null
+     */
+    private function getExistingDeliveryTime(Context $context): ?DeliveryTimeEntity
+    {
+        return $this->deliveryTimeRepository->search(new Criteria(), $context)->first();
     }
 }
