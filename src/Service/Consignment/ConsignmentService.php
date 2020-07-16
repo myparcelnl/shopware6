@@ -22,6 +22,7 @@ class ConsignmentService
 {
     private const FIELD_ORDER_ID = 'order_id';
     private const FIELD_ORDER_VERSION_ID = 'order_version_id';
+    private const FIELD_PACKAGE_TYPE = 'package_type';
 
     /**
      * @var OrderService
@@ -85,13 +86,15 @@ class ConsignmentService
     /**
      * @param Context     $context
      * @param OrderEntity $orderEntity
+     * @param int         $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
      */
     private function createConsignment(
         Context $context,
-        OrderEntity $orderEntity
+        OrderEntity $orderEntity,
+        int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -136,6 +139,14 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        if (
+            $shippingOptions->getPackageType() !== null
+            && is_int($shippingOptions->getPackageType())
+            && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
+        ) {
+            $consignment->setPackageType($shippingOptions->getPackageType());
+        }
+
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
             $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
         }
@@ -150,14 +161,6 @@ class ConsignmentService
 
         if ($shippingOptions->getOnlyRecipient() !== null) {
             $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
-        }
-
-        if (
-            $shippingOptions->getPackageType() !== null
-            && is_int($shippingOptions->getPackageType())
-            && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
-        ) {
-            $consignment->setPackageType($shippingOptions->getPackageType());
         }
 
         try {
@@ -198,10 +201,27 @@ class ConsignmentService
             }
 
             /** @var OrderEntity $order */
-            $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, []);
+            $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, [
+                'addresses',
+                'deliveries',
+                'deliveries.shippingOrderAddress',
+                'deliveries.shippingOrderAddress.country',
+            ]);
 
             if ($order !== null) {
-                $consignment = $this->createConsignment($context, $order);
+
+                $packageType = null;
+
+                if(
+                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderId)
+                    && in_array($orderId[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
+                )
+                {
+                    $packageType = $orderId[self::FIELD_PACKAGE_TYPE];
+                }
+
+
+                $consignment = $this->createConsignment($context, $order, $packageType);
 
                 if ($consignment !== null) {
                     $consignments->addConsignment($consignment);

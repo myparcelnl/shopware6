@@ -19,7 +19,6 @@ class Migration1593593459ShippingOptions extends MigrationStep
                 `id` BINARY(16) NOT NULL,
                 `order_id` BINARY(16) NOT NULL,
                 `order_version_id` BINARY(16) NOT NULL,
-                `shipment_id` BINARY(16) NULL,
                 `carrier_id` INT(11) NOT NULL,
                 `package_type` INT(11) NULL,
                 `delivery_type` INT(11) NULL,

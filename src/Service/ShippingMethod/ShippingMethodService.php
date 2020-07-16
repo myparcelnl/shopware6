@@ -129,7 +129,7 @@ class ShippingMethodService
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('shippingMethodId', $shopwareShippingMethodId));
-        $criteria->addAssociation('kiener_my_parcel_shipping_method.shipping_method');
+        $criteria->addAssociation('shipping_method');
 
         $shippingMethods = $this->myParcelShippingMethodRepository->search($criteria, $context);
 
@@ -148,7 +148,7 @@ class ShippingMethodService
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('carrierId', $carrierId));
-        $criteria->addAssociation('kiener_my_parcel_shipping_method.shipping_method');
+        $criteria->addAssociation('shipping_method');
 
         $shippingMethods = $this->myParcelShippingMethodRepository->search($criteria, $context);
 

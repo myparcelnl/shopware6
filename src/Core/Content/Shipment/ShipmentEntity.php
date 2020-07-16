@@ -4,9 +4,10 @@ namespace Kiener\KienerMyParcel\Core\Content\Shipment;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
-class ShipmentEntity
+class ShipmentEntity extends Entity
 {
     use EntityIdTrait;
 
@@ -17,6 +18,7 @@ class ShipmentEntity
     public const FIELD_ORDER = 'order';
     public const FIELD_ORDER_ID = 'orderId';
     public const FIELD_ORDER_VERSION_ID = 'orderVersionId';
+    public const FIELD_VERSION_ID = 'versionId';
     public const FIELD_LABEL_URL = 'labelUrl';
     public const FIELD_INSURED_AMOUNT= 'insuredAmount';
 

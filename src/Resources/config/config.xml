@@ -10,5 +10,17 @@
             <label>MyParcel API Key</label>
             <label lang="nl-NL">MyParcel API Key</label>
         </input-field>
+
+        <input-field type="float">
+            <name>costsDeliveryMorning</name>
+            <label>Morning delivery costs</label>
+            <label lang="nl-NL">Kosten ochtendbezorging</label>
+        </input-field>
+
+        <input-field type="float">
+            <name>costsDeliveryEvening</name>
+            <label>Evening delivery costs</label>
+            <label lang="nl-NL">Kosten avondbezorging</label>
+        </input-field>
     </card>
 </config>

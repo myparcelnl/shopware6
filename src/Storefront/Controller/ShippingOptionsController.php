@@ -27,7 +27,6 @@ class ShippingOptionsController extends StorefrontController
 
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
-    private const RESPONSE_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
     private const RESPONSE_KEY_SHIPPING_OPTIONS = 'shipping_options';
     private const RESPONSE_KEY_DELIVERY_TYPES = 'delivery_types';
 
@@ -92,7 +91,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping_options/create",
+     *     "/api/v{version}/_action/myparcel/shipping-options/create",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
@@ -103,7 +102,7 @@ class ShippingOptionsController extends StorefrontController
      * @return JsonResponse
      * @throws Exception
      */
-    public function createForOrder(Request $request): JsonResponse
+    public function createForOrder(Request $request): JsonResponse //NOSONAR
     {
         $orderId = $request->get(self::REQUEST_KEY_ORDER_ID);
         $orderVersionId = $request->get(self::REQUEST_KEY_ORDER_VERSION_ID);
@@ -119,7 +118,7 @@ class ShippingOptionsController extends StorefrontController
             ]);
         }
 
-        $context = $request->attributes->get(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT);
+        $context = new Context(new SystemSource());
 
         $order = $this->orderService->getOrder($orderId, $orderVersionId, $context);
 
@@ -135,28 +134,44 @@ class ShippingOptionsController extends StorefrontController
         }
 
         $shippingOptions = [
-            ShippingOptionEntity::FIELD_ORDER_ID => $orderId,
-            ShippingOptionEntity::FIELD_ORDER_VERSION_ID => $orderVersionId,
+            ShippingOptionEntity::FIELD_ORDER => [
+                ShippingOptionEntity::FIELD_ORDER_ID => $orderId,
+                ShippingOptionEntity::FIELD_VERSION_ID => $orderVersionId,
+            ],
         ];
 
+        $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
+
+        if ((string)$packageType !== ''
+            && is_int($packageType)
+            && in_array($packageType, AbstractConsignment::PACKAGE_TYPES_IDS, true)
+        ) {
+            $shippingOptions[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $packageType;
+        }
+
         if ((string)$request->get(self::REQUEST_KEY_AGE_CHECK) !== '') {
-            $shippingOptions[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = $request->get(self::REQUEST_KEY_AGE_CHECK);
+            $shippingOptions[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] =
+                $packageType === AbstractConsignment::PACKAGE_TYPE_PACKAGE && $request->get(self::REQUEST_KEY_AGE_CHECK);
         }
 
         if ((string)$request->get(self::REQUEST_KEY_LARGE_FORMAT) !== '') {
-            $shippingOptions[ShippingOptionEntity::FIELD_LARGE_FORMAT] = $request->get(self::REQUEST_KEY_LARGE_FORMAT);
+            $shippingOptions[ShippingOptionEntity::FIELD_LARGE_FORMAT] =
+                $packageType === AbstractConsignment::PACKAGE_TYPE_PACKAGE && $request->get(self::REQUEST_KEY_LARGE_FORMAT);
         }
 
         if ((string)$request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME) !== '') {
-            $shippingOptions[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME);
+            $shippingOptions[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] =
+                $packageType === AbstractConsignment::PACKAGE_TYPE_PACKAGE && $request->get(self::REQUEST_KEY_RETURN_IF_NOT_HOME);
         }
 
         if ((string)$request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE) !== '') {
-            $shippingOptions[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE);
+            $shippingOptions[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] =
+                $packageType === AbstractConsignment::PACKAGE_TYPE_PACKAGE && $request->get(self::REQUEST_KEY_REQUIRES_SIGNATURE);
         }
 
         if ((string)$request->get(self::REQUEST_KEY_ONLY_RECIPIENT) !== '') {
-            $shippingOptions[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = $request->get(self::REQUEST_KEY_ONLY_RECIPIENT);
+            $shippingOptions[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] =
+                $packageType === AbstractConsignment::PACKAGE_TYPE_PACKAGE && $request->get(self::REQUEST_KEY_ONLY_RECIPIENT);
         }
 
         $carrierId = $request->get(self::REQUEST_KEY_CARRIER_ID);
@@ -172,15 +187,6 @@ class ShippingOptionsController extends StorefrontController
             $shippingOptions[ShippingOptionEntity::FIELD_CARRIER_ID] = $carrierId;
         }
 
-        $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
-
-        if ((string)$packageType !== ''
-            && is_int($packageType)
-            && in_array($packageType, AbstractConsignment::PACKAGE_TYPES_IDS, true)
-        ) {
-            $shippingOptions[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $packageType;
-        }
-
         $deliveryType = $request->get(self::REQUEST_KEY_DELIVERY_TYPE);
 
         if ((string)$deliveryType !== ''
@@ -188,6 +194,12 @@ class ShippingOptionsController extends StorefrontController
             && in_array($deliveryType, AbstractConsignment::DELIVERY_TYPES_IDS, true)
         ) {
             $shippingOptions[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $deliveryType;
+
+            if(in_array($deliveryType, [AbstractConsignment::DELIVERY_TYPE_MORNING, AbstractConsignment::DELIVERY_TYPE_EVENING], true))
+            {
+                $shippingOptions[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = true;
+            }
+
         }
 
         $shippingOptionsEntity = $this->shippingOptionsService->createOrUpdateShippingOptions(
@@ -197,14 +209,14 @@ class ShippingOptionsController extends StorefrontController
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
-            self::RESPONSE_KEY_SHIPPING_OPTIONS_ID => $shippingOptionsEntity ? $shippingOptionsEntity->getId() : null
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity
         ]);
     }
 
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options",
+     *     "/api/v{version}/_action/myparcel/shipping-options/all",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_ALL,
      *     methods={"GET"}
@@ -223,7 +235,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping_options/show",
+     *     "/api/v{version}/_action/myparcel/shipping-options/show",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
      *     methods={"POST"}

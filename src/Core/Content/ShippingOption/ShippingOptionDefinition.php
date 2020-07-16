@@ -55,7 +55,6 @@ class ShippingOptionDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
-            (new FkField('shipment_id', 'shipmentId', ShipmentDefinition::class))->addFlags( new CascadeDelete()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
             (new IntField('package_type', 'packageType')),
             (new IntField('delivery_type', 'deliveryType')),
@@ -66,7 +65,6 @@ class ShippingOptionDefinition extends EntityDefinition
             (new BoolField('large_format', 'largeFormat')),
 
             (new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, true))->addFlags(new Required(), new CascadeDelete()),
-            (new OneToOneAssociationField('shipment', 'shipment_id', 'id', ShipmentDefinition::class, false))->addFlags( new CascadeDelete()),
         ]);
     }
 }

@@ -15,6 +15,7 @@ class ShippingOptionEntity extends Entity //NOSONAR
     public const FIELD_ORDER = 'order';
     public const FIELD_ORDER_ID = 'orderId';
     public const FIELD_ORDER_VERSION_ID = 'orderVersionId';
+    public const FIELD_VERSION_ID = 'versionId';
     public const FIELD_SHIPMENT = 'shipment';
     public const FIELD_SHIPMENT_ID = 'shipmentId';
     public const FIELD_CARRIER_ID = 'carrierId';
