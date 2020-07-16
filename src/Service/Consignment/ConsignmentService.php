@@ -3,8 +3,10 @@
 namespace Kiener\KienerMyParcel\Service\Consignment;
 
 use Exception;
+use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Kiener\KienerMyParcel\Helper\AddressHelper;
 use Kiener\KienerMyParcel\Service\Order\OrderService;
+use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
 use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
@@ -22,6 +24,7 @@ class ConsignmentService
 {
     private const FIELD_ORDER_ID = 'order_id';
     private const FIELD_ORDER_VERSION_ID = 'order_version_id';
+    private const FIELD_SHIPPING_OPTION_ID = 'shipping_option_id';
     private const FIELD_PACKAGE_TYPE = 'package_type';
 
     /**
@@ -35,6 +38,11 @@ class ConsignmentService
     private $shippingOptionsService;
 
     /**
+     * @var ShipmentService
+     */
+    private $shipmentService;
+
+    /**
      * @var string
      */
     private $apiKey;
@@ -44,16 +52,19 @@ class ConsignmentService
      *
      * @param OrderService           $orderService
      * @param ShippingOptionsService $shippingOptionsService
+     * @param ShipmentService        $shipmentService
      * @param SystemConfigService    $systemConfigService
      */
     public function __construct(
         OrderService $orderService,
         ShippingOptionsService $shippingOptionsService,
+        ShipmentService $shipmentService,
         SystemConfigService $systemConfigService
     )
     {
         $this->orderService = $orderService;
         $this->shippingOptionsService = $shippingOptionsService;
+        $this->shipmentService = $shipmentService;
 
         $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
     }
@@ -177,31 +188,71 @@ class ConsignmentService
     }
 
     /**
+     * @param Context     $context
+     * @param OrderEntity $orderEntity
+     * @param string      $shippingOptionId
+     *
+     * @return ShipmentEntity|null
+     */
+    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId): ?ShipmentEntity
+    {
+        $shipmentParameters = [
+            ShipmentEntity::FIELD_ORDER_ID => $orderEntity->getId(),
+            ShipmentEntity::FIELD_ORDER_VERSION_ID => $orderEntity->getVersionId(),
+            ShipmentEntity::FIELD_SHIPPING_OPTION_ID => $shippingOptionId,
+        ];
+
+        return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
+    }
+
+    /**
+     * @param Context        $context
+     * @param ShipmentEntity $shipment
+     * @param string         $labelUrl
+     *
+     * @return ShipmentEntity|null
+     */
+    private function addLabelUrlToShipment(Context $context, ShipmentEntity $shipment, string $labelUrl): ?ShipmentEntity
+    {
+        $shipmentParameters = [
+            ShipmentEntity::FIELD_ID => $shipment->getId(),
+            ShipmentEntity::FIELD_LABEL_URL => $labelUrl,
+        ];
+
+        return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
+    }
+
+    /**
      * @param Context    $context
-     * @param array      $orderIds
+     * @param array      $ordersData
      *
      * @param array|null $labelPositions
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
      */
-    public function createConsignments(Context $context, array $orderIds, ?array $labelPositions): MyParcelCollection //NOSONAR
+    public function createConsignments( //NOSONAR
+        Context $context,
+        array $ordersData,
+        ?array $labelPositions
+    ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
+        $shipments = [];
 
         /** @var OrderEntity $order */
-        foreach ($orderIds as $orderId) {
+        foreach ($ordersData as $orderData) {
 
-            if(
-                !array_key_exists(self::FIELD_ORDER_ID, $orderId)
-                || !array_key_exists(self::FIELD_ORDER_VERSION_ID, $orderId)
-            )
-            {
+            if (
+                !array_key_exists(self::FIELD_ORDER_ID, $orderData)
+                || !array_key_exists(self::FIELD_ORDER_VERSION_ID, $orderData)
+                || !array_key_exists(self::FIELD_SHIPPING_OPTION_ID, $orderData)
+            ) {
                 continue;
             }
 
             /** @var OrderEntity $order */
-            $order = $this->orderService->getOrder($orderId[self::FIELD_ORDER_ID], $orderId[self::FIELD_ORDER_VERSION_ID],$context, [
+            $order = $this->orderService->getOrder($orderData[self::FIELD_ORDER_ID], $orderData[self::FIELD_ORDER_VERSION_ID], $context, [
                 'addresses',
                 'deliveries',
                 'deliveries.shippingOrderAddress',
@@ -212,33 +263,38 @@ class ConsignmentService
 
                 $packageType = null;
 
-                if(
-                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderId)
-                    && in_array($orderId[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
-                )
-                {
-                    $packageType = $orderId[self::FIELD_PACKAGE_TYPE];
+                if (
+                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderData)
+                    && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
+                ) {
+                    $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
                 }
-
 
                 $consignment = $this->createConsignment($context, $order, $packageType);
 
                 if ($consignment !== null) {
                     $consignments->addConsignment($consignment);
                 }
+
+                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID]);
+                $shipments[] = $shipment;
             }
         }
-
         try {
             if (is_array($labelPositions) && !empty($labelPositions)) {
                 if (count($labelPositions) === 1) {
-
                     $consignments->setPdfOfLabels($labelPositions[0]);
                 } else {
                     $consignments->setPdfOfLabels($labelPositions);
                 }
             } else {
                 $consignments->setPdfOfLabels(false);
+            }
+
+            foreach ($shipments as $shipment) {
+                if (!empty($shipment)) {
+                    $this->addLabelUrlToShipment($context, $shipment, $consignments->getLinkOfLabels());
+                }
             }
         } catch (Exception $e) {
             var_dump($e->getMessage());
