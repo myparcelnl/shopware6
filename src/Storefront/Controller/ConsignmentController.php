@@ -13,7 +13,6 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
-use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,7 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
 
-    private const REQUEST_KEY_ORDER_IDS = 'order_ids';
+    private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
 
@@ -119,16 +118,21 @@ class ConsignmentController extends StorefrontController
      */
     public function createConsignments(Request $request): JsonResponse
     {
+        /**
+         * @todo Per consignment een Shipment maken zodat dit niet in Javascript hoeft
+         * Voor Shipment wordt meegegeven: Order_id (al present), Order_version_id (al present) en ShippingOption_ID (required) [Optioneel: InsuredAmount]
+         */
+
         $context = new Context(new SystemSource());
 
         if (
-            $request->get(self::REQUEST_KEY_ORDER_IDS) === null
-            || !is_array($request->get(self::REQUEST_KEY_ORDER_IDS))
-            || empty($request->get(self::REQUEST_KEY_ORDER_IDS))
+            $request->get(self::REQUEST_KEY_ORDERS) === null
+            || !is_array($request->get(self::REQUEST_KEY_ORDERS))
+            || empty($request->get(self::REQUEST_KEY_ORDERS))
         ) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => sprintf('Missing valid %s array with ids as parameter', self::REQUEST_KEY_ORDER_IDS)
+                self::RESPONSE_KEY_ERROR => sprintf('Missing valid %s array with ids as parameter', self::REQUEST_KEY_ORDERS)
             ]);
         }
 
@@ -142,26 +146,9 @@ class ConsignmentController extends StorefrontController
 
         $consignments = $this->consignmentService->createConsignments(
             $context,
-            $request->get(self::REQUEST_KEY_ORDER_IDS),
+            $request->get(self::REQUEST_KEY_ORDERS),
             $labelPositions ?? null
         );
-
-        if (
-            (string)$request->get(self::REQUEST_KEY_SHIPMENT_ID) === ''
-        ) {
-            $shipment = $this->shipmentService->getShipment($request->get(self::REQUEST_KEY_SHIPMENT_ID), $context);
-
-            if ($shipment !== null)
-            {
-                $shipmentParameters = [
-                    ShipmentEntity::FIELD_ID => $shipment->getId(),
-                    ShipmentEntity::FIELD_LABEL_URL => $consignments->getLinkOfLabels()
-                ];
-
-                $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
-            }
-
-        }
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $consignments !== null,
