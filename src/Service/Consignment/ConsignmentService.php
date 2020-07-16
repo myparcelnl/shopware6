@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 namespace Kiener\KienerMyParcel\Service\Consignment;
 
@@ -197,7 +197,22 @@ class ConsignmentService
     {
         $shipmentParameters[ShipmentEntity::FIELD_SHIPPING_OPTION_ID] = $shippingOptionId;
 
-        $shipmentParameters[ShipmentEntity::FIELD_LABEL_URL] = $consignments->getLinkOfLabels();
+        return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
+    }
+
+    /**
+     * @param Context        $context
+     * @param ShipmentEntity $shipment
+     * @param string         $labelUrl
+     *
+     * @return ShipmentEntity|null
+     */
+    private function addLabelUrlToShipment(Context $context, ShipmentEntity $shipment, string $labelUrl): ?ShipmentEntity
+    {
+        $shipmentParameters = [
+            ShipmentEntity::FIELD_ID => $shipment->getId(),
+            ShipmentEntity::FIELD_LABEL_URL => $labelUrl,
+        ];
 
         return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
     }
@@ -211,7 +226,7 @@ class ConsignmentService
      * @return MyParcelCollection
      * @throws MissingFieldException
      */
-    public function createConsignments(
+    public function createConsignments( //NOSONAR
         Context $context,
         array $ordersData,
         ?array $labelPositions
@@ -264,7 +279,6 @@ class ConsignmentService
                 $shipments[] = $shipment;
             }
         }
-
         try {
             if (is_array($labelPositions) && !empty($labelPositions)) {
                 if (count($labelPositions) === 1) {
@@ -276,9 +290,10 @@ class ConsignmentService
                 $consignments->setPdfOfLabels(false);
             }
 
-            foreach ($shipments as $shipment)
-            {
-                $shipment->setLabelUrl($consignments->getLinkOfLabels());
+            foreach ($shipments as $shipment) {
+                if (!empty($shipment)) {
+                    $this->addLabelUrlToShipment($context, $shipment, $consignments->getLinkOfLabels());
+                }
             }
         } catch (Exception $e) {
             var_dump($e->getMessage());
