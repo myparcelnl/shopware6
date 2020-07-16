@@ -1,15 +1,14 @@
-// import 'regenerator-runtime';
+import 'regenerator-runtime';
 
 // Import all necessary Storefront plugins and scss files
-// import ShippingOptions
-//     from './myparcel/plugins/shipping-options.plugin';
-// import MyParcel
-//     from './myparcel/myparcel.plugin';
+import MyParcelShippingOptions
+    from './myparcel/plugins/shipping-options.plugin';
 
 // Register them via the existing PluginManager
-// const PluginManager = window.PluginManager;
-// PluginManager.register('ShippingOptions', ShippingOptions);
-// PluginManager.register('MyParcel', MyParcel);
-// if (module.hot) {
-//     module.hot.accept();
-// }
+const PluginManager = window.PluginManager;
+PluginManager.register('MyParcelShippingOptions', MyParcelShippingOptions);
+
+// Necessary for the webpack hot module reloading server
+if (module.hot) {
+    module.hot.accept();
+}

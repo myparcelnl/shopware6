@@ -5,11 +5,27 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+
+        <!--ContextController-->
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
             <argument id="Shopware\Storefront\Page\GenericPageLoader" type="service"/>
             <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
+            <argument type="service" id="Shopware\Storefront\Framework\Cookie\CookieProviderInterface"/>
         </service>
 
+        <!--SNIPPETS-->
+        <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL"
+                 id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.nl_nl.snippet_file_nl_nl">
+            <tag name="shopware.snippet.file"/>
+        </service>
+
+        <!--Cookie provider-->
+        <service id="kiener.kiener_my_parcel.service.cookie.cookie_provider"
+                 class="Kiener\KienerMyParcel\Service\Cookie\CookieProvider"
+                 decorates="Shopware\Storefront\Framework\Cookie\CookieProviderInterface">
+            <argument type="service"
+                      id="kiener.kiener_my_parcel.service.cookie.cookie_provider.inner" />
+        </service>
 
         <!-- Services -->
         <service id="Kiener\KienerMyParcel\Service\Settings\SettingsService" class="Kiener\KienerMyParcel\Service\Settings\SettingsService">

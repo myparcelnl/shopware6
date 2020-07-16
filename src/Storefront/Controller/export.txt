@@ -2,9 +2,11 @@ Shopware\Core\Framework\Validation\DataBag\RequestDataBag Object
 (
     [parameters:protected] => Array
         (
-            [_csrf_token] => eS1xvpuJcnrnaP5W9-bpfhfYOsQk2ZqvJu-ASlgLv8g
+            [_csrf_token] => 2n3p3kf3CUTSpY9SVq43fYx-O9KmgO9BX1BT7S5DvOk
             [redirectTo] => frontend.checkout.confirm.page
-            [shippingMethodId] => bd08a080903c4c938edb9835e9c5d4b7
+            [shippingMethodId] => 03c2552e37a74460b172f025f9afa06d
+            [myparcel_delivery_type] => 3
+            [myparcel_requires_signature] => 1
         )
 
 )

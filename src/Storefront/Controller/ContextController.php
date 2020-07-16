@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
+use Kiener\KienerMyParcel\Service\Cookie\CookieProvider;
+
 /**
  * @RouteScope(scopes={"storefront"})
  */
@@ -34,14 +36,21 @@ class ContextController extends StorefrontController
     private $view;
 
     /**
+     * @var CookieProvider
+     */
+    private $cookieProvider;
+
+    /**
      * ContextController constructor.
      * @param GenericPageLoader $genericPageLoader
      * @param SalesChannelContextSwitcher $contextSwitcher
+     * @param CookieProvider $cookieProvider
      */
-    public function __construct(GenericPageLoader $genericPageLoader, SalesChannelContextSwitcher $contextSwitcher)
+    public function __construct(GenericPageLoader $genericPageLoader, SalesChannelContextSwitcher $contextSwitcher, CookieProvider $cookieProvider)
     {
         $this->genericPageLoader = $genericPageLoader;
         $this->contextSwitcher = $contextSwitcher;
+        $this->cookieProvider = $cookieProvider;
     }
 
     /**
@@ -54,42 +63,52 @@ class ContextController extends StorefrontController
     public function configure(Request $request, RequestDataBag $data, SalesChannelContext $context)
     {
         file_put_contents(__DIR__ . '/export.txt', print_r($data, true));
-//        [shippingMethodId] => bd08a080903c4c938edb9835e9c5d4b7
-//        [myparcel_delivery_type] => 2
-//        [myparcel_requires_signature] => 1
+
+        /* get vars from post */
+        $shippingMethodId = $data->get('shippingMethodId') ?: 0;
+        $myparcel_delivery_type= $data->get('myparcel_delivery_type') ?: 0;
+        $myparcel_requires_signature= $data->get('myparcel_requires_signature') ?: 0;
+        $myparcel_only_recipient= $data->get('myparcel_only_recipient') ?: 0;
+
+        /* set vars to cookie */
+        $cookieValue = 'shipid:' . $shippingMethodId;
+        $cookieValue .= ',deltype:' . $myparcel_delivery_type;
+        $cookieValue .= ',sign:' . $myparcel_requires_signature;
+        $cookieValue.= ',recip:' . $myparcel_only_recipient;
+
+        $cookieValue = "[" . trim($cookieValue) . "]";
+
+        $cookies = $this->cookieProvider->getCookieGroups();
+        foreach ($cookies as &$cookie) {
+            if (!\is_array($cookie)) {
+                continue;
+            }
+
+            if (!$this->cookieProvider->isRequiredCookieGroup($cookie)) {
+                continue;
+            }
+
+            if (!\array_key_exists('entries', $cookie)) {
+                continue;
+            }
+
+            /* find key in array */
+            $key = array_search('myparcel-cookie-key', array_column($cookie['entries'], 'cookie'));
+
+            /* set cookie */
+            $cookie['entries'][$key] = [
+                'snippet_name' => 'cookie.myparcel.name',
+                'cookie' => 'myparcel-cookie-key',
+                'expiration' => 1,
+                'value' => $cookieValue
+            ];
+        }
+
+        /* debug */
+        file_put_contents(__DIR__ . '/export-2.txt', print_r($cookies, true));
+        $this->cookieProvider->getCookieGroups($cookies);
 
         $this->contextSwitcher->update($data, $context);
-//        var_dump($request);
-//        die();
-//        $request->view->assign('myparcel-post-data', $data);
         return $this->createActionResponse($request);
     }
-
-//    /**
-//     * @Route("/checkout/confirm", name="frontend.checkout.confirm.page", options={"seo"="false"}, methods={"GET"}, defaults={"XmlHttpRequest"=true})
-//     * @param Request $request
-//     * @param SalesChannelContext $context
-//     * @return RedirectResponse|Response
-//     */
-//    public function confirm(Request $request, SalesChannelContext $context)
-//    {
-////        [shippingMethodId] => bd08a080903c4c938edb9835e9c5d4b7
-////        [myparcel_delivery_type] => 2
-////        [myparcel_requires_signature] => 1
-//
-////        var_dump($request);
-////        die();
-//
-//        if (!$context->getCustomer()) {
-//            return $this->redirectToRoute('frontend.checkout.register.page');
-//        }
-//
-//        if ($this->cartService->getCart($context->getToken(), $context)->getLineItems()->count() === 0) {
-//            return $this->redirectToRoute('frontend.checkout.cart.page');
-//        }
-//
-//        $page = $this->confirmPageLoader->load($request, $context);
-//
-//        return $this->renderStorefront('@Storefront/storefront/page/checkout/confirm/index.html.twig', ['page' => $page]);
-//    }
 }
