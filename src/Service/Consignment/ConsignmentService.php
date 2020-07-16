@@ -188,14 +188,19 @@ class ConsignmentService
     }
 
     /**
-     * @param Context $context
-     * @param string  $shippingOptionId
+     * @param Context     $context
+     * @param OrderEntity $orderEntity
+     * @param string      $shippingOptionId
      *
      * @return ShipmentEntity|null
      */
-    private function createShipment(Context $context, string $shippingOptionId): ?ShipmentEntity
+    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId): ?ShipmentEntity
     {
-        $shipmentParameters[ShipmentEntity::FIELD_SHIPPING_OPTION_ID] = $shippingOptionId;
+        $shipmentParameters = [
+            ShipmentEntity::FIELD_ORDER_ID => $orderEntity->getId(),
+            ShipmentEntity::FIELD_ORDER_VERSION_ID => $orderEntity->getVersionId(),
+            ShipmentEntity::FIELD_SHIPPING_OPTION_ID => $shippingOptionId,
+        ];
 
         return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
     }
@@ -271,11 +276,7 @@ class ConsignmentService
                     $consignments->addConsignment($consignment);
                 }
 
-                $shipment = $this->createShipment($context, $orderData[self::FIELD_SHIPPING_OPTION_ID]);
-
-                $shipment->setOrderId($order->getId())
-                    ->setOrderVersionId($order->getVersionId());
-
+                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID]);
                 $shipments[] = $shipment;
             }
         }
