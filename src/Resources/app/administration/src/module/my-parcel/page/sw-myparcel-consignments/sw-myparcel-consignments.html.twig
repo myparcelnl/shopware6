@@ -1,0 +1,74 @@
+{% block sw_myparcel_consignments %}
+<sw-page class="sw-myparcel-consignments">
+    {% block sw_myparcel_smart_bar_header %}
+    <template #smart-bar-header>
+        {% block sw_myparcel_smart_bar_header_title %}
+        <h2>
+            {% block sw_myparcel_smart_bar_header_title_text %}
+            {{ $tc('sw-myparcel.general.mainMenuItemGeneral') }}: {{ $tc('sw-myparcel.consignments.title') }}
+            {% endblock %}
+        </h2>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+    {% block sw_myparcel_smart_bar_actions %}
+    <template #smart-bar-actions>
+
+    </template>
+    {% endblock %}
+
+    {% block sw_myparcel_content %}
+    <template #content>
+        <sw-data-grid
+                :dataSource="consignments"
+                :columns="consignmentColumns"
+                :fullPage="true"
+                :showSettings="true"
+                :showSelection="true"
+                :sortBy="sortBy"
+                :sortDirection="sortDirection"
+                :isLoading="isLoading"
+                :allowColumnEdit="false"
+                identifier="sw-myparcel-consignment-list"
+                @column-sort="onSortColumn"
+                @selection-change="onSelectionChanged">
+
+            <template #column-createdAt="{ item }">
+                {{ item.createdAt | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+            </template>
+
+            <template #column-order.orderDateTime="{ item }">
+                {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+            </template>
+
+            <template #column-shippingOption.packageType="{ item }">
+                {{ packageTypes[item.shippingOption.packageType] }}
+            </template>
+
+            <template #column-shippingOption.carrierId="{ item }">
+                {{ carriers[item.shippingOption.carrierId] }}
+            </template>
+
+            <template #actions="{ item }">
+                <sw-context-menu-item :disabled="!item.labelUrl" class="sw-myparcel-shipping-options-list__create-consignment-action" @click="onDownloadLabel(item)">
+                    {{ $tc('sw-myparcel.orders.buttons.downloadLabel') }}
+                </sw-context-menu-item>
+            </template>
+
+            <template slot="pagination">
+                <sw-pagination
+                        :page="page"
+                        :limit="limit"
+                        :total="total"
+                        :total-visible="25"
+                        @page-change="onPageChange"
+                        :steps="[25]">
+                </sw-pagination>
+            </template>
+
+        </sw-data-grid>
+    </template>
+    {% endblock %}
+</sw-page>
+{% endblock %}

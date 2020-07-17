@@ -160,8 +160,6 @@ class ShipmentController extends StorefrontController
             $shipment[ShipmentEntity::FIELD_INSURED_AMOUNT] = $request->get(self::REQUEST_KEY_INSURED_AMOUNT);
         }
 
-        file_put_contents(__DIR__ . '/shipment.txt', print_r($shipment, true));
-
         $shipmentEntity = $this->shipmentService->createOrUpdateShipment(
             $shipment,
             $context

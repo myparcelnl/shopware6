@@ -42,15 +42,18 @@
                     </sw-context-button>
                 </sw-grid-column>
             </template>
-        </sw-grid>
-    </template>
 
-    <template #pagination>
-        <sw-pagination :page="page"
-                       :limit="limit"
-                       :total="total"
-                       :total-visible="7">
-        </sw-pagination>
+            <template slot="pagination">
+                <sw-pagination
+                        :page="page"
+                        :limit="limit"
+                        :total="total"
+                        :total-visible="10"
+                        @page-change="onPageChange"
+                        :steps="[10]">
+                </sw-pagination>
+            </template>
+        </sw-grid>
     </template>
     {% endblock %}
 </sw-page>

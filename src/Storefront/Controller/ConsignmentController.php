@@ -34,6 +34,7 @@ class ConsignmentController extends StorefrontController
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_CARRIERS = 'carriers';
     private const RESPONSE_KEY_PACKAGE_TYPES = 'package_types';
+    private const RESPONSE_KEY_LABEL_URL = 'labelUrl';
 
     /**
      * @var ConsignmentService
@@ -150,8 +151,19 @@ class ConsignmentController extends StorefrontController
             $labelPositions ?? null
         );
 
+        if (
+            isset($labelPositions)
+            && is_array($labelPositions)
+            && !empty($labelPositions)
+        ) {
+            $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
+        } else {
+            $consignments->setLinkOfLabels(false);
+        }
+
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $consignments !== null,
+            self::RESPONSE_KEY_LABEL_URL => $consignments->getLinkOfLabels(),
         ]);
     }
 

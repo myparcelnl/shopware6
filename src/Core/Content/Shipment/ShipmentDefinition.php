@@ -48,8 +48,8 @@ class ShipmentDefinition extends EntityDefinition
             (new StringField('label_url', 'labelUrl')),
             (new FloatField('insured_amount', 'insuredAmount')),
 
-            (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class))->addFlags(new Required()),
-            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', false))->addFlags(new Required(), new CascadeDelete()),
+            (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class, true))->addFlags(new Required()),
+            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', true))->addFlags(new Required(), new CascadeDelete()),
         ]);
     }
 }

@@ -1,5 +1,5 @@
 import './page/sw-myparcel-orders';
-import './page/sw-myparcel-shipments';
+import './page/sw-myparcel-consignments';
 import './page/sw-myparcel-shipping-methods';
 import './extension/sw-settings-index';
 
@@ -30,9 +30,9 @@ Module.register('sw-myparcel', {
             component: 'sw-myparcel-orders',
             path: 'orders'
         },
-        shipments: {
-            component: 'sw-myparcel-shipments',
-            path: 'shipments',
+        consignments: {
+            component: 'sw-myparcel-consignments',
+            path: 'consignments',
             meta: {
                 parentPath: 'sw.myparcel.orders'
             }
@@ -64,18 +64,18 @@ Module.register('sw-myparcel', {
             parent: 'sw-myparcel'
         },
         {
-            id: 'sw-myparcel-shipments',
-            path: 'sw.myparcel.shipments',
-            label: 'sw-myparcel.general.shipmentsMenuItemGeneral',
+            id: 'sw-myparcel-consignments',
+            label: 'sw-myparcel.general.consignmentsMenuItemGeneral',
             color: '#0f5c47',
+            path: 'sw.myparcel.consignments',
             position: 100,
             parent: 'sw-myparcel'
         },
         {
             id: 'sw-myparcel-shipping-methods',
-            path: 'sw.myparcel.shippingMethods',
             label: 'sw-myparcel.general.shippingMethodsMenuItemGeneral',
             color: '#0f5c47',
+            path: 'sw.myparcel.shippingMethods',
             position: 100,
             parent: 'sw-myparcel'
         }

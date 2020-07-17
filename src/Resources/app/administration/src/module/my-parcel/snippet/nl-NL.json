@@ -3,14 +3,30 @@
     "general": {
       "mainMenuItemGeneral": "MyParcel",
       "ordersMenuItemGeneral": "Orders",
-      "shipmentsMenuItemGeneral": "Shipments",
+      "consignmentsMenuItemGeneral": "Consignments",
       "shippingMethodsMenuItemGeneral": "Shipping methods",
-      "descriptionTextModule": "Tagline for MyParcel"
+      "descriptionTextModule": "Tagline for MyParcel",
+      "packageTypes": {
+        "package": "Pakket",
+        "mailbox": "Brievenbuspakket",
+        "letter": "Briefpost",
+        "digitalStamp": "Digitale postzegel"
+      },
+      "carriers": {
+        "postNL": "PostNL",
+        "bPost": "bpost",
+        "dpd": "DPD"
+      }
+    },
+    "messages": {
+      "error": "Er heeft een fout plaatsgevonden",
+      "consignmentSuccess": "De verzending is succesvol aangemaakt"
     },
     "columns": {
-      "orderColumn": "Order",
-      "orderDateColumn": "Aankoopdatum",
-      "totalAmountColumn": "Totaalbedrag",
+      "orderColumn": "Bestelling",
+      "orderDateColumn": "Besteld",
+      "consignmentDateColumn": "Aangemaakt",
+      "totalAmountColumn": "Totaal",
       "statusColumn": "Status",
       "actionsColumn": "Acties",
       "packageTypeColumn": "Type pakket",
@@ -19,7 +35,7 @@
     "orders": {
       "title": "Bestellingen",
       "modals": {
-        "createShipment": {
+        "createConsignment": {
           "titleSingle": "Maak verzending aan",
           "titleMultiple": "Maak verzendingen aan ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
@@ -47,17 +63,13 @@
       "buttons": {
         "viewOrder": "Order bekijken",
         "cancelButton": "Annuleren",
-        "createShipmentButton": "Verzending aanmaken",
-        "createShipmentsButton": "Verzendingen aanmaken",
+        "createConsignmentButton": "Verzending aanmaken",
+        "createConsignmentsButton": "Verzendingen aanmaken",
         "viewShippingMethod": "Bekijk verzendmethod",
         "downloadLabel": "Label downloaden"
-      },
-      "messages": {
-        "error": "Er heeft een fout plaatsgevonden",
-        "shipmentSuccess": "De verzending is succesvol aangemaakt"
       }
     },
-    "shipments": {
+    "consignments": {
       "title": "Verzendingen"
     },
     "shippingMethods": {

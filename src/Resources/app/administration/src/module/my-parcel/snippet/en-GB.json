@@ -3,13 +3,29 @@
     "general": {
       "mainMenuItemGeneral": "MyParcel",
       "ordersMenuItemGeneral": "Orders",
-      "shipmentsMenuItemGeneral": "Shipments",
+      "consignmentsMenuItemGeneral": "Consignments",
       "shippingMethodsMenuItemGeneral": "Shipping methods",
-      "descriptionTextModule": "Tagline for MyParcel"
+      "descriptionTextModule": "Tagline for MyParcel",
+      "packageTypes": {
+        "package": "Package",
+        "mailbox": "Mailbox",
+        "letter": "Letter",
+        "digitalStamp": "Digital stamp"
+      },
+      "carriers": {
+        "postNL": "PostNL",
+        "bPost": "bpost",
+        "dpd": "DPD"
+      }
+    },
+    "messages": {
+      "error": "An error has occurred",
+      "consignmentSuccess": "The consignment is successfully created"
     },
     "columns": {
       "orderColumn": "Order",
-      "orderDateColumn": "Order date",
+      "orderDateColumn": "Ordered",
+      "consignmentDateColumn": "Created",
       "totalAmountColumn": "Total amount",
       "statusColumn": "Status",
       "actionsColumn": "Actions",
@@ -19,9 +35,9 @@
     "orders": {
       "title": "Orders",
       "modals": {
-        "createShipment": {
-          "titleSingle": "Create a shipment",
-          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
+        "createConsignment": {
+          "titleSingle": "Create a consignment",
+          "titleMultiple": "Create consignments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
           "actionTypeCreateLabel": "Create consignment",
           "packageTypePackageLabel": "Package",
@@ -47,18 +63,14 @@
       "buttons": {
         "viewOrder": "View the order",
         "cancelButton": "Cancel",
-        "createShipmentButton": "Create shipment",
-        "createShipmentsButton": "Create shipments",
+        "createConsignmentButton": "Create consignment",
+        "createConsignmentsButton": "Create consignments",
         "viewShippingMethod": "View shipping method",
         "downloadLabel": "Download label"
-      },
-      "messages": {
-        "error": "An error has occurred",
-        "shipmentSuccess": "The shipment is successfully created"
       }
     },
-    "shipments": {
-      "title": "Shipments"
+    "consignments": {
+      "title": "Consignments"
     },
     "shippingMethods": {
       "title": "Shipping methods"

@@ -138,7 +138,7 @@ class ConsignmentService
 
         $consignment = (ConsignmentFactory::createByCarrierId($shippingOptions->getCarrierId()))
             ->setApiKey($this->apiKey)
-            ->setReferenceId($orderEntity->getId())
+            ->setReferenceId($orderEntity->getOrderNumber())
             ->setCountry($shippingAddress->getCountry()->getIso())
             ->setPerson(
                 sprintf('%s %s', $shippingAddress->getFirstName(), $shippingAddress->getLastName())
@@ -149,6 +149,7 @@ class ConsignmentService
             ->setPostalCode($shippingAddress->getZipcode())
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
+
 
         if (
             $shippingOptions->getPackageType() !== null
@@ -192,14 +193,21 @@ class ConsignmentService
      * @param OrderEntity $orderEntity
      * @param string      $shippingOptionId
      *
+     * @param int|null    $consignmentId
+     *
      * @return ShipmentEntity|null
      */
-    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId): ?ShipmentEntity
+    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId, ?int $consignmentId = null): ?ShipmentEntity
     {
         $shipmentParameters = [
-            ShipmentEntity::FIELD_ORDER_ID => $orderEntity->getId(),
-            ShipmentEntity::FIELD_ORDER_VERSION_ID => $orderEntity->getVersionId(),
-            ShipmentEntity::FIELD_SHIPPING_OPTION_ID => $shippingOptionId,
+            ShipmentEntity::FIELD_CONSIGNMENT_ID => $consignmentId,
+            ShipmentEntity::FIELD_ORDER => [
+                ShipmentEntity::FIELD_ID => $orderEntity->getId(),
+                ShipmentEntity::FIELD_VERSION_ID => $orderEntity->getVersionId(),
+            ],
+            ShipmentEntity::FIELD_SHIPPING_OPTION => [
+                ShipmentEntity::FIELD_ID => $shippingOptionId,
+            ],
         ];
 
         return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
@@ -276,28 +284,9 @@ class ConsignmentService
                     $consignments->addConsignment($consignment);
                 }
 
-                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID]);
+                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment->getConsignmentId());
                 $shipments[] = $shipment;
             }
-        }
-        try {
-            if (is_array($labelPositions) && !empty($labelPositions)) {
-                if (count($labelPositions) === 1) {
-                    $consignments->setPdfOfLabels($labelPositions[0]);
-                } else {
-                    $consignments->setPdfOfLabels($labelPositions);
-                }
-            } else {
-                $consignments->setPdfOfLabels(false);
-            }
-
-            foreach ($shipments as $shipment) {
-                if (!empty($shipment)) {
-                    $this->addLabelUrlToShipment($context, $shipment, $consignments->getLinkOfLabels());
-                }
-            }
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
         }
 
         return $consignments;
