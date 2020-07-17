@@ -4,74 +4,76 @@ import CookieStorage from 'src/helper/storage/cookie-storage.helper';
 export default class MyParcelShippingOptions extends Plugin {
 
     static options = {
-
-        /**
-         * cookie set to determine if cookies were accepted or denied
-         */
-        cookieName: 'myparcel-cookie-key'
-        // cookieName: 'cookie.groupRequiredDescription'
-
-        /**
-         * container selector
-         */
-        // targetContainer: '.js-cookie-permission-button'
+        cookieName: 'myparcel-cookie-key',
+        shippingForm: '.myparcel_shipping_form',
+        confirmOrderForm: 'form#confirmOrderForm',
+        currentShipping: 'p.confirm-shipping-current'
     };
 
     // get shipping form
     init() {
         const me = this;
+        const shippingForms = document.querySelectorAll(me.options.shippingForm);
 
-        const shippingForms = document.querySelectorAll('.myparcel_shipping_form');
-        // CookieStorage.setItem(me.options.cookieName, 'test');
-        // CookieStorage.setItem('allowCookie', '');
-        const cookiePermission = CookieStorage.getItem(me.options.cookieName);
-        console.log('Cookie: ' + cookiePermission);
-        // CookieStorage.setItem(cookieName, '1', cookieExpiration);
+        /* Get cookie value and set some vars  */
+        const cookieMyParcel = CookieStorage.getItem(me.options.cookieName);
+        const cookieSet = cookieMyParcel.split('_');
+        const shippingMethodId  = cookieSet[0];
+        const myparcel_delivery_type =  cookieSet[1];
+        const myparcel_requires_signature =  cookieSet[2];
+        const myparcel_only_recipient =  cookieSet[3];
 
-        if (shippingForms) {
-            shippingForms.forEach(function (shippingForm) {
-                const shippingMethodId = shippingForm.getAttribute('data-shipping-method-id');
-                // const deliveryOptionInputs = shippingForm.querySelectorAll('input[name="myparcel_delivery_type"]');
-                // const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
-                // const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
+        /* Is myParcel shippingform and is delivery type selected? */
+        if (shippingForms && myparcel_delivery_type > 0) {
+            /* Set delivery type */
+            const shippingForm = document.querySelector('div[data-shipping-method-id="' + shippingMethodId + '"]');
+            const deliveryOptionInputs = shippingForm.querySelector('input[name="myparcel_delivery_type"][value="' + myparcel_delivery_type + '"]');
+            deliveryOptionInputs.checked = true;
+            let shippingSelectedTxt = '';
 
-                console.log(shippingMethodId + ' - v3');
-                // deliveryOptionInputs.forEach(function (deliveryOptionInput) {
-                //     deliveryOptionInput.addEventListener('change', function() {
-                //         const targetName = deliveryOptionInput.getAttribute('data-target');
-                //         document.querySelector(targetName).value(deliveryOptionInput.value);
-                //         console.log('del option val ' + deliveryOptionInput.value + ' target ' + targetName);
-                //     });
-                // });
-                //
-                // requiresSignatureInput.addEventListener('change', function() {
-                //     const targetName = requiresSignatureInput.getAttribute('data-target');
-                //     console.log(targetName);
-                // });
-                //
-                // onlyRecipientInput.addEventListener('change', function() {
-                //     const targetName = onlyRecipientInput.getAttribute('data-target');
-                //     console.log(targetName);
-                // });
-            });
+            /* Set signature checkbox */
+            if(myparcel_requires_signature > 0) {
+                const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
+                const requiresSignatureLabel = shippingForm.querySelector('label[for="'+ requiresSignatureInput.id + '"]').firstChild.textContent;
+                requiresSignatureInput.checked = true;
+                shippingSelectedTxt = shippingSelectedTxt + requiresSignatureLabel;
+                if(myparcel_only_recipient > 0) {
+                    shippingSelectedTxt = shippingSelectedTxt + ', ';
+                }
+            }
 
-            // document.querySelectorAll('.myparcel_shipping_form').addEventListener('change', function() {
-            //     console.log('Changed!');
-            // });
-            // // document.getElementById("select").onchange = function() { console.log("Changed!"); }
-            //
-            // // document.addEventListener('click', function (event) {
-            // //
-            // //     // If the clicked element doesn't have the right selector, bail
-            // //     if (!event.target.matches('.click-me')) return;
-            // //
-            // //     // Don't follow the link
-            // //     event.preventDefault();
-            // //
-            // //     // Log the clicked element in the console
-            // //     console.log(event.target);
-            // //
-            // // }, false);
+            /* Set recipient checkbox */
+            if(myparcel_only_recipient > 0) {
+                const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
+                const onlyRecipientLabel = shippingForm.querySelector('label[for="'+ onlyRecipientInput.id + '"]').firstChild.textContent;
+                onlyRecipientInput .checked = true;
+                shippingSelectedTxt = shippingSelectedTxt + onlyRecipientLabel;
+            }
+
+            /* Enclose shipment text */
+            if(myparcel_only_recipient > 0 || myparcel_requires_signature > 0) {
+                shippingSelectedTxt = ' (' + shippingSelectedTxt + ')';
+            }
+
+            /* Set and place text */
+            const deliveryOptionId = deliveryOptionInputs.id;
+            const deliveryOptionLabel = shippingForm.querySelector('label[for="'+ deliveryOptionId + '"]').firstChild.textContent;
+            const shippingSelected = document.querySelector(me.options.currentShipping);
+            shippingSelected.innerHTML += '<br/><small>' + deliveryOptionLabel + shippingSelectedTxt + '</small>';
+
+            /* Set orderform fields */
+            const confirmOrderForm = document.querySelector(me.options.confirmOrderForm);
+            const confirmShippingMethod = confirmOrderForm.querySelector('input[name="myparcel[shipping_method_id]"]');
+            const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type]"]');
+            const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
+            const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
+
+            /* Set orderform values */
+            confirmShippingMethod.value = shippingMethodId;
+            confirmDeliveryType.value = myparcel_delivery_type;
+            confirmSignature.value = myparcel_requires_signature;
+            confirmOnlyRecipient.value = myparcel_only_recipient;
+
         }
     }
 }

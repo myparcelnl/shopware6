@@ -13,19 +13,24 @@
             {# can't have a from inside a form #}
 {#            <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">#}
                 <label class="d-block">
-                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1"> Ochtendlevering
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1" id="myparcel_delivery_type_1_{{ shipping.id }}">
+                    <label for="myparcel_delivery_type_1_{{ shipping.id }}">Ochtendlevering</label>
                 </label>
                 <label class="d-block">
-                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="2"> Standaardlevering
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="2" id="myparcel_delivery_type_2_{{ shipping.id }}">
+                    <label for="myparcel_delivery_type_2_{{ shipping.id }}">Standaardlevering</label>
                 </label>
                 <label class="d-block">
-                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="3"> Avondlevering
+                    <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="3" id="myparcel_delivery_type_3_{{ shipping.id }}">
+                    <label for="myparcel_delivery_type_3_{{ shipping.id }}">Avondlevering</label>
                 </label>
                 <label class="d-block">
-                    <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1"> Handtekening voor ontvangst
+                    <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ shipping.id }}">
+                    <label for="myparcel_requires_signature_{{ shipping.id }}">Handtekening voor ontvangst</label>
                 </label>
                 <label class="d-block">
-                    <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1"> Niet bij de buren bezorgen
+                    <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ shipping.id }}">
+                    <label for="myparcel_only_recipient_{{ shipping.id }}">Niet bij de buren bezorgen</label>
                 </label>
 {#            </form>#}
         </div>

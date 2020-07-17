@@ -19,7 +19,6 @@ class CookieProvider implements CookieProviderInterface {
     public function getCookieGroups($getcookies = null): array
     {
         $cookies = $this->original->getCookieGroups();
-        file_put_contents(__DIR__ . '/export-3.txt', print_r($getcookies, true));
 
         if($getcookies !== null) {
             print_r('Dit is een if case');
