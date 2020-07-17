@@ -4,6 +4,6 @@
   transition: all .5s ease-in-out;
 
   .shipping-method-input:checked ~ & {
-    max-height: 10rem;
+    max-height: 12rem;
   }
 }

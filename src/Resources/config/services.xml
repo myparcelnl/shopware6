@@ -14,10 +14,16 @@
         </service>
 
         <!--SNIPPETS-->
+        <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB"
+                 id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.en_gb.snippet_file_en_gb">
+            <tag name="shopware.snippet.file"/>
+        </service>
+
         <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL"
                  id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.nl_nl.snippet_file_nl_nl">
             <tag name="shopware.snippet.file"/>
         </service>
+
 
         <!--Cookie provider-->
         <service id="kiener.kiener_my_parcel.service.cookie.cookie_provider"

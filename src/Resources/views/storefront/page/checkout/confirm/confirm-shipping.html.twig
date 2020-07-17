@@ -9,28 +9,28 @@
     {{ parent() }}
     {# Todo: only show this form when a myparcel shipping method is selected #}
     {% if shipping.id in page.myparcel_shipping_method_ids %}
-        <div class="myparcel_shipping_form" data-myparcel-option="true" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">
+        <div class="myparcel_shipping_form mt-3" data-myparcel-option="true" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">
             {# can't have a from inside a form #}
 {#            <form name="myparcel_shipping_form" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]">#}
-                <label class="d-block">
+                <label class="d-block mb-0">
                     <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1" id="myparcel_delivery_type_1_{{ shipping.id }}">
-                    <label for="myparcel_delivery_type_1_{{ shipping.id }}">Ochtendlevering</label>
+                    <label for="myparcel_delivery_type_1_{{ shipping.id }}">{{ "myparcel.delivery_type_morning"|trans|sw_sanitize }}</label>
                 </label>
-                <label class="d-block">
+                <label class="d-block mb-0">
                     <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="2" id="myparcel_delivery_type_2_{{ shipping.id }}">
-                    <label for="myparcel_delivery_type_2_{{ shipping.id }}">Standaardlevering</label>
+                    <label for="myparcel_delivery_type_2_{{ shipping.id }}">{{ "myparcel.delivery_type_default"|trans|sw_sanitize }}</label>
                 </label>
-                <label class="d-block">
+                <label class="d-block mb-0">
                     <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="3" id="myparcel_delivery_type_3_{{ shipping.id }}">
-                    <label for="myparcel_delivery_type_3_{{ shipping.id }}">Avondlevering</label>
+                    <label for="myparcel_delivery_type_3_{{ shipping.id }}">{{ "myparcel.delivery_type_evening"|trans|sw_sanitize }}</label>
                 </label>
-                <label class="d-block">
+                <label class="d-block mb-0">
                     <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ shipping.id }}">
-                    <label for="myparcel_requires_signature_{{ shipping.id }}">Handtekening voor ontvangst</label>
+                    <label for="myparcel_requires_signature_{{ shipping.id }}">{{ "myparcel.delivery_signature"|trans|sw_sanitize }}</label>
                 </label>
-                <label class="d-block">
+                <label class="d-block mb-0">
                     <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ shipping.id }}">
-                    <label for="myparcel_only_recipient_{{ shipping.id }}">Niet bij de buren bezorgen</label>
+                    <label for="myparcel_only_recipient_{{ shipping.id }}">{{ "myparcel.delivery_recipient"|trans|sw_sanitize }}</label>
                 </label>
 {#            </form>#}
         </div>

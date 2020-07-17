@@ -1,24 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\nl_NL;
+namespace Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\en_GB;
 
 use Shopware\Core\System\Snippet\Files\SnippetFileInterface;
 
-class SnippetFile_nl_NL implements SnippetFileInterface
+class SnippetFile_en_GB implements SnippetFileInterface
 {
     public function getName(): string
     {
-        return 'myparcel.nl-NL';
+        return 'myparcel.en-GB';
     }
 
     public function getPath(): string
     {
-        return __DIR__ . '/myparcel.nl-NL.json';
+        return __DIR__ . '/myparcel.en-GB.json';
     }
 
     public function getIso(): string
     {
-        return 'nl-NL';
+        return 'en-GB';
     }
 
     public function getAuthor(): string

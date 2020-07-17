@@ -17,6 +17,9 @@ export default class MyParcelShippingOptions extends Plugin {
 
         /* Get cookie value and set some vars  */
         const cookieMyParcel = CookieStorage.getItem(me.options.cookieName);
+        if(!cookieMyParcel) {
+            return false;
+        }
         const cookieSet = cookieMyParcel.split('_');
         const shippingMethodId  = cookieSet[0];
         const myparcel_delivery_type =  cookieSet[1];
