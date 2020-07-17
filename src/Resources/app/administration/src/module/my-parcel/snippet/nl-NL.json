@@ -12,6 +12,12 @@
         "letter": "Briefpost",
         "digitalStamp": "Digitale postzegel"
       },
+      "deliveryTypes": {
+        "morning": "Ochtendlevering",
+        "standard": "Standaardlevering",
+        "evening": "Avondlevering",
+        "pickup": "Afhaalpunt"
+      },
       "carriers": {
         "postNL": "PostNL",
         "bPost": "bpost",
@@ -20,7 +26,8 @@
     },
     "messages": {
       "error": "Er heeft een fout plaatsgevonden",
-      "consignmentSuccess": "De verzending is succesvol aangemaakt"
+      "consignmentSuccess": "De verzending is succesvol aangemaakt",
+      "downloadLabelSuccess": "Het label is succesvol aangemaakt"
     },
     "columns": {
       "orderColumn": "Bestelling",
@@ -30,7 +37,13 @@
       "statusColumn": "Status",
       "actionsColumn": "Acties",
       "packageTypeColumn": "Type pakket",
-      "carrierColumn": "Carrier"
+      "carrierColumn": "Carrier",
+      "deliveryTypeColumn": "Verzendtype",
+      "requiresAgeCheckColumn": "Controle leeftijd 18+",
+      "requiresSignatureColumn": "Handtekening nodig",
+      "onlyRecipientColumn": "Alleen thuisadres",
+      "returnIfNotHomeColumn": "Retour bij niet aanwezig",
+      "largeFormatColumn": "Groot pakket"
     },
     "orders": {
       "title": "Bestellingen",
@@ -48,7 +61,7 @@
           "optionRequiresAgeCheckLabel": "Controle leeftijd 18+",
           "optionRequiresSignatureLabel": "Handtekening nodig",
           "optionReturnIfNotHomeLabel": "Retour bij niet aanwezig",
-          "optionLargePackageLabel": "Groot pakket",
+          "optionLargeFormatLabel": "Groot formaat",
           "positionTopLeftLabel": "Linksboven",
           "positionTopRightLabel": "Rechtsboven",
           "positionBottomLeftLabel": "Linksonder",
@@ -70,7 +83,24 @@
       }
     },
     "consignments": {
-      "title": "Verzendingen"
+      "title": "Verzendingen",
+      "modals": {
+        "downloadLabels": {
+          "titleSingle": "Download label",
+          "titleMultiple": "Download labels ({numberOfItems} item(s))",
+          "positionTopLeftLabel": "Linksboven",
+          "positionTopRightLabel": "Rechtsboven",
+          "positionBottomLeftLabel": "Linksonder",
+          "positionBottomRightLabel": "Rechtsonder",
+          "numberOfLabelsHeading": "Aantal labels",
+          "printPositionHeading": "Printpositie"
+        }
+      },
+      "buttons": {
+        "cancelButton": "Annuleren",
+        "downloadLabelButton": "Label downloaden",
+        "downloadLabelsButton": "Labels downloaden"
+      }
     },
     "shippingMethods": {
       "title": "Verzendmethoden"

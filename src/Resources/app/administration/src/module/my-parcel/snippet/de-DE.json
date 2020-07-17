@@ -12,6 +12,12 @@
         "letter": "Letter",
         "digitalStamp": "Digital stamp"
       },
+      "deliveryTypes": {
+        "morning": "Morning delivery",
+        "standard": "Standard delivery",
+        "evening": "Evening delivery",
+        "pickup": "Pickup point"
+      },
       "carriers": {
         "postNL": "PostNL",
         "bPost": "bpost",
@@ -20,7 +26,8 @@
     },
     "messages": {
       "error": "An error has occurred",
-      "consignmentSuccess": "The consignment is successfully created"
+      "consignmentSuccess": "The consignment is successfully created",
+      "downloadLabelSuccess": "The label is successfully created"
     },
     "columns": {
       "orderColumn": "Order",
@@ -30,7 +37,13 @@
       "statusColumn": "Status",
       "actionsColumn": "Actions",
       "packageTypeColumn": "Package type",
-      "carrierColumn": "Carrier"
+      "carrierColumn": "Carrier",
+      "deliveryTypeColumn": "Delivery type",
+      "requiresAgeCheckColumn": "Requires age check",
+      "requiresSignatureColumn": "Requires signature",
+      "onlyRecipientColumn": "Recipient only",
+      "returnIfNotHomeColumn": "Return if not home",
+      "largeFormatColumn": "Large format"
     },
     "orders": {
       "title": "Orders",
@@ -48,7 +61,7 @@
           "optionRequiresAgeCheckLabel": "Requires age check 18+",
           "optionRequiresSignatureLabel": "Requires signature",
           "optionReturnIfNotHomeLabel": "Return if not home",
-          "optionLargePackageLabel": "Large package",
+          "optionLargeFormatLabel": "Large format",
           "positionTopLeftLabel": "Top left",
           "positionTopRightLabel": "Top right",
           "positionBottomLeftLabel": "Bottom left",
@@ -70,7 +83,24 @@
       }
     },
     "consignments": {
-      "title": "Consignments"
+      "title": "Consignments",
+      "modals": {
+        "downloadLabels": {
+          "titleSingle": "Download label",
+          "titleMultiple": "Download labels ({numberOfItems} item(s))",
+          "positionTopLeftLabel": "Top left",
+          "positionTopRightLabel": "Top right",
+          "positionBottomLeftLabel": "Bottom left",
+          "positionBottomRightLabel": "Bottom right",
+          "numberOfLabelsHeading": "Number of labels",
+          "printPositionHeading": "Print position"
+        }
+      },
+      "buttons": {
+        "cancelButton": "Cancel",
+        "downloadLabelButton": "Download label",
+        "downloadLabelsButton": "Download labels"
+      }
     },
     "shippingMethods": {
       "title": "Shipping methods"

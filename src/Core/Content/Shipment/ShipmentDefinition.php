@@ -41,7 +41,7 @@ class ShipmentDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new IntField('consignment_id', 'consignmentId')),
+            (new StringField('consignment_reference', 'consignmentReference')),
             (new FkField('shipping_option_id', 'shippingOptionId', ShippingOptionDefinition::class))->addFlags(new CascadeDelete()),
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),

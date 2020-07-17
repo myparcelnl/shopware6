@@ -9,6 +9,14 @@ const DELIVERY_TYPE_EVENING = 3;
 const ACTION_TYPE_DOWNLOAD = 'download';
 const ACTION_TYPE_CREATE = 'create';
 
+const CARRIER_POSTNL_ID = 1;
+const CARRIER_BPOST_ID = 2;
+const CARRIER_DPD_ID = 3;
+
+const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
+const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
+const CARRIER_DPD_SNIPPET = 'sw-myparcel.general.carriers.dpd';
+
 Component.register('sw-myparcel-orders', {
     template: template,
 
@@ -32,10 +40,14 @@ Component.register('sw-myparcel-orders', {
             availableCampaignCodes: [],
             campaignCodeFilter: [],
             shippingOptions: [],
+            shippingOptions2: [],
             sortBy: 'order.orderDateTime',
             sortDirection: 'ASC',
             createSingleConsignmentLoading: false,
             createMultipleConsignmentsLoading: false,
+            selectionCount: 0,
+            selectedShippingOptions: null,
+            selectedShippingOptionIds: [],
             createSingleConsignment: {
                 item: null,
                 actionType: ACTION_TYPE_DOWNLOAD,
@@ -50,9 +62,11 @@ Component.register('sw-myparcel-orders', {
                 printPosition: [1,2,3,4],
                 showModal: false,
             },
-            selectionCount: 0,
-            selectedShippingOptions: null,
-            selectedShippingOptionIds: [],
+            carriers: {
+                [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
+                [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
+                [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET)
+            }
         };
     },
 
@@ -105,10 +119,6 @@ Component.register('sw-myparcel-orders', {
     },
 
     methods: {
-        createdComponent() {
-            this.loadFilterValues();
-        },
-
         getOrderColumns() {
             return [{
                 property: 'order.orderNumber',
@@ -122,7 +132,7 @@ Component.register('sw-myparcel-orders', {
                 allowResize: true
             }, {
                 property: 'order.orderCustomer.firstName',
-                dataIndex: 'orderCustomer.firstName,orderCustomer.lastName',
+                dataIndex: 'order.orderCustomer.firstName,order.orderCustomer.lastName',
                 label: 'sw-order.list.columnCustomerName',
                 allowResize: true
             }, {
@@ -145,6 +155,10 @@ Component.register('sw-myparcel-orders', {
             }, {
                 property: 'order.deliveries[0].stateMachineState.name',
                 label: 'sw-order.list.columnDeliveryState',
+                allowResize: true
+            }, {
+                property: 'carrierId',
+                label: 'sw-myparcel.columns.carrierColumn',
                 allowResize: true
             }, {
                 property: 'order.orderDateTime',
@@ -189,43 +203,27 @@ Component.register('sw-myparcel-orders', {
             ).variant;
         },
 
-        loadFilterValues() {
-            this.filterLoading = true;
-
-            return this.orderRepository.search(this.filterSelectCriteria, Shopware.Context.api).then(({ aggregations }) => {
-                this.availableAffiliateCodes = aggregations.affiliateCodes.buckets;
-                this.availableCampaignCodes = aggregations.campaignCodes.buckets;
-                this.filterLoading = false;
-
-                return aggregations;
-            }).catch(() => {
-                this.filterLoading = false;
-            });
-        },
-
-        onChangeAffiliateCodeFilter(value) {
-            this.affiliateCodeFilter = value;
-            this.getList();
-        },
-
-        onChangeCampaignCodeFilter(value) {
-            this.campaignCodeFilter = value;
-            this.getList();
-        },
-
         closeModals() {
-            this.closeSingleConsignmentModal();
-            this.closeMultipleConsignmentsModal();
+            this.closeCreateSingleConsignmentModal();
+            this.closeCreateMultipleConsignmentsModal();
         },
 
-        closeSingleConsignmentModal() {
+        closeCreateSingleConsignmentModal() {
             this.createSingleConsignment.showModal = false;
             this.createSingleConsignmentLoading = false;
         },
 
-        closeMultipleConsignmentsModal() {
+        closeCreateMultipleConsignmentsModal() {
             this.createMultipleConsignments.showModal = false;
             this.createMultipleConsignmentsLoading = false;
+        },
+
+        openCreateSingleConsignmentModal() {
+            this.createSingleConsignment.showModal = true;
+        },
+
+        openCreateMultipleConsignmentsModal() {
+            this.createMultipleConsignments.showModal = true;
         },
 
         saveSingleConsignment(consignmentData) {
@@ -363,8 +361,8 @@ Component.register('sw-myparcel-orders', {
             this.createSingleConsignment.showModal = true;
         },
 
-        onCloseSingleConsignmentModal() {
-            this.createSingleConsignment.showModal = false;
+        onCloseCreateSingleConsignmentModal() {
+            this.closeCreateSingleConsignmentModal()
         },
 
         onCreateSingleConsignment() {
@@ -385,12 +383,12 @@ Component.register('sw-myparcel-orders', {
                 && this.selectedShippingOptionIds.length
             ) {
                 this.createMultipleConsignments.items = this.selectedShippingOptions;
-                this.createMultipleConsignments.showModal = true;
+                this.openCreateMultipleConsignmentsModal();
             }
         },
 
-        onCloseMultipleConsignmentsModal() {
-            this.createMultipleConsignments.showModal = false;
+        onCloseCreateMultipleConsignmentsModal() {
+            this.closeCreateSingleConsignmentModal();
         },
 
         onCreateMultipleConsignments() {

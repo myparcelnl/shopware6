@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use RuntimeException;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConsignmentService
@@ -138,7 +139,7 @@ class ConsignmentService
 
         $consignment = (ConsignmentFactory::createByCarrierId($shippingOptions->getCarrierId()))
             ->setApiKey($this->apiKey)
-            ->setReferenceId($orderEntity->getOrderNumber())
+            ->setReferenceId($orderEntity->getOrderNumber() . '-' . Uuid::randomHex())
             ->setCountry($shippingAddress->getCountry()->getIso())
             ->setPerson(
                 sprintf('%s %s', $shippingAddress->getFirstName(), $shippingAddress->getLastName())
@@ -193,14 +194,14 @@ class ConsignmentService
      * @param OrderEntity $orderEntity
      * @param string      $shippingOptionId
      *
-     * @param int|null    $consignmentId
+     * @param string|null    $referenceId
      *
      * @return ShipmentEntity|null
      */
-    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId, ?int $consignmentId = null): ?ShipmentEntity
+    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId, ?string $referenceId = null): ?ShipmentEntity
     {
         $shipmentParameters = [
-            ShipmentEntity::FIELD_CONSIGNMENT_ID => $consignmentId,
+            ShipmentEntity::FIELD_CONSIGNMENT_REFERENCE => $referenceId,
             ShipmentEntity::FIELD_ORDER => [
                 ShipmentEntity::FIELD_ID => $orderEntity->getId(),
                 ShipmentEntity::FIELD_VERSION_ID => $orderEntity->getVersionId(),
@@ -284,7 +285,7 @@ class ConsignmentService
                     $consignments->addConsignment($consignment);
                 }
 
-                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment->getConsignmentId());
+                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment->getReferenceId());
                 $shipments[] = $shipment;
             }
         }
@@ -303,5 +304,16 @@ class ConsignmentService
         $consignments = MyParcelCollection::findByReferenceId($referenceId, $this->apiKey);
 
         return $consignments->toArray();
+    }
+
+    /**
+     * @param array $referenceIds
+     *
+     * @return MyParcelCollection
+     * @throws MissingFieldException
+     */
+    public function findManyByReferenceId(array $referenceIds): MyParcelCollection
+    {
+        return MyParcelCollection::findManyByReferenceId($referenceIds, $this->apiKey);
     }
 }

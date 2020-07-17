@@ -20,6 +20,22 @@ class MyParcelConsignmentService extends ApiService {
                 return ApiService.handleResponse(response);
             });
     }
+
+    downloadLabels(data = { reference_ids: null, label_positions: null, number_of_labels: null }) {
+        const headers = this.getBasicHeaders();
+
+        return this.httpClient
+            .post(
+                `_action/${this.getApiBasePath()}/consignment/download-labels`,
+                JSON.stringify(data),
+                {
+                    headers: headers
+                }
+            )
+            .then((response) => {
+                return ApiService.handleResponse(response);
+            });
+    }
 }
 
 export default MyParcelConsignmentService;

@@ -14,7 +14,9 @@
 
     {% block sw_myparcel_smart_bar_actions %}
     <template #smart-bar-actions>
-
+        <sw-button :disabled="!downloadMultipleLabelsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenDownloadMultipleLabelsModal">
+            {{ $tc('sw-myparcel.consignments.buttons.downloadLabelsButton') }}
+        </sw-button>
     </template>
     {% endblock %}
 
@@ -50,8 +52,37 @@
                 {{ carriers[item.shippingOption.carrierId] }}
             </template>
 
+            <template #column-shippingOption.deliveryType="{ item }">
+                {{ deliveryTypes[item.shippingOption.deliveryType] }}
+            </template>
+
+            <template #column-shippingOption.requiresAgeCheck="{ item }">
+                <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.requiresAgeCheck === true" small="true" />
+                <span v-else />
+            </template>
+
+            <template #column-shippingOption.requiresSignature="{ item }">
+                <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.requiresSignature === true" small="true" />
+                <span v-else />
+            </template>
+
+            <template #column-shippingOption.onlyRecipient="{ item }">
+                <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.onlyRecipient === true" small="true" />
+                <span v-else />
+            </template>
+
+            <template #column-shippingOption.returnIfNotHome="{ item }">
+                <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.returnIfNotHome === true" small="true" />
+                <span v-else />
+            </template>
+
+            <template #column-shippingOption.largeFormat="{ item }">
+                <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.largeFormat === true" small="true" />
+                <span v-else />
+            </template>
+
             <template #actions="{ item }">
-                <sw-context-menu-item :disabled="!item.labelUrl" class="sw-myparcel-shipping-options-list__create-consignment-action" @click="onDownloadLabel(item)">
+                <sw-context-menu-item class="sw-myparcel-shipping-options-list__download-consignment-action" @click="onOpenDownloadSingleLabelModal(item)">
                     {{ $tc('sw-myparcel.orders.buttons.downloadLabel') }}
                 </sw-context-menu-item>
             </template>
@@ -68,6 +99,68 @@
             </template>
 
         </sw-data-grid>
+
+        <sw-modal v-if="downloadSingleLabel.showModal === true"
+                  :title="$tc('sw-myparcel.consignments.modals.downloadLabels.titleSingle')"
+                  @modal-close="onCloseDownloadSingleLabelModal"
+                  variant="small">
+
+            <form>
+
+                <sw-multi-select
+                        :label="$tc('sw-myparcel.consignments.modals.downloadLabels.printPositionHeading')"
+                        name="myparcel[print_position]"
+                        v-model="downloadSingleLabel.printPosition"
+                        :options="[
+                                { value: 1, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionBottomRightLabel') },
+                            ]">
+                </sw-multi-select>
+
+            </form>
+
+            <template slot="modal-footer">
+                <sw-button @click="onCloseDownloadSingleLabelModal" size="small">
+                    {{ $tc('sw-myparcel.consignments.buttons.cancelButton') }}
+                </sw-button>
+                <sw-button @click.prevent="onDownloadSingleLabel" :isLoading="downloadSingleLabelLoading" variant="primary" size="small">
+                    {{ $tc('sw-myparcel.consignments.buttons.downloadLabelButton') }}
+                </sw-button>
+            </template>
+        </sw-modal>
+
+        <sw-modal v-if="downloadMultipleLabels.showModal === true"
+                  :title="$tc('sw-myparcel.consignments.modals.downloadLabels.titleMultiple', 0, { numberOfItems: selectionCount })"
+                  @modal-close="onCloseDownloadMultipleLabelsModal"
+                  variant="small">
+
+            <form>
+
+                <sw-multi-select
+                        :label="$tc('sw-myparcel.consignments.modals.downloadLabels.printPositionHeading')"
+                        name="myparcel[print_position]"
+                        v-model="downloadMultipleLabels.printPosition"
+                        :options="[
+                                { value: 1, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.consignments.modals.downloadLabels.positionBottomRightLabel') },
+                            ]">
+                </sw-multi-select>
+
+            </form>
+
+            <template slot="modal-footer">
+                <sw-button @click="onCloseDownloadMultipleLabelsModal" size="small">
+                    {{ $tc('sw-myparcel.consignments.buttons.cancelButton') }}
+                </sw-button>
+                <sw-button @click.prevent="onDownloadMultipleLabels" :isLoading="downloadMultipleLabelsLoading" variant="primary" size="small">
+                    {{ $tc('sw-myparcel.consignments.buttons.downloadLabelsButton') }}
+                </sw-button>
+            </template>
+        </sw-modal>
     </template>
     {% endblock %}
 </sw-page>

@@ -32,7 +32,7 @@
                         :sortDirection="sortDirection"
                         :isLoading="isLoading"
                         :allowColumnEdit="false"
-                        identifier="sw-myparcel-order-list"
+                        identifier="sw-myparcel-orders-list"
                         @column-sort="onSortColumn"
                         @selection-change="onSelectionChanged">
 
@@ -64,7 +64,7 @@
                         </sw-label>
                     </template>
 
-                    <template #column-deliveries[0].stateMachineState.name="{ item }">
+                    <template #column-order.deliveries[0].stateMachineState.name="{ item }">
                         <sw-label v-if="item.order.deliveries && item.order.deliveries[0]"
                                   :variant="getVariantFromDeliveryState(item.order)"
                                   appearance="pill">
@@ -72,21 +72,13 @@
                         </sw-label>
                     </template>
 
-                    <template #column-order.orderDate="{ item }">
-                        {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                    <template #column-carrierId="{ item }">
+                        {{ carriers[item.carrierId] }}
                     </template>
 
-{#                    <template #column-order.orderDateTime="{ item }">#}
-{#                        {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}#}
-{#                    </template>#}
-
-{#                    <template #column-order.amountTotal="{ item }">#}
-{#                        {{ item.order.amountTotal | currency('EUR') }}#}
-{#                    </template>#}
-
-{#                    <template #column-order.stateMachineState.name="{ item }">#}
-{#                        {{ item.order.stateMachineState.name }}#}
-{#                    </template>#}
+                    <template #column-order.orderDateTime="{ item }">
+                        {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                    </template>
 
                     <template #actions="{ item }">
                         <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
@@ -112,7 +104,7 @@
 
                 <sw-modal v-if="createSingleConsignment.showModal === true"
                           :title="$tc('sw-myparcel.orders.modals.createConsignment.titleSingle')"
-                          @modal-close="onCloseSingleConsignmentModal"
+                          @modal-close="onCloseCreateSingleConsignmentModal"
                           variant="small">
 
                     <form>
@@ -163,20 +155,20 @@
                             <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionRequiresAgeCheckLabel')" name="myparcel[requires_age_check]" value="1" v-model="createSingleConsignment.item.requiresAgeCheck" />
                             <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionRequiresSignatureLabel')" name="myparcel[requires_signature]" value="1" v-model="createSingleConsignment.item.requiresSignature" />
                             <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionReturnIfNotHomeLabel')" name="myparcel[return_if_not_home]" value="1" v-model="createSingleConsignment.item.returnIfNotHome" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionLargePackageLabel')" name="myparcel[large_package]" value="1" v-model="createSingleConsignment.item.largePackage" /><br />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionLargeFormatLabel')" name="myparcel[large_format]" value="1" v-model="createSingleConsignment.item.largeFormat" /><br />
                         </template>
 
                         <template v-else>
                             <input type="hidden" name="myparcel[requires_age_check]" value="0" />
                             <input type="hidden" name="myparcel[requires_signature]" value="0" />
                             <input type="hidden" name="myparcel[return_if_not_home]" value="0" />
-                            <input type="hidden" name="myparcel[large_package]" value="0" />
+                            <input type="hidden" name="myparcel[large_format]" value="0" />
                         </template>
 
                     </form>
 
                     <template slot="modal-footer">
-                        <sw-button @click="onCloseSingleConsignmentModal" size="small">
+                        <sw-button @click="onCloseCreateSingleConsignmentModal" size="small">
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
                         <sw-button @click.prevent="onCreateSingleConsignment" :isLoading="createSingleConsignmentLoading" variant="primary" size="small">
@@ -187,7 +179,7 @@
 
                 <sw-modal v-if="createMultipleConsignments.showModal === true"
                           :title="$tc('sw-myparcel.orders.modals.createConsignment.titleMultiple', 0, { numberOfItems: selectedShippingOptionIds.length })"
-                          @modal-close="onCloseMultipleConsignmentsModal"
+                          @modal-close="onCloseCreateMultipleConsignmentsModal"
                           variant="small">
 
                     <form>
@@ -227,7 +219,7 @@
                     </form>
 
                     <template slot="modal-footer">
-                        <sw-button @click="onCloseMultipleConsignmentsModal" size="small">
+                        <sw-button @click="onCloseCreateMultipleConsignmentsModal" size="small">
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
                         <sw-button @click.prevent="onCreateMultipleConsignments" :isLoading="createMultipleConsignmentsLoading" variant="primary" size="small">

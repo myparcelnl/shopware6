@@ -25,10 +25,12 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
     public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
+    public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download_labels';
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
+    private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
 
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
@@ -138,9 +140,9 @@ class ConsignmentController extends StorefrontController
         }
 
         if (
-            $request->get(self::REQUEST_KEY_LABEL_POSITIONS) === null
-            || !is_array($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
-            || empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
+            $request->get(self::REQUEST_KEY_LABEL_POSITIONS) !== null
+            && is_array($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
+            && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
         }
@@ -170,7 +172,66 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/get-by-reference-id/{$referenceId}",
+     *     "/api/v{version}/_action/myparcel/consignment/download-labels",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_DOWNLOAD_LABELS,
+     *     methods={"POST"}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    public function downloadLabels(Request $request): JsonResponse
+    {
+        if (
+            $request->get(self::REQUEST_KEY_LABEL_POSITIONS) !== null
+            && is_array($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
+            && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
+        ) {
+            $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_REFERENCE_IDS) !== null
+            && is_array($request->get(self::REQUEST_KEY_REFERENCE_IDS))
+            && !empty($request->get(self::REQUEST_KEY_REFERENCE_IDS))
+        ) {
+            $referenceIds = $request->get(self::REQUEST_KEY_REFERENCE_IDS);
+        }
+
+        if (
+            isset($referenceIds)
+            && is_array($referenceIds)
+            && !empty($referenceIds)
+        ) {
+            $consignments = $this->consignmentService->findManyByReferenceId($referenceIds);
+        }
+
+        if (isset($consignments)) {
+            try {
+                if (
+                    is_array($labelPositions)
+                    && !empty($labelPositions)
+                ) {
+                    $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
+                } else {
+                    $consignments->setLinkOfLabels(false);
+                }
+            } catch (Exception $e) {
+                var_dump($e->getMessage());
+            }
+        }
+
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => isset($consignments),
+            self::RESPONSE_KEY_LABEL_URL => isset($consignments) ? $consignments->getLinkOfLabels() : null,
+        ]);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_GET_BY_REFERENCE_ID,
      *     methods={"POST"}
