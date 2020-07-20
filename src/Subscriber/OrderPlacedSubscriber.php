@@ -15,8 +15,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderPlacedSubscriber implements EventSubscriberInterface
 {
+    private const PARAM_DELIVERY_TYPE = 'delivery_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
-    private const PARAM_REQUIRES_SIGNATURE = 'requires_age_signature';
+    private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
     private const PARAM_ONLY_RECIPIENT = 'only_recipient';
     private const PARAM_RETURN_IF_NOT_HOME = 'return_if_not_home';
     private const PARAM_LARGE_FORMAT = 'large_format';
@@ -91,6 +92,10 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         }
 
         if (is_array($params) && !empty($params)) {
+            if (isset($params[self::PARAM_DELIVERY_TYPE])) {
+                $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int) $params[self::PARAM_DELIVERY_TYPE];
+            }
+
             if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
                 $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool) $params[self::PARAM_REQUIRES_AGE_CHECK];
             }
