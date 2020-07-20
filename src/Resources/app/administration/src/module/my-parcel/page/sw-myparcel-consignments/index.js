@@ -68,6 +68,7 @@ Component.register('sw-myparcel-consignments', {
             selectionCount: 0,
             selectedConsignments: null,
             selectedConsignmentIds: [],
+            orderIdFilter: [],
             packageTypes: {
                 [PACKAGE_TYPE_PACKAGE_ID]: this.$tc(PACKAGE_TYPE_PACKAGE_SNIPPET),
                 [PACKAGE_TYPE_MAILBOX_ID]: this.$tc(PACKAGE_TYPE_MAILBOX_SNIPPET),
@@ -95,6 +96,10 @@ Component.register('sw-myparcel-consignments', {
     },
 
     mounted() {
+        if (!!this.$route.params.orderId) {
+            this.orderIdFilter.push(this.$route.params.orderId);
+        }
+
         this.getList();
     },
 
@@ -117,6 +122,12 @@ Component.register('sw-myparcel-consignments', {
 
         consignmentCriteria() {
             const criteria = new Criteria(this.page, this.limit);
+
+            if (this.orderIdFilter.length) {
+                this.orderIdFilter.forEach(orderId => {
+                    criteria.addFilter(Criteria.equals('orderId', orderId));
+                });
+            }
 
             criteria.setTerm(this.term);
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
@@ -274,6 +285,11 @@ Component.register('sw-myparcel-consignments', {
             this.sortBy = column.dataIndex;
             this.sortDirection = sortDirection;
             this.getList();
+        },
+
+        onClearFilters() {
+            this.orderIdFilter = [];
+            this.$router.push({ name: 'sw.myparcel.consignments' });
         },
 
         onOpenCreateSingleLabelModal(item) {

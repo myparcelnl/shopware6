@@ -77,7 +77,7 @@
                     </template>
 
                     <template #column-numberOfConsignments="{ item }">
-                        <router-link :to="{ name: 'sw.myparcel.consignments' }"><span :ref="item.id" /></router-link>
+                        <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
                     </template>
 
                     <template #column-order.orderDateTime="{ item }">

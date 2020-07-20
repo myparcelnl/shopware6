@@ -99,6 +99,7 @@
       },
       "buttons": {
         "cancelButton": "Cancel",
+        "clearFiltersButton": "Show all",
         "createLabelButton": "Create label",
         "createLabelsButton": "Create labels",
         "downloadLabelButton": "Download label",

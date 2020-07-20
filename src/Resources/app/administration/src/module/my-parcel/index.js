@@ -32,7 +32,7 @@ Module.register('sw-myparcel', {
         },
         consignments: {
             component: 'sw-myparcel-consignments',
-            path: 'consignments',
+            path: 'consignments/:orderId?',
             meta: {
                 parentPath: 'sw.myparcel.orders'
             }

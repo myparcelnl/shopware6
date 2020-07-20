@@ -14,6 +14,10 @@
 
     {% block sw_myparcel_smart_bar_actions %}
     <template #smart-bar-actions>
+        <sw-button v-if="orderIdFilter.length > 0" variant="secondary" :square="false" :block="false" :isLoading="false" @click="onClearFilters">
+            {{ $tc('sw-myparcel.consignments.buttons.clearFiltersButton') }}
+        </sw-button>
+
         <sw-button :disabled="!createMultipleLabelsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleLabelsModal">
             {{ $tc('sw-myparcel.consignments.buttons.createLabelsButton') }}
         </sw-button>
