@@ -3,27 +3,57 @@
     "general": {
       "mainMenuItemGeneral": "MyParcel",
       "ordersMenuItemGeneral": "Orders",
-      "shipmentsMenuItemGeneral": "Shipments",
+      "consignmentsMenuItemGeneral": "Consignments",
       "shippingMethodsMenuItemGeneral": "Shipping methods",
-      "descriptionTextModule": "Tagline for MyParcel"
+      "descriptionTextModule": "Tagline for MyParcel",
+      "packageTypes": {
+        "package": "Package",
+        "mailbox": "Mailbox",
+        "letter": "Letter",
+        "digitalStamp": "Digital stamp"
+      },
+      "deliveryTypes": {
+        "morning": "Morning delivery",
+        "standard": "Standard delivery",
+        "evening": "Evening delivery",
+        "pickup": "Pickup point"
+      },
+      "carriers": {
+        "postNL": "PostNL",
+        "bPost": "bpost",
+        "dpd": "DPD"
+      }
+    },
+    "messages": {
+      "error": "An error has occurred",
+      "consignmentSuccess": "The consignment is successfully created",
+      "createLabelSuccess": "The label is successfully created"
     },
     "columns": {
       "orderColumn": "Order",
-      "orderDateColumn": "Order date",
+      "orderDateColumn": "Ordered",
+      "consignmentDateColumn": "Created",
       "totalAmountColumn": "Total amount",
       "statusColumn": "Status",
       "actionsColumn": "Actions",
       "packageTypeColumn": "Package type",
-      "carrierColumn": "Carrier"
+      "carrierColumn": "Carrier",
+      "deliveryTypeColumn": "Delivery type",
+      "requiresAgeCheckColumn": "Requires age check",
+      "requiresSignatureColumn": "Requires signature",
+      "onlyRecipientColumn": "Recipient only",
+      "returnIfNotHomeColumn": "Return if not home",
+      "largeFormatColumn": "Large format",
+      "numberOfConsignmentsColumn": "Consignment(s)"
     },
     "orders": {
       "title": "Orders",
       "modals": {
-        "createShipment": {
-          "titleSingle": "Create a shipment",
-          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
+        "createConsignment": {
+          "titleSingle": "Create a consignment",
+          "titleMultiple": "Create consignments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
-          "actionTypeCreateLabel": "Create consignment",
+          "actionTypeCreateConsignment": "Create consignment",
           "packageTypePackageLabel": "Package",
           "packageTypeMailboxLabel": "Mailbox",
           "packageTypeLetterLabel": "Letter",
@@ -32,7 +62,7 @@
           "optionRequiresAgeCheckLabel": "Requires age check 18+",
           "optionRequiresSignatureLabel": "Requires signature",
           "optionReturnIfNotHomeLabel": "Return if not home",
-          "optionLargePackageLabel": "Large package",
+          "optionLargeFormatLabel": "Large format",
           "positionTopLeftLabel": "Top left",
           "positionTopRightLabel": "Top right",
           "positionBottomLeftLabel": "Bottom left",
@@ -45,20 +75,38 @@
         }
       },
       "buttons": {
-        "viewOrder": "View the order",
+        "viewOrderButton": "View the order",
         "cancelButton": "Cancel",
-        "createShipmentButton": "Create shipment",
-        "createShipmentsButton": "Create shipments",
-        "viewShippingMethod": "View shipping method",
-        "downloadLabel": "Download label"
-      },
-      "messages": {
-        "error": "An error has occurred",
-        "shipmentSuccess": "The shipment is successfully created"
+        "createConsignmentButton": "Create consignment",
+        "createConsignmentsButton": "Create consignments",
+        "viewShippingMethodButton": "View shipping method",
+        "downloadLabelButton": "Download label"
       }
     },
-    "shipments": {
-      "title": "Shipments"
+    "consignments": {
+      "title": "Consignments",
+      "modals": {
+        "createLabels": {
+          "titleSingle": "Create label",
+          "titleMultiple": "Create labels ({numberOfItems} item(s))",
+          "positionTopLeftLabel": "Top left",
+          "positionTopRightLabel": "Top right",
+          "positionBottomLeftLabel": "Bottom left",
+          "positionBottomRightLabel": "Bottom right",
+          "numberOfLabelsHeading": "Number of labels",
+          "printPositionHeading": "Print position"
+        }
+      },
+      "buttons": {
+        "cancelButton": "Cancel",
+        "clearFiltersButton": "Show all",
+        "createLabelButton": "Create label",
+        "createLabelsButton": "Create labels",
+        "downloadLabelButton": "Download label",
+        "downloadLabelsButton": "Download labels",
+        "downloadDefaultLabelButton": "Download label (default settings)",
+        "downloadDefaultLabelsButton": "Download labels (default settings)"
+      }
     },
     "shippingMethods": {
       "title": "Shipping methods"

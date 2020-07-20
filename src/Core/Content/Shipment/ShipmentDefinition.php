@@ -41,15 +41,15 @@ class ShipmentDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new IntField('consignment_id', 'consignmentId')),
+            (new StringField('consignment_reference', 'consignmentReference')),
             (new FkField('shipping_option_id', 'shippingOptionId', ShippingOptionDefinition::class))->addFlags(new CascadeDelete()),
             (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new CascadeDelete()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             (new StringField('label_url', 'labelUrl')),
             (new FloatField('insured_amount', 'insuredAmount')),
 
-            (new OneToOneAssociationField('shippingOption', 'shipping_option_id', 'id', ShippingOptionDefinition::class))->addFlags(new Required()),
-            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', false))->addFlags(new Required(), new CascadeDelete()),
+            (new ManyToOneAssociationField('shippingOption', 'shipping_option_id', ShippingOptionDefinition::class, 'id', true))->addFlags(new Required()),
+            (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', true))->addFlags(new Required(), new CascadeDelete()),
         ]);
     }
 }

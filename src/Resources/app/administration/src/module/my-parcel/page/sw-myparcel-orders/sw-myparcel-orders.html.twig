@@ -14,186 +14,223 @@
 
         {% block sw_myparcel_smart_bar_actions %}
             <template #smart-bar-actions>
-                <sw-button :disabled="true" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleShipmentsModal">
-                    {{ $tc('sw-myparcel.orders.buttons.createShipmentsButton') }}
+                <sw-button :disabled="!createMultipleConsignmentsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleConsignmentsModal">
+                    {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}
                 </sw-button>
             </template>
         {% endblock %}
 
         {% block sw_myparcel_content %}
             <template #content>
-                <sw-grid
-                    :items="shippingOptions"
-                    :isFullpage="true"
-                    :table="true"
-                    :sortBy="sortBy"
-                    :sortDirection="sortDirection"
-                    @sw-grid-select-item="onSelectionChanged"
-                    @sw-grid-select-all="onSelectionChanged"
-                    @sort-column="onSortColumn">
-                    <template slot="columns" slot-scope="{ item }">
-                        <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.orderColumn')" dataIndex="order.orderNumber" :sortable="true">
-                            {{ item.order.orderNumber }}
-                        </sw-grid-column>
+                <sw-data-grid
+                        :dataSource="shippingOptions"
+                        :columns="orderColumns"
+                        :fullPage="true"
+                        :showSettings="true"
+                        :showSelection="true"
+                        :sortBy="sortBy"
+                        :sortDirection="sortDirection"
+                        :isLoading="isLoading"
+                        :allowColumnEdit="false"
+                        identifier="sw-myparcel-orders-list"
+                        @column-sort="onSortColumn"
+                        @selection-change="onSelectionChanged">
 
-                        <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.orderDateColumn')" dataIndex="order.orderDateTime" :sortable="true">
-                            {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit'}) }}
-                        </sw-grid-column>
-
-                        <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.totalAmountColumn')">
-                            {{ item.order.amountTotal | currency('EUR') }}
-                        </sw-grid-column>
-
-                        <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.statusColumn')">
-                            {{ item.order.stateMachineState.name }}
-                        </sw-grid-column>
-
-                        <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.actionsColumn')">
-                            <sw-context-button :showMenuOnStartup="false" :menuWidth="220" menuHorizontalAlign="right" menuVerticalAlign="bottom" icon="small-more" :disabled="false" :autoClose="true" :zIndex="9000">
-                                <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
-                                    {{ $tc('sw-myparcel.orders.buttons.viewOrder') }}
-                                </sw-context-menu-item>
-                                <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-shipment-action" @click="onOpenCreateSingleShipmentModal(item)">
-                                    {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
-                                </sw-context-menu-item>
-                            </sw-context-button>
-                        </sw-grid-column>
+                    <template #column-order.orderCustomer.firstName="{ item }">
+                        {{ item.order.orderCustomer.firstName }} {{ item.order.orderCustomer.lastName }}
                     </template>
-                </sw-grid>
 
-                <sw-modal v-if="createSingleShipment.showModal === true"
-                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleSingle')"
-                          @modal-close="onCloseSingleShipmentModal"
+                    <template #column-order.billingAddressId="{ item }">
+                        {{ getBillingAddress(item.order).street }},
+                        {{ getBillingAddress(item.order).zipcode }}
+                        {{ getBillingAddress(item.order).city }}
+                    </template>
+
+                    <template #column-order.amountTotal="{ item }">
+                        {{ item.order.amountTotal | currency(item.order.currency.translated.shortName) }}
+                    </template>
+
+                    <template #column-order.stateMachineState.name="{ item }">
+                        <sw-label :variant="getVariantFromOrderState(item.order)" appearance="pill">
+                            {{ item.order.stateMachineState.translated.name }}
+                        </sw-label>
+                    </template>
+
+                    <template #column-order.transactions[0].stateMachineState.name="{ item }">
+                        <sw-label v-if="item.order.transactions && item.order.transactions[0]"
+                                  :variant="getVariantFromPaymentState(item.order)"
+                                  appearance="pill">
+                            {{ item.order.transactions[0].stateMachineState.translated.name }}
+                        </sw-label>
+                    </template>
+
+                    <template #column-order.deliveries[0].stateMachineState.name="{ item }">
+                        <sw-label v-if="item.order.deliveries && item.order.deliveries[0]"
+                                  :variant="getVariantFromDeliveryState(item.order)"
+                                  appearance="pill">
+                            {{ item.order.deliveries[0].stateMachineState.translated.name }}
+                        </sw-label>
+                    </template>
+
+                    <template #column-carrierId="{ item }">
+                        {{ carriers[item.carrierId] }}
+                    </template>
+
+                    <template #column-numberOfConsignments="{ item }">
+                        <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
+                    </template>
+
+                    <template #column-order.orderDateTime="{ item }">
+                        {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                    </template>
+
+                    <template #actions="{ item }">
+                        <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
+                            {{ $tc('sw-myparcel.orders.buttons.viewOrderButton') }}
+                        </sw-context-menu-item>
+                        <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">
+                            {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}
+                        </sw-context-menu-item>
+                    </template>
+
+                    <template slot="pagination">
+                        <sw-pagination
+                                :page="page"
+                                :limit="limit"
+                                :total="total"
+                                :total-visible="25"
+                                @page-change="onPageChange"
+                                :steps="[25]">
+                        </sw-pagination>
+                    </template>
+
+                </sw-data-grid>
+
+                <sw-modal v-if="createSingleConsignment.showModal === true"
+                          :title="$tc('sw-myparcel.orders.modals.createConsignment.titleSingle')"
+                          @modal-close="onCloseCreateSingleConsignmentModal"
                           variant="small">
 
                     <form>
 
                         <sw-select-field
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.actionTypeHeading')"
                                 name="myparcel[action_type]"
-                                v-model="createSingleShipment.actionType">
+                                v-model="createSingleConsignment.actionType">
 
-                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') }}</option>
-                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }}</option>
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeDownloadLabel') }}</option>
+                            <option value="create">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeCreateLabel') }}</option>
                         </sw-select-field>
 
                         <sw-select-number-field
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.packageTypeHeading')"
                                 name="myparcel[package_type]"
-                                v-model="createSingleShipment.item.packageType">
+                                v-model="createSingleConsignment.item.packageType">
 
-                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') }}</option>
-                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') }}</option>
-                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') }}</option>
-                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }}</option>
+                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypePackageLabel') }}</option>
+                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeMailboxLabel') }}</option>
+                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeLetterLabel') }}</option>
+                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeDigitalStampLabel') }}</option>
                         </sw-select-number-field>
 
                         <sw-multi-select
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.printPositionHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.printPositionHeading')"
                                 name="myparcel[print_position]"
-                                v-model="createSingleShipment.printPosition"
+                                v-model="createSingleConsignment.printPosition"
                                 :options="[
-                                { value: 1, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopLeftLabel') },
-                                { value: 2, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopRightLabel') },
-                                { value: 3, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomLeftLabel') },
-                                { value: 4, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomRightLabel') },
+                                { value: 1, label: $tc('sw-myparcel.orders.modals.createConsignment.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.orders.modals.createConsignment.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.orders.modals.createConsignment.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.orders.modals.createConsignment.positionBottomRightLabel') },
                             ]">
                         </sw-multi-select>
 
                         <sw-number-field
-                            :label="$tc('sw-myparcel.orders.modals.createShipment.numberOfLabelsHeading')"
+                            :label="$tc('sw-myparcel.orders.modals.createConsignment.numberOfLabelsHeading')"
                             name="myparcel[number_of_labels]"
                             numberType="int"
                             :min="1"
                             :step="1"
-                            v-model="createSingleShipment.numberOfLabels" />
+                            v-model="createSingleConsignment.numberOfLabels" />
 
-                        <template v-if="createSingleShipment.item.packageType === 1">
-                            <sw-base-field :label="$tc('sw-myparcel.orders.modals.createShipment.shippingOptionsHeading')" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionOnlyRecipientLabel')" name="myparcel[only_recipient]" value="1" v-model="createSingleShipment.item.onlyRecipient" :checked="onlyRecipientChecked(createSingleShipment.item)" :disabled="onlyRecipientDisabled(createSingleShipment.item)" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionRequiresAgeCheckLabel')" name="myparcel[requires_age_check]" value="1" v-model="createSingleShipment.item.requiresAgeCheck" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionRequiresSignatureLabel')" name="myparcel[requires_signature]" value="1" v-model="createSingleShipment.item.requiresSignature" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionReturnIfNotHomeLabel')" name="myparcel[return_if_not_home]" value="1" v-model="createSingleShipment.item.returnIfNotHome" />
-                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createShipment.optionLargePackageLabel')" name="myparcel[large_package]" value="1" v-model="createSingleShipment.item.largePackage" /><br />
+                        <template v-if="createSingleConsignment.item.packageType === 1">
+                            <sw-base-field :label="$tc('sw-myparcel.orders.modals.createConsignment.shippingOptionsHeading')" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionOnlyRecipientLabel')" name="myparcel[only_recipient]" value="1" v-model="createSingleConsignment.item.onlyRecipient" :checked="onlyRecipientChecked(createSingleConsignment.item)" :disabled="onlyRecipientDisabled(createSingleConsignment.item)" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionRequiresAgeCheckLabel')" name="myparcel[requires_age_check]" value="1" v-model="createSingleConsignment.item.requiresAgeCheck" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionRequiresSignatureLabel')" name="myparcel[requires_signature]" value="1" v-model="createSingleConsignment.item.requiresSignature" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionReturnIfNotHomeLabel')" name="myparcel[return_if_not_home]" value="1" v-model="createSingleConsignment.item.returnIfNotHome" />
+                            <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.optionLargeFormatLabel')" name="myparcel[large_format]" value="1" v-model="createSingleConsignment.item.largeFormat" /><br />
                         </template>
 
                         <template v-else>
                             <input type="hidden" name="myparcel[requires_age_check]" value="0" />
                             <input type="hidden" name="myparcel[requires_signature]" value="0" />
                             <input type="hidden" name="myparcel[return_if_not_home]" value="0" />
-                            <input type="hidden" name="myparcel[large_package]" value="0" />
+                            <input type="hidden" name="myparcel[large_format]" value="0" />
                         </template>
 
                     </form>
 
                     <template slot="modal-footer">
-                        <sw-button @click="onCloseSingleShipmentModal" size="small">
+                        <sw-button @click="onCloseCreateSingleConsignmentModal" size="small">
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
-                        <sw-button @click="onCreateSingleShipment" variant="primary" size="small">
-                            {{ $tc('sw-myparcel.orders.buttons.createShipmentButton') }}
+                        <sw-button @click.prevent="onCreateSingleConsignment" :isLoading="createSingleConsignmentLoading" variant="primary" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}
                         </sw-button>
                     </template>
                 </sw-modal>
 
-                <sw-modal v-if="createMultipleShipments.showModal === true"
-                          :title="$tc('sw-myparcel.orders.modals.createShipment.titleMultiple', 0, { numberOfItems: selectedShippingOptionIds.length })"
-                          @modal-close="onCloseMultipleShipmentsModal"
+                <sw-modal v-if="createMultipleConsignments.showModal === true"
+                          :title="$tc('sw-myparcel.orders.modals.createConsignment.titleMultiple', 0, { numberOfItems: selectedShippingOptionIds.length })"
+                          @modal-close="onCloseCreateMultipleConsignmentsModal"
                           variant="small">
 
                     <form>
 
                         <sw-select-field
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.actionTypeHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.actionTypeHeading')"
                                 name="myparcel[action_type]"
-                                v-model="createMultipleShipments.actionType">
+                                v-model="createMultipleConsignments.actionType">
 
-                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeDownloadLabel') }}</option>
-                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createShipment.actionTypeCreateLabel') }}</option>
+                            <option value="download">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeDownloadLabel') }}</option>
+                            <option value="create">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeCreateLabel') }}</option>
                         </sw-select-field>
 
                         <sw-select-number-field
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.packageTypeHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.packageTypeHeading')"
                                 name="myparcel[package_type]"
-                                v-model="createMultipleShipments.packageType">
+                                v-model="createMultipleConsignments.packageType">
 
-                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypePackageLabel') }}</option>
-                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeMailboxLabel') }}</option>
-                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeLetterLabel') }}</option>
-                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createShipment.packageTypeDigitalStampLabel') }}</option>
+                            <option value="1">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypePackageLabel') }}</option>
+                            <option value="2">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeMailboxLabel') }}</option>
+                            <option value="3">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeLetterLabel') }}</option>
+                            <option value="4">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeDigitalStampLabel') }}</option>
                         </sw-select-number-field>
 
                         <sw-multi-select
-                                :label="$tc('sw-myparcel.orders.modals.createShipment.printPositionHeading')"
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.printPositionHeading')"
                                 name="myparcel[print_position]"
-                                v-model="createMultipleShipments.printPosition"
+                                v-model="createMultipleConsignments.printPosition"
                                 :options="[
-                                { value: 1, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopLeftLabel') },
-                                { value: 2, label: $tc('sw-myparcel.orders.modals.createShipment.positionTopRightLabel') },
-                                { value: 3, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomLeftLabel') },
-                                { value: 4, label: $tc('sw-myparcel.orders.modals.createShipment.positionBottomRightLabel') },
+                                { value: 1, label: $tc('sw-myparcel.orders.modals.createConsignment.positionTopLeftLabel') },
+                                { value: 2, label: $tc('sw-myparcel.orders.modals.createConsignment.positionTopRightLabel') },
+                                { value: 3, label: $tc('sw-myparcel.orders.modals.createConsignment.positionBottomLeftLabel') },
+                                { value: 4, label: $tc('sw-myparcel.orders.modals.createConsignment.positionBottomRightLabel') },
                             ]">
                         </sw-multi-select>
 
                     </form>
 
                     <template slot="modal-footer">
-                        <sw-button @click="onCloseMultipleShipmentsModal" size="small">
+                        <sw-button @click="onCloseCreateMultipleConsignmentsModal" size="small">
                             {{ $tc('sw-myparcel.orders.buttons.cancelButton') }}
                         </sw-button>
-                        <sw-button @click="onCreateMultipleShipments" variant="primary" size="small">
-                            {{ $tc('sw-myparcel.orders.buttons.createShipmentsButton') }}
+                        <sw-button @click.prevent="onCreateMultipleConsignments" :isLoading="createMultipleConsignmentsLoading" variant="primary" size="small">
+                            {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}
                         </sw-button>
                     </template>
                 </sw-modal>
-            </template>
-
-            <template #pagination>
-                <sw-pagination :page="page"
-                               :limit="limit"
-                               :total="total"
-                               :total-visible="7">
-                </sw-pagination>
             </template>
         {% endblock %}
     </sw-page>

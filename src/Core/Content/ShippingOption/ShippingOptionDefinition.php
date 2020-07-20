@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -64,6 +65,7 @@ class ShippingOptionDefinition extends EntityDefinition
             (new BoolField('return_if_not_home', 'returnIfNotHome')),
             (new BoolField('large_format', 'largeFormat')),
 
+            (new OneToManyAssociationField('consignments', ShipmentDefinition::class, 'shipping_option_id')),
             (new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, true))->addFlags(new Required(), new CascadeDelete()),
         ]);
     }

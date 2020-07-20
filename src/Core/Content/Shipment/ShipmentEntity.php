@@ -12,7 +12,7 @@ class ShipmentEntity extends Entity
     use EntityIdTrait;
 
     public const FIELD_ID = 'id';
-    public const FIELD_CONSIGNMENT_ID = 'consignmentId';
+    public const FIELD_CONSIGNMENT_REFERENCE = 'consignmentReference';
     public const FIELD_SHIPPING_OPTION = 'shippingOption';
     public const FIELD_SHIPPING_OPTION_ID = 'shippingOptionId';
     public const FIELD_ORDER = 'order';
@@ -23,9 +23,9 @@ class ShipmentEntity extends Entity
     public const FIELD_INSURED_AMOUNT= 'insuredAmount';
 
     /**
-     * @var int|null
+     * @var string|null
      */
-    protected $consignmentId;
+    protected $consignmentReference;
 
     /**
      * @var ShippingOptionEntity
@@ -65,19 +65,19 @@ class ShipmentEntity extends Entity
     /**
      * @return int|null
      */
-    public function getConsignmentId(): ?int
+    public function getConsignmentReference(): ?string
     {
-        return $this->consignmentId;
+        return $this->consignmentReference;
     }
 
     /**
-     * @param int|null $consignmentId
+     * @param string|null $consignmentReference
      *
      * @return self
      */
-    public function setConsignmentId(?int $consignmentId): self
+    public function setConsignmentReference(?int $consignmentReference): self
     {
-        $this->consignmentId = $consignmentId;
+        $this->consignmentReference = $consignmentReference;
         return $this;
     }
 

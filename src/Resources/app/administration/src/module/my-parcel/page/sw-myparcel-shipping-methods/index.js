@@ -16,6 +16,7 @@ Component.register('sw-myparcel-shipping-methods', {
 
     data() {
         return {
+            limit: 10,
             isLoading: false,
             shippingMethods: [],
             sortBy: 'createdAt',

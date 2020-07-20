@@ -13,7 +13,6 @@ use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
-use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,7 +74,7 @@ class ShipmentController extends StorefrontController
     {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
-            self::RESPONSE_KEY_SHIPMENTS => $this->shipmentService->getShipments(new Context(new SystemSource()))
+            self::RESPONSE_KEY_SHIPMENTS => $this->shipmentService->getShipments(new Context(new SystemSource())),
         ]);
     }
 
