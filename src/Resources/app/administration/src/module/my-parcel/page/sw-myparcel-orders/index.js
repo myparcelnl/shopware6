@@ -161,6 +161,10 @@ Component.register('sw-myparcel-orders', {
                 label: 'sw-myparcel.columns.carrierColumn',
                 allowResize: true
             }, {
+                property: 'numberOfConsignments',
+                label: 'sw-myparcel.columns.numberOfConsignmentsColumn',
+                allowResize: true
+            }, {
                 property: 'order.orderDateTime',
                 label: 'sw-order.list.orderDate',
                 allowResize: true
@@ -177,6 +181,32 @@ Component.register('sw-myparcel-orders', {
                 allowResize: true,
                 visible: false
             }];
+        },
+
+        getNumberOfConsignments(shippingOptionId) {
+            const gridItem = this.$refs[shippingOptionId];
+
+            if (!!gridItem) {
+                gridItem.innerHTML = '0';
+
+                this.MyParcelConsignmentService.getForShippingOption({
+                    shipping_option_id: shippingOptionId
+                })
+                    .then((response) => {
+
+                        if (response.success === true) {
+                            let length = 0;
+
+                            if (!!response.consignments) {
+                                for (let id in response.consignments) {
+                                    length = length + 1;
+                                }
+                            }
+
+                            gridItem.innerHTML = length.toString();
+                        }
+                    });
+            }
         },
 
         getBillingAddress(order) {
@@ -314,8 +344,12 @@ Component.register('sw-myparcel-orders', {
                 this.shippingOptions = response;
                 this.isLoading = false;
 
+                if (!!this.shippingOptions) {
+                    this.shippingOptions.forEach(item => this.getNumberOfConsignments(item.id));
+                }
+
                 return response;
-            }).catch(() => {
+            }).catch((error) => {
                 this.isLoading = false;
             });
         },

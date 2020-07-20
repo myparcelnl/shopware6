@@ -27,7 +27,7 @@
     "messages": {
       "error": "An error has occurred",
       "consignmentSuccess": "The consignment is successfully created",
-      "downloadLabelSuccess": "The label is successfully created"
+      "createLabelSuccess": "The label is successfully created"
     },
     "columns": {
       "orderColumn": "Order",
@@ -43,7 +43,8 @@
       "requiresSignatureColumn": "Requires signature",
       "onlyRecipientColumn": "Recipient only",
       "returnIfNotHomeColumn": "Return if not home",
-      "largeFormatColumn": "Large format"
+      "largeFormatColumn": "Large format",
+      "numberOfConsignmentsColumn": "Consignment(s)"
     },
     "orders": {
       "title": "Orders",
@@ -52,7 +53,7 @@
           "titleSingle": "Create a consignment",
           "titleMultiple": "Create consignments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
-          "actionTypeCreateLabel": "Create consignment",
+          "actionTypeCreateConsignment": "Create consignment",
           "packageTypePackageLabel": "Package",
           "packageTypeMailboxLabel": "Mailbox",
           "packageTypeLetterLabel": "Letter",
@@ -74,20 +75,20 @@
         }
       },
       "buttons": {
-        "viewOrder": "View the order",
+        "viewOrderButton": "View the order",
         "cancelButton": "Cancel",
         "createConsignmentButton": "Create consignment",
         "createConsignmentsButton": "Create consignments",
-        "viewShippingMethod": "View shipping method",
-        "downloadLabel": "Download label"
+        "viewShippingMethodButton": "View shipping method",
+        "downloadLabelButton": "Download label"
       }
     },
     "consignments": {
       "title": "Consignments",
       "modals": {
-        "downloadLabels": {
-          "titleSingle": "Download label",
-          "titleMultiple": "Download labels ({numberOfItems} item(s))",
+        "createLabels": {
+          "titleSingle": "Create label",
+          "titleMultiple": "Create labels ({numberOfItems} item(s))",
           "positionTopLeftLabel": "Top left",
           "positionTopRightLabel": "Top right",
           "positionBottomLeftLabel": "Bottom left",
@@ -98,8 +99,12 @@
       },
       "buttons": {
         "cancelButton": "Cancel",
+        "createLabelButton": "Create label",
+        "createLabelsButton": "Create labels",
         "downloadLabelButton": "Download label",
-        "downloadLabelsButton": "Download labels"
+        "downloadLabelsButton": "Download labels",
+        "downloadDefaultLabelButton": "Download label (default settings)",
+        "downloadDefaultLabelsButton": "Download labels (default settings)"
       }
     },
     "shippingMethods": {

@@ -25,18 +25,19 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
     public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
+    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get_for_shipping_option';
     public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download_labels';
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
     private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
+    private const REQUEST_KEY_SHIPPING_OPTION_ID = 'shipping_option_id';
 
-    private const RESPONSE_KEY_SUCCESS = 'success';
+    private const RESPONSE_KEY_CONSIGNMENTS = 'consignments';
     private const RESPONSE_KEY_ERROR = 'error';
-    private const RESPONSE_KEY_CARRIERS = 'carriers';
-    private const RESPONSE_KEY_PACKAGE_TYPES = 'package_types';
     private const RESPONSE_KEY_LABEL_URL = 'labelUrl';
+    private const RESPONSE_KEY_SUCCESS = 'success';
 
     /**
      * @var ConsignmentService
@@ -66,42 +67,39 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/carriers",
+     *     "/api/v{version}/_action/myparcel/consignment/get-for-shipping-option",
      *     defaults={"auth_enabled"=true},
-     *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
-     *     methods={"GET"}
+     *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION,
+     *     methods={"POST"}
      *     )
      *
      * @return JsonResponse
-     * @throws Exception
      */
-    public function getCarriers(): JsonResponse
+    public function getForShippingOption(Request $request): JsonResponse
     {
+        $shippingOptionId = $request->get(self::REQUEST_KEY_SHIPPING_OPTION_ID);
+        $consignments = null;
+
+        if ((string) $shippingOptionId === '') {
+            return new JsonResponse([
+                self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => sprintf(
+                    'Request is missing a valid %s',
+                    self::REQUEST_KEY_SHIPPING_OPTION_ID
+                )
+            ]);
+        }
+
+        if ((string) $shippingOptionId !== '') {
+            $consignments = $this->shipmentService->getShipmentsByShippingOptionId(
+                $shippingOptionId,
+                new Context(new SystemSource())
+            );
+        }
+
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
-            self::RESPONSE_KEY_CARRIERS => $this->consignmentService->getCarrierIds(),
-
-        ]);
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/package_types",
-     *     defaults={"auth_enabled"=true},
-     *     name=ConsignmentController::ROUTE_NAME_GET_PACKAGE_TYPES,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function getPackageTypes(): JsonResponse
-    {
-        return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => true,
-            self::RESPONSE_KEY_PACKAGE_TYPES => $this->consignmentService->getPackageTypes(),
-
+            self::RESPONSE_KEY_CONSIGNMENTS => $consignments,
         ]);
     }
 

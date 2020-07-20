@@ -75,6 +75,10 @@
             <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />
         </service>
 
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\MyParcelController" public="true">
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
+        </service>
+
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ShipmentController" public="true">
             <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
             <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />

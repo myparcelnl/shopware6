@@ -27,7 +27,7 @@
     "messages": {
       "error": "Er heeft een fout plaatsgevonden",
       "consignmentSuccess": "De verzending is succesvol aangemaakt",
-      "downloadLabelSuccess": "Het label is succesvol aangemaakt"
+      "createLabelSuccess": "Het label is succesvol aangemaakt"
     },
     "columns": {
       "orderColumn": "Bestelling",
@@ -43,7 +43,8 @@
       "requiresSignatureColumn": "Handtekening nodig",
       "onlyRecipientColumn": "Alleen thuisadres",
       "returnIfNotHomeColumn": "Retour bij niet aanwezig",
-      "largeFormatColumn": "Groot pakket"
+      "largeFormatColumn": "Groot pakket",
+      "numberOfConsignmentsColumn": "Zending(en)"
     },
     "orders": {
       "title": "Bestellingen",
@@ -52,7 +53,7 @@
           "titleSingle": "Maak verzending aan",
           "titleMultiple": "Maak verzendingen aan ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
-          "actionTypeCreateLabel": "Maak zending",
+          "actionTypeCreateConsignment": "Maak zending",
           "packageTypePackageLabel": "Pakket",
           "packageTypeMailboxLabel": "Brievenbuspakket",
           "packageTypeLetterLabel": "Briefpost",
@@ -74,20 +75,21 @@
         }
       },
       "buttons": {
-        "viewOrder": "Order bekijken",
+        "viewOrderButton": "Order bekijken",
         "cancelButton": "Annuleren",
         "createConsignmentButton": "Verzending aanmaken",
         "createConsignmentsButton": "Verzendingen aanmaken",
-        "viewShippingMethod": "Bekijk verzendmethod",
-        "downloadLabel": "Label downloaden"
+        "viewShippingMethodButton": "Bekijk verzendmethod",
+        "createLabelButton": "Label aanmaken",
+        "downloadLabelButton": "Label downloaden"
       }
     },
     "consignments": {
       "title": "Verzendingen",
       "modals": {
-        "downloadLabels": {
-          "titleSingle": "Download label",
-          "titleMultiple": "Download labels ({numberOfItems} item(s))",
+        "createLabels": {
+          "titleSingle": "Label aanmaken",
+          "titleMultiple": "Labels aanmaken ({numberOfItems} item(s))",
           "positionTopLeftLabel": "Linksboven",
           "positionTopRightLabel": "Rechtsboven",
           "positionBottomLeftLabel": "Linksonder",
@@ -98,8 +100,12 @@
       },
       "buttons": {
         "cancelButton": "Annuleren",
+        "createLabelButton": "Label aanmaken",
+        "createLabelsButton": "Labels aanmaken",
         "downloadLabelButton": "Label downloaden",
-        "downloadLabelsButton": "Labels downloaden"
+        "downloadLabelsButton": "Labels downloaden",
+        "downloadDefaultLabelButton": "Label downloaden (standaard instellingen)",
+        "downloadDefaultLabelsButton": "Labels downloaden (standaard instellingen)"
       }
     },
     "shippingMethods": {

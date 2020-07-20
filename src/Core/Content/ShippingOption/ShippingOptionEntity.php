@@ -5,6 +5,7 @@ namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
 use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ShippingOptionEntity extends Entity //NOSONAR
@@ -43,19 +44,14 @@ class ShippingOptionEntity extends Entity //NOSONAR
     protected $orderVersionId;
 
     /**
-     * @var ShipmentEntity|null
-     */
-    protected $shipment;
-
-    /**
-     * @var string|null
-     */
-    protected $shipmentId;
-
-    /**
      * @var int
      */
     protected $carrierId;
+
+    /**
+     * @var EntityCollection|null
+     */
+    protected $consignments;
 
     /**
      * @var int
@@ -150,44 +146,6 @@ class ShippingOptionEntity extends Entity //NOSONAR
     }
 
     /**
-     * @return ShipmentEntity|null
-     */
-    public function getShipment(): ?ShipmentEntity
-    {
-        return $this->shipment;
-    }
-
-    /**
-     * @param ShipmentEntity|null $shipment
-     *
-     * @return self
-     */
-    public function setShipment(?ShipmentEntity $shipment): self
-    {
-        $this->shipment = $shipment;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getShipmentId(): ?string
-    {
-        return $this->shipmentId;
-    }
-
-    /**
-     * @param string|null $shipmentId
-     *
-     * @return self
-     */
-    public function setShipmentId(?string $shipmentId): self
-    {
-        $this->shipmentId = $shipmentId;
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getCarrierId(): int
@@ -203,6 +161,25 @@ class ShippingOptionEntity extends Entity //NOSONAR
     public function setCarrierId(int $carrierId): ShippingOptionEntity
     {
         $this->carrierId = $carrierId;
+        return $this;
+    }
+
+    /**
+     * @return EntityCollection|null
+     */
+    public function getConsignments(): ?EntityCollection
+    {
+        return $this->consignments;
+    }
+
+    /**
+     * @param EntityCollection|null $consignments
+     *
+     * @return self
+     */
+    public function setConsignments(EntityCollection $consignments): self
+    {
+        $this->consignments = $consignments;
         return $this;
     }
 

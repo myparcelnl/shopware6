@@ -5,6 +5,7 @@ namespace Kiener\KienerMyParcel\Service\Shipment;
 use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
@@ -86,21 +87,21 @@ class ShipmentService
     }
 
     /**
-     * Returns a shipment object from the database by the shipping option id.
+     * Returns shipment objects from the database by the shipping option id.
      *
      * @param string  $shippingOptionId
      * @param Context $context
      *
-     * @return ShipmentEntity|null
+     * @return array
      */
-    public function getShipmentByShippingOptionId(string $shippingOptionId, Context $context): ?ShipmentEntity
+    public function getShipmentsByShippingOptionId(string $shippingOptionId, Context $context): array
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('shippingOptionId', $shippingOptionId));
         $criteria->addAssociation('shipping_option');
         $criteria->addAssociation('order');
 
-        return $this->shipmentRepository->search($criteria, $context)->first();
+        return $this->shipmentRepository->search($criteria, $context)->getElements();
     }
 
     /**

@@ -51,20 +51,20 @@ Component.register('sw-myparcel-consignments', {
             consignments: [],
             sortBy: 'createdAt',
             sortDirection: 'DESC',
-            downloadSingleLabel: {
+            createSingleLabel: {
                 item: null,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
             },
-            downloadMultipleLabels: {
+            createMultipleLabels: {
                 items: null,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
             },
-            downloadSingleLabelLoading: false,
-            downloadMultipleLabelsLoading: false,
+            createSingleLabelLoading: false,
+            createMultipleLabelsLoading: false,
             selectionCount: 0,
             selectedConsignments: null,
             selectedConsignmentIds: [],
@@ -101,6 +101,10 @@ Component.register('sw-myparcel-consignments', {
     computed: {
         consignmentColumns() {
             return this.getConsignmentColumns();
+        },
+
+        createMultipleLabelsAvailable() {
+            return !!this.selectedConsignmentIds && this.selectionCount > 0 || false;
         },
 
         downloadMultipleLabelsAvailable() {
@@ -180,35 +184,35 @@ Component.register('sw-myparcel-consignments', {
         },
 
         closeModals() {
-            this.closeDownloadSingleLabelModal();
-            this.closeDownloadMultipleLabelsModal();
+            this.closeCreateSingleLabelModal();
+            this.closeCreateMultipleLabelsModal();
         },
 
-        closeDownloadSingleLabelModal() {
-            this.downloadSingleLabel.showModal = false;
-            this.downloadSingleLabelLoading = false;
+        closeCreateSingleLabelModal() {
+            this.createSingleLabel.showModal = false;
+            this.createSingleLabelLoading = false;
         },
 
-        closeDownloadMultipleLabelsModal() {
-            this.downloadMultipleLabels.showModal = false;
-            this.downloadMultipleLabelsLoading = false;
+        closeCreateMultipleLabelsModal() {
+            this.createMultipleLabels.showModal = false;
+            this.createMultipleLabelsLoading = false;
         },
 
-        openDownloadSingleLabelModal() {
-            this.downloadSingleLabel.showModal = true;
+        openCreateSingleLabelModal() {
+            this.createSingleLabel.showModal = true;
         },
 
-        openDownloadMultipleLabelsModal() {
-            this.downloadMultipleLabels.showModal = true;
+        openCreateMultipleLabelsModal() {
+            this.createMultipleLabels.showModal = true;
         },
 
-        downloadLabels(data) {
-            this.MyParcelConsignmentService.downloadLabels(data)
+        createLabels(data) {
+            this.MyParcelConsignmentService.createLabels(data)
                 .then((response) => {
                     if (response.success) {
                         this.createNotificationSuccess({
                             title: this.$tc('sw-myparcel.general.mainMenuItemGeneral'),
-                            message: this.$tc('sw-myparcel.messages.downloadLabelSuccess')
+                            message: this.$tc('sw-myparcel.messages.createLabelSuccess')
                         });
 
                         if (!!response.labelUrl) {
@@ -272,54 +276,54 @@ Component.register('sw-myparcel-consignments', {
             this.getList();
         },
 
-        onOpenDownloadSingleLabelModal(item) {
-            this.downloadSingleLabel.item = item;
-            this.openDownloadSingleLabelModal();
+        onOpenCreateSingleLabelModal(item) {
+            this.createSingleLabel.item = item;
+            this.openCreateSingleLabelModal();
         },
 
-        onOpenDownloadMultipleLabelsModal() {
-            this.downloadMultipleLabels.items = this.selectedConsignments;
-            this.openDownloadMultipleLabelsModal();
+        onOpenCreateMultipleLabelsModal() {
+            this.createMultipleLabels.items = this.selectedConsignments;
+            this.openCreateMultipleLabelsModal();
         },
 
-        onCloseDownloadSingleLabelModal() {
-            this.closeDownloadSingleLabelModal();
+        onCloseCreateSingleLabelModal() {
+            this.closeCreateSingleLabelModal();
         },
 
-        onDownloadSingleLabel() {
-            if (!!this.downloadSingleLabel.item.consignmentReference) {
-                this.downloadSingleLabelLoading = true;
+        onCreateSingleLabel() {
+            if (!!this.createSingleLabel.item.consignmentReference) {
+                this.createSingleLabelLoading = true;
 
                 let data = {
-                    reference_ids: [this.downloadSingleLabel.item.consignmentReference],
-                    label_positions: this.downloadSingleLabel.printPosition
+                    reference_ids: [this.createSingleLabel.item.consignmentReference],
+                    label_positions: this.createSingleLabel.printPosition
                 };
 
-                this.downloadLabels(data);
+                this.createLabels(data);
             }
         },
 
-        onCloseDownloadMultipleLabelsModal() {
-            this.closeDownloadMultipleLabelsModal();
+        onCloseCreateMultipleLabelsModal() {
+            this.closeCreateMultipleLabelsModal();
         },
 
-        onDownloadMultipleLabels() {
-            if (!!this.downloadMultipleLabels.items) {
-                this.downloadMultipleLabelsLoading = true;
+        onCreateMultipleLabels() {
+            if (!!this.createMultipleLabels.items) {
+                this.createMultipleLabelsLoading = true;
 
                 let data = {
                     reference_ids: [],
-                    label_positions: this.downloadMultipleLabels.printPosition
+                    label_positions: this.createMultipleLabels.printPosition
                 };
 
-                for (let id in this.downloadMultipleLabels.items) {
-                    if (!!this.downloadMultipleLabels.items[id].consignmentReference) {
-                        data.reference_ids.push(this.downloadMultipleLabels.items[id].consignmentReference);
+                for (let id in this.createMultipleLabels.items) {
+                    if (!!this.createMultipleLabels.items[id].consignmentReference) {
+                        data.reference_ids.push(this.createMultipleLabels.items[id].consignmentReference);
                     }
                 }
 
                 if (data.reference_ids.length) {
-                    this.downloadLabels(data);
+                    this.createLabels(data);
                 }
             }
         },

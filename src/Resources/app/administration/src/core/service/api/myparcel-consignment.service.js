@@ -36,6 +36,22 @@ class MyParcelConsignmentService extends ApiService {
                 return ApiService.handleResponse(response);
             });
     }
+
+    getForShippingOption(data = { shipping_option_id: null }) {
+        const headers = this.getBasicHeaders();
+
+        return this.httpClient
+            .post(
+                `_action/${this.getApiBasePath()}/consignment/get-for-shipping-option`,
+                JSON.stringify(data),
+                {
+                    headers: headers
+                }
+            )
+            .then((response) => {
+                return ApiService.handleResponse(response);
+            });
+    }
 }
 
 export default MyParcelConsignmentService;

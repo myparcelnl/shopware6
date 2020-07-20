@@ -76,13 +76,17 @@
                         {{ carriers[item.carrierId] }}
                     </template>
 
+                    <template #column-numberOfConsignments="{ item }">
+                        <router-link :to="{ name: 'sw.myparcel.consignments' }"><span :ref="item.id" /></router-link>
+                    </template>
+
                     <template #column-order.orderDateTime="{ item }">
                         {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
                     </template>
 
                     <template #actions="{ item }">
                         <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
-                            {{ $tc('sw-myparcel.orders.buttons.viewOrder') }}
+                            {{ $tc('sw-myparcel.orders.buttons.viewOrderButton') }}
                         </sw-context-menu-item>
                         <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">
                             {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}
