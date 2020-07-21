@@ -21,7 +21,7 @@ class MyParcelConsignmentService extends ApiService {
             });
     }
 
-    downloadLabels(data = { reference_ids: null, label_positions: null, number_of_labels: null }) {
+    createLabels(data = { reference_ids: null, label_positions: null, number_of_labels: null }) {
         const headers = this.getBasicHeaders();
 
         return this.httpClient

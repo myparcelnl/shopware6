@@ -442,7 +442,7 @@ Component.register('sw-myparcel-orders', {
         },
 
         onCloseCreateMultipleConsignmentsModal() {
-            this.closeCreateSingleConsignmentModal();
+            this.closeCreateMultipleConsignmentsModal();
         },
 
         onCreateMultipleConsignments() {
