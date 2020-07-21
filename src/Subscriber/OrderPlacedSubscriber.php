@@ -4,6 +4,7 @@ namespace Kiener\KienerMyParcel\Subscriber;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
+use Kiener\KienerMyParcel\Service\Order\OrderService;
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderPlacedSubscriber implements EventSubscriberInterface
 {
+    private const PARAM_MY_PARCEL = 'my_parcel';
     private const PARAM_DELIVERY_TYPE = 'delivery_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
     private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
@@ -29,6 +31,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private $requestStack;
 
     /**
+     * @var OrderService
+     */
+    private $orderService;
+
+    /**
      * @var ShippingMethodService
      */
     private $shippingMethodService;
@@ -41,17 +48,20 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     /**
      * Creates a new instance of the order placed subscriber.
      *
-     * @param RequestStack          $requestStack
-     * @param ShippingMethodService $shippingMethodService
-     * @param ShippingOptionService $shippingOptionService
+     * @param RequestStack              $requestStack
+     * @param OrderService              $orderService
+     * @param ShippingMethodService     $shippingMethodService
+     * @param ShippingOptionsService    $shippingOptionService
      */
     public function __construct(
         RequestStack $requestStack,
+        OrderService $orderService,
         ShippingMethodService $shippingMethodService,
         ShippingOptionsService $shippingOptionService
     )
     {
        $this->requestStack = $requestStack;
+       $this->orderService = $orderService;
        $this->shippingMethodService = $shippingMethodService;
        $this->shippingOptionsService = $shippingOptionService;
     }
@@ -87,10 +97,12 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         /** @var ShippingMethodEntity|null $shippingMethod */
         $shippingMethod = null;
 
+        // Get the parameters from the request
         if ($request !== null) {
             $params = $request->get('myparcel');
         }
 
+        // Add the options from the checkout to the array of options
         if (is_array($params) && !empty($params)) {
             if (isset($params[self::PARAM_DELIVERY_TYPE])) {
                 $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int) $params[self::PARAM_DELIVERY_TYPE];
@@ -128,15 +140,26 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
             !empty($options)
             && $shippingMethod !== null
         ) {
-
+            // Add the order to the shipping options
             $options[ShippingOptionEntity::FIELD_ORDER] = [
                 'id' => $event->getOrder()->getId(),
                 'versionId' => $event->getOrder()->getVersionId(),
             ];
 
+            // Add the carrier id to the shipping options
             $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
 
+            // Store shipping options in the database
             $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+
+            // Update custom fields on the order
+            $this->orderService->createOrUpdateOrder([
+                'id' => $event->getOrder()->getId(),
+                'versionId' => $event->getOrder()->getVersionId(),
+                'customFields' => [
+                    self::PARAM_MY_PARCEL => $options,
+                ]
+            ], $event->getContext());
         }
     }
 }

@@ -6,14 +6,14 @@
 
     <services>
 
-        <!--ContextController-->
+        <!-- ContextController -->
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
             <argument id="Shopware\Storefront\Page\GenericPageLoader" type="service"/>
             <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
             <argument type="service" id="Shopware\Storefront\Framework\Cookie\CookieProviderInterface"/>
         </service>
 
-        <!--SNIPPETS-->
+        <!-- Snippets -->
         <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB"
                  id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.en_gb.snippet_file_en_gb">
             <tag name="shopware.snippet.file"/>
@@ -24,8 +24,7 @@
             <tag name="shopware.snippet.file"/>
         </service>
 
-
-        <!--Cookie provider-->
+        <!-- Cookie provider -->
         <service id="kiener.kiener_my_parcel.service.cookie.cookie_provider"
                  class="Kiener\KienerMyParcel\Service\Cookie\CookieProvider"
                  decorates="Shopware\Storefront\Framework\Cookie\CookieProviderInterface">
@@ -91,6 +90,7 @@
 
         <service id="Kiener\KienerMyParcel\Subscriber\OrderPlacedSubscriber">
             <argument type="service" id="request_stack" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" />
             <tag name="kernel.event_subscriber"/>
