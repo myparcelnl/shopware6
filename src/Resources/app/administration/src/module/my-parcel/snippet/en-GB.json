@@ -30,6 +30,7 @@
       "createLabelSuccess": "The label is successfully created"
     },
     "columns": {
+      "idColumn": "ID",
       "orderColumn": "Order",
       "orderDateColumn": "Ordered",
       "consignmentDateColumn": "Created",
@@ -68,6 +69,7 @@
           "positionBottomLeftLabel": "Bottom left",
           "positionBottomRightLabel": "Bottom right",
           "actionTypeHeading": "Action type",
+          "deliveryTypeHeading": "Delivery type",
           "packageTypeHeading": "Package type",
           "numberOfLabelsHeading": "Number of labels",
           "printPositionHeading": "Print position",
@@ -79,7 +81,6 @@
         "cancelButton": "Cancel",
         "createConsignmentButton": "Create consignment",
         "createConsignmentsButton": "Create consignments",
-        "viewShippingMethodButton": "View shipping method",
         "downloadLabelButton": "Download label"
       }
     },
@@ -109,7 +110,10 @@
       }
     },
     "shippingMethods": {
-      "title": "Shipping methods"
+      "title": "Shipping methods",
+      "buttons": {
+        "viewShippingMethodButton": "View shipping method"
+      }
     }
   }
 }

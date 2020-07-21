@@ -35,6 +35,10 @@ Component.register('sw-myparcel-shipping-methods', {
     },
 
     computed: {
+        shippingMethodColumns() {
+            return this.getShippingMethodColumns();
+        },
+
         shippingMethodRepository() {
             return this.repositoryFactory.create('kiener_my_parcel_shipping_method');
         },
@@ -50,6 +54,19 @@ Component.register('sw-myparcel-shipping-methods', {
     },
 
     methods: {
+        getShippingMethodColumns() {
+            return [{
+                property: 'carrierId',
+                label: 'sw-myparcel.columns.idColumn',
+                allowResize: true,
+                primary: true
+            }, {
+                property: 'carrierName',
+                label: 'sw-myparcel.columns.carrierColumn',
+                allowResize: true
+            }];
+        },
+
         getList() {
             this.isLoading = true;
 

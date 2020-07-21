@@ -36,7 +36,7 @@
                 :sortDirection="sortDirection"
                 :isLoading="isLoading"
                 :allowColumnEdit="false"
-                identifier="sw-myparcel-consignment-list"
+                identifier="sw-myparcel-consignments-list"
                 @column-sort="onSortColumn"
                 @selection-change="onSelectionChanged">
 
@@ -86,7 +86,7 @@
             </template>
 
             <template #actions="{ item }">
-                <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-label-action" @click="onOpenCreateSingleLabelModal(item)">
+                <sw-context-menu-item class="sw-myparcel-consignments-list__create-label-action" @click="onOpenCreateSingleLabelModal(item)">
                     {{ $tc('sw-myparcel.consignments.buttons.createLabelButton') }}
                 </sw-context-menu-item>
             </template>

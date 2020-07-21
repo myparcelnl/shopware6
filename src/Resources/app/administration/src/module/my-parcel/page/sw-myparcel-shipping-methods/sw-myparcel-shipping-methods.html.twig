@@ -20,40 +20,36 @@
 
     {% block sw_myparcel_content %}
     <template #content>
-        <sw-grid
-            :items="shippingMethods"
-            :isFullpage="true"
-            :table="true"
-            :sortBy="sortBy"
-            :sortDirection="sortDirection"
-            :selectable="false"
-            @sort-column="onSortColumn">
+        <sw-data-grid
+                :dataSource="shippingMethods"
+                :columns="shippingMethodColumns"
+                :fullPage="true"
+                :showSettings="true"
+                :showSelection="false"
+                :sortBy="sortBy"
+                :sortDirection="sortDirection"
+                :isLoading="isLoading"
+                :allowColumnEdit="false"
+                identifier="sw-myparcel-shipping-methods-list"
+                @column-sort="onSortColumn">
 
-            <template slot="columns" slot-scope="{ item }">
-                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.carrierColumn')" dataIndex="item.carrierName" :sortable="true">
-                    {{ item.carrierName }}
-                </sw-grid-column>
-
-                <sw-grid-column flex="minmax(200px, 1fr)" :label="$tc('sw-myparcel.columns.actionsColumn')">
-                    <sw-context-button :showMenuOnStartup="false" :menuWidth="220" menuHorizontalAlign="right" menuVerticalAlign="bottom" icon="small-more" :disabled="false" :autoClose="true" :zIndex="9000">
-                        <sw-context-menu-item class="sw-myparcel-shipping-method-list__view-shipping-method-action" :routerLink="{ name: 'sw.settings.shipping.detail', params: { id: item.shippingMethodId } }">
-                            {{ $tc('sw-myparcel.orders.buttons.viewShippingMethod') }}
-                        </sw-context-menu-item>
-                    </sw-context-button>
-                </sw-grid-column>
-            </template>
-
-            <template slot="pagination">
+            <template slot="pagination">#}
                 <sw-pagination
                         :page="page"
                         :limit="limit"
                         :total="total"
-                        :total-visible="10"
+                        :total-visible="25"
                         @page-change="onPageChange"
-                        :steps="[10]">
+                        :steps="[25]">
                 </sw-pagination>
             </template>
-        </sw-grid>
+
+            <template #actions="{ item }">
+                <sw-context-menu-item class="sw-myparcel-shipping-methods-list__shipping-method-view-action" :routerLink="{ name: 'sw.settings.shipping.detail', params: { id: item.shippingMethodId } }">
+                    {{ $tc('sw-myparcel.shippingMethods.buttons.viewShippingMethodButton') }}
+                </sw-context-menu-item>
+            </template>
+        </sw-data-grid>
     </template>
     {% endblock %}
 </sw-page>

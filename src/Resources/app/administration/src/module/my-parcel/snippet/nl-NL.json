@@ -30,6 +30,7 @@
       "createLabelSuccess": "Het label is succesvol aangemaakt"
     },
     "columns": {
+      "idColumn": "ID",
       "orderColumn": "Bestelling",
       "orderDateColumn": "Besteld",
       "consignmentDateColumn": "Aangemaakt",
@@ -68,6 +69,7 @@
           "positionBottomLeftLabel": "Linksonder",
           "positionBottomRightLabel": "Rechtsonder",
           "actionTypeHeading": "Type actie",
+          "deliveryTypeHeading": "Type levering",
           "packageTypeHeading": "Type pakket",
           "numberOfLabelsHeading": "Aantal labels",
           "printPositionHeading": "Printpositie",
@@ -79,7 +81,6 @@
         "cancelButton": "Annuleren",
         "createConsignmentButton": "Verzending aanmaken",
         "createConsignmentsButton": "Verzendingen aanmaken",
-        "viewShippingMethodButton": "Bekijk verzendmethod",
         "createLabelButton": "Label aanmaken",
         "downloadLabelButton": "Label downloaden"
       }
@@ -110,7 +111,10 @@
       }
     },
     "shippingMethods": {
-      "title": "Verzendmethoden"
+      "title": "Verzendmethoden",
+      "buttons": {
+        "viewShippingMethodButton": "Bekijk verzendmethode"
+      }
     }
   }
 }

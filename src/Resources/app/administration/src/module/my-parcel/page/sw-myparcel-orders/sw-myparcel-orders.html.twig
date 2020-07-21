@@ -76,6 +76,10 @@
                         {{ carriers[item.carrierId] }}
                     </template>
 
+                    <template #column-deliveryType="{ item }">
+                        {{ deliveryTypes[item.deliveryType] }}
+                    </template>
+
                     <template #column-numberOfConsignments="{ item }">
                         <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
                     </template>
@@ -85,10 +89,10 @@
                     </template>
 
                     <template #actions="{ item }">
-                        <sw-context-menu-item class="sw-myparcel-shipping-options-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
+                        <sw-context-menu-item class="sw-myparcel-orders-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
                             {{ $tc('sw-myparcel.orders.buttons.viewOrderButton') }}
                         </sw-context-menu-item>
-                        <sw-context-menu-item class="sw-myparcel-shipping-options-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">
+                        <sw-context-menu-item class="sw-myparcel-orders-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">
                             {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}
                         </sw-context-menu-item>
                     </template>
@@ -121,6 +125,13 @@
                             <option value="download">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeDownloadLabel') }}</option>
                             <option value="create">{{ $tc('sw-myparcel.orders.modals.createConsignment.actionTypeCreateLabel') }}</option>
                         </sw-select-field>
+
+                        <sw-base-field
+                                :label="$tc('sw-myparcel.orders.modals.createConsignment.deliveryTypeHeading')"
+                                name="myparcel[delivery_type]">
+
+                            {{ deliveryTypes[createSingleConsignment.item.deliveryType] }}
+                        </sw-base-field>
 
                         <sw-select-number-field
                                 :label="$tc('sw-myparcel.orders.modals.createConsignment.packageTypeHeading')"

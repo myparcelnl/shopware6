@@ -17,6 +17,16 @@ const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
 const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
 const CARRIER_DPD_SNIPPET = 'sw-myparcel.general.carriers.dpd';
 
+const DELIVERY_TYPE_MORNING_ID = 1;
+const DELIVERY_TYPE_STANDARD_ID = 2;
+const DELIVERY_TYPE_EVENING_ID = 3;
+const DELIVERY_TYPE_PICKUP_ID = 4;
+
+const DELIVERY_TYPE_MORNING_SNIPPET = 'sw-myparcel.general.deliveryTypes.morning';
+const DELIVERY_TYPE_STANDARD_SNIPPET = 'sw-myparcel.general.deliveryTypes.standard';
+const DELIVERY_TYPE_EVENING_SNIPPET = 'sw-myparcel.general.deliveryTypes.evening';
+const DELIVERY_TYPE_PICKUP_SNIPPET = 'sw-myparcel.general.deliveryTypes.pickup';
+
 Component.register('sw-myparcel-orders', {
     template: template,
 
@@ -66,7 +76,13 @@ Component.register('sw-myparcel-orders', {
                 [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
                 [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
                 [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET)
-            }
+            },
+            deliveryTypes: {
+                [DELIVERY_TYPE_MORNING_ID]: this.$tc(DELIVERY_TYPE_MORNING_SNIPPET),
+                [DELIVERY_TYPE_STANDARD_ID]: this.$tc(DELIVERY_TYPE_STANDARD_SNIPPET),
+                [DELIVERY_TYPE_EVENING_ID]: this.$tc(DELIVERY_TYPE_EVENING_SNIPPET),
+                [DELIVERY_TYPE_PICKUP_ID]: this.$tc(DELIVERY_TYPE_PICKUP_SNIPPET)
+            },
         };
     },
 
@@ -159,6 +175,10 @@ Component.register('sw-myparcel-orders', {
             }, {
                 property: 'carrierId',
                 label: 'sw-myparcel.columns.carrierColumn',
+                allowResize: true
+            }, {
+                property: 'deliveryType',
+                label: 'sw-myparcel.columns.deliveryTypeColumn',
                 allowResize: true
             }, {
                 property: 'numberOfConsignments',
