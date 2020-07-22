@@ -128,7 +128,10 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool) $params[self::PARAM_LARGE_FORMAT];
             }
 
-            if (isset($params[self::PARAM_SHIPPING_METHOD_ID])) {
+            if (
+                isset($params[self::PARAM_SHIPPING_METHOD_ID])
+                && strlen($params[self::PARAM_SHIPPING_METHOD_ID]) >= 32
+            ) {
                 $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
                     $params[self::PARAM_SHIPPING_METHOD_ID],
                     new Context(new SystemSource())

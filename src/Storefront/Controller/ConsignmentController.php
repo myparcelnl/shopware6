@@ -6,10 +6,10 @@
 namespace Kiener\KienerMyParcel\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
 use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
 use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -27,16 +27,19 @@ class ConsignmentController extends StorefrontController
     public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
     public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get_for_shipping_option';
     public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download_labels';
+    public const ROUTE_NAME_TRACK_AND_TRACE = 'api.action.myparcel.consignment.track_and_trace';
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
+    private const REQUEST_KEY_REFERENCE_ID = 'reference_id';
     private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
     private const REQUEST_KEY_SHIPPING_OPTION_ID = 'shipping_option_id';
 
     private const RESPONSE_KEY_CONSIGNMENTS = 'consignments';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_LABEL_URL = 'labelUrl';
+    private const RESPONSE_KEY_TRACK_TRACE_INFO = 'trackTraceInfo';
     private const RESPONSE_KEY_SUCCESS = 'success';
 
     /**
@@ -223,6 +226,53 @@ class ConsignmentController extends StorefrontController
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => isset($consignments),
             self::RESPONSE_KEY_LABEL_URL => isset($consignments) ? $consignments->getLinkOfLabels() : null,
+        ]);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/track-and-trace",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_TRACK_AND_TRACE,
+     *     methods={"POST"}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    public function trackAndTrace(Request $request): JsonResponse
+    {
+        if (
+            $request->get(self::REQUEST_KEY_REFERENCE_ID) !== null
+        ) {
+            $referenceId = $request->get(self::REQUEST_KEY_REFERENCE_ID);
+        }
+
+        if (isset($referenceId)) {
+            /** @var array $consignment */
+            $consignment = $this->consignmentService->findByReferenceId($referenceId);
+        }
+
+        if (
+            isset($consignment)
+            && is_array($consignment)
+            && !empty($consignment)
+        ) {
+            $trackTraceInfo = [
+                'barcode' => $consignment[0]->getBarcode(),
+                'url' => TrackTraceUrl::create(
+                    $consignment[0]->getBarcode(),
+                    $consignment[0]->getPostalCode(),
+                    $consignment[0]->getCountry()
+                ),
+                //'consignment' => $consignment,
+            ];
+        }
+
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => isset($consignment),
+            self::RESPONSE_KEY_TRACK_TRACE_INFO => $trackTraceInfo ?? null,
         ]);
     }
 

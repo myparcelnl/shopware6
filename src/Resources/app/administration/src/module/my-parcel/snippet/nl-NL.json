@@ -35,6 +35,7 @@
       "orderDateColumn": "Besteld",
       "consignmentDateColumn": "Aangemaakt",
       "totalAmountColumn": "Totaal",
+      "trackingCodesColumn": "Track & trace",
       "statusColumn": "Status",
       "actionsColumn": "Acties",
       "packageTypeColumn": "Type pakket",

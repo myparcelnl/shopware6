@@ -132,6 +132,7 @@ Component.register('sw-myparcel-consignments', {
             criteria.setTerm(this.term);
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
             criteria.addAssociation('order');
+            criteria.addAssociation('order.deliveries');
             criteria.addAssociation('shippingOption');
 
             return criteria;
@@ -149,6 +150,10 @@ Component.register('sw-myparcel-consignments', {
                 property: 'order.orderNumber',
                 label: 'sw-myparcel.columns.orderColumn',
                 routerLink: 'sw.order.detail',
+                allowResize: true
+            }, {
+                property: 'order.deliveries[0].trackingCodes[0]',
+                label: 'sw-myparcel.columns.trackingCodesColumn',
                 allowResize: true
             }, {
                 property: 'order.orderDateTime',

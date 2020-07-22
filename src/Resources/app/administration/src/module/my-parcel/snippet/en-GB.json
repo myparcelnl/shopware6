@@ -35,6 +35,7 @@
       "orderDateColumn": "Ordered",
       "consignmentDateColumn": "Created",
       "totalAmountColumn": "Total amount",
+      "trackingCodesColumn": "Track & trace",
       "statusColumn": "Status",
       "actionsColumn": "Actions",
       "packageTypeColumn": "Package type",
