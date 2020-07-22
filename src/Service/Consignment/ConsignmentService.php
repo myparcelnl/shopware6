@@ -190,18 +190,22 @@ class ConsignmentService
     }
 
     /**
-     * @param Context     $context
-     * @param OrderEntity $orderEntity
-     * @param string      $shippingOptionId
-     *
-     * @param string|null    $referenceId
+     * @param Context             $context
+     * @param OrderEntity         $orderEntity
+     * @param string              $shippingOptionId
+     * @param AbstractConsignment $consignment
      *
      * @return ShipmentEntity|null
      */
-    private function createShipment(Context $context, OrderEntity $orderEntity, string $shippingOptionId, ?string $referenceId = null): ?ShipmentEntity
+    private function createShipment(
+        Context $context,
+        OrderEntity $orderEntity,
+        string $shippingOptionId,
+        AbstractConsignment $consignment
+    ): ?ShipmentEntity
     {
         $shipmentParameters = [
-            ShipmentEntity::FIELD_CONSIGNMENT_REFERENCE => $referenceId,
+            ShipmentEntity::FIELD_CONSIGNMENT_REFERENCE => $consignment->getReferenceId(),
             ShipmentEntity::FIELD_ORDER => [
                 ShipmentEntity::FIELD_ID => $orderEntity->getId(),
                 ShipmentEntity::FIELD_VERSION_ID => $orderEntity->getVersionId(),
@@ -209,6 +213,12 @@ class ConsignmentService
             ShipmentEntity::FIELD_SHIPPING_OPTION => [
                 ShipmentEntity::FIELD_ID => $shippingOptionId,
             ],
+            ShipmentEntity::FIELD_BAR_CODE => $consignment->getBarcode(),
+            ShipmentEntity::FIELD_TRACK_AND_TRACE_URL => $consignment->getBarcodeUrl(
+                $consignment->getBarcode(),
+                $consignment->getPostalCode(),
+                $consignment->getCountry()
+            ),
         ];
 
         return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
@@ -285,7 +295,7 @@ class ConsignmentService
                     $consignments->addConsignment($consignment);
                 }
 
-                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment->getReferenceId());
+                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment);
                 $shipments[] = $shipment;
             }
         }

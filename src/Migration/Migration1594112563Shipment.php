@@ -25,6 +25,8 @@ class Migration1594112563Shipment extends MigrationStep
                 `insured_amount` DECIMAL(10,2) NULL,
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
+                `bar_code` VARCHAR(255) NULL,
+                `track_and_trace_url` VARCHAR(255) NULL,
                 PRIMARY KEY (`id`),
                 KEY `fk.kiener_my_parcel_shipment.order_id` (`order_id`,`order_version_id`),
                 KEY `fk.kiener_my_parcel_shipment.shipping_option_id` (`shipping_option_id`),

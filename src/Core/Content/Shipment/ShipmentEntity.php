@@ -21,6 +21,8 @@ class ShipmentEntity extends Entity
     public const FIELD_VERSION_ID = 'versionId';
     public const FIELD_LABEL_URL = 'labelUrl';
     public const FIELD_INSURED_AMOUNT= 'insuredAmount';
+    public const FIELD_BAR_CODE = 'barCode';
+    public const FIELD_TRACK_AND_TRACE_URL = 'trackAndTraceUrl';
 
     /**
      * @var string|null
@@ -61,6 +63,17 @@ class ShipmentEntity extends Entity
      * @var float
      */
     protected $insuredAmount = 0.0;
+
+    /**
+     * @var string|null
+     */
+    protected $barCode;
+
+    /**
+     * @var string|null
+     */
+    protected $trackAndTraceUrl;
+
 
     /**
      * @return int|null
@@ -211,6 +224,44 @@ class ShipmentEntity extends Entity
     public function setInsuredAmount(float $insuredAmount): ShipmentEntity
     {
         $this->insuredAmount = $insuredAmount;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBarCode(): ?string
+    {
+        return $this->barCode;
+    }
+
+    /**
+     * @param string|null $barCode
+     *
+     * @return ShipmentEntity
+     */
+    public function setBarCode(?string $barCode): ShipmentEntity
+    {
+        $this->barCode = $barCode;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTrackAndTraceUrl(): ?string
+    {
+        return $this->trackAndTraceUrl;
+    }
+
+    /**
+     * @param string|null $trackAndTraceUrl
+     *
+     * @return ShipmentEntity
+     */
+    public function setTrackAndTraceUrl(?string $trackAndTraceUrl): ShipmentEntity
+    {
+        $this->trackAndTraceUrl = $trackAndTraceUrl;
         return $this;
     }
 }
