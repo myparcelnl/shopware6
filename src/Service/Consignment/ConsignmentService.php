@@ -213,13 +213,33 @@ class ConsignmentService
             ShipmentEntity::FIELD_SHIPPING_OPTION => [
                 ShipmentEntity::FIELD_ID => $shippingOptionId,
             ],
-            ShipmentEntity::FIELD_BAR_CODE => $consignment->getBarcode(),
-            ShipmentEntity::FIELD_TRACK_AND_TRACE_URL => $consignment->getBarcodeUrl(
+        ];
+
+        if($consignment->getBarcode() !== null) {
+            $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
+            $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
                 $consignment->getPostalCode(),
                 $consignment->getCountry()
-            ),
-        ];
+            );
+
+            // Add track and trace to the custom fields
+            $customFields = $orderEntity->getCustomFields()['my_parcel'] ?? null;
+            $trackAndTrace = $customFields['track_and_trace'] ?? [];
+
+            $trackAndTrace[] = [
+                'bar_code' => $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE],
+                'url' => $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL],
+            ];
+
+            $customFields['track_and_trace'] = $trackAndTrace;
+
+            $this->orderService->createOrUpdateOrder([
+                'id' => $orderEntity->getId(),
+                'versionId' => $orderEntity->getVersionId(),
+                'customFields' => $customFields,
+            ], $context);
+        }
 
         return $this->shipmentService->createOrUpdateShipment($shipmentParameters, $context);
     }
@@ -257,6 +277,7 @@ class ConsignmentService
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
+        $shipmentData = [];
         $shipments = [];
 
         /** @var OrderEntity $order */
@@ -295,8 +316,46 @@ class ConsignmentService
                     $consignments->addConsignment($consignment);
                 }
 
-                $shipment = $this->createShipment($context, $order, $orderData[self::FIELD_SHIPPING_OPTION_ID], $consignment);
-                $shipments[] = $shipment;
+                $shipmentData[] = [
+                    'context' => $context,
+                    'order' => $order,
+                    'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
+                    'referenceId' => $consignment->getReferenceId(),
+                ];
+            }
+        }
+
+        if ($consignments->isEmpty() === false) {
+            if (
+                isset($labelPositions)
+                && is_array($labelPositions)
+                && !empty($labelPositions)
+            ) {
+                $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
+            } else {
+                $consignments->setLinkOfLabels(false);
+            }
+        }
+
+        if (
+            is_array($shipmentData)
+            && !empty($shipmentData)
+        ) {
+            foreach ($shipmentData as $shipment) {
+                $consignment = null;
+                $foundConsignments = $this->findByReferenceId($shipment['referenceId']);
+
+                if (
+                    is_array($foundConsignments)
+                    && !empty($foundConsignments)
+                ) {
+                    $consignment = $foundConsignments[0];
+                }
+
+                if ($consignment !== null) {
+                    $createdShipment = $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
+                    $shipments[] = $createdShipment;
+                }
             }
         }
 

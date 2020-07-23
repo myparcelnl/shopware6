@@ -48,8 +48,8 @@
                 {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
-            <template #column-order.deliveries[0].trackingCodes[0]="{ item }">
-                {{ item.order.deliveries[0].trackingCodes[0] }}
+            <template #column-barCode="{ item }">
+                <a :href="item.trackAndTraceUrl" target="_blank">{{ item.barCode }}</a>
             </template>
 
             <template #column-shippingOption.packageType="{ item }">

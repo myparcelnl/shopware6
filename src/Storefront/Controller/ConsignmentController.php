@@ -154,16 +154,6 @@ class ConsignmentController extends StorefrontController
             $labelPositions ?? null
         );
 
-        if (
-            isset($labelPositions)
-            && is_array($labelPositions)
-            && !empty($labelPositions)
-        ) {
-            $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
-        } else {
-            $consignments->setLinkOfLabels(false);
-        }
-
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $consignments !== null,
             self::RESPONSE_KEY_LABEL_URL => $consignments->getLinkOfLabels(),
@@ -211,7 +201,8 @@ class ConsignmentController extends StorefrontController
         if (isset($consignments)) {
             try {
                 if (
-                    is_array($labelPositions)
+                    isset($labelPositions)
+                    && is_array($labelPositions)
                     && !empty($labelPositions)
                 ) {
                     $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
