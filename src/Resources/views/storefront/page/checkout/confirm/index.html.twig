@@ -8,5 +8,10 @@
     <input type="hidden" name="myparcel[return_if_not_home]" value="" />
     <input type="hidden" name="myparcel[large_format]" value="" />
     <input type="hidden" name="myparcel[delivery_type]" value="" />
+
+    <input type="hidden" name="myparcel_delivery_type_cost_morning" value="{{ page.my_parcel_morning_delivery_cost }}" />
+    <input type="hidden" name="myparcel_delivery_type_cost_standard" value="{{ page.my_parcel_standard_delivery_cost }}" />
+    <input type="hidden" name="myparcel_delivery_type_cost_evening" value="{{ page.my_parcel_evening_delivery_cost }}" />
+    <input type="hidden" name="myparcel_delivery_type_cost_pickup" value="{{ page.my_parcel_pickup_delivery_cost }}" />
     {{ parent() }}
 {% endblock %}

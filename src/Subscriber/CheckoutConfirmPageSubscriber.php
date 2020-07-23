@@ -45,6 +45,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     {
         $args->getPage()->assign([
             'myparcel_shipping_method_ids' => $this->shippingMethodService->getMyParcelShippingMethodIds($args->getContext()),
+            'my_parcel_morning_delivery_cost' => 5.95,
+            'my_parcel_standard_delivery_cost' => 0,
+            'my_parcel_evening_delivery_cost' => 3.95,
+            'my_parcel_pickup_delivery_cost' => 0,
         ]);
 
     }

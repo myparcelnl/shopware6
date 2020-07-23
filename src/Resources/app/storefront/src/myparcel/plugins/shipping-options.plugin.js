@@ -15,6 +15,9 @@ export default class MyParcelShippingOptions extends Plugin {
         const me = this;
         const shippingForms = document.querySelectorAll(me.options.shippingForm);
 
+        /* Set costs per delivery type */
+        this.setDeliveryTypeCosts();
+
         /* Get cookie value and set some vars  */
         const cookieMyParcel = CookieStorage.getItem(me.options.cookieName);
         if(!cookieMyParcel) {
@@ -76,7 +79,41 @@ export default class MyParcelShippingOptions extends Plugin {
             confirmDeliveryType.value = myparcel_delivery_type;
             confirmSignature.value = myparcel_requires_signature;
             confirmOnlyRecipient.value = myparcel_only_recipient;
+        }
+    }
 
+    setDeliveryTypeCosts() {
+        /* Get delivery costs */
+        const morningDeliveryCost = document.querySelector('input[name="myparcel_delivery_type_cost_morning"]');
+        const standardDeliveryCost = document.querySelector('input[name="myparcel_delivery_type_cost_standard"]');
+        const eveningDeliveryCost = document.querySelector('input[name="myparcel_delivery_type_cost_evening"]');
+        const pickupDeliveryCost = document.querySelector('input[name="myparcel_delivery_type_cost_pickup"]');
+
+        for (let i = 1; i < 5; i++) {
+            let label = document.querySelector('label[for^="myparcel_delivery_type_' + i + '"]');
+            let cost;
+
+            if (label !== undefined && label !== null) {
+                cost = label.querySelector('span.cost');
+            }
+
+            if (cost !== undefined && cost !== null) {
+                if (i === 1 && morningDeliveryCost.value > 0) {
+                    cost.innerHTML = '+&euro; ' + morningDeliveryCost.value;
+                }
+
+                if (i === 2 && standardDeliveryCost.value > 0) {
+                    cost.innerHTML = '+&euro; ' + standardDeliveryCost.value;
+                }
+
+                if (i === 3 && eveningDeliveryCost.value > 0) {
+                    cost.innerHTML = '+&euro; ' + eveningDeliveryCost.value;
+                }
+
+                if (i === 4 && pickupDeliveryCost.value > 0) {
+                    cost.innerHTML = '+&euro; ' + pickupDeliveryCost.value;
+                }
+            }
         }
     }
 }
