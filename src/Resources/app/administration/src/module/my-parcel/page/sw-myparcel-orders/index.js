@@ -360,11 +360,30 @@ Component.register('sw-myparcel-orders', {
             this.isLoading = true;
 
             return this.shippingOptionRepository.search(this.shippingOptionCriteria, Shopware.Context.api).then((response) => {
-                this.total = response.total;
-                this.shippingOptions = response;
+                response.forEach(item => {
+                    if (
+                        !!item.order.deliveries
+                        && item.order.deliveries.length !== 0
+                        && !!item.order.deliveries[0].stateMachineState.name
+                        && item.order.deliveries[0].stateMachineState.name.toLowerCase() === 'open'
+                    ) {
+                        this.shippingOptions.push(item);
+                    }
+
+                    if (
+                        !item.order.deliveries
+                        || item.order.deliveries.length === 0
+                        || !item.order.deliveries[0].stateMachineState.name
+                    ) {
+                        this.shippingOptions.push(item);
+                    }
+                });
+
+                //this.shippingOptions = response;
                 this.isLoading = false;
 
                 if (!!this.shippingOptions) {
+                    this.total = this.shippingOptions.length;
                     this.shippingOptions.forEach(item => this.getNumberOfConsignments(item.id));
                 }
 
