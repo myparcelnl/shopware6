@@ -48,8 +48,8 @@
                 {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
-            <template #column-order.deliveries[0].trackingCodes[0]="{ item }">
-                {{ item.order.deliveries[0].trackingCodes[0] }}
+            <template #column-barCode="{ item }">
+                <a :href="item.trackAndTraceUrl" target="_blank">{{ item.barCode }}</a>
             </template>
 
             <template #column-shippingOption.packageType="{ item }">
@@ -115,7 +115,11 @@
 
             <form>
 
+                <sw-base-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printOptionsHeading')" />
+                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createSingleLabel.printSmallLabel" />
+
                 <sw-multi-select
+                        :disabled="createSingleLabel.printSmallLabel === true"
                         :label="$tc('sw-myparcel.consignments.modals.createLabels.printPositionHeading')"
                         name="myparcel[print_position]"
                         v-model="createSingleLabel.printPosition"
@@ -146,7 +150,11 @@
 
             <form>
 
+                <sw-base-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printOptionsHeading')" />
+                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createMultipleLabels.printSmallLabel" />
+
                 <sw-multi-select
+                        :disabled="createMultipleLabels.printSmallLabel === true"
                         :label="$tc('sw-myparcel.consignments.modals.createLabels.printPositionHeading')"
                         name="myparcel[print_position]"
                         v-model="createMultipleLabels.printPosition"

@@ -49,7 +49,7 @@ export default class MyParcelShippingOptions extends Plugin {
             if(myparcel_only_recipient > 0) {
                 const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
                 const onlyRecipientLabel = shippingForm.querySelector('label[for="'+ onlyRecipientInput.id + '"]').firstChild.textContent;
-                onlyRecipientInput .checked = true;
+                onlyRecipientInput.checked = true;
                 shippingSelectedTxt = shippingSelectedTxt + onlyRecipientLabel;
             }
 
@@ -76,7 +76,6 @@ export default class MyParcelShippingOptions extends Plugin {
             confirmDeliveryType.value = myparcel_delivery_type;
             confirmSignature.value = myparcel_requires_signature;
             confirmOnlyRecipient.value = myparcel_only_recipient;
-
         }
     }
 }

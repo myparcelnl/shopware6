@@ -149,7 +149,11 @@
                             <option value="4">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeDigitalStampLabel') }}</option>
                         </sw-select-number-field>
 
+                        <sw-base-field :label="$tc('sw-myparcel.orders.modals.createConsignment.printOptionsHeading')" />
+                        <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createSingleConsignment.printSmallLabel" />
+
                         <sw-multi-select
+                                :disabled="createSingleConsignment.printSmallLabel === true"
                                 :label="$tc('sw-myparcel.orders.modals.createConsignment.printPositionHeading')"
                                 name="myparcel[print_position]"
                                 v-model="createSingleConsignment.printPosition"
@@ -161,13 +165,13 @@
                             ]">
                         </sw-multi-select>
 
-                        <sw-number-field
-                            :label="$tc('sw-myparcel.orders.modals.createConsignment.numberOfLabelsHeading')"
-                            name="myparcel[number_of_labels]"
-                            numberType="int"
-                            :min="1"
-                            :step="1"
-                            v-model="createSingleConsignment.numberOfLabels" />
+{#                        <sw-number-field#}
+{#                            :label="$tc('sw-myparcel.orders.modals.createConsignment.numberOfLabelsHeading')"#}
+{#                            name="myparcel[number_of_labels]"#}
+{#                            numberType="int"#}
+{#                            :min="1"#}
+{#                            :step="1"#}
+{#                            v-model="createSingleConsignment.numberOfLabels" />#}
 
                         <template v-if="createSingleConsignment.item.packageType === 1">
                             <sw-base-field :label="$tc('sw-myparcel.orders.modals.createConsignment.shippingOptionsHeading')" />
@@ -224,7 +228,11 @@
                             <option value="4">{{ $tc('sw-myparcel.orders.modals.createConsignment.packageTypeDigitalStampLabel') }}</option>
                         </sw-select-number-field>
 
+                        <sw-base-field :label="$tc('sw-myparcel.orders.modals.createConsignment.printOptionsHeading')" />
+                        <sw-checkbox-field :label="$tc('sw-myparcel.orders.modals.createConsignment.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createMultipleConsignments.printSmallLabel" />
+
                         <sw-multi-select
+                                :disabled="createMultipleConsignments.printSmallLabel === true"
                                 :label="$tc('sw-myparcel.orders.modals.createConsignment.printPositionHeading')"
                                 name="myparcel[print_position]"
                                 v-model="createMultipleConsignments.printPosition"

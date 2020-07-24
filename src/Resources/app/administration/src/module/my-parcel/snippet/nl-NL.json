@@ -69,10 +69,12 @@
           "positionTopRightLabel": "Rechtsboven",
           "positionBottomLeftLabel": "Linksonder",
           "positionBottomRightLabel": "Rechtsonder",
+          "printSmallLabelLabel": "A6 label",
           "actionTypeHeading": "Type actie",
           "deliveryTypeHeading": "Type levering",
           "packageTypeHeading": "Type pakket",
           "numberOfLabelsHeading": "Aantal labels",
+          "printOptionsHeading": "Printopties",
           "printPositionHeading": "Printpositie",
           "shippingOptionsHeading": "Verzendopties"
         }
@@ -96,7 +98,9 @@
           "positionTopRightLabel": "Rechtsboven",
           "positionBottomLeftLabel": "Linksonder",
           "positionBottomRightLabel": "Rechtsonder",
+          "printSmallLabelLabel": "A6 label",
           "numberOfLabelsHeading": "Aantal labels",
+          "printOptionsHeading": "Printopties",
           "printPositionHeading": "Printpositie"
         }
       },

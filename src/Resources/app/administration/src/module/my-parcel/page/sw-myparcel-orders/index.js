@@ -61,6 +61,7 @@ Component.register('sw-myparcel-orders', {
             createSingleConsignment: {
                 item: null,
                 actionType: ACTION_TYPE_DOWNLOAD,
+                printSmallLabel: false,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
@@ -69,6 +70,7 @@ Component.register('sw-myparcel-orders', {
                 items: [],
                 actionType: ACTION_TYPE_DOWNLOAD,
                 packageType: 1,
+                printSmallLabel: false,
                 printPosition: [1,2,3,4],
                 showModal: false,
             },
@@ -321,7 +323,7 @@ Component.register('sw-myparcel-orders', {
         createConsignments(orders, consignmentData) {
             this.MyParcelConsignmentService.createConsignments({
                 orders: orders,
-                label_positions: consignmentData.printPosition,
+                label_positions: consignmentData.printSmallLabel === false ? consignmentData.printPosition : [],
                 package_type: consignmentData.packageType
             })
                 .then((response) => {
@@ -360,11 +362,30 @@ Component.register('sw-myparcel-orders', {
             this.isLoading = true;
 
             return this.shippingOptionRepository.search(this.shippingOptionCriteria, Shopware.Context.api).then((response) => {
-                this.total = response.total;
-                this.shippingOptions = response;
+                response.forEach(item => {
+                    if (
+                        !!item.order.deliveries
+                        && item.order.deliveries.length !== 0
+                        && !!item.order.deliveries[0].stateMachineState.name
+                        && item.order.deliveries[0].stateMachineState.name.toLowerCase() === 'open'
+                    ) {
+                        this.shippingOptions.push(item);
+                    }
+
+                    if (
+                        !item.order.deliveries
+                        || item.order.deliveries.length === 0
+                        || !item.order.deliveries[0].stateMachineState.name
+                    ) {
+                        this.shippingOptions.push(item);
+                    }
+                });
+
+                //this.shippingOptions = response;
                 this.isLoading = false;
 
                 if (!!this.shippingOptions) {
+                    this.total = this.shippingOptions.length;
                     this.shippingOptions.forEach(item => this.getNumberOfConsignments(item.id));
                 }
 
