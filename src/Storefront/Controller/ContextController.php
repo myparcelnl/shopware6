@@ -74,7 +74,7 @@ class ContextController extends StorefrontController
         $cookieValue = '' . $shippingMethodId;
         $cookieValue .= '_' . $myparcel_delivery_type;
         $cookieValue .= '_' . $myparcel_requires_signature;
-        $cookieValue.= '_' . $myparcel_only_recipient;
+        $cookieValue .= '_' . $myparcel_only_recipient;
 
         $cookieValue = trim($cookieValue);
 
@@ -82,6 +82,7 @@ class ContextController extends StorefrontController
         setcookie("myparcel-cookie-key", htmlentities($cookieValue), time() + 600, '/');
 
         $this->contextSwitcher->update($data, $context);
+
         return $this->createActionResponse($request);
     }
 }

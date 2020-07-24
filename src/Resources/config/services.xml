@@ -6,6 +6,17 @@
 
     <services>
 
+        <service id="Kiener\KienerMyParcel\Cart\Checkout\ShippingCostsCollector">
+            <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService" />
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService" />
+
+            <!-- after product collector/processor -->
+            <tag name="shopware.cart.processor" priority="4500" />
+            <tag name="shopware.cart.collector" priority="4500" />
+        </service>
+
         <!-- ContextController -->
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
             <argument id="Shopware\Storefront\Page\GenericPageLoader" type="service"/>

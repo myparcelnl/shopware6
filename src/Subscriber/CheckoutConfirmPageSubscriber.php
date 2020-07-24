@@ -66,10 +66,12 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             ),
         ];
 
+        $shippingCostsPrice = $args->getPage()->getCart()->getShippingCosts()->getTotalPrice();
+
         if ($settings !== null) {
-            $options['my_parcel_morning_delivery_cost'] = $settings->getCostsDeliveryMorning();
+            $options['my_parcel_morning_delivery_cost'] = $settings->getCostsDeliveryMorning() - $shippingCostsPrice;
             $options['my_parcel_standard_delivery_cost'] = 0;
-            $options['my_parcel_evening_delivery_cost'] = $settings->getCostsDeliveryEvening();
+            $options['my_parcel_evening_delivery_cost'] = $settings->getCostsDeliveryEvening() - $shippingCostsPrice;
             $options['my_parcel_pickup_delivery_cost'] = 0;
         }
 
