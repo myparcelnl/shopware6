@@ -44,6 +44,10 @@
                 {{ item.createdAt | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
+            <template #column-order.orderNumber="{ item }">
+                <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">{{ item.order.orderNumber }}</router-link>
+            </template>
+
             <template #column-order.orderDateTime="{ item }">
                 {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>

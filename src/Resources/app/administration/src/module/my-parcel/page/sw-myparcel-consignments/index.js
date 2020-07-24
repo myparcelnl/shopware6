@@ -151,7 +151,6 @@ Component.register('sw-myparcel-consignments', {
             }, {
                 property: 'order.orderNumber',
                 label: 'sw-myparcel.columns.orderColumn',
-                routerLink: 'sw.order.detail',
                 allowResize: true
             }, {
                 property: 'barCode',

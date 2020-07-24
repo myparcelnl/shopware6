@@ -141,7 +141,6 @@ Component.register('sw-myparcel-orders', {
             return [{
                 property: 'order.orderNumber',
                 label: 'sw-order.list.columnOrderNumber',
-                routerLink: 'sw.order.detail',
                 allowResize: true,
                 primary: true
             }, {

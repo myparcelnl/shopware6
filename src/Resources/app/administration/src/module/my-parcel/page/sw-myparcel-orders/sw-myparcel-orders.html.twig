@@ -36,6 +36,10 @@
                         @column-sort="onSortColumn"
                         @selection-change="onSelectionChanged">
 
+                    <template #column-order.orderNumber="{ item }">
+                        <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">{{ item.order.orderNumber }}</router-link>
+                    </template>
+
                     <template #column-order.orderCustomer.firstName="{ item }">
                         {{ item.order.orderCustomer.firstName }} {{ item.order.orderCustomer.lastName }}
                     </template>
