@@ -53,12 +53,14 @@ Component.register('sw-myparcel-consignments', {
             sortDirection: 'DESC',
             createSingleLabel: {
                 item: null,
+                printSmallLabel: false,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
             },
             createMultipleLabels: {
                 items: null,
+                printSmallLabel: false,
                 printPosition: [1,2,3,4],
                 numberOfLabels: 1,
                 showModal: false,
@@ -317,7 +319,7 @@ Component.register('sw-myparcel-consignments', {
 
                 let data = {
                     reference_ids: [this.createSingleLabel.item.consignmentReference],
-                    label_positions: this.createSingleLabel.printPosition
+                    label_positions: this.createSingleLabel.printSmallLabel === false ? this.createSingleLabel.printPosition : []
                 };
 
                 this.createLabels(data);
@@ -334,7 +336,7 @@ Component.register('sw-myparcel-consignments', {
 
                 let data = {
                     reference_ids: [],
-                    label_positions: this.createMultipleLabels.printPosition
+                    label_positions: this.createMultipleLabels.printSmallLabel === false ? this.createMultipleLabels.printPosition : []
                 };
 
                 for (let id in this.createMultipleLabels.items) {

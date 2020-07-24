@@ -69,10 +69,12 @@
           "positionTopRightLabel": "Top right",
           "positionBottomLeftLabel": "Bottom left",
           "positionBottomRightLabel": "Bottom right",
+          "printSmallLabelLabel": "A6 label",
           "actionTypeHeading": "Action type",
           "deliveryTypeHeading": "Delivery type",
           "packageTypeHeading": "Package type",
           "numberOfLabelsHeading": "Number of labels",
+          "printOptionsHeading": "Print options",
           "printPositionHeading": "Print position",
           "shippingOptionsHeading": "Shipping options"
         }
@@ -95,7 +97,9 @@
           "positionTopRightLabel": "Top right",
           "positionBottomLeftLabel": "Bottom left",
           "positionBottomRightLabel": "Bottom right",
+          "printSmallLabelLabel": "A6 label",
           "numberOfLabelsHeading": "Number of labels",
+          "printOptionsHeading": "Print options",
           "printPositionHeading": "Print position"
         }
       },
