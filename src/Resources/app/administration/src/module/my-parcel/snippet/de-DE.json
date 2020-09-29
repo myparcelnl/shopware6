@@ -3,7 +3,7 @@
     "general": {
       "mainMenuItemGeneral": "MyParcel",
       "ordersMenuItemGeneral": "Orders",
-      "consignmentsMenuItemGeneral": "Consignments",
+      "consignmentsMenuItemGeneral": "Shipments",
       "shippingMethodsMenuItemGeneral": "Shipping methods",
       "descriptionTextModule": "Tagline for MyParcel",
       "packageTypes": {
@@ -26,7 +26,7 @@
     },
     "messages": {
       "error": "An error has occurred",
-      "consignmentSuccess": "The consignment is successfully created",
+      "consignmentSuccess": "The Shipment is successfully created",
       "createLabelSuccess": "The label is successfully created"
     },
     "columns": {
@@ -46,16 +46,16 @@
       "onlyRecipientColumn": "Recipient only",
       "returnIfNotHomeColumn": "Return if not home",
       "largeFormatColumn": "Large format",
-      "numberOfConsignmentsColumn": "Consignment(s)"
+      "numberOfConsignmentsColumn": "Shipment(s)"
     },
     "orders": {
       "title": "Orders",
       "modals": {
         "createConsignment": {
-          "titleSingle": "Create a consignment",
-          "titleMultiple": "Create consignments ({numberOfItems} item(s))",
+          "titleSingle": "Create a shipment",
+          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
-          "actionTypeCreateConsignment": "Create consignment",
+          "actionTypeCreateConsignment": "Create shipment",
           "packageTypePackageLabel": "Package",
           "packageTypeMailboxLabel": "Mailbox",
           "packageTypeLetterLabel": "Letter",
@@ -82,13 +82,13 @@
       "buttons": {
         "viewOrderButton": "View the order",
         "cancelButton": "Cancel",
-        "createConsignmentButton": "Create consignment",
-        "createConsignmentsButton": "Create consignments",
+        "createConsignmentButton": "Create shipment",
+        "createConsignmentsButton": "Create shipments",
         "downloadLabelButton": "Download label"
       }
     },
     "consignments": {
-      "title": "Consignments",
+      "title": "Shipments",
       "modals": {
         "createLabels": {
           "titleSingle": "Create label",
