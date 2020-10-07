@@ -1,0 +1,94 @@
+<?php
+
+namespace Kiener\KienerMyParcel\Storefront\Controller;
+
+use Kiener\KienerMyParcel\Helper\AddressHelper;
+use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
+use Shopware\Core\Framework\Context;
+use Psr\Log\LoggerInterface;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Storefront\Controller\StorefrontController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
+
+use Shopware\Core\Defaults;
+
+class DeliveryOptionsController extends StorefrontController
+{
+    /**
+     * @var ShippingMethodService
+     */
+    private $shippingMethodService;
+
+    public const ROUTE_NAME_GET_DELIVERY_OPTIONS = 'myparcel.delivery_options';
+    private const RESPONSE_KEY_SUCCESS = 'success';
+    private const RESPONSE_KEY_ERROR = 'error';
+    private const RESPONSE_KEY_CODE = 'code';
+    private const RESPONSE_KEY_DELIVERY_OPTIONS = 'delivery_options';
+
+    public function __construct(
+        LoggerInterface $logger,
+        ShippingMethodService $shippingMethodService
+    )
+    {
+        $this->shippingMethodService = $shippingMethodService;
+    }
+
+    /**
+     * @RouteScope(scopes={"storefront"})
+     * @Route(
+     *     "/myparcel/delivery_options",
+     *     name=DeliveryOptionsController::ROUTE_NAME_GET_DELIVERY_OPTIONS,
+     *     methods={"POST|GET"},
+     *     defaults={"csrf_protected"=false, "XmlHttpRequest"=true}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getDeliveryOptions(Request $request, SalesChannelContext $salesChannelContext, Context $context): JsonResponse
+    {
+        /** @var string $carrier_id */
+        $carrier_id = $salesChannelContext->getShippingMethod()->getId();
+
+        /** @var string $cc */
+        $cc = $salesChannelContext->getShippingLocation()->getCountry()->getIso();
+
+        /** @var string $postal_code */
+        $postal_code = $salesChannelContext->getShippingLocation()->getAddress()->getZipcode();
+
+        $parsedAddress = AddressHelper::parseAddress($salesChannelContext->getShippingLocation()->getAddress());
+
+        /** @var string $number */
+        $number = $parsedAddress['houseNumber'];
+
+        /** @var ShippingMethodEntity $carrier */
+        $carrier = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId($carrier_id, $context);
+
+        if(!$carrier){
+            return new JsonResponse([
+                self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => 'No MyParcel carrier for this Shopware carrier',
+                self::RESPONSE_KEY_CODE => '422'
+            ]);
+        }
+
+        $response = file_get_contents('https://api.myparcel.nl/delivery_options?platform=myparcel&carrier='.$carrier->getCarrierName().'&cc='.$cc.'&number='.$number.'&postal_code='.$postal_code);
+
+        if(!$response || empty(json_decode($response)->data->delivery)){
+            return new JsonResponse([
+                self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => 'Failed to receive options from MyParcel',
+                self::RESPONSE_KEY_CODE => '503'
+            ]);
+        }
+
+        return new JsonResponse([
+            self::RESPONSE_KEY_SUCCESS => true,
+            self::RESPONSE_KEY_DELIVERY_OPTIONS => json_decode($response)->data->delivery,
+            'response' => [$carrier, $cc, $postal_code, $number]
+        ]);
+    }
+}

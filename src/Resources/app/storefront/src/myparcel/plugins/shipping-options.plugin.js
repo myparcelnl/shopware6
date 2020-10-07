@@ -1,3 +1,4 @@
+import HttpClient from 'src/service/http-client.service';
 import Plugin from 'src/plugin-system/plugin.class';
 import CookieStorage from 'src/helper/storage/cookie-storage.helper';
 
@@ -12,6 +13,9 @@ export default class MyParcelShippingOptions extends Plugin {
 
     // get shipping form
     init() {
+        console.log('init myparcel');
+        this.loadMethodOptions();
+
         const me = this;
         const shippingForms = document.querySelectorAll(me.options.shippingForm);
 
@@ -20,6 +24,7 @@ export default class MyParcelShippingOptions extends Plugin {
         if(!cookieMyParcel) {
             return false;
         }
+
         const cookieSet = cookieMyParcel.split('_');
         const shippingMethodId  = cookieSet[0];
         const myparcel_delivery_type =  cookieSet[1];
@@ -77,5 +82,35 @@ export default class MyParcelShippingOptions extends Plugin {
             confirmSignature.value = myparcel_requires_signature;
             confirmOnlyRecipient.value = myparcel_only_recipient;
         }
+    }
+
+    loadMethodOptions(){
+        const httpClient = new HttpClient(window.accessKey, window.contextToken);
+        const methodOptionsUrl = '/myparcel/delivery_options';
+
+
+
+        //const selectMethod = document.querySelector("input[name=shippingMethodId]:checked");
+        httpClient.get(methodOptionsUrl, function(json) {
+            const response = JSON.parse(json);
+
+            if(response.success == false && response.code == '422'){
+                return;
+            }
+
+            if(response.success == false){
+                //TODO error about unsuccesfull retrievement of shipping options
+                return;
+            }
+
+            console.log(response.delivery_options);
+
+            response.delivery_options.forEach(function(option){
+                //TODO populate the date dropdown with the dates we retrieved
+                console.log(option);
+            });
+
+            //TODO show/hide the correct options for the date (morning, standard, evening) should make this a seperate function so we can reuse when selecting another date
+        });
     }
 }
