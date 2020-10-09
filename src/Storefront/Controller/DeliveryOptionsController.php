@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 use Shopware\Core\Defaults;
@@ -45,13 +46,14 @@ class DeliveryOptionsController extends StorefrontController
      *     defaults={"csrf_protected"=false, "XmlHttpRequest"=true}
      *     )
      *
-     * @return JsonResponse
+     * @return Response
      * @throws Exception
      */
-    public function getDeliveryOptions(Request $request, SalesChannelContext $salesChannelContext, Context $context): JsonResponse
+    public function getDeliveryOptions(Request $request, SalesChannelContext $salesChannelContext, Context $context): Response
     {
+
         /** @var string $carrier_id */
-        $carrier_id = $salesChannelContext->getShippingMethod()->getId();
+        $carrier_id = (($request->get('method') != null) ? $request->get('method') : $salesChannelContext->getShippingMethod()->getId());
 
         /** @var string $cc */
         $cc = $salesChannelContext->getShippingLocation()->getCountry()->getIso();
@@ -85,10 +87,15 @@ class DeliveryOptionsController extends StorefrontController
             ]);
         }
 
-        return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => true,
-            self::RESPONSE_KEY_DELIVERY_OPTIONS => json_decode($response)->data->delivery,
-            'response' => [$carrier, $cc, $postal_code, $number]
-        ]);
+        $viewData = [
+            'options' => json_decode($response, true)['data']['delivery'],
+            'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
+            'salesContext' => $salesChannelContext,
+            'context' => $context
+        ];
+
+        return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);
+
+
     }
 }

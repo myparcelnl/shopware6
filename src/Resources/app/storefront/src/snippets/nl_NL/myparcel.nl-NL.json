@@ -1,7 +1,7 @@
 {
     "myparcel": {
         "delivery_type_morning": "Ochtendlevering",
-        "delivery_type_default": "Standaardlevering",
+        "delivery_type_standard": "Standaardlevering",
         "delivery_type_evening": "Avondlevering",
         "delivery_signature": "Handtekening voor ontvangst",
         "delivery_recipient": "Niet bij de buren bezorgen"

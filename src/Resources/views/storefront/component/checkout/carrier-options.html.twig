@@ -1,0 +1,35 @@
+<div class="mb-0 date_select">
+    <select name="myparcel_deliver_date">
+        {% for option in options %}
+            <option value="{{ option['date'] }}">{{ option['date'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+{% for option in options %}
+    <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
+        {% for time in option['time'] %}
+            <label class="d-block mb-0">
+                <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
+                <label for="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
+                    {{ ("myparcel.delivery_type_" ~ time['price_comment']) |trans|sw_sanitize }}
+                    <span class="cost">
+                        {% if time['price']['amount'] > 0 %}
+                            {{ (time['price']['amount']/100)|format_currency('EUR') }}
+                        {% endif %}
+                    </span>
+                </label>
+            </label>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<label class="d-block mb-0">
+    <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ carrier_id }}">
+    <label for="myparcel_requires_signature_{{ carrier_id }}">{{ "myparcel.delivery_signature"|trans|sw_sanitize }} <span class="cost"></span></label>
+</label>
+<label class="d-block mb-0">
+    <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ carrier_id }}">
+    <label for="myparcel_only_recipient_{{ carrier_id }}">{{ "myparcel.delivery_recipient"|trans|sw_sanitize }} <span class="cost"></span></label>
+</label>
+

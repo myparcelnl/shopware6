@@ -13,10 +13,17 @@ export default class MyParcelShippingOptions extends Plugin {
 
     // get shipping form
     init() {
-        console.log('init myparcel');
-        this.loadMethodOptions();
-
         const me = this;
+        console.log('init myparcel');
+        me.loadMethodOptions(me);
+
+        const methods = document.querySelectorAll('[name="shippingMethodId"]')
+        methods.forEach(function(method, ) {
+            method.addEventListener('change', (event) => {
+                me.loadMethodOptions(me);
+            });
+        });
+
         const shippingForms = document.querySelectorAll(me.options.shippingForm);
 
         /* Get cookie value and set some vars  */
@@ -84,33 +91,60 @@ export default class MyParcelShippingOptions extends Plugin {
         }
     }
 
-    loadMethodOptions(){
+    loadMethodOptions(me){
         const httpClient = new HttpClient(window.accessKey, window.contextToken);
         const methodOptionsUrl = '/myparcel/delivery_options';
+        const selectedMethod = document.querySelector("input[name=shippingMethodId]:checked");
+        const selectedMethodValue = selectedMethod.value;
+        const optionsDiv = document.querySelector('[data-shipping-method-id='+selectedMethodValue+']')
 
+        //TODO rewrite check so we don't load everytime we change methods
+        if(optionsDiv.getAttribute('data-options-loaded') == true) {
+            return
+        }
 
+        httpClient.get(methodOptionsUrl+'?method='+selectedMethodValue, function(response) {
+            //check if we have json as response, if so, then it's a error
+            if(me.checkIfJsonString(response)){
+                const response = JSON.parse(response);
 
-        //const selectMethod = document.querySelector("input[name=shippingMethodId]:checked");
-        httpClient.get(methodOptionsUrl, function(json) {
-            const response = JSON.parse(json);
+                if(response.success == false && response.code == '422'){
+                    return;
+                }
 
-            if(response.success == false && response.code == '422'){
-                return;
+                if(response.success == false){
+                    //TODO error about unsuccesfull retrievement of shipping options
+                    return;
+                }
+                return
             }
 
-            if(response.success == false){
-                //TODO error about unsuccesfull retrievement of shipping options
-                return;
-            }
+            //we have html, let's append it to the correct method
+            optionsDiv.innerHTML = response;
+            optionsDiv.setAttribute('data-options-loaded', 'true');
 
-            console.log(response.delivery_options);
+            optionsDiv.querySelector('.date_select select').addEventListener('change', (event)=>{
 
-            response.delivery_options.forEach(function(option){
-                //TODO populate the date dropdown with the dates we retrieved
-                console.log(option);
-            });
+                const dateOptionsNotActive = optionsDiv.querySelectorAll('.delivery_options')
+                dateOptionsNotActive.forEach(function(element){
+                    element.classList.add("d-none");
+                });
 
-            //TODO show/hide the correct options for the date (morning, standard, evening) should make this a seperate function so we can reuse when selecting another date
+                const dateOptionsDiv = optionsDiv.querySelector('[data-date="'+event.target.value+'"]')
+                dateOptionsDiv.classList.remove("d-none");
+
+                //TODO set no neighbours selected when selected type is 3
+            })
+
         });
+    }
+
+    checkIfJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
 }
