@@ -2,7 +2,6 @@
 
 namespace Kiener\KienerMyParcel\Subscriber;
 
-use Kiener\KienerMyParcel\Service\Settings\SettingsService;
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
 use Shopware\Storefront\Page\PageLoadedEvent;
@@ -17,23 +16,15 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     private $shippingMethodService;
 
     /**
-     * @var SettingsService
-     */
-    private $settingsService;
-
-    /**
      * Creates a new instance of the checkout confirm page subscriber.
      *
      * @param ShippingMethodService $shippingMethodService
-     * @param SettingsService       $settingsService
      */
     public function __construct(
-        ShippingMethodService $shippingMethodService,
-        SettingsService $settingsService
+        ShippingMethodService $shippingMethodService
     )
     {
         $this->shippingMethodService = $shippingMethodService;
-        $this->settingsService = $settingsService;
     }
 
     /**
@@ -55,25 +46,12 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function addMyParcelShippingMethodIdsToPage($args): void
     {
-        /** @var MyParcelSettingStruct $settings */
-        $settings = $this->settingsService->getSettings(
-            $args->getSalesChannelContext()->getSalesChannel()->getId()
-        );
-
+        //dd($args);
         $options = [
             'myparcel_shipping_method_ids' => $this->shippingMethodService->getMyParcelShippingMethodIds(
                 $args->getContext()
             ),
         ];
-
-        $shippingCostsPrice = $args->getPage()->getCart()->getShippingCosts()->getTotalPrice();
-
-        if ($settings !== null) {
-            $options['my_parcel_morning_delivery_cost'] = $settings->getCostsDeliveryMorning() - $shippingCostsPrice;
-            $options['my_parcel_standard_delivery_cost'] = 0;
-            $options['my_parcel_evening_delivery_cost'] = $settings->getCostsDeliveryEvening() - $shippingCostsPrice;
-            $options['my_parcel_pickup_delivery_cost'] = 0;
-        }
 
         $args->getPage()->assign($options);
     }

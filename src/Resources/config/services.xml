@@ -10,7 +10,6 @@
             <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService" />
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator" />
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService" />
 
             <!-- after product collector/processor -->
             <tag name="shopware.cart.processor" priority="4500" />
@@ -44,10 +43,6 @@
         </service>
 
         <!-- Services -->
-        <service id="Kiener\KienerMyParcel\Service\Settings\SettingsService" class="Kiener\KienerMyParcel\Service\Settings\SettingsService">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
-        </service>
-
         <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">
             <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService"/>
@@ -77,7 +72,6 @@
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService"/>
         </service>
 
         <!-- Entities -->
@@ -96,7 +90,6 @@
         <!-- Event Subscribers -->
         <service id="Kiener\KienerMyParcel\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Settings\SettingsService" />
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -131,6 +124,12 @@
         <service id="Kiener\KienerMyParcel\Storefront\Controller\DeliveryOptionsController" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService"/>
+        </service>
+
+        <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher"/>
+            <argument type="service" id="Shopware\Storefront\Framework\Cookie\CookieProviderInterface"/>
         </service>
 
     </services>

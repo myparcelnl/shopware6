@@ -1,5 +1,5 @@
 <div class="mb-0 date_select">
-    <select name="myparcel_deliver_date">
+    <select name="myparcel_delivery_date">
         {% for option in options %}
             <option value="{{ option['date'] }}">{{ option['date'] }}</option>
         {% endfor %}
@@ -10,7 +10,7 @@
     <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
         {% for time in option['time'] %}
             <label class="d-block mb-0">
-                <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="1" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
+                <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="{{ time['type'] }}" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
                 <label for="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
                     {{ ("myparcel.delivery_type_" ~ time['price_comment']) |trans|sw_sanitize }}
                     <span class="cost">

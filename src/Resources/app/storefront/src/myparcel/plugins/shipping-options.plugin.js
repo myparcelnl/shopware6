@@ -14,7 +14,7 @@ export default class MyParcelShippingOptions extends Plugin {
     // get shipping form
     init() {
         const me = this;
-        console.log('init myparcel');
+
         me.loadMethodOptions(me);
 
         const methods = document.querySelectorAll('[name="shippingMethodId"]')
@@ -23,7 +23,9 @@ export default class MyParcelShippingOptions extends Plugin {
                 me.loadMethodOptions(me);
             });
         });
+    }
 
+    loadInitialValues(me){
         const shippingForms = document.querySelectorAll(me.options.shippingForm);
 
         /* Get cookie value and set some vars  */
@@ -32,37 +34,52 @@ export default class MyParcelShippingOptions extends Plugin {
             return false;
         }
 
+console.log("MyParcel Cookie set");
+
         const cookieSet = cookieMyParcel.split('_');
         const shippingMethodId  = cookieSet[0];
-        const myparcel_delivery_type =  cookieSet[1];
-        const myparcel_requires_signature =  cookieSet[2];
-        const myparcel_only_recipient =  cookieSet[3];
+        const myparcel_delivery_date  = cookieSet[1];
+        const myparcel_delivery_type =  cookieSet[2];
+        const myparcel_requires_signature =  cookieSet[3];
+        const myparcel_only_recipient =  cookieSet[4];
 
         /* Is myParcel shippingform and is delivery type selected? */
         if (shippingForms && myparcel_delivery_type > 0) {
-            /* Set delivery type */
-            const shippingForm = document.querySelector('div[data-shipping-method-id="' + shippingMethodId + '"]');
-            const deliveryOptionInputs = shippingForm.querySelector('input[name="myparcel_delivery_type"][value="' + myparcel_delivery_type + '"]');
-            deliveryOptionInputs.checked = true;
             let shippingSelectedTxt = '';
+
+            /* Get the enclosing elements */
+            const shippingForm = document.querySelector('div[data-shipping-method-id="' + shippingMethodId + '"]');
+            const shippingOptions = shippingForm.querySelector('.delivery_options[data-date="' + myparcel_delivery_date + '"]');
+
+            /* Set the selected date */
+            if(myparcel_delivery_date){
+                const deliveryDateSelect = shippingForm.querySelector('select[name="myparcel_delivery_date"]');
+                const selectedDate = deliveryDateSelect.querySelector('[value="' + myparcel_delivery_date + '"]');
+                selectedDate.selected = true;
+
+                shippingSelectedTxt = shippingSelectedTxt + selectedDate.text;
+            }
+
+            /* Set delivery type */
+            const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type"][value="' + myparcel_delivery_type + '"]');
+            deliveryOptionType.checked = true;
+
 
             /* Set signature checkbox */
             if(myparcel_requires_signature > 0) {
                 const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
-                const requiresSignatureLabel = shippingForm.querySelector('label[for="'+ requiresSignatureInput.id + '"]').firstChild.textContent;
+                const requiresSignatureLabel = shippingForm.querySelector('label[for="'+ requiresSignatureInput.id + '"]').textContent;
                 requiresSignatureInput.checked = true;
-                shippingSelectedTxt = shippingSelectedTxt + requiresSignatureLabel;
-                if(myparcel_only_recipient > 0) {
-                    shippingSelectedTxt = shippingSelectedTxt + ', ';
-                }
+
+                shippingSelectedTxt = shippingSelectedTxt + ', ' + requiresSignatureLabel.toLowerCase();
             }
 
             /* Set recipient checkbox */
             if(myparcel_only_recipient > 0) {
                 const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
-                const onlyRecipientLabel = shippingForm.querySelector('label[for="'+ onlyRecipientInput.id + '"]').firstChild.textContent;
+                const onlyRecipientLabel = shippingForm.querySelector('label[for="'+ onlyRecipientInput.id + '"]').textContent;
                 onlyRecipientInput.checked = true;
-                shippingSelectedTxt = shippingSelectedTxt + onlyRecipientLabel;
+                shippingSelectedTxt = shippingSelectedTxt + ', ' + onlyRecipientLabel.toLowerCase();
             }
 
             /* Enclose shipment text */
@@ -71,23 +88,32 @@ export default class MyParcelShippingOptions extends Plugin {
             }
 
             /* Set and place text */
-            const deliveryOptionId = deliveryOptionInputs.id;
-            const deliveryOptionLabel = shippingForm.querySelector('label[for="'+ deliveryOptionId + '"]').firstChild.textContent;
+            //const deliveryOptionId = shippingMethodId;
+            //const deliveryOptionLabel = shippingForm.querySelector('label[for="'+ shippingMethodId + '"]').textContent;
             const shippingSelected = document.querySelector(me.options.currentShipping);
-            shippingSelected.innerHTML += '<br/><small>' + deliveryOptionLabel + shippingSelectedTxt + '</small>';
+            shippingSelected.innerHTML += '<br/><small>' + shippingSelectedTxt + '</small>';
 
             /* Set orderform fields */
             const confirmOrderForm = document.querySelector(me.options.confirmOrderForm);
             const confirmShippingMethod = confirmOrderForm.querySelector('input[name="myparcel[shipping_method_id]"]');
+            const confirmDeliveryDate = confirmOrderForm.querySelector('input[name="myparcel[delivery_date]"]');
             const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type]"]');
             const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
             const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
 
             /* Set orderform values */
             confirmShippingMethod.value = shippingMethodId;
+            confirmDeliveryDate.value = myparcel_delivery_date;
             confirmDeliveryType.value = myparcel_delivery_type;
             confirmSignature.value = myparcel_requires_signature;
             confirmOnlyRecipient.value = myparcel_only_recipient;
+
+            let optionForms = shippingForm.querySelectorAll('.delivery_options');
+            optionForms.forEach(function(element){
+                element.classList.add("d-none");
+            });
+            shippingOptions.classList.remove("d-none");
+
         }
     }
 
@@ -98,7 +124,6 @@ export default class MyParcelShippingOptions extends Plugin {
         const selectedMethodValue = selectedMethod.value;
         const optionsDiv = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"]');
 
-        //TODO rewrite check so we don't load everytime we change methods
         if(!optionsDiv || optionsDiv.getAttribute('data-options-loaded') == 'true') {
             return
         }
@@ -109,11 +134,13 @@ export default class MyParcelShippingOptions extends Plugin {
                 const response = JSON.parse(response);
 
                 if(response.success == false && response.code == '422'){
+                    console.log('error 422');
                     return;
                 }
 
                 if(response.success == false){
                     //TODO error about unsuccesfull retrievement of shipping options
+                    console.log('no options retrieved');
                     return;
                 }
                 return
@@ -145,8 +172,7 @@ export default class MyParcelShippingOptions extends Plugin {
                             const recipient_option = optionsDiv.querySelector('[name="myparcel_only_recipient"]');
                             if(type == 1 || type == 3){
                                 recipient_option.checked = true;
-                            }else{
-                                recipient_option.checked = false;
+                                //TODO add disabling of option
                             }
                         }
                     });
@@ -155,6 +181,8 @@ export default class MyParcelShippingOptions extends Plugin {
 
             const event = new Event('change');
             dateSelect.dispatchEvent(event);
+
+            me.loadInitialValues(me);
 
         });
     }

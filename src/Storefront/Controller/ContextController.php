@@ -66,12 +66,14 @@ class ContextController extends StorefrontController
     {
         /* get vars from post */
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
+        $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
         $myparcel_delivery_type= $data->get('myparcel_delivery_type') ?: 0;
         $myparcel_requires_signature= $data->get('myparcel_requires_signature') ?: 0;
         $myparcel_only_recipient= $data->get('myparcel_only_recipient') ?: 0;
 
         /* set vars to cookie */
         $cookieValue = '' . $shippingMethodId;
+        $cookieValue .= '_' . $myparcel_delivery_date;
         $cookieValue .= '_' . $myparcel_delivery_type;
         $cookieValue .= '_' . $myparcel_requires_signature;
         $cookieValue .= '_' . $myparcel_only_recipient;

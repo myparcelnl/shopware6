@@ -21,6 +21,7 @@ class ShippingOptionEntity extends Entity //NOSONAR
     public const FIELD_SHIPMENT_ID = 'shipmentId';
     public const FIELD_CARRIER_ID = 'carrierId';
     public const FIELD_PACKAGE_TYPE = 'packageType';
+    public const FIELD_DELIVERY_DATE = 'deliveryDate';
     public const FIELD_DELIVERY_TYPE = 'deliveryType';
     public const FIELD_REQUIRES_AGE_CHECK = 'requiresAgeCheck';
     public const FIELD_REQUIRES_SIGNATURE = 'requiresSignature';
@@ -57,6 +58,11 @@ class ShippingOptionEntity extends Entity //NOSONAR
      * @var int
      */
     protected $packageType;
+
+    /**
+     * @var date
+     */
+    protected $deliveryDate;
 
     /**
      * @var int
@@ -314,5 +320,21 @@ class ShippingOptionEntity extends Entity //NOSONAR
     {
         $this->largeFormat = $largeFormat;
         return $this;
+    }
+
+    /**
+     * @return date
+     */
+    public function getDeliveryDate(): date
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param date $deliveryDate
+     */
+    public function setDeliveryDate(date $deliveryDate): void
+    {
+        $this->deliveryDate = $deliveryDate;
     }
 }

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class OrderPlacedSubscriber implements EventSubscriberInterface
 {
     private const PARAM_MY_PARCEL = 'my_parcel';
+    private const PARAM_DELIVERY_DATE = 'delivery_date';
     private const PARAM_DELIVERY_TYPE = 'delivery_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
     private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
@@ -104,30 +105,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
         // Add the options from the checkout to the array of options
         if (is_array($params) && !empty($params)) {
-            if (isset($params[self::PARAM_DELIVERY_TYPE])) {
-                $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int) $params[self::PARAM_DELIVERY_TYPE];
-            }
 
-            if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
-                $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool) $params[self::PARAM_REQUIRES_AGE_CHECK];
-            }
-
-            if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
-                $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool) $params[self::PARAM_REQUIRES_SIGNATURE];
-            }
-
-            if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
-                $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool) $params[self::PARAM_ONLY_RECIPIENT];
-            }
-
-            if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
-                $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool) $params[self::PARAM_RETURN_IF_NOT_HOME];
-            }
-
-            if (isset($params[self::PARAM_LARGE_FORMAT])) {
-                $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool) $params[self::PARAM_LARGE_FORMAT];
-            }
-
+            // Check if we have a MyParcel shippingMethod
             if (
                 isset($params[self::PARAM_SHIPPING_METHOD_ID])
                 && strlen($params[self::PARAM_SHIPPING_METHOD_ID]) >= 32
@@ -137,32 +116,62 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                     new Context(new SystemSource())
                 );
             }
-        }
 
-        if (
-            !empty($options)
-            && $shippingMethod !== null
-        ) {
-            // Add the order to the shipping options
-            $options[ShippingOptionEntity::FIELD_ORDER] = [
-                'id' => $event->getOrder()->getId(),
-                'versionId' => $event->getOrder()->getVersionId(),
-            ];
+            if ($shippingMethod !== null) {
 
-            // Add the carrier id to the shipping options
-            $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
+                if (isset($params[self::PARAM_DELIVERY_TYPE])) {
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $params[self::PARAM_DELIVERY_TYPE];
+                }
 
-            // Store shipping options in the database
-            $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+                if (isset($params[self::PARAM_DELIVERY_DATE])) {
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = $params[self::PARAM_DELIVERY_DATE];
+                }
 
-            // Update custom fields on the order
-            $this->orderService->createOrUpdateOrder([
-                'id' => $event->getOrder()->getId(),
-                'versionId' => $event->getOrder()->getVersionId(),
-                'customFields' => [
-                    self::PARAM_MY_PARCEL => $options,
-                ]
-            ], $event->getContext());
+                if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
+                }
+
+                if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
+                }
+
+                if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
+                }
+
+                if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
+                }
+
+                if (isset($params[self::PARAM_LARGE_FORMAT])) {
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }
+
+                dd($options);
+
+                if (!empty($options)) {
+                    // Add the order to the shipping options
+                    $options[ShippingOptionEntity::FIELD_ORDER] = [
+                        'id' => $event->getOrder()->getId(),
+                        'versionId' => $event->getOrder()->getVersionId(),
+                    ];
+
+                    // Add the carrier id to the shipping options
+                    $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
+
+                    // Store shipping options in the database
+                    $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+
+                    // Update custom fields on the order
+                    $this->orderService->createOrUpdateOrder([
+                        'id' => $event->getOrder()->getId(),
+                        'versionId' => $event->getOrder()->getVersionId(),
+                        'customFields' => [
+                            self::PARAM_MY_PARCEL => json_encode($options),
+                        ]
+                    ], $event->getContext());
+                }
+            }
         }
     }
 }

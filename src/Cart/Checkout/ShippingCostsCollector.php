@@ -2,7 +2,6 @@
 
 namespace Kiener\KienerMyParcel\Cart\Checkout;
 
-use Kiener\KienerMyParcel\Service\Settings\SettingsService;
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
@@ -38,21 +37,15 @@ class ShippingCostsCollector implements CartDataCollectorInterface, CartProcesso
      */
     private $shippingMethodService;
 
-    /**
-     * @var SettingsService
-     */
-    private $settingsService;
 
     public function __construct(
         AdminOrderCartService $adminOrderCartService,
         QuantityPriceCalculator $calculator,
-        ShippingMethodService $shippingMethodService,
-        SettingsService $settingsService
+        ShippingMethodService $shippingMethodService
     ) {
         $this->adminOrderCartService = $adminOrderCartService;
         $this->calculator = $calculator;
         $this->shippingMethodService = $shippingMethodService;
-        $this->settingsService = $settingsService;
     }
 
     public function collect(CartDataCollection $data, Cart $original, SalesChannelContext $context, CartBehavior $behavior): void
@@ -169,9 +162,6 @@ class ShippingCostsCollector implements CartDataCollectorInterface, CartProcesso
 
     private function getAddedDeliveryCosts(string $shippingMethodId, SalesChannelContext $context): float
     {
-        /** @var MyParcelSettingStruct $settings */
-        $settings = $this->settingsService->getSettings($context->getSalesChannel()->getId());
-
         /** @var float $price */
         $price = 0.0;
 
@@ -190,11 +180,11 @@ class ShippingCostsCollector implements CartDataCollectorInterface, CartProcesso
         }
 
         if ($deliveryType === AbstractConsignment::DELIVERY_TYPE_MORNING) {
-            $price = $settings->getCostsDeliveryMorning();
+            $price = 0;
         }
 
         if ($deliveryType === AbstractConsignment::DELIVERY_TYPE_EVENING) {
-            $price = $settings->getCostsDeliveryEvening();
+            $price = 0;
         }
 
         return $price;

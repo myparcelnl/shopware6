@@ -3,8 +3,6 @@
 namespace Kiener\KienerMyParcel\Service\ShippingOptions;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
-use Kiener\KienerMyParcel\Service\Settings\SettingsService;
-use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
@@ -30,27 +28,18 @@ class ShippingOptionsService
     private $shippingOptionsRepository;
 
     /**
-     * @var MyParcelSettingStruct
-     */
-    private $settings;
-
-
-    /**
      * ShippingOptionsService constructor.
      *
      * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shippingOptionsRepository
-     * @param SettingsService           $settingsService
      */
     public function __construct(
         LoggerInterface $logger,
-        EntityRepositoryInterface $shippingOptionsRepository,
-        SettingsService $settingsService
+        EntityRepositoryInterface $shippingOptionsRepository
     )
     {
         $this->logger = $logger;
         $this->shippingOptionsRepository = $shippingOptionsRepository;
-        $this->settings = $settingsService->getSettings();
     }
 
     /**
@@ -135,7 +124,7 @@ class ShippingOptionsService
         return [
             AbstractConsignment::DELIVERY_TYPE_MORNING => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
-                self::FIELD_COSTS => $this->settings->getCostsDeliveryMorning(),
+                self::FIELD_COSTS => 0,
             ],
             AbstractConsignment::DELIVERY_TYPE_STANDARD => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
@@ -143,7 +132,7 @@ class ShippingOptionsService
             ],
             AbstractConsignment::DELIVERY_TYPE_EVENING => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
-                self::FIELD_COSTS => $this->settings->getCostsDeliveryEvening(),
+                self::FIELD_COSTS => 0,
             ],
             AbstractConsignment::DELIVERY_TYPE_PICKUP => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
