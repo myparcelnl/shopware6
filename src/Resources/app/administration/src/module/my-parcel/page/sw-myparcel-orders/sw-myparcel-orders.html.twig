@@ -13,11 +13,11 @@
         {% endblock %}
 
         {% block sw_myparcel_smart_bar_actions %}
-            <template #smart-bar-actions>
-                <sw-button :disabled="!createMultipleConsignmentsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleConsignmentsModal">
-                    {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}
-                </sw-button>
-            </template>
+{#            <template #smart-bar-actions>#}
+{#                <sw-button :disabled="!createMultipleConsignmentsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleConsignmentsModal">#}
+{#                    {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}#}
+{#                </sw-button>#}
+{#            </template>#}
         {% endblock %}
 
         {% block sw_myparcel_content %}
@@ -96,9 +96,9 @@
                         <sw-context-menu-item class="sw-myparcel-orders-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
                             {{ $tc('sw-myparcel.orders.buttons.viewOrderButton') }}
                         </sw-context-menu-item>
-                        <sw-context-menu-item class="sw-myparcel-orders-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">
-                            {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}
-                        </sw-context-menu-item>
+{#                        <sw-context-menu-item class="sw-myparcel-orders-list__create-consignment-action" @click="onOpenCreateSingleConsignmentModal(item)">#}
+{#                            {{ $tc('sw-myparcel.orders.buttons.createConsignmentButton') }}#}
+{#                        </sw-context-menu-item>#}
                     </template>
 
                     <template slot="pagination">

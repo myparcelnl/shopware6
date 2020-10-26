@@ -94,10 +94,6 @@ Component.register('sw-myparcel-orders', {
         };
     },
 
-    mounted() {
-        this.getList();
-    },
-
     computed: {
         orderColumns() {
             return this.getOrderColumns();

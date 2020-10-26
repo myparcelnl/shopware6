@@ -81,7 +81,7 @@ class ShippingOptionsService
     {
         $criteria = new Criteria([$id]);
         $criteria->addAssociation('order');
-        $criteria->addAssociation('consignments');
+        //$criteria->addAssociation('consignments');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->get($id);
     }

@@ -120,11 +120,12 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
             if ($shippingMethod !== null) {
 
                 if (isset($params[self::PARAM_DELIVERY_TYPE])) {
-                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $params[self::PARAM_DELIVERY_TYPE];
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
                 }
 
                 if (isset($params[self::PARAM_DELIVERY_DATE])) {
-                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = $params[self::PARAM_DELIVERY_DATE];
+                    $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
@@ -146,8 +147,6 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 if (isset($params[self::PARAM_LARGE_FORMAT])) {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }
-
-                dd($options);
 
                 if (!empty($options)) {
                     // Add the order to the shipping options

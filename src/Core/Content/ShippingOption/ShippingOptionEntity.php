@@ -333,7 +333,7 @@ class ShippingOptionEntity extends Entity //NOSONAR
     /**
      * @param date $deliveryDate
      */
-    public function setDeliveryDate(date $deliveryDate): void
+    public function setDeliveryDate(date $deliveryDate): self
     {
         $this->deliveryDate = $deliveryDate;
     }

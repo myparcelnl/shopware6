@@ -6,6 +6,7 @@ use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\DateField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -58,6 +59,7 @@ class ShippingOptionDefinition extends EntityDefinition
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             (new IntField('carrier_id', 'carrierId'))->addFlags(new Required()),
             (new IntField('package_type', 'packageType')),
+            (new DateField('delivery_date', 'deliveryDate')),
             (new IntField('delivery_type', 'deliveryType')),
             (new BoolField('requires_age_check', 'requiresAgeCheck')),
             (new BoolField('requires_signature', 'requiresSignature')),

@@ -81,7 +81,8 @@ class ContextController extends StorefrontController
         $cookieValue = trim($cookieValue);
 
         /* set cookievalue */
-        setcookie("myparcel-cookie-key", htmlentities($cookieValue), time() + 600, '/');
+        //setcookie("myparcel-cookie-key", htmlentities($cookieValue), time() + 600, '/');
+        setcookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');
 
         $this->contextSwitcher->update($data, $context);
 
