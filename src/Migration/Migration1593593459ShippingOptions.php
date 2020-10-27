@@ -21,7 +21,6 @@ class Migration1593593459ShippingOptions extends MigrationStep
                 `order_version_id` BINARY(16) NOT NULL,
                 `carrier_id` INT(11) NOT NULL,
                 `package_type` INT(11) NULL,
-                `delivery_date` DATE NULL,
                 `delivery_type` INT(11) NULL DEFAULT \'2\',
                 `requires_age_check` TINYINT(1) NULL DEFAULT \'0\',
                 `requires_signature` TINYINT(1) NULL DEFAULT \'0\',
