@@ -224,7 +224,7 @@ class ConsignmentService
             );
 
             // Add track and trace to the custom fields
-            $customFields = $orderEntity->getCustomFields()['my_parcel'] ?? null;
+            $customFields = json_decode($orderEntity->getCustomFields()['my_parcel'], true) ?? null;
             $trackAndTrace = $customFields['track_and_trace'] ?? [];
 
             $trackAndTrace[] = [
