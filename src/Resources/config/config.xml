@@ -23,17 +23,17 @@
             <label lang="nl-NL">Standaard afleveringsperiode</label>
             <options>
                 <option>
-                    <id>standard</id>
+                    <id>2</id>
                     <name>Standard</name>
                     <name lang="nl-NL">Standaard</name>
                 </option>
                 <option>
-                    <id>morning</id>
+                    <id>1</id>
                     <name>Morning</name>
                     <name lang="nl-NL">Ochtend</name>
                 </option>
                 <option>
-                    <id>evening</id>
+                    <id>3</id>
                     <name>Evening</name>
                     <name lang="nl-NL">Avond</name>
                 </option>
@@ -139,6 +139,37 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+        </input-field>
+
+        <!--Choose default delivery window-->
+        <input-field type="single-select">
+            <name>myParcelDefaultPackageType</name>
+            <label>Default package type</label>
+            <label lang="nl-NL">Standaard verpakkingssoort</label>
+            <defaultValue>1</defaultValue>
+            <options>
+                <option>
+                    <id>1</id>
+                    <name>Package</name>
+                    <name lang="nl-NL">Pakket</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Mailbox package</name>
+                    <name lang="nl-NL">Brievenbus pakket</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Letter</name>
+                    <name lang="nl-NL">Brief</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Digital stamp</name>
+                    <name lang="nl-NL">Digitale postzegel</name>
+                </option>
+            </options>
+            <defaultValue>standard</defaultValue>
         </input-field>
 
         <!--Choose default carrier-->

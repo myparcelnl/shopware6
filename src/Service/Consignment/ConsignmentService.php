@@ -48,6 +48,9 @@ class ConsignmentService
      */
     private $apiKey;
 
+    /** @var SystemConfigService */
+    private $systemConfigService;
+
     /**
      * ConsignmentService constructor.
      *
@@ -66,7 +69,7 @@ class ConsignmentService
         $this->orderService = $orderService;
         $this->shippingOptionsService = $shippingOptionsService;
         $this->shipmentService = $shipmentService;
-
+        $this->systemConfigService = $systemConfigService;
         $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
     }
 
@@ -158,6 +161,8 @@ class ConsignmentService
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());
+        }else if ($packageType) {
+            $consignment->setPackageType($packageType);
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
@@ -308,6 +313,8 @@ class ConsignmentService
                     && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
                 ) {
                     $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
+                }else{
+                    $packageType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultPackageType');
                 }
 
                 $consignment = $this->createConsignment($context, $order, $packageType);

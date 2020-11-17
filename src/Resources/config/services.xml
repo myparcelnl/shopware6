@@ -124,6 +124,7 @@
         <service id="Kiener\KienerMyParcel\Storefront\Controller\DeliveryOptionsController" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">

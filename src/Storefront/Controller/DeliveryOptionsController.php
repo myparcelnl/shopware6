@@ -7,6 +7,7 @@ use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Framework\Context;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +24,9 @@ class DeliveryOptionsController extends StorefrontController
      */
     private $shippingMethodService;
 
+    /** @var SystemConfigService */
+    private $configService;
+
     public const ROUTE_NAME_GET_DELIVERY_OPTIONS = 'myparcel.delivery_options';
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
@@ -31,10 +35,12 @@ class DeliveryOptionsController extends StorefrontController
 
     public function __construct(
         LoggerInterface $logger,
-        ShippingMethodService $shippingMethodService
+        ShippingMethodService $shippingMethodService,
+        SystemConfigService $configService
     )
     {
         $this->shippingMethodService = $shippingMethodService;
+        $this->configService = $configService;
     }
 
     /**
@@ -91,7 +97,8 @@ class DeliveryOptionsController extends StorefrontController
             'options' => json_decode($response, true)['data']['delivery'],
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
             'salesContext' => $salesChannelContext,
-            'context' => $context
+            'context' => $context,
+            'config' => $this->configService->get('KienerMyParcel.config')
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

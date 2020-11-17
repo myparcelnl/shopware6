@@ -355,8 +355,8 @@ Component.register('sw-myparcel-orders', {
 
         getList() {
             this.isLoading = true;
-
             return this.shippingOptionRepository.search(this.shippingOptionCriteria, Shopware.Context.api).then((response) => {
+                this.shippingOptions = [];
                 response.forEach(item => {
                     if (
                         !!item.order.deliveries

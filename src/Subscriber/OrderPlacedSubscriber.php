@@ -10,6 +10,7 @@ use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,6 +20,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private const PARAM_MY_PARCEL = 'my_parcel';
     private const PARAM_DELIVERY_DATE = 'delivery_date';
     private const PARAM_DELIVERY_TYPE = 'delivery_type';
+    private const PARAM_PACKAGE_TYPE = 'package_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
     private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
     private const PARAM_ONLY_RECIPIENT = 'only_recipient';
@@ -46,6 +48,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     private $shippingOptionsService;
 
+    /** @var SystemConfigService */
+    private $configService;
+
     /**
      * Creates a new instance of the order placed subscriber.
      *
@@ -53,18 +58,21 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      * @param OrderService              $orderService
      * @param ShippingMethodService     $shippingMethodService
      * @param ShippingOptionsService    $shippingOptionService
+     * @param SystemConfigService       $configService
      */
     public function __construct(
         RequestStack $requestStack,
         OrderService $orderService,
         ShippingMethodService $shippingMethodService,
-        ShippingOptionsService $shippingOptionService
+        ShippingOptionsService $shippingOptionService,
+        SystemConfigService $configService
     )
     {
        $this->requestStack = $requestStack;
        $this->orderService = $orderService;
        $this->shippingMethodService = $shippingMethodService;
        $this->shippingOptionsService = $shippingOptionService;
+        $this->configService = $configService;
     }
 
     /**
@@ -121,6 +129,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
                 if (isset($params[self::PARAM_DELIVERY_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
                 }
 
                 if (isset($params[self::PARAM_DELIVERY_DATE])) {
@@ -148,6 +158,13 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }
 
+                if (isset($params[self::PARAM_PACKAGE_TYPE])) {
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }else{
+                    //TODO get from config service
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = 1;//$this->configService->get('MolliePayments.config.testApiKey');
+                }
+
                 if (!empty($options)) {
                     // Add the order to the shipping options
                     $options[ShippingOptionEntity::FIELD_ORDER] = [
@@ -169,6 +186,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                             self::PARAM_MY_PARCEL => json_encode($options),
                         ]
                     ], $event->getContext());
+
+                    setcookie("myparcel-cookie-key", '', 600, '/');
                 }
             }
         }
