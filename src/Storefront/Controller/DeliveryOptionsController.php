@@ -86,11 +86,20 @@ class DeliveryOptionsController extends StorefrontController
         $response = file_get_contents('https://api.myparcel.nl/delivery_options?platform=myparcel&carrier='.$carrier->getCarrierName().'&cc='.$cc.'&number='.$number.'&postal_code='.$postal_code);
 
         if(!$response || empty(json_decode($response)->data->delivery)){
-            return new JsonResponse([
-                self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => 'Failed to receive options from MyParcel',
-                self::RESPONSE_KEY_CODE => '503'
-            ]);
+
+            if(json_decode($response)->errors){
+                return new JsonResponse([
+                    self::RESPONSE_KEY_SUCCESS => false,
+                    self::RESPONSE_KEY_ERROR => json_decode($response, true)['errors'],
+                    self::RESPONSE_KEY_CODE => '503',
+                ]);
+            } else {
+                return new JsonResponse([
+                    self::RESPONSE_KEY_SUCCESS => false,
+                    self::RESPONSE_KEY_ERROR => 'Failed to receive options from MyParcel',
+                    self::RESPONSE_KEY_CODE => '503',
+                ]);
+            }
         }
 
         $viewData = [
