@@ -67,7 +67,7 @@ class ContextController extends StorefrontController
         /* get vars from post */
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
         $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
-        $myparcel_delivery_type= $data->get('myparcel_delivery_type') ?: 0;
+        $myparcel_delivery_type = $data->get('myparcel_delivery_type_'.$myparcel_delivery_date) ?: 0;
         $myparcel_requires_signature= $data->get('myparcel_requires_signature') ?: 0;
         $myparcel_only_recipient= $data->get('myparcel_only_recipient') ?: 0;
 

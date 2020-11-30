@@ -11,7 +11,7 @@
     <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
         {% for time in option['time'] %}
             <label class="d-block mb-0">
-                <input type="radio" name="myparcel_delivery_type" data-target="myparcel[delivery_type]" value="{{ time['type'] }}" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }} {% if config.myParcelDefaultDeliveryWindow == time['type'] %}checked{% endif %}">
+                <input type="radio" name="myparcel_delivery_type_{{ option['date'] }}" data-target="myparcel[delivery_type]" value="{{ time['type'] }}" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}" {% if config.myParcelDefaultDeliveryWindow == time['type'] %}checked="checked"{% endif %} />
                 <label for="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
                     {{ ("myparcel.delivery_type_" ~ time['price_comment']) |trans|sw_sanitize }}
                     <span class="cost">

@@ -61,7 +61,7 @@ console.log("MyParcel Cookie set");
             }
 
             /* Set delivery type */
-            const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type"][value="' + myparcel_delivery_type + '"]');
+            const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type_'+ myparcel_delivery_date +'"][value="' + myparcel_delivery_type + '"]');
             deliveryOptionType.checked = true;
 
 
