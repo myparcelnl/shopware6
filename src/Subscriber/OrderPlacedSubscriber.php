@@ -48,7 +48,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     private $shippingOptionsService;
 
-    /** @var SystemConfigService */
+    /**
+     * @var SystemConfigService
+     */
     private $configService;
 
     /**
@@ -72,7 +74,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
        $this->orderService = $orderService;
        $this->shippingMethodService = $shippingMethodService;
        $this->shippingOptionsService = $shippingOptionService;
-        $this->configService = $configService;
+       $this->configService = $configService;
     }
 
     /**
