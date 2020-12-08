@@ -323,9 +323,9 @@ class ShippingOptionEntity extends Entity //NOSONAR
     }
 
     /**
-     * @return date
+     * @return \DateTimeImmutable
      */
-    public function getDeliveryDate(): date
+    public function getDeliveryDate(): \DateTimeImmutable
     {
         return $this->deliveryDate;
     }
