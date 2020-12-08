@@ -141,7 +141,7 @@
             </options>
         </input-field>
 
-        <!--Choose default delivery window-->
+        <!--Choose default package type-->
         <input-field type="single-select">
             <name>myParcelDefaultPackageType</name>
             <label>Default package type</label>
@@ -170,6 +170,18 @@
                 </option>
             </options>
             <defaultValue>standard</defaultValue>
+        </input-field>
+
+        <input-field type="float">
+            <name>costsDelivery1</name>
+            <label>Morning delivery costs</label>
+            <label lang="nl-NL">Kosten ochtendbezorging</label>
+        </input-field>
+
+        <input-field type="float">
+            <name>costsDelivery3</name>
+            <label>Evening delivery costs</label>
+            <label lang="nl-NL">Kosten avondbezorging</label>
         </input-field>
 
         <!--Choose default carrier-->
