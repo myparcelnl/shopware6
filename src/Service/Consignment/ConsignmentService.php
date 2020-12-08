@@ -154,6 +154,26 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        if($shippingOptions->getDeliveryDate() !== null) {
+            $consignment->setDeliveryDate($shippingOptions->getDeliveryDate()->format('Y-m-d'));
+        }
+
+        if(
+            $shippingOptions->getDeliveryDate() !== null
+            && $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
+
+        if(
+            $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
 
         if (
             $shippingOptions->getPackageType() !== null
