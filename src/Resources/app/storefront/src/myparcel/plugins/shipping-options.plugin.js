@@ -34,8 +34,6 @@ export default class MyParcelShippingOptions extends Plugin {
             return false;
         }
 
-console.log("MyParcel Cookie set");
-
         const cookieSet = cookieMyParcel.split('_');
         const shippingMethodId  = cookieSet[0];
         const myparcel_delivery_date  = cookieSet[1];

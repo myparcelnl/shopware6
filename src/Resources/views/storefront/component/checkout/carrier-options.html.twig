@@ -15,10 +15,10 @@
                 <label for="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}">
                     {{ ("myparcel.delivery_type_" ~ time['type']) |trans|sw_sanitize }}
                     <span class="cost">
-                        {% if time['price']['amount'] > 0 %}
-                            {{ (time['price']['amount']/100)|format_currency('EUR') }}
+                        {% if attribute(config, "costsDelivery#{time['type']}") > 0 %}
+                            + {{ attribute(config, "costsDelivery#{time['type']}")|format_currency('EUR') }}
                         {% endif %}
-                    </span>
+                    </span> {#costsDelivery1#}
                 </label>
             </label>
         {% endfor %}

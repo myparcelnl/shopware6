@@ -90,6 +90,7 @@
         <!-- Event Subscribers -->
         <service id="Kiener\KienerMyParcel\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
