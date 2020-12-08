@@ -1,8 +1,8 @@
 {
     "myparcel": {
-        "delivery_type_morning": "Morning delivery",
-        "delivery_type_standard": "Standard delivery",
-        "delivery_type_evening": "Evening delivery",
+        "delivery_type_1": "Morning delivery",
+        "delivery_type_2": "Standard delivery",
+        "delivery_type_3": "Evening delivery",
         "delivery_signature": "Signature on delivery",
         "delivery_recipient": "Do not deliver to the neighbors"
     },
