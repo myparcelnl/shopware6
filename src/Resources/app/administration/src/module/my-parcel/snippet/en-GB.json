@@ -55,6 +55,7 @@
           "titleSingle": "Create a shipment",
           "titleMultiple": "Create shipments ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
+          "actionTypeCreateLabel": "Create label",
           "actionTypeCreateConsignment": "Create shipment",
           "packageTypePackageLabel": "Package",
           "packageTypeMailboxLabel": "Mailbox",
