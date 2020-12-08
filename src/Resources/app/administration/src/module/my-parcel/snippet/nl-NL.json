@@ -55,6 +55,7 @@
           "titleSingle": "Maak verzending aan",
           "titleMultiple": "Maak verzendingen aan ({numberOfItems} item(s))",
           "actionTypeDownloadLabel": "Download",
+          "actionTypeCreateLabel": "Maak label",
           "actionTypeCreateConsignment": "Maak zending",
           "packageTypePackageLabel": "Pakket",
           "packageTypeMailboxLabel": "Brievenbuspakket",
