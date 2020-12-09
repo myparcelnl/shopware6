@@ -132,50 +132,50 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 if (isset($params[self::PARAM_DELIVERY_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
                 }
 
                 if (isset($params[self::PARAM_DELIVERY_DATE])) {
                     $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
                 }else{
-                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));;
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = $this->configService->get('KienerMyParcel.config.myParcelDefaultAgeCheck');
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultAgeCheck');
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
                 }else{
-                    $options[ShippingOptionEntity::PARAM_REQUIRES_SIGNATURE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature');
+                    $options[ShippingOptionEntity::PARAM_REQUIRES_SIGNATURE] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultSignature');
                 }
 
                 if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
                     $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient');
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient');
                 }
 
                 if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
                     $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = $this->configService->get('KienerMyParcel.config.myParcelDefaultReturnNotHome');
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultReturnNotHome');
                 }
 
                 if (isset($params[self::PARAM_LARGE_FORMAT])) {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = $this->configService->get('KienerMyParcel.config.myParcelDefaultLargeFormat');
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultLargeFormat');
                 }
 
                 if (isset($params[self::PARAM_PACKAGE_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultPackageType');
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (int)$this->configService->get('KienerMyParcel.config.myParcelDefaultPackageType');
                 }
 
                 if (!empty($options)) {

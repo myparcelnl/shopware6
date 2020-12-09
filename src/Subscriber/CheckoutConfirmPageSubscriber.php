@@ -75,7 +75,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
         }else{
             $data['myparcel_values'] = [
                 'shippingMethodId' => $this->configService->get('KienerMyParcel.config.myParcelDefaultMethod'),
-                'deliveryDate'=> \date('Y-m-d'),
+                'deliveryDate'=> \date('Y-m-d', strtotime("+1 day")),
                 'deliveryType'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
                 'requiresSignature'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
                 'onlyRecipient'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
