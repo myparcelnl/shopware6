@@ -109,7 +109,7 @@ class ConsignmentService
     private function createConsignment(
         Context $context,
         OrderEntity $orderEntity,
-        int $packageType
+        ?int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -291,6 +291,8 @@ class ConsignmentService
      * @param array      $ordersData
      *
      * @param array|null $labelPositions
+     * @param int|null $packageType
+     * @param int|null $numberOfLabels
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
@@ -298,7 +300,9 @@ class ConsignmentService
     public function createConsignments( //NOSONAR
         Context $context,
         array $ordersData,
-        ?array $labelPositions
+        ?array $labelPositions,
+        ?int $packageType,
+        ?int $numberOfLabels
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
@@ -325,17 +329,6 @@ class ConsignmentService
             ]);
 
             if ($order !== null) {
-
-                $packageType = null;
-
-                if (
-                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderData)
-                    && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
-                ) {
-                    $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
-                }else{
-                    $packageType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultPackageType');
-                }
 
                 $consignment = $this->createConsignment($context, $order, $packageType);
 
