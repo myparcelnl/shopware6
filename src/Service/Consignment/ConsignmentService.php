@@ -101,7 +101,7 @@ class ConsignmentService
     /**
      * @param Context     $context
      * @param OrderEntity $orderEntity
-     * @param int         $packageType
+     * @param null|int         $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
@@ -183,6 +183,21 @@ class ConsignmentService
             $consignment->setPackageType($shippingOptions->getPackageType());
         }else if ($packageType) {
             $consignment->setPackageType($packageType);
+        }
+
+        if($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP){
+
+            $totalWeight = 0;
+            $lineItems = $orderEntity->getLineItems();
+            if($lineItems){
+                foreach($lineItems as $lineItem){
+                    $totalWeight += $lineItem->getProduct()->getWeight();
+                }
+                //Shopware uses KG for weight, MyParcel wants Grams
+                $totalWeight = $totalWeight * 1000;
+            }
+
+            $consignment->setTotalWeight($totalWeight);
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
@@ -326,6 +341,8 @@ class ConsignmentService
                 'deliveries',
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
+                'lineItems',
+                'lineItems.product'
             ]);
 
             if ($order !== null) {
