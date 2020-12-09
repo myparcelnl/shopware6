@@ -172,10 +172,50 @@
             <defaultValue>standard</defaultValue>
         </input-field>
 
+        <!--Choose default only house, no neighbours-->
+        <input-field type="single-select">
+            <name>myParcelShowWindowType1</name>
+            <label>Show morning delivery window</label>
+            <label lang="nl-NL">Toon ochtend levering</label>
+            <defaultValue>1</defaultValue>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>No</name>
+                    <name lang="nl-NL">Nee</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Yes</name>
+                    <name lang="nl-NL">Ja</name>
+                </option>
+            </options>
+        </input-field>
+
         <input-field type="float">
             <name>costsDelivery1</name>
             <label>Morning delivery costs</label>
             <label lang="nl-NL">Kosten ochtendbezorging</label>
+        </input-field>
+
+        <!--Choose default only house, no neighbours-->
+        <input-field type="single-select">
+            <name>myParcelShowWindowType3</name>
+            <label>Show evening delivery window</label>
+            <label lang="nl-NL">Toon avond levering</label>
+            <defaultValue>1</defaultValue>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>No</name>
+                    <name lang="nl-NL">Nee</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Yes</name>
+                    <name lang="nl-NL">Ja</name>
+                </option>
+            </options>
         </input-field>
 
         <input-field type="float">
