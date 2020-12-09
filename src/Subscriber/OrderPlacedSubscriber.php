@@ -138,33 +138,44 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 if (isset($params[self::PARAM_DELIVERY_DATE])) {
                     $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
+                }else{
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));;
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = $this->configService->get('KienerMyParcel.config.myParcelDefaultAgeCheck');
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
+                }else{
+                    $options[ShippingOptionEntity::PARAM_REQUIRES_SIGNATURE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature');
                 }
 
                 if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
                     $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient');
                 }
 
                 if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
                     $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = $this->configService->get('KienerMyParcel.config.myParcelDefaultReturnNotHome');
                 }
 
                 if (isset($params[self::PARAM_LARGE_FORMAT])) {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = $this->configService->get('KienerMyParcel.config.myParcelDefaultLargeFormat');
                 }
 
                 if (isset($params[self::PARAM_PACKAGE_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }else{
-                    //TODO get from config service
-                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = 1;//$this->configService->get('MolliePayments.config.testApiKey');
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultPackageType');
                 }
 
                 if (!empty($options)) {
