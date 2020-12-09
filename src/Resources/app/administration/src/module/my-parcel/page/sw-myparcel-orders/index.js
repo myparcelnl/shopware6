@@ -319,7 +319,8 @@ Component.register('sw-myparcel-orders', {
             this.MyParcelConsignmentService.createConsignments({
                 orders: orders,
                 label_positions: consignmentData.printSmallLabel === false ? consignmentData.printPosition : [],
-                package_type: consignmentData.packageType
+                number_of_labels: consignmentData.numberOfLabels === false ? 1 : consignmentData.numberOfLabels,
+                package_type: consignmentData.packageType,
             })
                 .then((response) => {
                     if (response.success === true) {

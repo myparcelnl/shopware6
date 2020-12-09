@@ -31,6 +31,8 @@ class ConsignmentController extends StorefrontController
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
+    private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
+    private const REQUEST_KEY_NUMBER_OF_LABELS = 'number_of_labels';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
     private const REQUEST_KEY_REFERENCE_ID = 'reference_id';
     private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
@@ -148,10 +150,28 @@ class ConsignmentController extends StorefrontController
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
         }
 
+        if (
+            $request->get(self::REQUEST_KEY_PACKAGE_TYPE) !== null
+            && is_array($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+            && !empty($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+        ) {
+            $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS) !== null
+            && is_array($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
+            && !empty($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
+        ) {
+            $numberOfLabels = $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS);
+        }
+
         $consignments = $this->consignmentService->createConsignments(
             $context,
             $request->get(self::REQUEST_KEY_ORDERS),
-            $labelPositions ?? null
+            $labelPositions ?? null,
+            $packageType ?? null,
+            $numberOfLabels ?? null
         );
 
         return new JsonResponse([

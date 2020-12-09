@@ -101,7 +101,7 @@ class ConsignmentService
     /**
      * @param Context     $context
      * @param OrderEntity $orderEntity
-     * @param int         $packageType
+     * @param null|int         $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
@@ -109,7 +109,7 @@ class ConsignmentService
     private function createConsignment(
         Context $context,
         OrderEntity $orderEntity,
-        int $packageType
+        ?int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -183,6 +183,21 @@ class ConsignmentService
             $consignment->setPackageType($shippingOptions->getPackageType());
         }else if ($packageType) {
             $consignment->setPackageType($packageType);
+        }
+
+        if($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP){
+
+            $totalWeight = 0;
+            $lineItems = $orderEntity->getLineItems();
+            if($lineItems){
+                foreach($lineItems as $lineItem){
+                    $totalWeight += $lineItem->getProduct()->getWeight();
+                }
+                //Shopware uses KG for weight, MyParcel wants Grams
+                $totalWeight = $totalWeight * 1000;
+            }
+
+            $consignment->setTotalWeight($totalWeight);
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
@@ -291,6 +306,8 @@ class ConsignmentService
      * @param array      $ordersData
      *
      * @param array|null $labelPositions
+     * @param int|null $packageType
+     * @param int|null $numberOfLabels
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
@@ -298,7 +315,9 @@ class ConsignmentService
     public function createConsignments( //NOSONAR
         Context $context,
         array $ordersData,
-        ?array $labelPositions
+        ?array $labelPositions,
+        ?int $packageType,
+        ?int $numberOfLabels
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
@@ -322,20 +341,11 @@ class ConsignmentService
                 'deliveries',
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
+                'lineItems',
+                'lineItems.product'
             ]);
 
             if ($order !== null) {
-
-                $packageType = null;
-
-                if (
-                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderData)
-                    && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
-                ) {
-                    $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
-                }else{
-                    $packageType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultPackageType');
-                }
 
                 $consignment = $this->createConsignment($context, $order, $packageType);
 
