@@ -44,8 +44,29 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CheckoutConfirmPageLoadedEvent::class => 'addMyParcelShippingMethodIdsToPage',
+            CheckoutConfirmPageLoadedEvent::class => 'addMyParcelDataToPage',
+            CheckoutConfirmPageLoadedEvent::class => 'updateShippingCosts',
         ];
+    }
+
+    /**
+     * Update the shipping costs displayed based on the MyParcel options selected
+     *
+     * @param PageLoadedEvent|CheckoutConfirmPageLoadedEvent $args
+     */
+    public function updateShippingCosts($args): void
+    {
+        //dd($args->getPage()->getCart());
+
+        //TODO check if the current selected option is a myparcel option
+
+        //TODO if myparcel option then get the cart -> deliveries
+
+        //TODO itterate trough the deliveries
+
+        //TODO get the current delivery price and add the amount that should be applied as raise through the setShippingCosts
+
+
     }
 
     /**
@@ -53,7 +74,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      *
      * @param PageLoadedEvent|CheckoutConfirmPageLoadedEvent $args
      */
-    public function addMyParcelShippingMethodIdsToPage($args): void
+    public function addMyParcelDataToPage($args): void
     {
 
         $data = [
