@@ -4,6 +4,10 @@ namespace Kiener\KienerMyParcel\Subscriber;
 
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
+use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
+use Shopware\Core\Framework\Api\Context\SystemSource;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\PageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,8 +48,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CheckoutConfirmPageLoadedEvent::class => 'addMyParcelDataToPage',
-            CheckoutConfirmPageLoadedEvent::class => 'updateShippingCosts',
+            CheckoutConfirmPageLoadedEvent::class => [
+                ['addMyParcelDataToPage', 500],
+                ['updateShippingCosts', -100],
+            ]
         ];
     }
 
@@ -56,16 +62,52 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function updateShippingCosts($args): void
     {
-        //dd($args->getPage()->getCart());
 
-        //TODO check if the current selected option is a myparcel option
+        //check if the current selected option is a myparcel option
+        $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
+            $args->getSalesChannelContext()->getShippingMethod()->getId(),
+            new Context(new SystemSource())
+        );
 
-        //TODO if myparcel option then get the cart -> deliveries
+        if($shippingMethod) {
+            foreach($args->getPage()->getCart()->getDeliveries() as $delivery){
+                $currentCosts = $delivery->getShippingCosts();
 
-        //TODO itterate trough the deliveries
+                if(isset($_COOKIE['myparcel-cookie-key'])){
+                    $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
 
-        //TODO get the current delivery price and add the amount that should be applied as raise through the setShippingCosts
+                    $deliveryType = $cookie_data[2];
+                }else{
+                    $deliveryType = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                }
 
+                $raise = '0';
+
+                if($deliveryType == '1') {
+                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery1');
+                }
+                if($deliveryType == '3') {
+                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery3');
+                }
+                if($deliveryType == '2'){
+                    continue;
+                }
+
+                $current = $currentCosts->getUnitPrice();
+
+                $new = (float)bcadd((string)$current, (string)$raise);
+
+                $newCalculatedPrice = new CalculatedPrice(
+                    $new,
+                    1,
+                    $currentCosts->getCalculatedTaxes(),
+                    $currentCosts->getTaxRules()
+                );
+
+                $delivery->setShippingCosts($newCalculatedPrice);
+
+            }
+        }
 
     }
 
