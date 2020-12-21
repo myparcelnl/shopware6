@@ -4,6 +4,10 @@ namespace Kiener\KienerMyParcel\Subscriber;
 
 use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
 use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
+use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
+use Shopware\Core\Framework\Api\Context\SystemSource;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\PageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -44,8 +48,67 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CheckoutConfirmPageLoadedEvent::class => 'addMyParcelShippingMethodIdsToPage',
+            CheckoutConfirmPageLoadedEvent::class => [
+                ['addMyParcelDataToPage', 500],
+                ['updateShippingCosts', -100],
+            ]
         ];
+    }
+
+    /**
+     * Update the shipping costs displayed based on the MyParcel options selected
+     *
+     * @param PageLoadedEvent|CheckoutConfirmPageLoadedEvent $args
+     */
+    public function updateShippingCosts($args): void
+    {
+
+        //check if the current selected option is a myparcel option
+        $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
+            $args->getSalesChannelContext()->getShippingMethod()->getId(),
+            new Context(new SystemSource())
+        );
+
+        if($shippingMethod) {
+            foreach($args->getPage()->getCart()->getDeliveries() as $delivery){
+                $currentCosts = $delivery->getShippingCosts();
+
+                if(isset($_COOKIE['myparcel-cookie-key'])){
+                    $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
+
+                    $deliveryType = $cookie_data[2];
+                }else{
+                    $deliveryType = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                }
+
+                $raise = '0';
+
+                if($deliveryType == '1') {
+                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery1');
+                }
+                if($deliveryType == '3') {
+                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery3');
+                }
+                if($deliveryType == '2'){
+                    continue;
+                }
+
+                $current = $currentCosts->getUnitPrice();
+
+                $new = (float)bcadd((string)$current, (string)$raise);
+
+                $newCalculatedPrice = new CalculatedPrice(
+                    $new,
+                    1,
+                    $currentCosts->getCalculatedTaxes(),
+                    $currentCosts->getTaxRules()
+                );
+
+                $delivery->setShippingCosts($newCalculatedPrice);
+
+            }
+        }
+
     }
 
     /**
@@ -53,7 +116,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      *
      * @param PageLoadedEvent|CheckoutConfirmPageLoadedEvent $args
      */
-    public function addMyParcelShippingMethodIdsToPage($args): void
+    public function addMyParcelDataToPage($args): void
     {
 
         $data = [

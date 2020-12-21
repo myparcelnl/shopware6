@@ -74,8 +74,8 @@ Component.register('sw-myparcel-consignments', {
             packageTypes: {
                 [PACKAGE_TYPE_PACKAGE_ID]: this.$tc(PACKAGE_TYPE_PACKAGE_SNIPPET),
                 [PACKAGE_TYPE_MAILBOX_ID]: this.$tc(PACKAGE_TYPE_MAILBOX_SNIPPET),
-                [PACKAGE_TYPE_LETTER_ID]: this.$tc(PACKAGE_TYPE_LETTER_SNIPPET),
-                [PACKAGE_TYPE_DIGITAL_STAMP_ID]: this.$tc(PACKAGE_TYPE_DIGITAL_STAMP_SNIPPET)
+                [PACKAGE_TYPE_LETTER_ID]: this.$tc(PACKAGE_TYPE_LETTER_SNIPPET)
+                //[PACKAGE_TYPE_DIGITAL_STAMP_ID]: this.$tc(PACKAGE_TYPE_DIGITAL_STAMP_SNIPPET)
             },
             deliveryTypes: {
                 [DELIVERY_TYPE_MORNING_ID]: this.$tc(DELIVERY_TYPE_MORNING_SNIPPET),

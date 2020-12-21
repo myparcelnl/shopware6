@@ -95,7 +95,7 @@ export default class MyParcelShippingOptions extends Plugin {
             const confirmOrderForm = document.querySelector(me.options.confirmOrderForm);
             const confirmShippingMethod = confirmOrderForm.querySelector('input[name="myparcel[shipping_method_id]"]');
             const confirmDeliveryDate = confirmOrderForm.querySelector('input[name="myparcel[delivery_date]"]');
-            const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type]"]');
+            const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type_'+ myparcel_delivery_date +']"]');
             const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
             const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
 

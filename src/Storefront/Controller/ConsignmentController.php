@@ -160,7 +160,6 @@ class ConsignmentController extends StorefrontController
 
         if (
             $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS) !== null
-            && is_array($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
             && !empty($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
         ) {
             $numberOfLabels = $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS);

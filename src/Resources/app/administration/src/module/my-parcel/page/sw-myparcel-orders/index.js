@@ -429,6 +429,7 @@ Component.register('sw-myparcel-orders', {
         onOpenCreateSingleConsignmentModal(item) {
             this.createSingleConsignment.item = item;
             this.selectedShippingOptionIds = [item.id];
+            this.createSingleConsignment.numberOfLabels = 1;
             this.createSingleConsignment.showModal = true;
         },
 

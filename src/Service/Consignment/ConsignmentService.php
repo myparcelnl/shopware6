@@ -346,19 +346,23 @@ class ConsignmentService
             ]);
 
             if ($order !== null) {
-
-                $consignment = $this->createConsignment($context, $order, $packageType);
-
-                if ($consignment !== null) {
-                    $consignments->addConsignment($consignment);
+                if(!$numberOfLabels || is_null($numberOfLabels)){
+                    $numberOfLabels = 1;
                 }
+                for($i = 1; $i <= $numberOfLabels; $i++) {
+                    $consignment = $this->createConsignment($context, $order, $packageType);
 
-                $shipmentData[] = [
-                    'context' => $context,
-                    'order' => $order,
-                    'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
-                    'referenceId' => $consignment->getReferenceId(),
-                ];
+                    if ($consignment !== null) {
+                        $consignments->addConsignment($consignment);
+                    }
+
+                    $shipmentData[] = [
+                        'context' => $context,
+                        'order' => $order,
+                        'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
+                        'referenceId' => $consignment->getReferenceId(),
+                    ];
+                }
             }
         }
 
@@ -392,7 +396,7 @@ class ConsignmentService
                 if ($consignment !== null) {
                     $createdShipment = $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
                     $shipments[] = $createdShipment;
-                }
+            }
             }
         }
 
