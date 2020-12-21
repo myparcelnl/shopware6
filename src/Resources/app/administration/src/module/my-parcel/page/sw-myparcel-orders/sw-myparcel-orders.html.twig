@@ -32,9 +32,7 @@
                         :sortDirection="sortDirection"
                         :isLoading="isLoading"
                         :allowColumnEdit="false"
-                        identifier="sw-myparcel-orders-list"
-                        @column-sort="onSortColumn"
-                        @selection-change="onSelectionChanged">
+                        identifier="sw-myparcel-orders-list">
 
                     <template #column-order.orderNumber="{ item }">
                         <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">{{ item.order.orderNumber }}</router-link>
@@ -101,15 +99,15 @@
                         </sw-context-menu-item>
                     </template>
 
-                    <template slot="pagination">
-                        <sw-pagination
-                                :page="page"
-                                :limit="limit"
-                                :total="total"
-                                :total-visible="25"
-                                @page-change="onPageChange"
-                                :steps="[25]">
-                        </sw-pagination>
+                    <template #pagination>
+                        {% block sw_order_list_grid_pagination %}
+                            <sw-pagination :page="page"
+                                           :limit="limit"
+                                           :total="total"
+                                           :total-visible="7"
+                                           @page-change="onPageChange">
+                            </sw-pagination>
+                        {% endblock %}
                     </template>
 
                 </sw-data-grid>

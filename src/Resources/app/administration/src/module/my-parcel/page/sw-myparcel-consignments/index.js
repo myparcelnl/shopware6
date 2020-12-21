@@ -87,7 +87,10 @@ Component.register('sw-myparcel-consignments', {
                 [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
                 [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
                 [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET)
-            }
+            },
+            page: 1,
+            total: 0,
+            limit: 25
         };
     },
 
@@ -101,6 +104,14 @@ Component.register('sw-myparcel-consignments', {
         if (!!this.$route.params.orderId) {
             this.orderIdFilter.push(this.$route.params.orderId);
         }
+
+        const criteria = new Criteria(this.page, this.limit);
+
+        criteria.addAggregation(Criteria.count('countTotal', 'id'));
+
+        this.consignmentRepository.search(criteria, Shopware.Context.api).then((response) => {
+            this.total = response.aggregations.countTotal.count;
+        });
 
         this.getList();
     },
@@ -258,7 +269,6 @@ Component.register('sw-myparcel-consignments', {
             this.isLoading = true;
 
             return this.consignmentRepository.search(this.consignmentCriteria, Shopware.Context.api).then((response) => {
-                this.total = response.total;
                 this.consignments = response;
                 this.isLoading = false;
 
@@ -348,6 +358,14 @@ Component.register('sw-myparcel-consignments', {
                     this.createLabels(data);
                 }
             }
+        },
+
+        onPageChange({ page = 1, limit = 25 }) {
+            this.page = page;
+            this.limit = limit;
+            this.isLoading = true;
+
+            this.getList();
         },
     }
 });

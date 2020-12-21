@@ -85,6 +85,9 @@ Component.register('sw-myparcel-orders', {
                 [DELIVERY_TYPE_EVENING_ID]: this.$tc(DELIVERY_TYPE_EVENING_SNIPPET),
                 [DELIVERY_TYPE_PICKUP_ID]: this.$tc(DELIVERY_TYPE_PICKUP_SNIPPET)
             },
+            page: 1,
+            total: 0,
+            limit: 25
         };
     },
 
@@ -92,6 +95,16 @@ Component.register('sw-myparcel-orders', {
         return {
             title: this.$createTitle()
         };
+    },
+
+    mounted(){
+        const criteria = new Criteria(this.page, this.limit);
+
+        criteria.addAggregation(Criteria.count('countTotal', 'id'));
+
+        this.shippingOptionRepository.search(criteria, Shopware.Context.api).then((response) => {
+            this.total = response.aggregations.countTotal.count;
+        });
     },
 
     computed: {
@@ -377,11 +390,9 @@ Component.register('sw-myparcel-orders', {
                     }
                 });
 
-                //this.shippingOptions = response;
                 this.isLoading = false;
 
                 if (!!this.shippingOptions) {
-                    this.total = this.shippingOptions.length;
                     this.shippingOptions.forEach(item => this.getNumberOfConsignments(item.id));
                 }
 
@@ -465,6 +476,14 @@ Component.register('sw-myparcel-orders', {
 
         onCreateMultipleConsignments() {
             this.saveMultipleConsignments(this.createMultipleConsignments);
+        },
+
+        onPageChange({ page = 1, limit = 25 }) {
+            this.page = page;
+            this.limit = limit;
+            this.isLoading = true;
+
+            this.getList();
         },
     }
 });
