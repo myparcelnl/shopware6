@@ -72,6 +72,7 @@
         <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <!-- Entities -->
@@ -91,6 +92,7 @@
         <service id="Kiener\KienerMyParcel\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 

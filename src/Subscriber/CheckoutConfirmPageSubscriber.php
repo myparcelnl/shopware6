@@ -8,6 +8,7 @@ use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\PageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,18 +27,26 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     private $configService;
 
     /**
+     * @var CartService
+     */
+    private $cartService;
+
+    /**
      * Creates a new instance of the checkout confirm page subscriber.
      *
      * @param ShippingMethodService $shippingMethodService
      * @param SystemConfigService       $configService
+     * @param CartService       $cartService
      */
     public function __construct(
         ShippingMethodService $shippingMethodService,
-        SystemConfigService $configService
+        SystemConfigService $configService,
+        CartService $cartService
     )
     {
         $this->shippingMethodService = $shippingMethodService;
         $this->configService = $configService;
+        $this->cartService = $cartService;
     }
 
     /**
@@ -49,8 +58,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     {
         return [
             CheckoutConfirmPageLoadedEvent::class => [
-                ['addMyParcelDataToPage', 500],
-                ['updateShippingCosts', -100],
+                ['addMyParcelDataToPage', 500]
             ]
         ];
     }
@@ -62,15 +70,15 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function updateShippingCosts($args): void
     {
-
         //check if the current selected option is a myparcel option
         $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
             $args->getSalesChannelContext()->getShippingMethod()->getId(),
             new Context(new SystemSource())
         );
-
+//dd($args->getPage()->getCart()->getDeliveries());
         if($shippingMethod) {
-            foreach($args->getPage()->getCart()->getDeliveries() as $delivery){
+            $cart = $args->getPage()->getCart();
+            foreach($cart->getDeliveries() as $delivery){
                 $currentCosts = $delivery->getShippingCosts();
 
                 if(isset($_COOKIE['myparcel-cookie-key'])){
@@ -99,7 +107,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
                 $newCalculatedPrice = new CalculatedPrice(
                     $new,
-                    1,
+                    $new,
                     $currentCosts->getCalculatedTaxes(),
                     $currentCosts->getTaxRules()
                 );
@@ -107,6 +115,12 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
                 $delivery->setShippingCosts($newCalculatedPrice);
 
             }
+
+            //dump($args->getPage()->getCart());
+
+           $cart = $this->cartService->recalculate($cart, $args->getSalesChannelContext());
+
+            //dd($cart);
         }
 
     }
