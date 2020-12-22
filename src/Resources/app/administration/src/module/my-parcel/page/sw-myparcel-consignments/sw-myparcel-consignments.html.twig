@@ -60,6 +60,10 @@
                 {{ packageTypes[item.shippingOption.packageType] }}
             </template>
 
+            <template #column-shippingOption.deliveryDate="{ item }">
+                {{ item.shippingOption.deliveryDate | date() }}
+            </template>
+
             <template #column-shippingOption.carrierId="{ item }">
                 {{ carriers[item.shippingOption.carrierId] }}
             </template>

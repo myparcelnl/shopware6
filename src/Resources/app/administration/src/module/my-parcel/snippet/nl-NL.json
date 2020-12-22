@@ -39,6 +39,7 @@
       "statusColumn": "Status",
       "actionsColumn": "Acties",
       "packageTypeColumn": "Type pakket",
+      "deliveryDateColumn": "Bezorgdatum",
       "carrierColumn": "Carrier",
       "deliveryTypeColumn": "Verzendtype",
       "requiresAgeCheckColumn": "Controle leeftijd 18+",

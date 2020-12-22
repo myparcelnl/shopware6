@@ -175,6 +175,10 @@ Component.register('sw-myparcel-consignments', {
                 property: 'shippingOption.packageType',
                 label: 'sw-myparcel.columns.packageTypeColumn',
                 allowResize: true
+            },{
+                property: 'shippingOption.deliveryDate',
+                label: 'sw-myparcel.columns.deliveryDateColumn',
+                allowResize: true
             }, {
                 property: 'shippingOption.carrierId',
                 label: 'sw-myparcel.columns.carrierColumn',
