@@ -236,7 +236,6 @@ Component.register('sw-myparcel-orders', {
                                     length = length + 1;
                                 }
                             }
-
                             gridItem.innerHTML = length.toString();
                         }
                     });

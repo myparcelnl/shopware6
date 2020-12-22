@@ -87,6 +87,7 @@
                     </template>
 
                     <template #column-numberOfConsignments="{ item }">
+                        {{ getNumberOfConsignments(item.id) }}
                         <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
                     </template>
 
