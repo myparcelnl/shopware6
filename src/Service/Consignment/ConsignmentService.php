@@ -155,7 +155,14 @@ class ConsignmentService
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
         if($shippingOptions->getDeliveryDate() !== null) {
-            $consignment->setDeliveryDate($shippingOptions->getDeliveryDate()->format('Y-m-d'));
+
+            $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
+
+            if(strtotime($shippingDate) <= strtotime("today")){
+                $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
+            }
+
+            $consignment->setDeliveryDate($shippingDate);
         }
 
         if(
