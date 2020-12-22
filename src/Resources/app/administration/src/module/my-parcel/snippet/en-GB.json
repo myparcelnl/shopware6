@@ -39,6 +39,7 @@
       "statusColumn": "Status",
       "actionsColumn": "Actions",
       "packageTypeColumn": "Package type",
+      "deliveryDateColumn": "Delivery date",
       "carrierColumn": "Carrier",
       "deliveryTypeColumn": "Delivery type",
       "requiresAgeCheckColumn": "Requires age check",

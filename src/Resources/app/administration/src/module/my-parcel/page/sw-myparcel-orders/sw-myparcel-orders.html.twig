@@ -74,6 +74,10 @@
                         </sw-label>
                     </template>
 
+                    <template #column-deliveryDate="{ item }">
+                        {{ item.deliveryDate | date() }}
+                    </template>
+
                     <template #column-carrierId="{ item }">
                         {{ carriers[item.carrierId] }}
                     </template>

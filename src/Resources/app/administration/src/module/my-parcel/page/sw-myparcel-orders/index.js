@@ -183,6 +183,10 @@ Component.register('sw-myparcel-orders', {
                 label: 'sw-order.list.columnDeliveryState',
                 allowResize: true
             }, {
+                property: 'deliveryDate',
+                label: 'sw-myparcel.columns.deliveryDateColumn',
+                allowResize: true
+            },{
                 property: 'carrierId',
                 label: 'sw-myparcel.columns.carrierColumn',
                 allowResize: true
