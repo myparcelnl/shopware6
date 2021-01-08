@@ -154,9 +154,9 @@ class ShippingOptionsService
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getShippingOptionsRaisePrice(): int
+    public function getShippingOptionsRaisePrice(): float
     {
         if(isset($_COOKIE['myparcel-cookie-key'])){
             $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);

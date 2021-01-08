@@ -17,6 +17,7 @@ use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConsignmentController extends StorefrontController
 {
@@ -55,18 +56,26 @@ class ConsignmentController extends StorefrontController
     private $shipmentService;
 
     /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
+
+    /**
      * ConsignmentController constructor.
      *
      * @param ConsignmentService $consignmentService
      * @param ShipmentService    $shipmentService
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
         ConsignmentService $consignmentService,
-        ShipmentService $shipmentService
+        ShipmentService $shipmentService,
+        SystemConfigService $systemConfigService
     )
     {
         $this->consignmentService = $consignmentService;
         $this->shipmentService = $shipmentService;
+        $this->systemConfigService = $systemConfigService;
     }
 
     /**
@@ -148,6 +157,12 @@ class ConsignmentController extends StorefrontController
             && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
+        }else{
+            if($this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultLabelFormat') == 'A6'){
+                $labelPositions = false;
+            }else{
+                $labelPositions = 1;
+            }
         }
 
         if (

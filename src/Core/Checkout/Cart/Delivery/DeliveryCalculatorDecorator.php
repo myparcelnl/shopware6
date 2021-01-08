@@ -221,7 +221,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         if($shippingMethod) {
             $raise = $this->shippingOptionsService->getShippingOptionsRaisePrice();
-
             $price += $raise;
         }
 
