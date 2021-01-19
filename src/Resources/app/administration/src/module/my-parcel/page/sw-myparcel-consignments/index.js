@@ -43,6 +43,7 @@ Component.register('sw-myparcel-consignments', {
     inject: [
         'repositoryFactory',
         'MyParcelConsignmentService',
+        'systemConfigApiService'
     ],
 
     data() {
@@ -92,6 +93,10 @@ Component.register('sw-myparcel-consignments', {
             total: 0,
             limit: 25
         };
+    },
+
+    created(){
+        this.setDefaultLabelSize();
     },
 
     metaInfo() {
@@ -215,6 +220,17 @@ Component.register('sw-myparcel-consignments', {
             }];
         },
 
+        setDefaultLabelSize(){
+            this.systemConfigApiService
+                .getValues('KienerMyParcel.config')
+                .then(response => {
+                    if(response['KienerMyParcel.config.myParcelDefaultLabelFormat'] == 'A6') {
+                        this.createSingleLabel.printSmallLabel = true;
+                        this.createMultipleLabels.printSmallLabel = true;
+                    }
+                });
+        },
+
         closeModals() {
             this.closeCreateSingleLabelModal();
             this.closeCreateMultipleLabelsModal();
@@ -313,6 +329,7 @@ Component.register('sw-myparcel-consignments', {
         },
 
         onOpenCreateSingleLabelModal(item) {
+            //KienerMyParcel.config.myParcelDefaultLabelFormat
             this.createSingleLabel.item = item;
             this.openCreateSingleLabelModal();
         },

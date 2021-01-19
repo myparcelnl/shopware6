@@ -38,7 +38,8 @@ Component.register('sw-myparcel-orders', {
     inject: [
         'repositoryFactory',
         'stateStyleDataProviderService',
-        'MyParcelConsignmentService'
+        'MyParcelConsignmentService',
+        'systemConfigApiService'
     ],
 
     data() {
@@ -89,6 +90,10 @@ Component.register('sw-myparcel-orders', {
             total: 0,
             limit: 25
         };
+    },
+
+    created(){
+        this.setDefaultLabelSize();
     },
 
     metaInfo() {
@@ -215,6 +220,17 @@ Component.register('sw-myparcel-orders', {
                 allowResize: true,
                 visible: false
             }];
+        },
+
+        setDefaultLabelSize(){
+            this.systemConfigApiService
+                .getValues('KienerMyParcel.config')
+                .then(response => {
+                    if(response['KienerMyParcel.config.myParcelDefaultLabelFormat'] == 'A6') {
+                        this.createSingleConsignment.printSmallLabel = true;
+                        this.createMultipleConsignments.printSmallLabel = true;
+                    }
+                });
         },
 
         getNumberOfConsignments(shippingOptionId) {
