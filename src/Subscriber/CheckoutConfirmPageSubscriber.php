@@ -75,7 +75,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             $args->getSalesChannelContext()->getShippingMethod()->getId(),
             new Context(new SystemSource())
         );
-//dd($args->getPage()->getCart()->getDeliveries());
+        
         if($shippingMethod) {
             $cart = $args->getPage()->getCart();
             foreach($cart->getDeliveries() as $delivery){
@@ -116,11 +116,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
             }
 
-            //dump($args->getPage()->getCart());
-
            $cart = $this->cartService->recalculate($cart, $args->getSalesChannelContext());
-
-            //dd($cart);
         }
 
     }
@@ -139,7 +135,12 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             ),
         ];
 
-        if(isset($_COOKIE['myparcel-cookie-key'])){
+        $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
+            $args->getSalesChannelContext()->getShippingMethod()->getId(),
+            new Context(new SystemSource())
+        );
+
+        if(isset($_COOKIE['myparcel-cookie-key']) && $shippingMethod){
             $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
 
             $data['myparcel_values'] = [
@@ -150,13 +151,23 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
                 'onlyRecipient'=> $cookie_data[4]
             ];
         }else{
-            $data['myparcel_values'] = [
-                'shippingMethodId' => $this->configService->get('KienerMyParcel.config.myParcelDefaultMethod'),
-                'deliveryDate'=> \date('Y-m-d', strtotime("+1 day")),
-                'deliveryType'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
-                'requiresSignature'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
-                'onlyRecipient'=> $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
-            ];
+            if($shippingMethod){
+                $data['myparcel_values'] = [
+                    'shippingMethodId' => $args->getSalesChannelContext()->getShippingMethod()->getId(),
+                    'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
+                    'deliveryType' => $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
+                    'requiresSignature' => $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
+                    'onlyRecipient' => $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
+                ];
+            }else {
+                $data['myparcel_values'] = [
+                    'shippingMethodId' => $this->configService->get('KienerMyParcel.config.myParcelDefaultMethod'),
+                    'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
+                    'deliveryType' => $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
+                    'requiresSignature' => $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
+                    'onlyRecipient' => $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
+                ];
+            }
         }
         $args->getPage()->assign($data);
     }

@@ -135,8 +135,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
                 }
 
-                if (isset($params[self::PARAM_DELIVERY_DATE])) {
+                if (isset($params[self::PARAM_DELIVERY_DATE]) && !empty($params[self::PARAM_DELIVERY_DATE])) {
                     $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
+                    if(!$strTime){
+                        $strTime = strtotime("+1 day");
+                    }
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
                 }else{
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));
