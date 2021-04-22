@@ -51,19 +51,23 @@ class ConsignmentService
     /** @var SystemConfigService */
     private $systemConfigService;
 
+    private $shopwareVersion;
+
     /**
      * ConsignmentService constructor.
      *
-     * @param OrderService           $orderService
+     * @param OrderService $orderService
      * @param ShippingOptionsService $shippingOptionsService
-     * @param ShipmentService        $shipmentService
-     * @param SystemConfigService    $systemConfigService
+     * @param ShipmentService $shipmentService
+     * @param SystemConfigService $systemConfigService
+     * @param $shopwareVersion
      */
     public function __construct(
         OrderService $orderService,
         ShippingOptionsService $shippingOptionsService,
         ShipmentService $shipmentService,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        $shopwareVersion
     )
     {
         $this->orderService = $orderService;
@@ -71,6 +75,7 @@ class ConsignmentService
         $this->shipmentService = $shipmentService;
         $this->systemConfigService = $systemConfigService;
         $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
+        $this->shopwareVersion = $shopwareVersion;
     }
 
     /**
@@ -330,6 +335,8 @@ class ConsignmentService
         $consignments = (new MyParcelCollection());
         $shipmentData = [];
         $shipments = [];
+
+        $consignments->setUserAgent('Shopware', $this->shopwareVersion);
 
         /** @var OrderEntity $order */
         foreach ($ordersData as $orderData) {

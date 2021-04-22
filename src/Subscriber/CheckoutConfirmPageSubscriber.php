@@ -75,7 +75,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             $args->getSalesChannelContext()->getShippingMethod()->getId(),
             new Context(new SystemSource())
         );
-//dd($args->getPage()->getCart()->getDeliveries());
+
         if($shippingMethod) {
             $cart = $args->getPage()->getCart();
             foreach($cart->getDeliveries() as $delivery){
@@ -116,11 +116,8 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
             }
 
-            //dump($args->getPage()->getCart());
-
            $cart = $this->cartService->recalculate($cart, $args->getSalesChannelContext());
 
-            //dd($cart);
         }
 
     }

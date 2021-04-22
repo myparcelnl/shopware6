@@ -48,6 +48,7 @@
             <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument>%kernel.shopware_version%</argument>
         </service>
 
         <service id="Kiener\KienerMyParcel\Service\Order\OrderService" public="true">
