@@ -1,7 +1,6 @@
 import './page/sw-myparcel-orders';
 import './page/sw-myparcel-consignments';
 import './page/sw-myparcel-shipping-methods';
-import './extension/sw-settings-index';
 
 import nlNL from './snippet/nl-NL.json';
 import deDE from './snippet/de-DE.json';

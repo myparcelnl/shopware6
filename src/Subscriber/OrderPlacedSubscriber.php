@@ -10,6 +10,7 @@ use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -17,7 +18,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class OrderPlacedSubscriber implements EventSubscriberInterface
 {
     private const PARAM_MY_PARCEL = 'my_parcel';
+    private const PARAM_DELIVERY_DATE = 'delivery_date';
     private const PARAM_DELIVERY_TYPE = 'delivery_type';
+    private const PARAM_PACKAGE_TYPE = 'package_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
     private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
     private const PARAM_ONLY_RECIPIENT = 'only_recipient';
@@ -46,24 +49,32 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private $shippingOptionsService;
 
     /**
+     * @var SystemConfigService
+     */
+    private $configService;
+
+    /**
      * Creates a new instance of the order placed subscriber.
      *
      * @param RequestStack              $requestStack
      * @param OrderService              $orderService
      * @param ShippingMethodService     $shippingMethodService
      * @param ShippingOptionsService    $shippingOptionService
+     * @param SystemConfigService       $configService
      */
     public function __construct(
         RequestStack $requestStack,
         OrderService $orderService,
         ShippingMethodService $shippingMethodService,
-        ShippingOptionsService $shippingOptionService
+        ShippingOptionsService $shippingOptionService,
+        SystemConfigService $configService
     )
     {
        $this->requestStack = $requestStack;
        $this->orderService = $orderService;
        $this->shippingMethodService = $shippingMethodService;
        $this->shippingOptionsService = $shippingOptionService;
+       $this->configService = $configService;
     }
 
     /**
@@ -104,30 +115,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
         // Add the options from the checkout to the array of options
         if (is_array($params) && !empty($params)) {
-            if (isset($params[self::PARAM_DELIVERY_TYPE])) {
-                $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int) $params[self::PARAM_DELIVERY_TYPE];
-            }
 
-            if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
-                $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool) $params[self::PARAM_REQUIRES_AGE_CHECK];
-            }
-
-            if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
-                $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool) $params[self::PARAM_REQUIRES_SIGNATURE];
-            }
-
-            if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
-                $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool) $params[self::PARAM_ONLY_RECIPIENT];
-            }
-
-            if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
-                $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool) $params[self::PARAM_RETURN_IF_NOT_HOME];
-            }
-
-            if (isset($params[self::PARAM_LARGE_FORMAT])) {
-                $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool) $params[self::PARAM_LARGE_FORMAT];
-            }
-
+            // Check if we have a MyParcel shippingMethod
             if (
                 isset($params[self::PARAM_SHIPPING_METHOD_ID])
                 && strlen($params[self::PARAM_SHIPPING_METHOD_ID]) >= 32
@@ -137,32 +126,86 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                     new Context(new SystemSource())
                 );
             }
-        }
 
-        if (
-            !empty($options)
-            && $shippingMethod !== null
-        ) {
-            // Add the order to the shipping options
-            $options[ShippingOptionEntity::FIELD_ORDER] = [
-                'id' => $event->getOrder()->getId(),
-                'versionId' => $event->getOrder()->getVersionId(),
-            ];
+            if ($shippingMethod !== null) {
 
-            // Add the carrier id to the shipping options
-            $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
+                if (isset($params[self::PARAM_DELIVERY_TYPE])) {
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                }
 
-            // Store shipping options in the database
-            $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+                if (isset($params[self::PARAM_DELIVERY_DATE]) && !empty($params[self::PARAM_DELIVERY_DATE])) {
+                    $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
+                    if(!$strTime){
+                        $strTime = strtotime("+1 day");
+                    }
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
+                }else{
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));
+                }
 
-            // Update custom fields on the order
-            $this->orderService->createOrUpdateOrder([
-                'id' => $event->getOrder()->getId(),
-                'versionId' => $event->getOrder()->getVersionId(),
-                'customFields' => [
-                    self::PARAM_MY_PARCEL => $options,
-                ]
-            ], $event->getContext());
+                if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultAgeCheck');
+                }
+
+                if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
+                }else{
+                    $options[ShippingOptionEntity::PARAM_REQUIRES_SIGNATURE] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultSignature');
+                }
+
+                if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient');
+                }
+
+                if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultReturnNotHome');
+                }
+
+                if (isset($params[self::PARAM_LARGE_FORMAT])) {
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$this->configService->get('KienerMyParcel.config.myParcelDefaultLargeFormat');
+                }
+
+                if (isset($params[self::PARAM_PACKAGE_TYPE])) {
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (int)$this->configService->get('KienerMyParcel.config.myParcelDefaultPackageType');
+                }
+
+                if (!empty($options)) {
+                    // Add the order to the shipping options
+                    $options[ShippingOptionEntity::FIELD_ORDER] = [
+                        'id' => $event->getOrder()->getId(),
+                        'versionId' => $event->getOrder()->getVersionId(),
+                    ];
+
+                    // Add the carrier id to the shipping options
+                    $options[ShippingOptionEntity::FIELD_CARRIER_ID] = $shippingMethod->getCarrierId();
+
+                    // Store shipping options in the database
+                    $this->shippingOptionsService->createOrUpdateShippingOptions($options, new Context(new SystemSource()));
+
+                    // Update custom fields on the order
+                    $this->orderService->createOrUpdateOrder([
+                        'id' => $event->getOrder()->getId(),
+                        'versionId' => $event->getOrder()->getVersionId(),
+                        'customFields' => [
+                            self::PARAM_MY_PARCEL => json_encode($options),
+                        ]
+                    ], $event->getContext());
+
+                    setcookie("myparcel-cookie-key", '', 600, '/');
+                }
+            }
         }
     }
 }

@@ -3,8 +3,6 @@
 namespace Kiener\KienerMyParcel\Service\ShippingOptions;
 
 use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
-use Kiener\KienerMyParcel\Service\Settings\SettingsService;
-use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
@@ -13,11 +11,15 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ShippingOptionsService
 {
     private const FIELD_NAME = 'name';
     private const FIELD_COSTS = 'costs';
+    private const MORNING_TYPE = '1';
+    private const STANDARD_TYPE = '2';
+    private const EVENING_TYPE = '3';
 
     /**
      * @var LoggerInterface
@@ -30,27 +32,26 @@ class ShippingOptionsService
     private $shippingOptionsRepository;
 
     /**
-     * @var MyParcelSettingStruct
+     * @var SystemConfigService
      */
-    private $settings;
-
+    private $systemConfigService;
 
     /**
      * ShippingOptionsService constructor.
      *
      * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shippingOptionsRepository
-     * @param SettingsService           $settingsService
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
         LoggerInterface $logger,
         EntityRepositoryInterface $shippingOptionsRepository,
-        SettingsService $settingsService
+        SystemConfigService $systemConfigService
     )
     {
         $this->logger = $logger;
         $this->shippingOptionsRepository = $shippingOptionsRepository;
-        $this->settings = $settingsService->getSettings();
+        $this->systemConfigService = $systemConfigService;
     }
 
     /**
@@ -92,7 +93,7 @@ class ShippingOptionsService
     {
         $criteria = new Criteria([$id]);
         $criteria->addAssociation('order');
-        $criteria->addAssociation('consignments');
+        //$criteria->addAssociation('consignments');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->get($id);
     }
@@ -135,7 +136,7 @@ class ShippingOptionsService
         return [
             AbstractConsignment::DELIVERY_TYPE_MORNING => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
-                self::FIELD_COSTS => $this->settings->getCostsDeliveryMorning(),
+                self::FIELD_COSTS => 0,
             ],
             AbstractConsignment::DELIVERY_TYPE_STANDARD => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
@@ -143,12 +144,37 @@ class ShippingOptionsService
             ],
             AbstractConsignment::DELIVERY_TYPE_EVENING => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
-                self::FIELD_COSTS => $this->settings->getCostsDeliveryEvening(),
+                self::FIELD_COSTS => 0,
             ],
             AbstractConsignment::DELIVERY_TYPE_PICKUP => [
                 self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
                 self::FIELD_COSTS => 0,
             ],
         ];
+    }
+
+    /**
+     * @return float
+     */
+    public function getShippingOptionsRaisePrice(): float
+    {
+        if(isset($_COOKIE['myparcel-cookie-key'])){
+            $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
+
+            $deliveryType = $cookie_data[2];
+        }else{
+            $deliveryType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+        }
+
+        $raise = 0;
+
+        if($deliveryType == self::MORNING_TYPE) {
+            $raise = $this->systemConfigService->get('KienerMyParcel.config.costsDelivery1');
+        }
+        if($deliveryType == self::EVENING_TYPE) {
+            $raise = $this->systemConfigService->get('KienerMyParcel.config.costsDelivery3');
+        }
+
+        return $raise;
     }
 }

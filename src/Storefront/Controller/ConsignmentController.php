@@ -17,6 +17,7 @@ use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConsignmentController extends StorefrontController
 {
@@ -31,6 +32,8 @@ class ConsignmentController extends StorefrontController
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
+    private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
+    private const REQUEST_KEY_NUMBER_OF_LABELS = 'number_of_labels';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
     private const REQUEST_KEY_REFERENCE_ID = 'reference_id';
     private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
@@ -53,18 +56,26 @@ class ConsignmentController extends StorefrontController
     private $shipmentService;
 
     /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
+
+    /**
      * ConsignmentController constructor.
      *
      * @param ConsignmentService $consignmentService
      * @param ShipmentService    $shipmentService
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
         ConsignmentService $consignmentService,
-        ShipmentService $shipmentService
+        ShipmentService $shipmentService,
+        SystemConfigService $systemConfigService
     )
     {
         $this->consignmentService = $consignmentService;
         $this->shipmentService = $shipmentService;
+        $this->systemConfigService = $systemConfigService;
     }
 
     /**
@@ -146,12 +157,35 @@ class ConsignmentController extends StorefrontController
             && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
+        }else{
+            if($this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultLabelFormat') == 'A6'){
+                $labelPositions = null;
+            }else{
+                $labelPositions = 1;
+            }
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_PACKAGE_TYPE) !== null
+            && is_array($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+            && !empty($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+        ) {
+            $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS) !== null
+            && !empty($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
+        ) {
+            $numberOfLabels = $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS);
         }
 
         $consignments = $this->consignmentService->createConsignments(
             $context,
             $request->get(self::REQUEST_KEY_ORDERS),
-            $labelPositions ?? null
+            $labelPositions ?? null,
+            $packageType ?? null,
+            $numberOfLabels ?? null
         );
 
         return new JsonResponse([

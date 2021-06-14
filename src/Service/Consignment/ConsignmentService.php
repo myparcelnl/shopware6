@@ -48,26 +48,34 @@ class ConsignmentService
      */
     private $apiKey;
 
+    /** @var SystemConfigService */
+    private $systemConfigService;
+
+    private $shopwareVersion;
+
     /**
      * ConsignmentService constructor.
      *
-     * @param OrderService           $orderService
+     * @param OrderService $orderService
      * @param ShippingOptionsService $shippingOptionsService
-     * @param ShipmentService        $shipmentService
-     * @param SystemConfigService    $systemConfigService
+     * @param ShipmentService $shipmentService
+     * @param SystemConfigService $systemConfigService
+     * @param $shopwareVersion
      */
     public function __construct(
         OrderService $orderService,
         ShippingOptionsService $shippingOptionsService,
         ShipmentService $shipmentService,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        $shopwareVersion
     )
     {
         $this->orderService = $orderService;
         $this->shippingOptionsService = $shippingOptionsService;
         $this->shipmentService = $shipmentService;
-
+        $this->systemConfigService = $systemConfigService;
         $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
+        $this->shopwareVersion = $shopwareVersion;
     }
 
     /**
@@ -98,7 +106,7 @@ class ConsignmentService
     /**
      * @param Context     $context
      * @param OrderEntity $orderEntity
-     * @param int         $packageType
+     * @param null|int         $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
@@ -106,7 +114,7 @@ class ConsignmentService
     private function createConsignment(
         Context $context,
         OrderEntity $orderEntity,
-        int $packageType
+        ?int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -151,6 +159,33 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        if($shippingOptions->getDeliveryDate() !== null) {
+
+            $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
+
+            if(strtotime($shippingDate) <= strtotime("today")){
+                $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
+            }
+
+            $consignment->setDeliveryDate($shippingDate);
+        }
+
+        if(
+            $shippingOptions->getDeliveryDate() !== null
+            && $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
+
+        if(
+            $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
 
         if (
             $shippingOptions->getPackageType() !== null
@@ -158,6 +193,23 @@ class ConsignmentService
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());
+        }else if ($packageType) {
+            $consignment->setPackageType($packageType);
+        }
+
+        if($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP){
+
+            $totalWeight = 0;
+            $lineItems = $orderEntity->getLineItems();
+            if($lineItems){
+                foreach($lineItems as $lineItem){
+                    $totalWeight += $lineItem->getProduct()->getWeight();
+                }
+                //Shopware uses KG for weight, MyParcel wants Grams
+                $totalWeight = $totalWeight * 1000;
+            }
+
+            $consignment->setTotalWeight($totalWeight);
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
@@ -224,7 +276,7 @@ class ConsignmentService
             );
 
             // Add track and trace to the custom fields
-            $customFields = $orderEntity->getCustomFields()['my_parcel'] ?? null;
+            $customFields = json_decode($orderEntity->getCustomFields()['my_parcel'], true) ?? null;
             $trackAndTrace = $customFields['track_and_trace'] ?? [];
 
             $trackAndTrace[] = [
@@ -266,6 +318,8 @@ class ConsignmentService
      * @param array      $ordersData
      *
      * @param array|null $labelPositions
+     * @param int|null $packageType
+     * @param int|null $numberOfLabels
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
@@ -273,12 +327,16 @@ class ConsignmentService
     public function createConsignments( //NOSONAR
         Context $context,
         array $ordersData,
-        ?array $labelPositions
+        ?array $labelPositions,
+        ?int $packageType,
+        ?int $numberOfLabels
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
         $shipmentData = [];
         $shipments = [];
+
+        $consignments->setUserAgent('Shopware', $this->shopwareVersion);
 
         /** @var OrderEntity $order */
         foreach ($ordersData as $orderData) {
@@ -297,31 +355,28 @@ class ConsignmentService
                 'deliveries',
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
+                'lineItems',
+                'lineItems.product'
             ]);
 
             if ($order !== null) {
-
-                $packageType = null;
-
-                if (
-                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderData)
-                    && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
-                ) {
-                    $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
+                if(!$numberOfLabels || is_null($numberOfLabels)){
+                    $numberOfLabels = 1;
                 }
+                for($i = 1; $i <= $numberOfLabels; $i++) {
+                    $consignment = $this->createConsignment($context, $order, $packageType);
 
-                $consignment = $this->createConsignment($context, $order, $packageType);
+                    if ($consignment !== null) {
+                        $consignments->addConsignment($consignment);
+                    }
 
-                if ($consignment !== null) {
-                    $consignments->addConsignment($consignment);
+                    $shipmentData[] = [
+                        'context' => $context,
+                        'order' => $order,
+                        'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
+                        'referenceId' => $consignment->getReferenceId(),
+                    ];
                 }
-
-                $shipmentData[] = [
-                    'context' => $context,
-                    'order' => $order,
-                    'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
-                    'referenceId' => $consignment->getReferenceId(),
-                ];
             }
         }
 
@@ -355,7 +410,7 @@ class ConsignmentService
                 if ($consignment !== null) {
                     $createdShipment = $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
                     $shipments[] = $createdShipment;
-                }
+            }
             }
         }
 

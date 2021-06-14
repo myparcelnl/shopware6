@@ -32,9 +32,7 @@
                         :sortDirection="sortDirection"
                         :isLoading="isLoading"
                         :allowColumnEdit="false"
-                        identifier="sw-myparcel-orders-list"
-                        @column-sort="onSortColumn"
-                        @selection-change="onSelectionChanged">
+                        identifier="sw-myparcel-orders-list">
 
                     <template #column-order.orderNumber="{ item }">
                         <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">{{ item.order.orderNumber }}</router-link>
@@ -76,6 +74,10 @@
                         </sw-label>
                     </template>
 
+                    <template #column-deliveryDate="{ item }">
+                        {{ item.deliveryDate | date() }}
+                    </template>
+
                     <template #column-carrierId="{ item }">
                         {{ carriers[item.carrierId] }}
                     </template>
@@ -85,6 +87,7 @@
                     </template>
 
                     <template #column-numberOfConsignments="{ item }">
+                        {{ getNumberOfConsignments(item.id) }}
                         <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
                     </template>
 
@@ -101,15 +104,15 @@
                         </sw-context-menu-item>
                     </template>
 
-                    <template slot="pagination">
-                        <sw-pagination
-                                :page="page"
-                                :limit="limit"
-                                :total="total"
-                                :total-visible="25"
-                                @page-change="onPageChange"
-                                :steps="[25]">
-                        </sw-pagination>
+                    <template #pagination>
+                        {% block sw_order_list_grid_pagination %}
+                            <sw-pagination :page="page"
+                                           :limit="limit"
+                                           :total="total"
+                                           :total-visible="7"
+                                           @page-change="onPageChange">
+                            </sw-pagination>
+                        {% endblock %}
                     </template>
 
                 </sw-data-grid>
@@ -169,13 +172,13 @@
                             ]">
                         </sw-multi-select>
 
-{#                        <sw-number-field#}
-{#                            :label="$tc('sw-myparcel.orders.modals.createConsignment.numberOfLabelsHeading')"#}
-{#                            name="myparcel[number_of_labels]"#}
-{#                            numberType="int"#}
-{#                            :min="1"#}
-{#                            :step="1"#}
-{#                            v-model="createSingleConsignment.numberOfLabels" />#}
+                        <sw-number-field
+                            :label="$tc('sw-myparcel.orders.modals.createConsignment.numberOfLabelsHeading')"
+                            name="myparcel[number_of_labels]"
+                            numberType="int"
+                            :min="1"
+                            :step="1"
+                            v-model="createSingleConsignment.numberOfLabels" />
 
                         <template v-if="createSingleConsignment.item.packageType === 1">
                             <sw-base-field :label="$tc('sw-myparcel.orders.modals.createConsignment.shippingOptionsHeading')" />
