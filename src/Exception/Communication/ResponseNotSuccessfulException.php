@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Exception\Communication;
+namespace MyPaShopware\Exception\Communication;
 
 use Exception;
 

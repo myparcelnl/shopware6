@@ -1,8 +1,8 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Service\Shipment;
+namespace MyPaShopware\Service\Shipment;
 
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
+use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;

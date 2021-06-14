@@ -1,13 +1,13 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
-namespace Kiener\KienerMyParcel\Service\Consignment;
+namespace MyPaShopware\Service\Consignment;
 
 use Exception;
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
-use Kiener\KienerMyParcel\Helper\AddressHelper;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
-use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
+use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
+use MyPaShopware\Helper\AddressHelper;
+use MyPaShopware\Service\Order\OrderService;
+use MyPaShopware\Service\Shipment\ShipmentService;
+use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -74,7 +74,7 @@ class ConsignmentService
         $this->shippingOptionsService = $shippingOptionsService;
         $this->shipmentService = $shipmentService;
         $this->systemConfigService = $systemConfigService;
-        $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
+        $this->apiKey = (string)$systemConfigService->get('MyParcel.config.myParcelApiKey');
         $this->shopwareVersion = $shopwareVersion;
     }
 

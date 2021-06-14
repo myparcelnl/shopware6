@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Service\Cookie;
+namespace MyPaShopware\Service\Cookie;
 
 use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
 

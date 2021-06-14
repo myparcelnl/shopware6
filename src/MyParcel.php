@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel;
+namespace MyPaShopware;
 
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
+use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -15,7 +15,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\System\CustomField\CustomFieldTypes;
 
-class KienerMyParcel extends Plugin
+class MyParcel extends Plugin
 {
 
     public function install(InstallContext $installContext): void

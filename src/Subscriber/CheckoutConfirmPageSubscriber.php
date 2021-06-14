@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace Kiener\KienerMyParcel\Subscriber;
+namespace MyPaShopware\Subscriber;
 
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
-use Kiener\KienerMyParcel\Setting\MyParcelSettingStruct;
+use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
+use MyPaShopware\Setting\MyParcelSettingStruct;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -86,16 +86,16 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
                     $deliveryType = $cookie_data[2];
                 }else{
-                    $deliveryType = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                    $deliveryType = $this->configService->get('MyParcel.config.myParcelDefaultDeliveryWindow');
                 }
 
                 $raise = '0';
 
                 if($deliveryType == '1') {
-                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery1');
+                    $raise = $this->configService->get('MyParcel.config.costsDelivery1');
                 }
                 if($deliveryType == '3') {
-                    $raise = $this->configService->get('KienerMyParcel.config.costsDelivery3');
+                    $raise = $this->configService->get('MyParcel.config.costsDelivery3');
                 }
                 if($deliveryType == '2'){
                     continue;
@@ -142,7 +142,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             new Context(new SystemSource())
         );
 
-        if(isset($_COOKIE['myparcel-cookie-key']) && $shippingMethod){
+        if(isset($_COOKIE['myparcel-cookie-key']) && $_COOKIE['myparcel-cookie-key'] != 'empty' && $shippingMethod){
             $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
 
             $data['myparcel_values'] = [
@@ -157,17 +157,17 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
                 $data['myparcel_values'] = [
                     'shippingMethodId' => $args->getSalesChannelContext()->getShippingMethod()->getId(),
                     'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
-                    'deliveryType' => $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
-                    'requiresSignature' => $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
-                    'onlyRecipient' => $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
+                    'deliveryType' => $this->configService->get('MyParcel.config.myParcelDefaultDeliveryWindow'),
+                    'requiresSignature' => $this->configService->get('MyParcel.config.myParcelDefaultSignature'),
+                    'onlyRecipient' => $this->configService->get('MyParcel.config.myParcelDefaultOnlyRecipient')
                 ];
             }else {
                 $data['myparcel_values'] = [
-                    'shippingMethodId' => $this->configService->get('KienerMyParcel.config.myParcelDefaultMethod'),
+                    'shippingMethodId' => $this->configService->get('MyParcel.config.myParcelDefaultMethod'),
                     'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
-                    'deliveryType' => $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow'),
-                    'requiresSignature' => $this->configService->get('KienerMyParcel.config.myParcelDefaultSignature'),
-                    'onlyRecipient' => $this->configService->get('KienerMyParcel.config.myParcelDefaultOnlyRecipient')
+                    'deliveryType' => $this->configService->get('MyParcel.config.myParcelDefaultDeliveryWindow'),
+                    'requiresSignature' => $this->configService->get('MyParcel.config.myParcelDefaultSignature'),
+                    'onlyRecipient' => $this->configService->get('MyParcel.config.myParcelDefaultOnlyRecipient')
                 ];
             }
         }

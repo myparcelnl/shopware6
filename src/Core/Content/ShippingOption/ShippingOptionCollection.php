@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
+namespace MyPaShopware\Core\Content\ShippingOption;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 

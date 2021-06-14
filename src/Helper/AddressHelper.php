@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Helper;
+namespace MyPaShopware\Helper;
 
 use Shopware\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 
