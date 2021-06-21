@@ -1,13 +1,13 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
-namespace MyPaShopware\Service\Consignment;
+namespace MyPa\Shopware\Service\Consignment;
 
 use Exception;
-use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
-use MyPaShopware\Helper\AddressHelper;
-use MyPaShopware\Service\Order\OrderService;
-use MyPaShopware\Service\Shipment\ShipmentService;
-use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Helper\AddressHelper;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;

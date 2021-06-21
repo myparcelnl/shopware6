@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Exception\Directory;
+namespace MyPa\Shopware\Exception\Directory;
 
 use Exception;
 

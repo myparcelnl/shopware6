@@ -1,9 +1,9 @@
 <?php
 
-namespace MyPaShopware\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
-use MyPaShopware\Helper\AddressHelper;
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Helper\AddressHelper;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Framework\Context;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Core\Checkout\Cart\Delivery;
+namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
-use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\Delivery;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\DeliveryCollection;

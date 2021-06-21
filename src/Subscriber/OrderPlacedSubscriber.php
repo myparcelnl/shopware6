@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace MyPaShopware\Subscriber;
+namespace MyPa\Shopware\Subscriber;
 
-use MyPaShopware\Core\Content\ShippingMethod\ShippingMethodEntity;
-use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
-use MyPaShopware\Service\Order\OrderService;
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
-use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;

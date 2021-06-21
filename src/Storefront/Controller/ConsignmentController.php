@@ -3,11 +3,11 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace MyPaShopware\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
-use MyPaShopware\Service\Consignment\ConsignmentService;
-use MyPaShopware\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Service\Consignment\ConsignmentService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Framework\Api\Context\SystemSource;

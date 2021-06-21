@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware;
+namespace MyPa\Shopware;
 
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -15,7 +15,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\System\CustomField\CustomFieldTypes;
 
-class MyParcel extends Plugin
+class MyPaShopware extends Plugin
 {
 
     public function install(InstallContext $installContext): void

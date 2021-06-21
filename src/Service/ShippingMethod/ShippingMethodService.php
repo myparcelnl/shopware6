@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Service\ShippingMethod;
+namespace MyPa\Shopware\Service\ShippingMethod;
 
-use MyPaShopware\Core\Content\ShippingMethod\ShippingMethodEntity;
-use MyPaShopware\Service\Consignment\ConsignmentService;
+use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
+use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity as ShopwareShippingMethodEntity;

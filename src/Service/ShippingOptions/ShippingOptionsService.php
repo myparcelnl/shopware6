@@ -1,8 +1,8 @@
 <?php
 
-namespace MyPaShopware\Service\ShippingOptions;
+namespace MyPa\Shopware\Service\ShippingOptions;
 
-use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;

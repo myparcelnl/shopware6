@@ -3,9 +3,9 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace MyPaShopware\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MollieShopware\Components\Services\OrderService;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-//use MyPaShopware\Service\Cookie\CookieProvider;
+//use MyPa\Shopware\Service\Cookie\CookieProvider;
 use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
 
 

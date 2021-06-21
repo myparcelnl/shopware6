@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace MyPaShopware\Subscriber;
+namespace MyPa\Shopware\Subscriber;
 
-use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
-use MyPaShopware\Setting\MyParcelSettingStruct;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Setting\MyParcelSettingStruct;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
