@@ -300,6 +300,11 @@ class ShippingMethodService
                         'quantityStart' => 1,
                     ]
                 ],
+                'customFields' => [
+                    'myparcel' => [
+                        "carrierId" => $carrierId
+                    ]
+                ]
             ],
         ], $context);
 

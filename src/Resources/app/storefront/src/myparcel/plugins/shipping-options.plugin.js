@@ -117,7 +117,7 @@ export default class MyParcelShippingOptions extends Plugin {
 
     loadMethodOptions(me){
         const httpClient = new HttpClient(window.accessKey, window.contextToken);
-        const methodOptionsUrl = '/myparcel/delivery_options';
+        const methodOptionsUrl = window.router['myparcel.delivery_options'];
         const selectedMethod = document.querySelector("input[name=shippingMethodId]:checked");
         const selectedMethodValue = selectedMethod.value;
         const optionsDiv = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"]');

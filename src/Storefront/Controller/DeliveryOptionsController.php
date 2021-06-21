@@ -27,7 +27,6 @@ class DeliveryOptionsController extends StorefrontController
     /** @var SystemConfigService */
     private $configService;
 
-    public const ROUTE_NAME_GET_DELIVERY_OPTIONS = 'myparcel.delivery_options';
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_CODE = 'code';
@@ -47,7 +46,7 @@ class DeliveryOptionsController extends StorefrontController
      * @RouteScope(scopes={"storefront"})
      * @Route(
      *     "/myparcel/delivery_options",
-     *     name=DeliveryOptionsController::ROUTE_NAME_GET_DELIVERY_OPTIONS,
+     *     name="myparcel.delivery_options",
      *     methods={"POST|GET"},
      *     defaults={"csrf_protected"=false, "XmlHttpRequest"=true}
      *     )
