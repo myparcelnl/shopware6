@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Service\Order;
+namespace MyPa\Shopware\Service\Order;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;

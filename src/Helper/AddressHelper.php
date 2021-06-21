@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Helper;
+namespace MyPa\Shopware\Helper;
 
 use Shopware\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 

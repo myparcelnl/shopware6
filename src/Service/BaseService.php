@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Service;
+namespace MyPa\Shopware\Service;
 
 use Psr\Log\LoggerInterface;
 

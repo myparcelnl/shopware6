@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Exception\Curl;
+namespace MyPa\Shopware\Exception\Curl;
 
 use Exception;
 

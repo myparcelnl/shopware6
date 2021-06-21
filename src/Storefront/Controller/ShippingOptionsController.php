@@ -1,11 +1,11 @@
 <?php
 
-namespace MyPaShopware\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
-use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
-use MyPaShopware\Service\Order\OrderService;
-use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;

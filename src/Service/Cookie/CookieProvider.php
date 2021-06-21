@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Service\Cookie;
+namespace MyPa\Shopware\Service\Cookie;
 
 use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
 
