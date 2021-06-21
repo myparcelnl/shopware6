@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Resources\app\storefront\src\snippets\nl_NL;
+namespace MyPa\Shopware\Resources\app\storefront\src\snippets\nl_NL;
 
 use Shopware\Core\System\Snippet\Files\SnippetFileInterface;
 

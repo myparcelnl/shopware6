@@ -4,12 +4,12 @@
  * @noinspection PhpUndefinedClassInspection
  */
 
-namespace MyPaShopware\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
-use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
-use MyPaShopware\Service\Order\OrderService;
-use MyPaShopware\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;

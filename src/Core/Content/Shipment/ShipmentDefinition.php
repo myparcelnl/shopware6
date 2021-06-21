@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Core\Content\Shipment;
+namespace MyPa\Shopware\Core\Content\Shipment;
 
-use MyPaShopware\Core\Content\ShippingOption\ShippingOptionDefinition;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;

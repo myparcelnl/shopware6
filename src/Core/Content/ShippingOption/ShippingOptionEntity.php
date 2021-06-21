@@ -1,8 +1,8 @@
 <?php
 
-namespace MyPaShopware\Core\Content\ShippingOption;
+namespace MyPa\Shopware\Core\Content\ShippingOption;
 
-use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;

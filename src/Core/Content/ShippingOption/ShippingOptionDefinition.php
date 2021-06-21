@@ -1,8 +1,8 @@
 <?php
 
-namespace MyPaShopware\Core\Content\ShippingOption;
+namespace MyPa\Shopware\Core\Content\ShippingOption;
 
-use MyPaShopware\Core\Content\Shipment\ShipmentDefinition;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;

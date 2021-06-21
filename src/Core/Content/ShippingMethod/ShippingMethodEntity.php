@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MyPaShopware\Core\Content\ShippingMethod;
+namespace MyPa\Shopware\Core\Content\ShippingMethod;
 
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity as ShopwareShippingMethodEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;

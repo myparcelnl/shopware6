@@ -1,8 +1,8 @@
 <?php
 
-namespace MyPaShopware\Service\Shipment;
+namespace MyPa\Shopware\Service\Shipment;
 
-use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;

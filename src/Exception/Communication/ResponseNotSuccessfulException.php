@@ -1,6 +1,6 @@
 <?php
 
-namespace MyPaShopware\Exception\Communication;
+namespace MyPa\Shopware\Exception\Communication;
 
 use Exception;
 
