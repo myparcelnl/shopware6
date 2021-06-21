@@ -3,10 +3,10 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
+use MyPaShopware\Service\Consignment\ConsignmentService;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;

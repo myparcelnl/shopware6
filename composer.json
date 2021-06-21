@@ -1,15 +1,20 @@
 {
-  "name": "kiener/kiener-myparcel",
+  "name": "mypashopware/myparcel",
   "description": "MyParcel integration for Shopware 6",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "type": "shopware-platform-plugin",
   "license": "MIT",
   "authors": [
     {
-      "name": "Kiener Digital Commerce",
-      "homepage": "https://www.kiener.nl",
+      "name": "MyParcel",
+      "homepage": "https://www.myparcel.nl",
       "role": "Manufacturer"
-    }
+    },
+      {
+          "name": "Kiener Digital Commerce",
+          "homepage": "https://www.kiener.nl",
+          "role": "Developer"
+      }
   ],
   "require": {
     "shopware/core": "*",
@@ -18,8 +23,8 @@
     "myparcelnl/sdk": "^5.0"
   },
   "extra": {
-    "shopware-plugin-class": "Kiener\\KienerMyParcel\\KienerMyParcel",
-    "copyright": "(c) by Kiener Digital Commerce",
+    "shopware-plugin-class": "MyPaShopware\\MyParcel",
+    "copyright": "(c) by MyParcel",
     "label": {
       "en-GB": "MyParcel integration for Shopware 6",
       "nl-NL": "MyParcel integratie voor Shopware 6"
@@ -34,7 +39,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Kiener\\KienerMyParcel\\": "src/",
+      "MyPaShopware\\": "src/",
       "MyParcelNL\\Sdk\\src\\": "vendor/myparcelnl/sdk/src"
     }
   }

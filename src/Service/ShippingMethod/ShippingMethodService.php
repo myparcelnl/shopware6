@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Service\ShippingMethod;
+namespace MyPaShopware\Service\ShippingMethod;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
-use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
+use MyPaShopware\Core\Content\ShippingMethod\ShippingMethodEntity;
+use MyPaShopware\Service\Consignment\ConsignmentService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity as ShopwareShippingMethodEntity;

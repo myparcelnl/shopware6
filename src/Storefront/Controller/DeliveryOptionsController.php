@@ -1,9 +1,9 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
-use Kiener\KienerMyParcel\Helper\AddressHelper;
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
+use MyPaShopware\Helper\AddressHelper;
+use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Framework\Context;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -107,7 +107,7 @@ class DeliveryOptionsController extends StorefrontController
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
             'salesContext' => $salesChannelContext,
             'context' => $context,
-            'config' => $this->configService->get('KienerMyParcel.config')
+            'config' => $this->configService->get('MyParcel.config')
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

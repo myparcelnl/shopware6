@@ -6,10 +6,10 @@
 
     <services>
 
-        <service id="Kiener\KienerMyParcel\Cart\Checkout\ShippingCostsCollector">
+        <service id="MyPaShopware\Cart\Checkout\ShippingCostsCollector">
             <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService" />
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="MyPaShopware\Service\ShippingMethod\ShippingMethodService" />
 
             <!-- after product collector/processor -->
             <tag name="shopware.cart.processor" priority="4500" />
@@ -17,123 +17,123 @@
         </service>
 
         <!-- ContextController -->
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
+        <service id="MyPaShopware\Storefront\Controller\ContextController" public="true">
             <argument id="Shopware\Storefront\Page\GenericPageLoader" type="service"/>
             <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
             <argument type="service" id="Shopware\Storefront\Framework\Cookie\CookieProviderInterface"/>
         </service>
 
         <!-- Snippets -->
-        <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB"
+        <service class="MyPaShopware\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB"
                  id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.en_gb.snippet_file_en_gb">
             <tag name="shopware.snippet.file"/>
         </service>
 
-        <service class="Kiener\KienerMyParcel\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL"
+        <service class="MyPaShopware\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL"
                  id="kiener.kiener_my_parcel.resources.app.storefront.src.snippets.nl_nl.snippet_file_nl_nl">
             <tag name="shopware.snippet.file"/>
         </service>
 
         <!-- Cookie provider -->
         <service id="kiener.kiener_my_parcel.service.cookie.cookie_provider"
-                 class="Kiener\KienerMyParcel\Service\Cookie\CookieProvider"
+                 class="MyPaShopware\Service\Cookie\CookieProvider"
                  decorates="Shopware\Storefront\Framework\Cookie\CookieProviderInterface">
             <argument type="service"
                       id="kiener.kiener_my_parcel.service.cookie.cookie_provider.inner" />
         </service>
 
         <!-- Services -->
-        <service id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService"/>
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService"/>
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService"/>
+        <service id="MyPaShopware\Service\Consignment\ConsignmentService">
+            <argument type="service" id="MyPaShopware\Service\Order\OrderService"/>
+            <argument type="service" id="MyPaShopware\Service\ShippingOptions\ShippingOptionsService"/>
+            <argument type="service" id="MyPaShopware\Service\Shipment\ShipmentService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument>%kernel.shopware_version%</argument>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Service\Order\OrderService" public="true">
+        <service id="MyPaShopware\Service\Order\OrderService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="order.repository"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" public="true">
+        <service id="MyPaShopware\Service\Shipment\ShipmentService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipment.repository"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" public="true">
+        <service id="MyPaShopware\Service\ShippingMethod\ShippingMethodService" public="true">
             <argument type="service" id="logger"/>
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService"/>
+            <argument type="service" id="MyPaShopware\Service\Consignment\ConsignmentService"/>
             <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="kiener_my_parcel_shipping_method.repository"/>
             <argument type="service" id="rule_condition.repository"/>
             <argument type="service" id="shipping_method.repository"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" public="true">
+        <service id="MyPaShopware\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <!-- Entities -->
-        <service id="Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition">
+        <service id="MyPaShopware\Core\Content\Shipment\ShipmentDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipment"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodDefinition">
+        <service id="MyPaShopware\Core\Content\ShippingMethod\ShippingMethodDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipping_method"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionDefinition">
+        <service id="MyPaShopware\Core\Content\ShippingOption\ShippingOptionDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipping_option"/>
         </service>
 
         <!-- Event Subscribers -->
-        <service id="Kiener\KienerMyParcel\Subscriber\CheckoutConfirmPageSubscriber">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
+        <service id="MyPaShopware\Subscriber\CheckoutConfirmPageSubscriber">
+            <argument type="service" id="MyPaShopware\Service\ShippingMethod\ShippingMethodService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Subscriber\OrderPlacedSubscriber">
+        <service id="MyPaShopware\Subscriber\OrderPlacedSubscriber">
             <argument type="service" id="request_stack" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" />
+            <argument type="service" id="MyPaShopware\Service\Order\OrderService" />
+            <argument type="service" id="MyPaShopware\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="MyPaShopware\Service\ShippingOptions\ShippingOptionsService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
         <!-- Controller -->
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ConsignmentController" public="true">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />
+        <service id="MyPaShopware\Storefront\Controller\ConsignmentController" public="true">
+            <argument type="service" id="MyPaShopware\Service\Consignment\ConsignmentService" />
+            <argument type="service" id="MyPaShopware\Service\Shipment\ShipmentService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\MyParcelController" public="true">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Consignment\ConsignmentService" />
+        <service id="MyPaShopware\Storefront\Controller\MyParcelController" public="true">
+            <argument type="service" id="MyPaShopware\Service\Consignment\ConsignmentService" />
         </service>
 
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ShipmentController" public="true">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Shipment\ShipmentService" />
+        <service id="MyPaShopware\Storefront\Controller\ShipmentController" public="true">
+            <argument type="service" id="MyPaShopware\Service\Order\OrderService" />
+            <argument type="service" id="MyPaShopware\Service\Shipment\ShipmentService" />
         </service>
 
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ShippingOptionsController" public="true">
-            <argument type="service" id="Kiener\KienerMyParcel\Service\Order\OrderService" />
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService" />
+        <service id="MyPaShopware\Storefront\Controller\ShippingOptionsController" public="true">
+            <argument type="service" id="MyPaShopware\Service\Order\OrderService" />
+            <argument type="service" id="MyPaShopware\Service\ShippingOptions\ShippingOptionsService" />
         </service>
 
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\DeliveryOptionsController" public="true">
+        <service id="MyPaShopware\Storefront\Controller\DeliveryOptionsController" public="true">
             <argument type="service" id="logger"/>
-            <argument type="service" id="Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService"/>
+            <argument type="service" id="MyPaShopware\Service\ShippingMethod\ShippingMethodService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="Kiener\KienerMyParcel\Storefront\Controller\ContextController" public="true">
+        <service id="MyPaShopware\Storefront\Controller\ContextController" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
             <argument type="service" id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher"/>
             <argument type="service" id="Shopware\Storefront\Framework\Cookie\CookieProviderInterface"/>

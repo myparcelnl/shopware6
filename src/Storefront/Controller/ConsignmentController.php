@@ -3,11 +3,11 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
+use MyPaShopware\Service\Consignment\ConsignmentService;
+use MyPaShopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Framework\Api\Context\SystemSource;
@@ -158,7 +158,7 @@ class ConsignmentController extends StorefrontController
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
         }else{
-            if($this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultLabelFormat') == 'A6'){
+            if($this->systemConfigService->get('MyParcel.config.myParcelDefaultLabelFormat') == 'A6'){
                 $labelPositions = null;
             }else{
                 $labelPositions = 1;

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Content\Shipment;
+namespace MyPaShopware\Core\Content\Shipment;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionDefinition;
+use MyPaShopware\Core\Content\ShippingOption\ShippingOptionDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
