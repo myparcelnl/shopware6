@@ -4,12 +4,12 @@
  * @noinspection PhpUndefinedClassInspection
  */
 
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
+use MyPaShopware\Core\Content\Shipment\ShipmentEntity;
+use MyPaShopware\Service\Order\OrderService;
+use MyPaShopware\Service\Shipment\ShipmentService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;

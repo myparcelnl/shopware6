@@ -1,8 +1,8 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
+namespace MyPaShopware\Core\Content\ShippingOption;
 
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition;
+use MyPaShopware\Core\Content\Shipment\ShipmentDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Service\ShippingOptions;
+namespace MyPaShopware\Service\ShippingOptions;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
@@ -158,21 +158,21 @@ class ShippingOptionsService
      */
     public function getShippingOptionsRaisePrice(): float
     {
-        if(isset($_COOKIE['myparcel-cookie-key'])){
+        if(isset($_COOKIE['myparcel-cookie-key']) && $_COOKIE['myparcel-cookie-key'] != 'empty'){
             $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
 
             $deliveryType = $cookie_data[2];
         }else{
-            $deliveryType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+            $deliveryType = $this->systemConfigService->get('MyParcel.config.myParcelDefaultDeliveryWindow');
         }
 
         $raise = 0;
 
         if($deliveryType == self::MORNING_TYPE) {
-            $raise = $this->systemConfigService->get('KienerMyParcel.config.costsDelivery1');
+            $raise = $this->systemConfigService->get('MyParcel.config.costsDelivery1');
         }
         if($deliveryType == self::EVENING_TYPE) {
-            $raise = $this->systemConfigService->get('KienerMyParcel.config.costsDelivery3');
+            $raise = $this->systemConfigService->get('MyParcel.config.costsDelivery3');
         }
 
         return $raise;

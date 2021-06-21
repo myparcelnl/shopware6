@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Checkout\Cart\Delivery;
+namespace MyPaShopware\Core\Checkout\Cart\Delivery;
 
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
-use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
+use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
+use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\Delivery;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\DeliveryCollection;

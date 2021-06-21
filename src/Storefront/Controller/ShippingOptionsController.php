@@ -1,11 +1,11 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
+use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPaShopware\Service\Order\OrderService;
+use MyPaShopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;

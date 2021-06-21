@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Content\Shipment;
+namespace MyPaShopware\Core\Content\Shipment;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPaShopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;

@@ -3,9 +3,9 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPaShopware\Storefront\Controller;
 
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
+use MyPaShopware\Service\ShippingMethod\ShippingMethodService;
 use MollieShopware\Components\Services\OrderService;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-//use Kiener\KienerMyParcel\Service\Cookie\CookieProvider;
+//use MyPaShopware\Service\Cookie\CookieProvider;
 use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
 
 
