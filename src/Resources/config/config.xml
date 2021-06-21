@@ -10,6 +10,13 @@
             <label>MyParcel API Key</label>
             <label lang="nl-NL">MyParcel API Key</label>
         </input-field>
+
+        <component name="myparcel-api-test-button">
+            <name>apiTest</name>
+            <label lang="nl-NL">API Verbinding testen</label>
+            <label lang="en-GB">API Connection test</label>
+            <label lang="de-DE">API Verbindung testen</label>
+        </component>
     </card>
 
     <card>
@@ -38,7 +45,7 @@
                     <name lang="nl-NL">Avond</name>
                 </option>
             </options>
-            <defaultValue>standard</defaultValue>
+            <defaultValue>2</defaultValue>
         </input-field>
 
         <!--Choose default signed delivery-->
@@ -59,6 +66,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default only house, no neighbours-->
@@ -79,6 +87,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default return when not at home-->
@@ -99,6 +108,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default large format-->
@@ -119,6 +129,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default age check-->
@@ -139,6 +150,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default package type-->
@@ -169,7 +181,7 @@
                     <name lang="nl-NL">Digitale postzegel</name>
                 </option>
             </options>
-            <defaultValue>standard</defaultValue>
+            <defaultValue>1</defaultValue>
         </input-field>
 
         <!--Choose default only house, no neighbours-->
@@ -190,6 +202,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <input-field type="float">
@@ -216,6 +229,7 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <input-field type="float">
