@@ -3,12 +3,12 @@
 namespace MyPa\Shopware;
 
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use Doctrine\DBAL\Connection;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
@@ -42,8 +42,16 @@ class MyPaShopware extends Plugin
             return;
         }
 
-        $this->deleteCustomFields();
+        $connection = $this->container->get(Connection::class);
 
+        $connection->exec('SET FOREIGN_KEY_CHECKS=0;');
+        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipment`');
+        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipping_method`');
+        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipping_option`');
+
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1;');
+
+        $this->deleteCustomFields($uninstallContext);
     }
 
     private function updateCustomFields(string $to, ?string $from = null)
@@ -67,13 +75,10 @@ class MyPaShopware extends Plugin
         /** @var EntityRepositoryInterface $customFieldSetRepository */
         $customFieldSetRepository = $this->container->get('custom_field_set.repository');
 
-        $entityIds = $customFieldSetRepository->searchIds(
-            (new Criteria())
-                ->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('name', 'memo_auction_customer'),
-                ]))
-            , Context::createDefaultContext()
-        )->getIds();
+        $entityIds = $customFieldSetRepository->search(
+            (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
+            Context::createDefaultContext()
+        )->getEntities()->getIds();
 
         if (count($entityIds) < 1) {
             return;
@@ -91,10 +96,9 @@ class MyPaShopware extends Plugin
 
     private function updateCustomFields_0_1_0(EntityRepositoryInterface $customFieldSetRepository)
     {
-
         $customFieldSetRepository->upsert([
             [
-                'name' => 'kiener_myparcel',
+                'name' => 'myparcelShopware',
                 'global' => true,
                 'customFields' => [
                     [

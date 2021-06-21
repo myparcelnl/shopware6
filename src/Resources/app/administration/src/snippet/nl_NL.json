@@ -1,0 +1,8 @@
+{
+    "myparcel-api-test-button": {
+        "title": "API Test",
+        "success": "Connectie was succesvol getest",
+        "error": "Connectie test misluk, controleer de api gegevens",
+        "button": "Test"
+    }
+}
