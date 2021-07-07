@@ -224,9 +224,9 @@ Component.register('sw-myparcel-orders', {
 
         setDefaultLabelSize(){
             this.systemConfigApiService
-                .getValues('KienerMyParcel.config')
+                .getValues('MyPaShopware.config')
                 .then(response => {
-                    if(response['KienerMyParcel.config.myParcelDefaultLabelFormat'] == 'A6') {
+                    if(response['MyPaShopware.config.myParcelDefaultLabelFormat'] == 'A6') {
                         this.createSingleConsignment.printSmallLabel = true;
                         this.createMultipleConsignments.printSmallLabel = true;
                     }

@@ -74,7 +74,7 @@ class ConsignmentService
         $this->shippingOptionsService = $shippingOptionsService;
         $this->shipmentService = $shipmentService;
         $this->systemConfigService = $systemConfigService;
-        $this->apiKey = (string)$systemConfigService->get('MyParcel.config.myParcelApiKey');
+        $this->apiKey = (string)$systemConfigService->get('MyPaShopware.config.myParcelApiKey');
         $this->shopwareVersion = $shopwareVersion;
     }
 

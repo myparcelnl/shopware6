@@ -53,7 +53,6 @@
             <name>myParcelDefaultSignature</name>
             <label>Default signed delivery</label>
             <label lang="nl-NL">Standaard handtekening bij bezorging</label>
-            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -74,7 +73,6 @@
             <name>myParcelDefaultOnlyRecipient</name>
             <label>Default delivery at neighbours</label>
             <label lang="nl-NL">Standaard aflevering bij buren</label>
-            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -95,7 +93,6 @@
             <name>myParcelDefaultReturnNotHome</name>
             <label>Default return package to the sender when recipient is not home</label>
             <label lang="nl-NL">Stuur standaard het pakket terug naar de afzender als de ontvanger niet thuis is</label>
-            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -116,7 +113,6 @@
             <name>myParcelDefaultLargeFormat</name>
             <label>Default delivery is large format</label>
             <label lang="nl-NL">Standaard pakket is groot formaat</label>
-            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -137,7 +133,6 @@
             <name>myParcelDefaultAgeCheck</name>
             <label>The Customer/Consumer must sign for the package and only receive it when he is at least 18 years</label>
             <label lang="nl-NL">De klant welke voor het pakket tekent dient minstens 18 jaar te zijn</label>
-            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -158,7 +153,6 @@
             <name>myParcelDefaultPackageType</name>
             <label>Default package type</label>
             <label lang="nl-NL">Standaard verpakkingssoort</label>
-            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>1</id>
@@ -189,7 +183,6 @@
             <name>myParcelShowWindowType1</name>
             <label>Show morning delivery window</label>
             <label lang="nl-NL">Toon ochtend levering</label>
-            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -216,7 +209,6 @@
             <name>myParcelShowWindowType3</name>
             <label>Show evening delivery window</label>
             <label lang="nl-NL">Toon avond levering</label>
-            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>0</id>
