@@ -47,36 +47,25 @@ Module.register('sw-myparcel', {
 
     navigation: [
         {
-            id: 'sw-myparcel',
-            label: 'sw-myparcel.general.mainMenuItemGeneral',
-            color: '#0f5c47',
-            path: 'sw.myparcel.orders',
-            icon: 'default-shopping-paper-bag-product',
-            position: 100
-        },
-        {
             id: 'sw-myparcel-orders',
             label: 'sw-myparcel.general.ordersMenuItemGeneral',
             color: '#0f5c47',
             path: 'sw.myparcel.orders',
-            position: 100,
-            parent: 'sw-myparcel'
+            parent: 'sw-order'
         },
         {
             id: 'sw-myparcel-consignments',
             label: 'sw-myparcel.general.consignmentsMenuItemGeneral',
             color: '#0f5c47',
             path: 'sw.myparcel.consignments',
-            position: 100,
-            parent: 'sw-myparcel'
+            parent: 'sw-order'
         },
         {
             id: 'sw-myparcel-shipping-methods',
             label: 'sw-myparcel.general.shippingMethodsMenuItemGeneral',
             color: '#0f5c47',
             path: 'sw.myparcel.shippingMethods',
-            position: 100,
-            parent: 'sw-myparcel'
+            parent: 'sw-order'
         }
     ]
 });

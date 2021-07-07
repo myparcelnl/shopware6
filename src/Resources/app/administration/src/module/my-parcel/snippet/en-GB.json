@@ -2,9 +2,9 @@
   "sw-myparcel": {
     "general": {
       "mainMenuItemGeneral": "MyParcel",
-      "ordersMenuItemGeneral": "Orders",
-      "consignmentsMenuItemGeneral": "Shipments",
-      "shippingMethodsMenuItemGeneral": "Shipping methods",
+      "ordersMenuItemGeneral": "MyParcel Orders",
+      "consignmentsMenuItemGeneral": "MyParcel Shipments",
+      "shippingMethodsMenuItemGeneral": "MyParcel Shipping methods",
       "descriptionTextModule": "Tagline for MyParcel",
       "packageTypes": {
         "package": "Package",
