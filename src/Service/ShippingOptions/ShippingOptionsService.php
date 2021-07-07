@@ -163,16 +163,16 @@ class ShippingOptionsService
 
             $deliveryType = $cookie_data[2];
         }else{
-            $deliveryType = $this->systemConfigService->get('MyParcel.config.myParcelDefaultDeliveryWindow');
+            $deliveryType = $this->systemConfigService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow');
         }
 
         $raise = 0;
 
         if($deliveryType == self::MORNING_TYPE) {
-            $raise = $this->systemConfigService->get('MyParcel.config.costsDelivery1');
+            $raise = $this->systemConfigService->get('MyPaShopware.config.costsDelivery1');
         }
         if($deliveryType == self::EVENING_TYPE) {
-            $raise = $this->systemConfigService->get('MyParcel.config.costsDelivery3');
+            $raise = $this->systemConfigService->get('MyPaShopware.config.costsDelivery3');
         }
 
         return $raise;

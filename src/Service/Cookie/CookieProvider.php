@@ -21,7 +21,6 @@ class CookieProvider implements CookieProviderInterface {
         $cookies = $this->original->getCookieGroups();
 
         if($getcookies !== null) {
-            print_r('Dit is een if case');
             return $getcookies;
         }
         foreach ($cookies as &$cookie) {

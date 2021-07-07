@@ -106,7 +106,7 @@ class DeliveryOptionsController extends StorefrontController
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
             'salesContext' => $salesChannelContext,
             'context' => $context,
-            'config' => $this->configService->get('MyParcel.config')
+            'config' => $this->configService->get('MyPaShopware.config')
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

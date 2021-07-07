@@ -222,9 +222,9 @@ Component.register('sw-myparcel-consignments', {
 
         setDefaultLabelSize(){
             this.systemConfigApiService
-                .getValues('KienerMyParcel.config')
+                .getValues('MyPaShopware.config')
                 .then(response => {
-                    if(response['KienerMyParcel.config.myParcelDefaultLabelFormat'] == 'A6') {
+                    if(response['MyPaShopware.config.myParcelDefaultLabelFormat'] == 'A6') {
                         this.createSingleLabel.printSmallLabel = true;
                         this.createMultipleLabels.printSmallLabel = true;
                     }
@@ -329,7 +329,7 @@ Component.register('sw-myparcel-consignments', {
         },
 
         onOpenCreateSingleLabelModal(item) {
-            //KienerMyParcel.config.myParcelDefaultLabelFormat
+            //MyPaShopware.config.myParcelDefaultLabelFormat
             this.createSingleLabel.item = item;
             this.openCreateSingleLabelModal();
         },
