@@ -213,19 +213,35 @@ class ConsignmentService
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
-            $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
+            if($consignment instanceof DPDConsignment){
+                $consignment->setAgeCheck(false);
+            }else {
+                $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
+            }
         }
 
         if ($shippingOptions->getLargeFormat() !== null) {
-            $consignment->setLargeFormat($shippingOptions->getLargeFormat());
+            if($consignment instanceof DPDConsignment){
+                $consignment->setLargeFormat(false);
+            }else {
+                $consignment->setLargeFormat($shippingOptions->getLargeFormat());
+            }
         }
 
         if ($shippingOptions->getRequiresSignature() !== null) {
-            $consignment->setSignature($shippingOptions->getRequiresSignature());
+            if($consignment instanceof DPDConsignment){
+                $consignment->setSignature(false);
+            }else {
+                $consignment->setSignature($shippingOptions->getRequiresSignature());
+            }
         }
 
         if ($shippingOptions->getOnlyRecipient() !== null) {
-            $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
+            if($consignment instanceof DPDConsignment){
+                $consignment->setOnlyRecipient(false);
+            }else {
+                $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
+            }
         }
 
         try {

@@ -11,7 +11,7 @@ const ACTION_TYPE_CREATE = 'create';
 
 const CARRIER_POSTNL_ID = 1;
 const CARRIER_BPOST_ID = 2;
-const CARRIER_DPD_ID = 3;
+const CARRIER_DPD_ID = 4;
 
 const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
 const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
