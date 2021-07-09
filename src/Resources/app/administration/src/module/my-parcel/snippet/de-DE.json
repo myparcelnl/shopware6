@@ -1,126 +1,128 @@
 {
-  "sw-myparcel": {
-    "general": {
-      "mainMenuItemGeneral": "MyParcel",
-      "ordersMenuItemGeneral": "MyParcel Orders",
-      "consignmentsMenuItemGeneral": "MyParcel Shipments",
-      "shippingMethodsMenuItemGeneral": "MyParcel Shipping methods",
-      "descriptionTextModule": "Tagline for MyParcel",
-      "packageTypes": {
-        "package": "Package",
-        "mailbox": "Mailbox",
-        "letter": "Letter",
-        "digitalStamp": "Digital stamp"
-      },
-      "deliveryTypes": {
-        "morning": "Morning delivery",
-        "standard": "Standard delivery",
-        "evening": "Evening delivery",
-        "pickup": "Pickup point"
-      },
-      "carriers": {
-        "postNL": "PostNL",
-        "bPost": "bpost",
-        "dpd": "DPD"
-      }
-    },
-    "messages": {
-      "error": "An error has occurred",
-      "consignmentSuccess": "The Shipment is successfully created",
-      "createLabelSuccess": "The label is successfully created"
-    },
-    "columns": {
-      "idColumn": "ID",
-      "orderColumn": "Order",
-      "orderDateColumn": "Ordered",
-      "consignmentDateColumn": "Created",
-      "totalAmountColumn": "Total amount",
-      "trackingCodesColumn": "Track & trace",
-      "statusColumn": "Status",
-      "actionsColumn": "Actions",
-      "packageTypeColumn": "Package type",
-      "deliveryDateColumn": "Delivery date",
-      "carrierColumn": "Carrier",
-      "deliveryTypeColumn": "Delivery type",
-      "requiresAgeCheckColumn": "Requires age check",
-      "requiresSignatureColumn": "Requires signature",
-      "onlyRecipientColumn": "Recipient only",
-      "returnIfNotHomeColumn": "Return if not home",
-      "largeFormatColumn": "Large format",
-      "numberOfConsignmentsColumn": "Shipment(s)"
-    },
-    "orders": {
-      "title": "Orders",
-      "modals": {
-        "createConsignment": {
-          "titleSingle": "Create a shipment",
-          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
-          "actionTypeDownloadLabel": "Download",
-          "actionTypeCreateLabel": "Create label",
-          "actionTypeCreateConsignment": "Create shipment",
-          "packageTypePackageLabel": "Package",
-          "packageTypeMailboxLabel": "Mailbox",
-          "packageTypeLetterLabel": "Letter",
-          "packageTypeDigitalStampLabel": "Digital stamp",
-          "optionOnlyRecipientLabel": "Only recipient",
-          "optionRequiresAgeCheckLabel": "Requires age check 18+",
-          "optionRequiresSignatureLabel": "Requires signature",
-          "optionReturnIfNotHomeLabel": "Return if not home",
-          "optionLargeFormatLabel": "Large format",
-          "positionTopLeftLabel": "Top left",
-          "positionTopRightLabel": "Top right",
-          "positionBottomLeftLabel": "Bottom left",
-          "positionBottomRightLabel": "Bottom right",
-          "printSmallLabelLabel": "A6 label",
-          "actionTypeHeading": "Action type",
-          "deliveryTypeHeading": "Delivery type",
-          "packageTypeHeading": "Package type",
-          "numberOfLabelsHeading": "Number of labels",
-          "printOptionsHeading": "Print options",
-          "printPositionHeading": "Print position",
-          "shippingOptionsHeading": "Shipping options"
+    "sw-myparcel": {
+        "general": {
+            "mainMenuItemGeneral": "MyParcel",
+            "ordersMenuItemGeneral": "MeinPaketBestellungen",
+            "consignmentsMenuItemGeneral": "MeinPaket Sendungen",
+            "shippingMethodsMenuItemGeneral": "MeinPaket Versandmethoden",
+            "descriptionTextModule": "Tagline für MeinPaket",
+            "packageTypes": {
+                "package": "Paket",
+                "mailbox": "mailbox",
+                "letter": "Brief",
+                "digitalStamp": "Digitaler Stempel"
+            },
+            "deliveryTypes": {
+                "morning": "Morgenzustellung",
+                "standard": "Standardlieferung",
+                "Abend": "Abendzustellung",
+                "Abholung": "Abholpunkt"
+            },
+            "carriers": {
+                "postNL": "PostNL",
+                "bPost": "bpost",
+                "dpd": "DPD"
+            }
+        },
+        "messages": {
+            "error": "Es ist ein Fehler aufgetreten",
+            "consignmentSuccess": "Die Sendung wurde erfolgreich erstellt",
+            "createLabelSuccess": "Das Etikett wurde erfolgreich erstellt"
+        },
+        "columns": {
+            "idColumn": "ID",
+            "orderColumn": "order",
+            "orderDateColumn": "Ordered",
+            "consignmentDateColumn": "Erstellt",
+            "totalAmountColumn": "Gesamtbetrag",
+            "trackingCodesColumn": "Track & Trace",
+            "statusColumn": "Status",
+            "actionsColumn": "Actions",
+            "packageTypeColumn": "Pakettyp",
+            "deliveryDateColumn": "Lieferdatum",
+            "carrierColumn": "Carrier",
+            "deliveryTypeColumn": "Lieferart",
+            "requiresAgeCheckColumn": "Erfordert Altersprüfung",
+            "requiresSignatureColumn": "Erfordert Unterschrift",
+            "onlyRecipientColumn": "NurEmpfänger",
+            "returnIfNotHomeColumn": "Rückgabe, wenn nicht zu Hause",
+            "largeFormatColumn": "Großes Format",
+            "numberOfConsignmentsColumn": "Shipment(s)"
+        },
+        "orders": {
+            "title": "Bestellungen",
+            "modals": {
+                "createConsignment": {
+                    "titleSingle": "Sendung erstellen",
+                    "titleMultiple": "Sendung erstellen ({numberOfItems} item(s))",
+                    "actionTypeDownloadLabel": "Herunterladen",
+                    "actionTypeCreateLabel": "Etikett erstellen",
+                    "actionTypeCreateConsignment": "Sendung erstellen",
+                    "packageTypePackageLabel": "Paket",
+                    "packageTypeMailboxLabel": "Mailbox",
+                    "packageTypeLetterLabel": "Brief",
+                    "packageTypeDigitalStampLabel": "Digitaler Stempel",
+                    "optionOnlyRecipientLabel": "Nur Empfänger",
+                    "optionRequiresAgeCheckLabel": "Erfordert Altersprüfung 18+",
+                    "optionRequiresSignatureLabel": "Erfordert Unterschrift",
+                    "optionReturnIfNotHomeLabel": "Rückgabe, wenn nicht zu Hause",
+                    "optionLargeFormatLabel": "Großes Format",
+                    "positionTopLeftLabel": "Oben links",
+                    "positionTopRightLabel": "Oben rechts",
+                    "positionBottomLeftLabel": "Unten links",
+                    "positionBottomRightLabel": "Unten rechts",
+                    "printSmallLabelLabel": "A6-Etikett",
+                    "actionTypeHeading": "ActionType"
+                    :
+                    "Aktionstyp",
+                    "deliveryTypeHeading": "Lieferart",
+                    "packageTypeHeading": "Pakettyp",
+                    "numberOfLabelsHeading": "Anzahl der Etiketten",
+                    "printOptionsHeading": "Druckoptionen",
+                    "printPositionHeading": "Druckposition",
+                    "shippingOptionsHeading": "Versandoptionen"
+                }
+            },
+            "buttons": {
+                "viewOrderButton": "Bestellung anzeigen",
+                "cancelButton": "Abbrechen",
+                "createConsignmentButton": "Sendung erstellen",
+                "createConsignmentsButton": "Sendungen erstellen",
+                "downloadLabelButton": "Etikett herunterladen"
+            }
+        },
+        "consignments": {
+            "title": "Sendungen",
+            "modals": {
+                "createLabels": {
+                    "titleSingle": "Label erstellen",
+                    "titleMultiple": "Etiketten erstellen ({numberOfItems} item(s))",
+                    "positionTopLeftLabel": "Oben links",
+                    "positionTopRightLabel": "Oben rechts",
+                    "positionBottomLeftLabel": "Unten links",
+                    "positionBottomRightLabel": "Unten rechts",
+                    "printSmallLabelLabel": "A6-Etikett",
+                    "numberOfLabelsHeading": "Anzahl der Etiketten",
+                    "printOptionsHeading": "Druckoptionen",
+                    "printPositionHeading": "Druckposition"
+                }
+            },
+            "buttons": {
+                "cancelButton": "Cancel",
+                "clearFiltersButton": "Alle anzeigen",
+                "createLabelButton": "Label erstellen",
+                "createLabelsButton": "Etiketten erstellen",
+                "downloadLabelButton": "Etikett herunterladen",
+                "downloadLabelsButton": "Etiketten herunterladen",
+                "downloadDefaultLabelButton": "Label herunterladen (Standardeinstellungen)",
+                "downloadDefaultLabelsButton": "Etiketten herunterladen (Standardeinstellungen)"
+            }
+        },
+        "shippingMethods": {
+            "title": "Versandmethoden",
+            "buttons": {
+                "viewShippingMethodButton": "Versandmethode anzeigen"
+            }
         }
-      },
-      "buttons": {
-        "viewOrderButton": "View the order",
-        "cancelButton": "Cancel",
-        "createConsignmentButton": "Create shipment",
-        "createConsignmentsButton": "Create shipments",
-        "downloadLabelButton": "Download label"
-      }
-    },
-    "consignments": {
-      "title": "Shipments",
-      "modals": {
-        "createLabels": {
-          "titleSingle": "Create label",
-          "titleMultiple": "Create labels ({numberOfItems} item(s))",
-          "positionTopLeftLabel": "Top left",
-          "positionTopRightLabel": "Top right",
-          "positionBottomLeftLabel": "Bottom left",
-          "positionBottomRightLabel": "Bottom right",
-          "printSmallLabelLabel": "A6 label",
-          "numberOfLabelsHeading": "Number of labels",
-          "printOptionsHeading": "Print options",
-          "printPositionHeading": "Print position"
-        }
-      },
-      "buttons": {
-        "cancelButton": "Cancel",
-        "clearFiltersButton": "Show all",
-        "createLabelButton": "Create label",
-        "createLabelsButton": "Create labels",
-        "downloadLabelButton": "Download label",
-        "downloadLabelsButton": "Download labels",
-        "downloadDefaultLabelButton": "Download label (default settings)",
-        "downloadDefaultLabelsButton": "Download labels (default settings)"
-      }
-    },
-    "shippingMethods": {
-      "title": "Shipping methods",
-      "buttons": {
-        "viewShippingMethodButton": "View shipping method"
-      }
     }
-  }
 }
