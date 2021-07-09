@@ -104,6 +104,7 @@ class DeliveryOptionsController extends StorefrontController
         $viewData = [
             'options' => json_decode($response, true)['data']['delivery'],
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
+            'carrier' => $carrier,
             'salesContext' => $salesChannelContext,
             'context' => $context,
             'config' => $this->configService->get('MyPaShopware.config')

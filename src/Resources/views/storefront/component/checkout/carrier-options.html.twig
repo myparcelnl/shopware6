@@ -6,7 +6,6 @@
         {% endfor %}
     </select>
 </div>
-
 {% for option in options %}
     <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
         {% for time in option['time'] %}
@@ -33,12 +32,16 @@
     </div>
 {% endfor %}
 
-<label class="d-block mb-0">
-    <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ carrier_id }}" {% if config.myParcelDefaultSignature %}checked{% endif %}>
-    <label for="myparcel_requires_signature_{{ carrier_id }}">{{ "myparcel.delivery_signature"|trans|sw_sanitize }} <span class="cost"></span></label>
-</label>
-<label class="d-block mb-0">
-    <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ carrier_id }}" {% if config.myParcelDefaultOnlyRecipient%}checked{% endif %}>
-    <label for="myparcel_only_recipient_{{ carrier_id }}">{{ "myparcel.delivery_recipient"|trans|sw_sanitize }} <span class="cost"></span></label>
-</label>
+{% if carrier.carrierId != 4 %}
+    <label class="d-block mb-0">
+        <input type="checkbox" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ carrier_id }}" {% if config.myParcelDefaultSignature %}checked{% endif %}>
+        <label for="myparcel_requires_signature_{{ carrier_id }}">{{ "myparcel.delivery_signature"|trans|sw_sanitize }} <span class="cost"></span></label>
+    </label>
+{% endif %}
+{% if carrier.carrierId != 4 %}
+    <label class="d-block mb-0">
+        <input type="checkbox" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ carrier_id }}" {% if config.myParcelDefaultOnlyRecipient%}checked{% endif %}>
+        <label for="myparcel_only_recipient_{{ carrier_id }}">{{ "myparcel.delivery_recipient"|trans|sw_sanitize }} <span class="cost"></span></label>
+    </label>
+{% endif %}
 
