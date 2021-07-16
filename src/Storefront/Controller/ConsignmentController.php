@@ -9,6 +9,7 @@ use Exception;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -161,7 +162,7 @@ class ConsignmentController extends StorefrontController
             if($this->systemConfigService->get('MyPaShopware.config.myParcelDefaultLabelFormat') == 'A6'){
                 $labelPositions = null;
             }else{
-                $labelPositions = 1;
+                $labelPositions = [MyParcelCollection::DEFAULT_A4_POSITION];
             }
         }
 
