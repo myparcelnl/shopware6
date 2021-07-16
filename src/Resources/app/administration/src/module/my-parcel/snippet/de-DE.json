@@ -2,10 +2,10 @@
     "sw-myparcel": {
         "general": {
             "mainMenuItemGeneral": "MyParcel",
-            "ordersMenuItemGeneral": "MeinPaketBestellungen",
-            "consignmentsMenuItemGeneral": "MeinPaket Sendungen",
-            "shippingMethodsMenuItemGeneral": "MeinPaket Versandmethoden",
-            "descriptionTextModule": "Tagline für MeinPaket",
+            "ordersMenuItemGeneral": "MyParcel Bestellungen",
+            "consignmentsMenuItemGeneral": "MyParcel Sendungen",
+            "shippingMethodsMenuItemGeneral": "MyParcel Versandmethoden",
+            "descriptionTextModule": "Tagline für MyParcel",
             "packageTypes": {
                 "package": "Paket",
                 "mailbox": "mailbox",
@@ -72,9 +72,7 @@
                     "positionBottomLeftLabel": "Unten links",
                     "positionBottomRightLabel": "Unten rechts",
                     "printSmallLabelLabel": "A6-Etikett",
-                    "actionTypeHeading": "ActionType"
-                    :
-                    "Aktionstyp",
+                    "actionTypeHeading": "Aktionstyp",
                     "deliveryTypeHeading": "Lieferart",
                     "packageTypeHeading": "Pakettyp",
                     "numberOfLabelsHeading": "Anzahl der Etiketten",
