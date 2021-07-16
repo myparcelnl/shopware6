@@ -12,5 +12,18 @@ help:
 
 # ------------------------------------------------------------------------------------------------------------
 
+install: ## Installs all production dependencies
+	@composer install --no-dev
+
+dev: ## Installs all dev dependencies
+	@composer install
+
+clean: ## Cleans all dependencies
+	rm -rf vendor
+	rm -rf .reports | true
+
+# ------------------------------------------------------------------------------------------------------------
+
 release: ## Creates a new ZIP package
-	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store'
+	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
+	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '.editorconfig' '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store' '*/phpunit.xml' '*/.phpstan.neon' '*/.php_cs.php' '*/phpinsights.php'
