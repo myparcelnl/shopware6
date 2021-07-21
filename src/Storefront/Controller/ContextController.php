@@ -3,23 +3,18 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
+
 namespace MyPa\Shopware\Storefront\Controller;
 
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
-use MollieShopware\Components\Services\OrderService;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
-use Shopware\Storefront\Page\GenericPageLoader;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-//use MyPa\Shopware\Service\Cookie\CookieProvider;
-use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
-
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -32,27 +27,12 @@ class ContextController extends StorefrontController
     private $contextSwitcher;
 
     /**
-     * @var GenericPageLoader
-     */
-    private $genericPageLoader;
-    private $view;
-
-    /**
-     * @var CookieProvider
-     */
-    private $cookieProvider;
-
-    /**
      * ContextController constructor.
-     * @param GenericPageLoader $genericPageLoader
      * @param SalesChannelContextSwitcher $contextSwitcher
-     * @param CookieProviderInterface $cookieProvider
      */
-    public function __construct(GenericPageLoader $genericPageLoader, SalesChannelContextSwitcher $contextSwitcher, CookieProviderInterface $cookieProvider)
+    public function __construct(SalesChannelContextSwitcher $contextSwitcher)
     {
-        $this->genericPageLoader = $genericPageLoader;
         $this->contextSwitcher = $contextSwitcher;
-        $this->cookieProvider = $cookieProvider;
     }
 
     /**

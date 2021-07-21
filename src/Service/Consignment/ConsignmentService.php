@@ -2,7 +2,6 @@
 
 namespace MyPa\Shopware\Service\Consignment;
 
-use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
@@ -15,7 +14,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use RuntimeException;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -104,9 +102,9 @@ class ConsignmentService
     }
 
     /**
-     * @param Context     $context
+     * @param Context $context
      * @param OrderEntity $orderEntity
-     * @param null|int         $packageType
+     * @param null|int $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
@@ -126,7 +124,7 @@ class ConsignmentService
             $orderEntity->getDeliveries()->first() === null ||
             $orderEntity->getDeliveries()->first()->getShippingOrderAddress() === null
         ) {
-            throw new RuntimeException('Could not get a shipping address');
+            throw new \RuntimeException('Could not get a shipping address');
         }
 
         $shippingAddress = $orderEntity->getDeliveries()->first()->getShippingOrderAddress();
@@ -134,7 +132,7 @@ class ConsignmentService
         if ($shippingAddress === null ||
             $shippingAddress->getCountry() === null
         ) {
-            throw new RuntimeException('Shipping address is not properly formatted');
+            throw new \RuntimeException('Shipping address is not properly formatted');
         }
 
         $parsedAddress = AddressHelper::parseAddress($shippingAddress);
@@ -142,7 +140,7 @@ class ConsignmentService
         $shippingOptions = $this->shippingOptionsService->getShippingOptionsForOrder($orderEntity, $context);
 
         if ($shippingOptions === null) {
-            throw new RuntimeException('No valid Shipping Options found');
+            throw new \RuntimeException('No valid Shipping Options found');
         }
 
         $consignment = (ConsignmentFactory::createByCarrierId($shippingOptions->getCarrierId()))
@@ -159,18 +157,18 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
-        if($shippingOptions->getDeliveryDate() !== null) {
+        if ($shippingOptions->getDeliveryDate() !== null) {
 
             $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
 
-            if(strtotime($shippingDate) <= strtotime("today")){
+            if (strtotime($shippingDate) <= strtotime("today")) {
                 $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
             }
 
             $consignment->setDeliveryDate($shippingDate);
         }
 
-        if(
+        if (
             $shippingOptions->getDeliveryDate() !== null
             && $shippingOptions->getDeliveryType() !== null
             && is_int($shippingOptions->getDeliveryType())
@@ -179,7 +177,7 @@ class ConsignmentService
             $consignment->setDeliveryType($shippingOptions->getDeliveryType());
         }
 
-        if(
+        if (
             $shippingOptions->getDeliveryType() !== null
             && is_int($shippingOptions->getDeliveryType())
             && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
@@ -193,16 +191,16 @@ class ConsignmentService
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());
-        }else if ($packageType) {
+        } else if ($packageType) {
             $consignment->setPackageType($packageType);
         }
 
-        if($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP){
+        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
 
             $totalWeight = 0;
             $lineItems = $orderEntity->getLineItems();
-            if($lineItems){
-                foreach($lineItems as $lineItem){
+            if ($lineItems) {
+                foreach ($lineItems as $lineItem) {
                     $totalWeight += $lineItem->getProduct()->getWeight();
                 }
                 //Shopware uses KG for weight, MyParcel wants Grams
@@ -213,33 +211,33 @@ class ConsignmentService
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
-            if($consignment instanceof DPDConsignment){
+            if ($consignment instanceof DPDConsignment) {
                 $consignment->setAgeCheck(false);
-            }else {
+            } else {
                 $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
             }
         }
 
         if ($shippingOptions->getLargeFormat() !== null) {
-            if($consignment instanceof DPDConsignment){
+            if ($consignment instanceof DPDConsignment) {
                 $consignment->setLargeFormat(false);
-            }else {
+            } else {
                 $consignment->setLargeFormat($shippingOptions->getLargeFormat());
             }
         }
 
         if ($shippingOptions->getRequiresSignature() !== null) {
-            if($consignment instanceof DPDConsignment){
+            if ($consignment instanceof DPDConsignment) {
                 $consignment->setSignature(false);
-            }else {
+            } else {
                 $consignment->setSignature($shippingOptions->getRequiresSignature());
             }
         }
 
         if ($shippingOptions->getOnlyRecipient() !== null) {
-            if($consignment instanceof DPDConsignment){
+            if ($consignment instanceof DPDConsignment) {
                 $consignment->setOnlyRecipient(false);
-            }else {
+            } else {
                 $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
             }
         }
@@ -250,17 +248,16 @@ class ConsignmentService
             }
 
             return $consignment;
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
+        } catch (\Exception $e) {
         }
 
         return null;
     }
 
     /**
-     * @param Context             $context
-     * @param OrderEntity         $orderEntity
-     * @param string              $shippingOptionId
+     * @param Context $context
+     * @param OrderEntity $orderEntity
+     * @param string $shippingOptionId
      * @param AbstractConsignment $consignment
      *
      * @return ShipmentEntity|null
@@ -283,7 +280,7 @@ class ConsignmentService
             ],
         ];
 
-        if($consignment->getBarcode() !== null) {
+        if ($consignment->getBarcode() !== null) {
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
@@ -313,9 +310,9 @@ class ConsignmentService
     }
 
     /**
-     * @param Context        $context
+     * @param Context $context
      * @param ShipmentEntity $shipment
-     * @param string         $labelUrl
+     * @param string $labelUrl
      *
      * @return ShipmentEntity|null
      */
@@ -330,8 +327,8 @@ class ConsignmentService
     }
 
     /**
-     * @param Context    $context
-     * @param array      $ordersData
+     * @param Context $context
+     * @param array $ordersData
      *
      * @param array|null $labelPositions
      * @param int|null $packageType
@@ -376,10 +373,10 @@ class ConsignmentService
             ]);
 
             if ($order !== null) {
-                if(!$numberOfLabels || is_null($numberOfLabels)){
+                if (!$numberOfLabels || is_null($numberOfLabels)) {
                     $numberOfLabels = 1;
                 }
-                for($i = 1; $i <= $numberOfLabels; $i++) {
+                for ($i = 1; $i <= $numberOfLabels; $i++) {
                     $consignment = $this->createConsignment($context, $order, $packageType);
 
                     if ($consignment !== null) {
@@ -426,7 +423,7 @@ class ConsignmentService
                 if ($consignment !== null) {
                     $createdShipment = $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
                     $shipments[] = $createdShipment;
-            }
+                }
             }
         }
 
