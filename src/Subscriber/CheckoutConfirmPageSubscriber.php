@@ -2,6 +2,7 @@
 
 namespace MyPa\Shopware\Subscriber;
 
+use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
@@ -70,35 +71,46 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
             new Context(new SystemSource())
         );
 
-        if (isset($_COOKIE['myparcel-cookie-key']) && $_COOKIE['myparcel-cookie-key'] != 'empty' && $shippingMethod) {
-            $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
-
+        if(!($shippingMethod instanceof ShippingMethodEntity)) {
             $data['myparcel_values'] = [
-                'shippingMethodId' => $cookie_data[0],
-                'deliveryDate' => $cookie_data[1],
-                'deliveryType' => $cookie_data[2],
-                'requiresSignature' => $cookie_data[3],
-                'onlyRecipient' => $cookie_data[4]
+                'shippingMethodId' => $this->configService->get('MyPaShopware.config.myParcelDefaultMethod'),
+                'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
+                'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
+                'requiresSignature' => $this->configService->get('MyPaShopware.config.myParcelDefaultSignature'),
+                'onlyRecipient' => $this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient')
             ];
-        } else {
-            if ($shippingMethod) {
-                $data['myparcel_values'] = [
-                    'shippingMethodId' => $args->getSalesChannelContext()->getShippingMethod()->getId(),
-                    'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
-                    'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
-                    'requiresSignature' => $this->configService->get('MyPaShopware.config.myParcelDefaultSignature'),
-                    'onlyRecipient' => $this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient')
-                ];
-            } else {
-                $data['myparcel_values'] = [
-                    'shippingMethodId' => $this->configService->get('MyPaShopware.config.myParcelDefaultMethod'),
-                    'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
-                    'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
-                    'requiresSignature' => $this->configService->get('MyPaShopware.config.myParcelDefaultSignature'),
-                    'onlyRecipient' => $this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient')
-                ];
-            }
+
+            $args->getPage()->assign($data);
+            return;
         }
+
+        if($args->getRequest()->cookies->has('myparcel-cookie-key')) {
+            $cookie = $args->getRequest()->cookies->get('myparcel-cookie-key');
+        }
+
+        if(!isset($cookie) || $cookie == 'empty') {
+            $data['myparcel_values'] = [
+                'shippingMethodId' => $args->getSalesChannelContext()->getShippingMethod()->getId(),
+                'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
+                'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
+                'requiresSignature' => $this->configService->get('MyPaShopware.config.myParcelDefaultSignature'),
+                'onlyRecipient' => $this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient')
+            ];
+
+            $args->getPage()->assign($data);
+            return;
+        }
+
+        $cookieData = explode('_', $cookie);
+
+        $data['myparcel_values'] = [
+            'shippingMethodId' => $cookieData[0],
+            'deliveryDate' => $cookieData[1],
+            'deliveryType' => $cookieData[2],
+            'requiresSignature' => $cookieData[3],
+            'onlyRecipient' => $cookieData[4]
+        ];
+
         $args->getPage()->assign($data);
     }
 }

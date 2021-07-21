@@ -38,6 +38,7 @@ class ContextController extends StorefrontController
     /**
      * @Route("/checkout/configure", name="frontend.checkout.configure", methods={"POST"}, options={"seo"="false"}, defaults={"XmlHttpRequest": true})
      * @param Request $request
+     * @param Response $response
      * @param RequestDataBag $data
      * @param SalesChannelContext $context
      * @return Response
@@ -60,7 +61,7 @@ class ContextController extends StorefrontController
             $myparcel_only_recipient,
         ]));
 
-        /* set cookievalue */
+        /* set cookie */
         $cookie = new Cookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');
         $response->headers->setCookie($cookie);
 
