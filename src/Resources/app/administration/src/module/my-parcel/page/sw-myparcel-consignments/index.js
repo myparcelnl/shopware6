@@ -305,6 +305,9 @@ Component.register('sw-myparcel-consignments', {
 
             if (!!this.selectedConsignments) {
                 for (let id in this.selectedConsignments) {
+                    if(!this.selectedConsignments.hasOwnProperty(id)) {
+                        continue;
+                    }
                     this.selectedConsignmentIds.push(id);
                 }
             }
