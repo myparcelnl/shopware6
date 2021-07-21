@@ -38,12 +38,11 @@ class ContextController extends StorefrontController
     /**
      * @Route("/checkout/configure", name="frontend.checkout.configure", methods={"POST"}, options={"seo"="false"}, defaults={"XmlHttpRequest": true})
      * @param Request $request
-     * @param Response $response
      * @param RequestDataBag $data
      * @param SalesChannelContext $context
      * @return Response
      */
-    public function configure(Request $request, Response $response, RequestDataBag $data, SalesChannelContext $context)
+    public function configure(Request $request, RequestDataBag $data, SalesChannelContext $context)
     {
         /* get vars from post */
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
@@ -61,12 +60,14 @@ class ContextController extends StorefrontController
             $myparcel_only_recipient,
         ]));
 
+        $this->contextSwitcher->update($data, $context);
+
+        $response = $this->createActionResponse($request);
+
         /* set cookie */
         $cookie = new Cookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');
         $response->headers->setCookie($cookie);
 
-        $this->contextSwitcher->update($data, $context);
-
-        return $this->createActionResponse($request);
+        return $response;
     }
 }
