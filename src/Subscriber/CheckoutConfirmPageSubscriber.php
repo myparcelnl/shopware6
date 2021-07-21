@@ -28,12 +28,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      *
      * @param ShippingMethodService $shippingMethodService
      * @param SystemConfigService $configService
-     * @param CartService $cartService
      */
     public function __construct(
         ShippingMethodService $shippingMethodService,
-        SystemConfigService $configService,
-        CartService $cartService
+        SystemConfigService $configService
     )
     {
         $this->shippingMethodService = $shippingMethodService;
