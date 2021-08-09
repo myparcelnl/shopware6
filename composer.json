@@ -18,7 +18,7 @@
     ],
     "require": {
         "myparcelnl/sdk": "^5.0",
-        "shopware/core": "6.3.*",
+        "shopware/core": "^6.3.0",
         "shopware/storefront": "*",
         "shopware/administration": "*"
     },
