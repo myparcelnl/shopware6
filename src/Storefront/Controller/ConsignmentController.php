@@ -99,6 +99,7 @@ class ConsignmentController extends StorefrontController
      *     methods={"POST"}
      *     )
      *
+     * @param Request $request
      * @return JsonResponse
      */
     public function getForShippingOption(Request $request): JsonResponse
@@ -115,6 +116,7 @@ class ConsignmentController extends StorefrontController
      *     methods={"POST"}
      *     )
      *
+     * @param Request $request
      * @return JsonResponse
      */
     public function getForShippingOptionLegacy(Request $request): JsonResponse
