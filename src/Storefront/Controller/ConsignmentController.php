@@ -23,13 +23,13 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class ConsignmentController extends StorefrontController
 {
     public const ROUTE_NAME_GET_CARRIERS = 'api.action.myparcel.carriers';
-    public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package_types';
+    public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package-types';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
-    public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
-    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
-    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get_for_shipping_option';
-    public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download_labels';
-    public const ROUTE_NAME_TRACK_AND_TRACE = 'api.action.myparcel.consignment.track_and_trace';
+    public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create-consignments';
+    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get-by-reference-id';
+    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get-for-shipping-option';
+    public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download-labels';
+    public const ROUTE_NAME_TRACK_AND_TRACE = 'api.action.myparcel.consignment.track-and-trace';
 
     /* For backwards compatibility with 6.3*/
     public const ROUTE_NAME_GET_CARRIERS_LEGACY = 'api.action.myparcel.carriers';
