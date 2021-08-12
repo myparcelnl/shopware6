@@ -32,6 +32,8 @@
                         :sortDirection="sortDirection"
                         :isLoading="isLoading"
                         :allowColumnEdit="false"
+                        @selection-change="onSelectionChanged"
+                        @column-sort="onSortColumn"
                         identifier="sw-myparcel-orders-list">
 
                     <template #column-order.orderNumber="{ item }">

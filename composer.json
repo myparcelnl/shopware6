@@ -1,48 +1,48 @@
 {
-  "name": "mypashopware/myparcel",
-  "description": "MyParcel integration for Shopware 6",
-  "version": "v1.0.1",
-  "type": "shopware-platform-plugin",
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "MyParcel",
-      "homepage": "https://www.myparcel.nl",
-      "role": "Manufacturer"
+    "name": "mypashopware/myparcel",
+    "description": "MyParcel integration for Shopware 6",
+    "version": "v1.1.0",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "MyParcel",
+            "homepage": "https://www.myparcel.nl",
+            "role": "Manufacturer"
+        },
+        {
+            "name": "Kiener Digital Commerce",
+            "homepage": "https://www.kiener.nl",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "myparcelnl/sdk": "^5.0",
+        "shopware/core": "^6.3.0",
+        "shopware/storefront": "*",
+        "shopware/administration": "*"
     },
-      {
-          "name": "Kiener Digital Commerce",
-          "homepage": "https://www.kiener.nl",
-          "role": "Developer"
-      }
-  ],
-  "require": {
-    "shopware/core": "6.3.*",
-    "shopware/storefront": "*",
-    "shopware/administration": "*",
-    "myparcelnl/sdk": "^5.0"
-  },
-  "extra": {
-    "shopware-plugin-class": "MyPa\\Shopware\\MyPaShopware",
-    "copyright": "(c) by MyParcel",
-    "label": {
-      "en-GB": "MyParcel integration for Shopware 6",
-      "nl-NL": "MyParcel integratie voor Shopware 6",
-      "de-DE": "MyParcel-Integration für Shopware 6"
+    "extra": {
+        "shopware-plugin-class": "MyPa\\Shopware\\MyPaShopware",
+        "copyright": "(c) by MyParcel",
+        "label": {
+            "en-GB": "MyParcel integration for Shopware 6",
+            "nl-NL": "MyParcel integratie voor Shopware 6",
+            "de-DE": "MyParcel-Integration für Shopware 6"
+        },
+        "description": {
+            "en-GB": "MyParcel integration for Shopware 6",
+            "nl-NL": "MyParcel integratie voor Shopware 6",
+            "de-DE": "MyParcel-Integration für Shopware 6"
+        }
     },
-    "description": {
-      "en-GB": "MyParcel integration for Shopware 6",
-      "nl-NL": "MyParcel integratie voor Shopware 6",
-      "de-DE": "MyParcel-Integration für Shopware 6"
+    "config": {
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": {
+            "MyPa\\Shopware\\": "src/",
+            "MyParcelNL\\Sdk\\src\\": "vendor/myparcelnl/sdk/src"
+        }
     }
-  },
-  "config": {
-    "optimize-autoloader": true
-  },
-  "autoload": {
-    "psr-4": {
-      "MyPa\\Shopware\\": "src/",
-      "MyParcelNL\\Sdk\\src\\": "vendor/myparcelnl/sdk/src"
-    }
-  }
 }

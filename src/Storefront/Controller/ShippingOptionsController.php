@@ -25,6 +25,12 @@ class ShippingOptionsController extends StorefrontController
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipping_options.create';
     public const ROUTE_NAME_SHOW = 'api.action.myparcel.shipping_options.show';
 
+    /* For backwards compatibility with 6.3*/
+    public const ROUTE_NAME_ALL_LEGACY = 'api.action.myparcel.shipping_options.all';
+    public const ROUTE_NAME_CREATE_LEGACY = 'api.action.myparcel.shipping_options.create';
+    public const ROUTE_NAME_SHOW_LEGACY = 'api.action.myparcel.shipping_options.show';
+    /* End backwards compatibility*/
+
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_SHIPPING_OPTIONS = 'shipping_options';
@@ -70,7 +76,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/carriers",
+     *     "/api/_action/myparcel/carriers",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
      *     methods={"GET"}
@@ -80,6 +86,32 @@ class ShippingOptionsController extends StorefrontController
      * @throws Exception
      */
     public function getDeliveryTypes(): JsonResponse
+    {
+        return $this->getDeliveryTypesResponse();
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/carriers",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS_LEGACY,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function getDeliveryTypesLegacy(): JsonResponse
+    {
+        return $this->getDeliveryTypesResponse();
+    }
+
+    /**
+     * @return JsonResponse
+     * @throws Exception
+     */
+    private function getDeliveryTypesResponse(): JsonResponse
     {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
@@ -91,7 +123,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/create",
+     *     "/api/_action/myparcel/shipping-options/create",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
@@ -103,6 +135,36 @@ class ShippingOptionsController extends StorefrontController
      * @throws Exception
      */
     public function createForOrder(Request $request): JsonResponse //NOSONAR
+    {
+        return $this->createForOrderResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options/create",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_CREATE_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function createForOrderLegacy(Request $request): JsonResponse //NOSONAR
+    {
+        return $this->createForOrderResponse($request);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    private function createForOrderResponse (Request $request): JsonResponse //NOSONAR
     {
         $orderId = $request->get(self::REQUEST_KEY_ORDER_ID);
         $orderVersionId = $request->get(self::REQUEST_KEY_ORDER_VERSION_ID);
@@ -216,7 +278,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/all",
+     *     "/api/_action/myparcel/shipping-options/all",
      *     defaults={"auth_enabled"=true},
      *     name=ShippingOptionsController::ROUTE_NAME_ALL,
      *     methods={"GET"}
@@ -225,6 +287,38 @@ class ShippingOptionsController extends StorefrontController
      * @return JsonResponse
      */
     public function all(): JsonResponse
+    {
+        return $this->allResponse();
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options/all",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     */
+    public function allLegacy(): JsonResponse
+    {
+        return $this->allResponse();
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options/all",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     */
+    private function allResponse(): JsonResponse
     {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
@@ -247,6 +341,44 @@ class ShippingOptionsController extends StorefrontController
      * @throws Exception
      */
     public function show(Request $request): JsonResponse
+    {
+        return $this->showResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options/show",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function showLegacy(Request $request): JsonResponse
+    {
+        return $this->showResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipping-options/show",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    private function showResponse(Request $request): JsonResponse
     {
         $shippingOptionsId = $request->get(self::REQUEST_KEY_SHIPPING_OPTIONS_ID);
 

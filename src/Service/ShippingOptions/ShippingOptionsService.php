@@ -12,6 +12,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\HttpFoundation\Request;
 
 class ShippingOptionsService
 {
@@ -39,7 +40,7 @@ class ShippingOptionsService
     /**
      * ShippingOptionsService constructor.
      *
-     * @param LoggerInterface           $logger
+     * @param LoggerInterface $logger
      * @param EntityRepositoryInterface $shippingOptionsRepository
      * @param SystemConfigService $systemConfigService
      */
@@ -55,7 +56,7 @@ class ShippingOptionsService
     }
 
     /**
-     * @param array   $params
+     * @param array $params
      * @param Context $context
      *
      * @return ShippingOptionEntity|null
@@ -84,7 +85,7 @@ class ShippingOptionsService
     }
 
     /**
-     * @param string  $id
+     * @param string $id
      * @param Context $context
      *
      * @return ShippingOptionEntity|null
@@ -99,7 +100,7 @@ class ShippingOptionsService
     }
 
     /**
-     * @param string  $id
+     * @param string $id
      * @param Context $context
      *
      * @return array
@@ -115,7 +116,7 @@ class ShippingOptionsService
 
     /**
      * @param OrderEntity $orderEntity
-     * @param Context     $context
+     * @param Context $context
      *
      * @return ShippingOptionEntity|null
      */
@@ -158,23 +159,26 @@ class ShippingOptionsService
      */
     public function getShippingOptionsRaisePrice(): float
     {
-        if(isset($_COOKIE['myparcel-cookie-key']) && $_COOKIE['myparcel-cookie-key'] != 'empty'){
-            $cookie_data = explode('_', $_COOKIE['myparcel-cookie-key']);
+        $request = Request::createFromGlobals();
 
-            $deliveryType = $cookie_data[2];
-        }else{
-            $deliveryType = $this->systemConfigService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow');
+        $deliveryType = $this->systemConfigService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow');
+
+        if ($request->cookies->has('myparcel-cookie-key')) {
+            $cookie = $request->cookies->get('myparcel-cookie-key');
+
+            if ($cookie != 'empty') {
+                $cookieData = explode('_', $cookie);
+                $deliveryType = $cookieData[2];
+            }
         }
 
-        $raise = 0;
-
-        if($deliveryType == self::MORNING_TYPE) {
-            $raise = $this->systemConfigService->get('MyPaShopware.config.costsDelivery1');
+        switch ($deliveryType) {
+            case self::MORNING_TYPE:
+                return $this->systemConfigService->get('MyPaShopware.config.costsDelivery1');
+            case self::EVENING_TYPE:
+                return $this->systemConfigService->get('MyPaShopware.config.costsDelivery3');
+            default:
+                return 0;
         }
-        if($deliveryType == self::EVENING_TYPE) {
-            $raise = $this->systemConfigService->get('MyPaShopware.config.costsDelivery3');
-        }
-
-        return $raise;
     }
 }

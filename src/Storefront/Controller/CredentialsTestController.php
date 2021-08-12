@@ -14,9 +14,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class CredentialsTestController
 {
     /**
-     * @Route(path="/api/v{version}/_action/myparcel-api-test/verify")
+     * @Route(path="/api/_action/myparcel-api-test/verify")
      */
     public function check(RequestDataBag $dataBag): JsonResponse
+    {
+       return $this->checkResponse($dataBag);
+    }
+
+    /**
+     * @Route(path="/api/v{version}/_action/myparcel-api-test/verify")
+     */
+    public function checkLegacy(RequestDataBag $dataBag): JsonResponse
+    {
+        return $this->checkResponse($dataBag);
+    }
+
+    /**
+     *
+     */
+    public function checkResponse(RequestDataBag $dataBag): JsonResponse
     {
         $apiKey = $dataBag->get('MyPaShopware.config.myParcelApiKey');
 

@@ -3,23 +3,18 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
+
 namespace MyPa\Shopware\Storefront\Controller;
 
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
-use MollieShopware\Components\Services\OrderService;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
-use Shopware\Storefront\Page\GenericPageLoader;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-//use MyPa\Shopware\Service\Cookie\CookieProvider;
-use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
-
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -32,27 +27,12 @@ class ContextController extends StorefrontController
     private $contextSwitcher;
 
     /**
-     * @var GenericPageLoader
-     */
-    private $genericPageLoader;
-    private $view;
-
-    /**
-     * @var CookieProvider
-     */
-    private $cookieProvider;
-
-    /**
      * ContextController constructor.
-     * @param GenericPageLoader $genericPageLoader
      * @param SalesChannelContextSwitcher $contextSwitcher
-     * @param CookieProviderInterface $cookieProvider
      */
-    public function __construct(GenericPageLoader $genericPageLoader, SalesChannelContextSwitcher $contextSwitcher, CookieProviderInterface $cookieProvider)
+    public function __construct(SalesChannelContextSwitcher $contextSwitcher)
     {
-        $this->genericPageLoader = $genericPageLoader;
         $this->contextSwitcher = $contextSwitcher;
-        $this->cookieProvider = $cookieProvider;
     }
 
     /**
@@ -67,25 +47,27 @@ class ContextController extends StorefrontController
         /* get vars from post */
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
         $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
-        $myparcel_delivery_type = $data->get('myparcel_delivery_type_'.$myparcel_delivery_date) ?: 0;
-        $myparcel_requires_signature= $data->get('myparcel_requires_signature') ?: 0;
-        $myparcel_only_recipient= $data->get('myparcel_only_recipient') ?: 0;
+        $myparcel_delivery_type = $data->get('myparcel_delivery_type_' . $myparcel_delivery_date) ?: 0;
+        $myparcel_requires_signature = $data->get('myparcel_requires_signature') ?: 0;
+        $myparcel_only_recipient = $data->get('myparcel_only_recipient') ?: 0;
 
         /* set vars to cookie */
-        $cookieValue = '' . $shippingMethodId;
-        $cookieValue .= '_' . $myparcel_delivery_date;
-        $cookieValue .= '_' . $myparcel_delivery_type;
-        $cookieValue .= '_' . $myparcel_requires_signature;
-        $cookieValue .= '_' . $myparcel_only_recipient;
-
-        $cookieValue = trim($cookieValue);
-
-        /* set cookievalue */
-        //setcookie("myparcel-cookie-key", htmlentities($cookieValue), time() + 600, '/');
-        setcookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');
+        $cookieValue = trim(implode('_', [
+            $shippingMethodId,
+            $myparcel_delivery_date,
+            $myparcel_delivery_type,
+            $myparcel_requires_signature,
+            $myparcel_only_recipient,
+        ]));
 
         $this->contextSwitcher->update($data, $context);
 
-        return $this->createActionResponse($request);
+        $response = $this->createActionResponse($request);
+
+        /* set cookie */
+        $cookie = new Cookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');
+        $response->headers->setCookie($cookie);
+
+        return $response;
     }
 }
