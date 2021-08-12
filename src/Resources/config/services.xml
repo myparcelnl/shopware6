@@ -97,30 +97,48 @@
 
         <!-- Controller -->
         <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService" />
             <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\ContextController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\MyParcelController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService" />
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\ShipmentController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService" />
             <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService" />
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\ShippingOptionsController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService" />
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
             <argument type="service" id="logger"/>
             <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>

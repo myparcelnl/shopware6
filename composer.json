@@ -1,7 +1,7 @@
 {
     "name": "mypashopware/myparcel",
     "description": "MyParcel integration for Shopware 6",
-    "version": "v1.0.1",
+    "version": "v1.1.0",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
     "authors": [
@@ -18,7 +18,7 @@
     ],
     "require": {
         "myparcelnl/sdk": "^5.0",
-        "shopware/core": "6.3.*",
+        "shopware/core": "^6.3.0",
         "shopware/storefront": "*",
         "shopware/administration": "*"
     },

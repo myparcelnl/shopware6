@@ -224,7 +224,13 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             $price += $raise;
         }
 
-        $definition = new QuantityPriceDefinition($price, $rules, $context->getContext()->getCurrencyPrecision(), 1, true);
+        /* Backwards compatibility with 6.3*/
+        if(method_exists($context->getContext(), 'getCurrencyPrecision')){
+            $precision = $context->getContext()->getCurrencyPrecision();
+            $definition = new QuantityPriceDefinition($price, $rules, $precision, 1, true);
+        }else{
+            $definition = new QuantityPriceDefinition($price, $rules, 1);
+        }
 
         return $this->priceCalculator->calculate($definition, $context);
     }
