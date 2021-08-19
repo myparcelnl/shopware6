@@ -208,17 +208,9 @@ Component.register('sw-myparcel-orders', {
                 label: 'sw-order.list.orderDate',
                 allowResize: true
             }, {
-                property: 'order.affiliateCode',
-                inlineEdit: 'string',
-                label: 'sw-order.list.columnAffiliateCode',
-                allowResize: true,
-                visible: false
-            }, {
-                property: 'order.campaignCode',
-                inlineEdit: 'string',
-                label: 'sw-order.list.columnCampaignCode',
-                allowResize: true,
-                visible: false
+                property: 'pickupLocation',
+                label: 'sw-myparcel.columns.pickupLocation',
+                allowResize: true
             }];
         },
 
@@ -266,6 +258,14 @@ Component.register('sw-myparcel-orders', {
             return order.addresses.find((address) => {
                 return address.id === order.billingAddressId;
             });
+        },
+
+        getPickupLocation(item) {
+            if(!item.locationId){
+                return '-';
+            }
+
+            return item.locationName +" : "+ item.locationStreet+" "+item.locationNumber+" "+item.locationPostalCode+" "+item.locationCity+" "+item.locationCc;
         },
 
         getVariantFromOrderState(order) {

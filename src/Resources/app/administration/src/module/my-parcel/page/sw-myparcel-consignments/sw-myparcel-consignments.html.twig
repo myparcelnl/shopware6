@@ -97,6 +97,10 @@
                 <span v-else />
             </template>
 
+            <template #column-pickupLocation="{ item }">
+                {{ getPickupLocation(item.shippingOption) }}
+            </template>
+
             <template #actions="{ item }">
                 <sw-context-menu-item class="sw-myparcel-consignments-list__create-label-action" @click="onOpenCreateSingleLabelModal(item)">
                     {{ $tc('sw-myparcel.consignments.buttons.createLabelButton') }}

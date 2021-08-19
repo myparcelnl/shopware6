@@ -35,12 +35,17 @@ export default class MyParcelShippingOptions extends Plugin {
         }
 
         const cookieSet = cookieMyParcel.split('_');
-        const shippingMethodId  = cookieSet[0];
-        const myparcel_delivery_date  = cookieSet[1];
-        const myparcel_delivery_type =  cookieSet[2];
-        const myparcel_requires_signature =  cookieSet[3];
-        const myparcel_only_recipient =  cookieSet[4];
+        const myparcel_delivery_location = cookieSet[0]
+        const shippingMethodId  = cookieSet[1];
+        const myparcel_delivery_date  = cookieSet[2];
+        const myparcel_delivery_type =  cookieSet[3];
+        const myparcel_requires_signature =  cookieSet[4];
 
+        if(myparcel_delivery_location == 'pickup') {
+            const myparcel_pickup_id = cookieSet[5]
+        }else{
+            const myparcel_only_recipient =  cookieSet[5];
+        }
         /* Is myParcel shippingform and is delivery type selected? */
         if (shippingForms && myparcel_delivery_type > 0) {
             let shippingSelectedTxt = '';
@@ -49,41 +54,57 @@ export default class MyParcelShippingOptions extends Plugin {
             const shippingForm = document.querySelector('div[data-shipping-method-id="' + shippingMethodId + '"]');
             const shippingOptions = shippingForm.querySelector('.delivery_options[data-date="' + myparcel_delivery_date + '"]');
 
-            /* Set the selected date */
-            if(myparcel_delivery_date){
-                const deliveryDateSelect = shippingForm.querySelector('select[name="myparcel_delivery_date"]');
-                const selectedDate = deliveryDateSelect.querySelector('[value="' + myparcel_delivery_date + '"]');
-                selectedDate.selected = true;
+            const selectedDeliveryLocation = shippingForm.querySelector('input[name="delivery_location"][value="'+ myparcel_delivery_location +'"]')
+            selectedDeliveryLocation.checked = true;
 
-                shippingSelectedTxt = shippingSelectedTxt + selectedDate.text;
+            if(myparcel_delivery_location == 'address') {
+                /* Set the selected date */
+                if (myparcel_delivery_date) {
+                    const deliveryDateSelect = shippingForm.querySelector('select[name="myparcel_delivery_date"]');
+                    const selectedDate = deliveryDateSelect.querySelector('[value="' + myparcel_delivery_date + '"]');
+                    selectedDate.selected = true;
+
+                    shippingSelectedTxt = shippingSelectedTxt + selectedDate.text;
+                }
+
+                if (myparcel_delivery_location == 'address') {
+                    /* Set delivery type */
+                    const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type_' + myparcel_delivery_date + '"][value="' + myparcel_delivery_type + '"]');
+                    deliveryOptionType.checked = true;
+                }
+
+                /* Set signature checkbox */
+                if (myparcel_requires_signature > 0) {
+                    const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
+                    const requiresSignatureLabel = shippingForm.querySelector('label[for="' + requiresSignatureInput.id + '"]').textContent;
+                    requiresSignatureInput.checked = true;
+
+                    shippingSelectedTxt = shippingSelectedTxt + ', ' + requiresSignatureLabel.toLowerCase();
+                }
+
+                /* Set recipient checkbox */
+                if (myparcel_only_recipient > 0) {
+                    const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
+                    const onlyRecipientLabel = shippingForm.querySelector('label[for="' + onlyRecipientInput.id + '"]').textContent;
+                    onlyRecipientInput.checked = true;
+                    shippingSelectedTxt = shippingSelectedTxt + ', ' + onlyRecipientLabel.toLowerCase();
+                }
+
+                /* Enclose shipment text */
+                if(myparcel_only_recipient > 0 || myparcel_requires_signature > 0) {
+                    shippingSelectedTxt = ' (' + shippingSelectedTxt + ')';
+                }
+            }
+            if(myparcel_delivery_location == 'pickup'){
+                const selectedPickupPoint = shippingForm.querySelector('input[name="pickup_point"][value="'+ myparcel_pickup_id +'"]')
+                selectedPickupPoint.checked = true;
+
+                const pickupPointData = JSON.parse(jsonselectedPickupPoint.dataset.pickuppoint_data);
+                shippingSelectedTxt = pickupPointData.location +"<br />"
+                    + pickupPointData.street +" "+ pickupPointData.number+"<br />"+
+                    pickupPointData.postal_code +" "+ pickupPointData.city;
             }
 
-            /* Set delivery type */
-            const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type_'+ myparcel_delivery_date +'"][value="' + myparcel_delivery_type + '"]');
-            deliveryOptionType.checked = true;
-
-
-            /* Set signature checkbox */
-            if(myparcel_requires_signature > 0) {
-                const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
-                const requiresSignatureLabel = shippingForm.querySelector('label[for="'+ requiresSignatureInput.id + '"]').textContent;
-                requiresSignatureInput.checked = true;
-
-                shippingSelectedTxt = shippingSelectedTxt + ', ' + requiresSignatureLabel.toLowerCase();
-            }
-
-            /* Set recipient checkbox */
-            if(myparcel_only_recipient > 0) {
-                const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
-                const onlyRecipientLabel = shippingForm.querySelector('label[for="'+ onlyRecipientInput.id + '"]').textContent;
-                onlyRecipientInput.checked = true;
-                shippingSelectedTxt = shippingSelectedTxt + ', ' + onlyRecipientLabel.toLowerCase();
-            }
-
-            /* Enclose shipment text */
-            if(myparcel_only_recipient > 0 || myparcel_requires_signature > 0) {
-                shippingSelectedTxt = ' (' + shippingSelectedTxt + ')';
-            }
 
             /* Set and place text */
             //const deliveryOptionId = shippingMethodId;
