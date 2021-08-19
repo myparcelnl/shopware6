@@ -22,7 +22,7 @@ class Migration1629277711AddShippingOptionsLocationFields extends MigrationStep
             ADD `location_number` VARCHAR(255) NULL AFTER `location_street`,
             ADD `location_postalcode` VARCHAR(255) NULL AFTER `location_number`,
             ADD `location_city` VARCHAR(255) NULL AFTER `location_postalcode`,
-            ADD `location_cc` VARCHAR(255) NULL AFTER `location_city`
+            ADD `location_cc` VARCHAR(255) NULL AFTER `location_city`,
             ADD `retail_network_id` VARCHAR(255) NULL AFTER `location_cc`
         ');
     }
