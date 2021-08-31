@@ -64,7 +64,7 @@
                         <input type="radio" class="custom-control-input" id="pickup_point_{{ point.location_code }}" name="pickup_point" value="{{ point.location_code }}" data-pickuppoint_data="{{ point | json_encode }}" {% if point.location_code == location_id %}checked{% endif %}>
                         <label class="custom-control-label" for="pickup_point_{{ point.location_code }}">
                             <span class="location">{{ point.location }}</span>
-                            <span class="address">{{ point.street }} {{ point.number }}</span>
+                            <span class="address">{{ point.street }} {{ point.number }},</span>
                             <span class="postal">{{ point.postal_code }} </span>
                             <span class="city">{{ point.city }} </span>
                         </label>
