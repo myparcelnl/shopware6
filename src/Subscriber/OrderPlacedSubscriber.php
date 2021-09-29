@@ -27,6 +27,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private const PARAM_RETURN_IF_NOT_HOME = 'return_if_not_home';
     private const PARAM_LARGE_FORMAT = 'large_format';
     private const PARAM_SHIPPING_METHOD_ID = 'shipping_method_id';
+    private const PARAM_DELIVERY_LOCATION = 'delivery_location';
+    private const PARAM_PICKUP_DATA = 'pickup_point_data';
 
     /**
      * @var RequestStack
@@ -154,7 +156,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
                 }else{
-                    $options[ShippingOptionEntity::PARAM_REQUIRES_SIGNATURE] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultSignature');
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultSignature');
                 }
 
                 if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
@@ -179,6 +181,19 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }else{
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (int)$this->configService->get('MyPaShopware.config.myParcelDefaultPackageType');
+                }
+
+                if(isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup'){
+                    $decodedPickupPointData = json_decode(base64_decode($params[self::PARAM_PICKUP_DATA]), true);
+
+                    $options[ShippingOptionEntity::FIELD_PICKUP_LOCATION_ID] = intval($decodedPickupPointData['location_code']);
+                    $options[ShippingOptionEntity::FIELD_PICKUP_NAME] = $decodedPickupPointData['location'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_STREET] = $decodedPickupPointData['street'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_NUMBER] = $decodedPickupPointData['number'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_POSTAL_CODE] = $decodedPickupPointData['postal_code'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_CITY] = $decodedPickupPointData['city'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_CC] = $decodedPickupPointData['cc'];
+                    $options[ShippingOptionEntity::FIELD_RETAIL_NETWORK_ID] = $decodedPickupPointData['retail_network_id'];
                 }
 
                 if (!empty($options)) {

@@ -47,7 +47,8 @@
             "onlyRecipientColumn": "Recipient only",
             "returnIfNotHomeColumn": "Return if not home",
             "largeFormatColumn": "Large format",
-            "numberOfConsignmentsColumn": "Shipment(s)"
+            "numberOfConsignmentsColumn": "Shipment(s)",
+            "pickupLocation": "Pickup location"
         },
         "orders": {
             "title": "Orders",

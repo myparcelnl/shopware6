@@ -9,3 +9,38 @@
         display: block;
     }
 }
+.myparcel_delivery_options{
+    padding-left: 30px;
+}
+.myparcel_pickuppoint{
+    label{
+        margin: 5px 0;
+        .location{
+            display: block;
+        }
+    }
+}
+.my_parcel_delivery_location_type{
+    &.address{
+        ~ .myparcel_delivery_address{
+            display: none;
+            margin-left: 20px;
+        }
+        &:checked{
+            & ~ .myparcel_delivery_address{
+                display: block;
+            }
+        }
+    }
+    &.pickup{
+        ~ .myparcel_delivery_pickup{
+            display: none;
+            margin-left: 20px;
+        }
+        &:checked{
+            & ~ .myparcel_delivery_pickup{
+                display: block;
+            }
+        }
+    }
+}

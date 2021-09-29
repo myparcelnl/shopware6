@@ -73,6 +73,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
         if(!($shippingMethod instanceof ShippingMethodEntity)) {
             $data['myparcel_values'] = [
+                'deliveryLocation' => 'address',
                 'shippingMethodId' => $this->configService->get('MyPaShopware.config.myParcelDefaultMethod'),
                 'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
                 'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
@@ -90,6 +91,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
         if(!isset($cookie) || $cookie == 'empty') {
             $data['myparcel_values'] = [
+                'deliveryLocation' => 'address',
                 'shippingMethodId' => $args->getSalesChannelContext()->getShippingMethod()->getId(),
                 'deliveryDate' => \date('Y-m-d', strtotime("+1 day")),
                 'deliveryType' => $this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow'),
@@ -104,11 +106,13 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
         $cookieData = explode('_', $cookie);
 
         $data['myparcel_values'] = [
-            'shippingMethodId' => $cookieData[0],
-            'deliveryDate' => $cookieData[1],
-            'deliveryType' => $cookieData[2],
-            'requiresSignature' => $cookieData[3],
-            'onlyRecipient' => $cookieData[4]
+            'deliveryLocation' => $cookieData[0],
+            'shippingMethodId' => $cookieData[1],
+            'deliveryDate' => $cookieData[2],
+            'deliveryType' => $cookieData[3],
+            'requiresSignature' => ($cookieData[4] ?? null),
+            'onlyRecipient' => ($cookieData[5] ?? null),
+            'pickupPointData' => ($cookieData[7] ?? null)
         ];
 
         $args->getPage()->assign($data);

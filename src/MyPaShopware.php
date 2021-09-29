@@ -96,6 +96,15 @@ class MyPaShopware extends Plugin
 
     private function updateCustomFields_0_1_0(EntityRepositoryInterface $customFieldSetRepository)
     {
+        $entityIds = $customFieldSetRepository->search(
+            (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
+            Context::createDefaultContext()
+        )->getEntities()->getIds();
+
+        if (count($entityIds) > 0) {
+            return;
+        }
+
         $customFieldSetRepository->upsert([
             [
                 'name' => 'myparcelShopware',

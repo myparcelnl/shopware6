@@ -242,16 +242,22 @@ class ConsignmentService
             }
         }
 
-        try {
-            if ($shippingOptions->getReturnIfNotHome() !== null) {
-                $consignment->setReturn($shippingOptions->getReturnIfNotHome());
-            }
-
-            return $consignment;
-        } catch (\Exception $e) {
+        if ($shippingOptions->getReturnIfNotHome() !== null) {
+            $consignment->setReturn($shippingOptions->getReturnIfNotHome());
         }
 
-        return null;
+        if($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP){
+            $consignment->setPickupLocationCode(strval($shippingOptions->getLocationId()));
+            $consignment->setPickupLocationName($shippingOptions->getLocationName());
+            $consignment->setPickupStreet($shippingOptions->getLocationStreet());
+            $consignment->setPickupNumber($shippingOptions->getLocationNumber());
+            $consignment->setPickupPostalCode($shippingOptions->getLocationPostalCode());
+            $consignment->setPickupCity($shippingOptions->getLocationCity());
+            $consignment->setPickupCountry($shippingOptions->getLocationCc());
+            $consignment->setRetailNetworkId($shippingOptions->getRetailNetworkId());
+        }
+
+        return $consignment;
     }
 
     /**
