@@ -4,5 +4,5 @@
 ##Version 1.1.0
 - Shopware 6.4 compatibiliteit toegevoegd
 
-##Versie 1.2.0
-- Ondersteuning toegevoegd voor afhaalpunten voor vervoerders die deze ondersteunen
+##Versie 1.2.1
+- Bug opgelost in Javascript waardoor op alle pagina's geprobeerd werd de verzendopties op te halen

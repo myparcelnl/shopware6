@@ -15,9 +15,14 @@ export default class MyParcelShippingOptions extends Plugin {
     init() {
         const me = this;
 
+        const methods = document.querySelectorAll('[name="shippingMethodId"]');
+
+        if(methods.length <= 0){
+            return;
+        }
+
         me.loadMethodOptions(me);
 
-        const methods = document.querySelectorAll('[name="shippingMethodId"]')
         methods.forEach(function(method, ) {
             method.addEventListener('change', (event) => {
                 me.loadMethodOptions(me);
