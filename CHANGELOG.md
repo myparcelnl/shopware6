@@ -6,3 +6,9 @@
 
 ##Version 1.2.0
 - Added support for pickup points for carriers that support those
+
+##Version 1.2.0
+- Added support for pickup points for carriers that support those
+
+##Version 1.2.1
+- Fixed bug in Javascript that tried to retrieve the shipping options on all pages
