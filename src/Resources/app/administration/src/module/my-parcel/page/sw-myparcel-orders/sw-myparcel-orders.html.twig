@@ -97,6 +97,10 @@
                         {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
                     </template>
 
+                    <template #column-pickupLocation="{ item }">
+                       {{ getPickupLocation(item) }}
+                    </template>
+
                     <template #actions="{ item }">
                         <sw-context-menu-item class="sw-myparcel-orders-list__order-view-action" :routerLink="{ name: 'sw.order.detail', params: { id: item.orderId } }">
                             {{ $tc('sw-myparcel.orders.buttons.viewOrderButton') }}

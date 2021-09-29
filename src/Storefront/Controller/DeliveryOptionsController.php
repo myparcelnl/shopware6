@@ -100,14 +100,30 @@ class DeliveryOptionsController extends StorefrontController
                 ]);
             }
         }
+        $myparcelCookieData = $request->cookies->get('myparcel-cookie-key');
 
+        $cookieArray = explode('_', $myparcelCookieData);
+
+
+        if($cookieArray[0] == "pickup"){
+            $location_id = $cookieArray[6];
+            $delivery_location_type = "pickup";
+        }else{
+            $location_id = null;
+            $delivery_location_type = "address";
+        }
+
+        $data = json_decode($response, true)['data'];
         $viewData = [
-            'options' => json_decode($response, true)['data']['delivery'],
+            'options' => (($data['delivery'])?:null),
+            'pickupPoints' => (($data['pickup'])?:null),
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
             'carrier' => $carrier,
             'salesContext' => $salesChannelContext,
             'context' => $context,
-            'config' => $this->configService->get('MyPaShopware.config')
+            'config' => $this->configService->get('MyPaShopware.config'),
+            'delivery_location_type' => $delivery_location_type,
+            'location_id' => $location_id
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

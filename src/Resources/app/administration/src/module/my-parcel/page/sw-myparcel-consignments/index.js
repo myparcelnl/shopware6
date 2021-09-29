@@ -217,6 +217,10 @@ Component.register('sw-myparcel-consignments', {
                 label: 'sw-myparcel.columns.largeFormatColumn',
                 align: 'center',
                 allowResize: true
+            }, {
+                property: 'pickupLocation',
+                label: 'sw-myparcel.columns.pickupLocation',
+                allowResize: true
             }];
         },
 
@@ -390,6 +394,14 @@ Component.register('sw-myparcel-consignments', {
             this.isLoading = true;
 
             this.getList();
+        },
+
+        getPickupLocation(item) {
+            if(!item.locationId){
+                return '-';
+            }
+
+            return item.locationName +" : "+ item.locationStreet+" "+item.locationNumber+" "+item.locationPostalCode+" "+item.locationCity+" "+item.locationCc;
         },
     }
 });
