@@ -22,6 +22,23 @@
     </card>
 
     <card>
+        <title>Address fields configuration</title>
+        <title lang="de-DE">Konfiguration der Adressfelder</title>
+        <title lang="nl-NL">Adresvelden configuratie</title>
+
+        <input-field>
+            <name>addressFieldsConfiguration</name>
+            <label>Address fields to use</label>
+            <label lang="de-DE">Zu verwendende Adressfelder</label>
+            <label lang="nl-NL">Te gebruiken adresvelden</label>
+            <helpText>It's possible in this configuration setting to set the formatting of the address based on the fields used in your checkout. By default there are the following fields: {street}, {additionalAddressLine1}, {additionalAddressLine2}. When using one of the additional address lines for parts of the address it's necessary to add them in the configuration, example when using a seperate field for number: {street} {additionalAddressLine1}</helpText>
+            <helpText lang="de-DE">In dieser Konfigurationseinstellung können Sie die Formatierung der Adresse auf der Grundlage der in Ihrer Kasse verwendeten Felder festlegen. Standardmäßig gibt es die folgenden Felder: {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wenn Sie eine der zusätzlichen Adresszeilen für Teile der Adresse verwenden, müssen Sie diese in der Konfiguration hinzufügen, z.B. wenn Sie ein separates Feld für die Telefonnummer verwenden: {street} {additionalAddressLine1}</helpText>
+            <helpText lang="nl-NL">In deze configuratie-instelling is het mogelijk om de opmaak van het adres in te stellen op basis van de velden die in uw checkout worden gebruikt. Standaard zijn er de volgende velden: {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wanneer u een van de extra adresregels gebruikt voor delen van het adres, dan is het noodzakelijk om deze toe te voegen in de configuratie, bijvoorbeeld wanneer u een apart veld voor nummer gebruikt: {street} {additionalAddressLine1}</helpText>
+            <defaultValue>{street}</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
         <title>Shipment settings</title>
         <title lang="de-DE">Versandeinstellungen</title>
         <title lang="nl-NL">Verzend instellingen</title>

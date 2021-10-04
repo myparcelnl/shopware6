@@ -66,7 +66,10 @@ class DeliveryOptionsController extends StorefrontController
         /** @var string $postal_code */
         $postal_code = $salesChannelContext->getShippingLocation()->getAddress()->getZipcode();
 
-        $parsedAddress = AddressHelper::parseAddress($salesChannelContext->getShippingLocation()->getAddress());
+        $address = $salesChannelContext->getShippingLocation()->getAddress();
+        $config = $this->configService->get('MyPaShopware.config');
+
+        $parsedAddress = AddressHelper::parseAddress($address, $config);
 
         /** @var string $number */
         $number = $parsedAddress['houseNumber'];
@@ -121,7 +124,7 @@ class DeliveryOptionsController extends StorefrontController
             'carrier' => $carrier,
             'salesContext' => $salesChannelContext,
             'context' => $context,
-            'config' => $this->configService->get('MyPaShopware.config'),
+            'config' => $config,
             'delivery_location_type' => $delivery_location_type,
             'location_id' => $location_id
         ];

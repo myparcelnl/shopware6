@@ -9,3 +9,6 @@
 
 ##Version 1.2.1
 - Fehler in Javascript behoben, der versuchte, die Versandoptionen auf allen Seiten abzurufen
+
+##Version 1.3.0
+- Hinzufügen der Möglichkeit, festzulegen, welche Felder für die Adresse verwendet werden sollen
