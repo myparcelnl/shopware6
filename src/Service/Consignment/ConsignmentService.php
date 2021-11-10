@@ -135,7 +135,7 @@ class ConsignmentService
             throw new \RuntimeException('Shipping address is not properly formatted');
         }
 
-        $parsedAddress = AddressHelper::parseAddress($shippingAddress);
+        $parsedAddress = AddressHelper::parseAddress($shippingAddress, $this->systemConfigService->get('MyPaShopware.config'));
 
         $shippingOptions = $this->shippingOptionsService->getShippingOptionsForOrder($orderEntity, $context);
 
