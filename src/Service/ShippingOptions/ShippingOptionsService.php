@@ -170,12 +170,13 @@ class ShippingOptionsService
                 $cookieData = explode('_', $cookie);
                 $deliveryType = $cookieData[2];
             }
+
         }
 
         switch ($deliveryType) {
-            case self::MORNING_TYPE:
+            case ($deliveryType == self::MORNING_TYPE && $this->systemConfigService->get('MyPaShopware.config.costsDelivery1') == 1):
                 return $this->systemConfigService->get('MyPaShopware.config.costsDelivery1');
-            case self::EVENING_TYPE:
+            case ($deliveryType == self::EVENING_TYPE && $this->systemConfigService->get('MyPaShopware.config.costsDelivery1') == 1):
                 return $this->systemConfigService->get('MyPaShopware.config.costsDelivery3');
             default:
                 return 0;

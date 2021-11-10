@@ -76,10 +76,22 @@ class AddressHelper
      * @param OrderAddressEntity $address
      * @return array
      */
-    public static function parseAddress($address): array
+    public static function parseAddress($address, $config): array
     {
-        // Variables
-        $street = $address->getStreet();
+        //get the complete address of street, number, addition and generate how it should be by the config string given
+        $mapping = [
+            'street' => 'getStreet',
+            'additionalAddressLine1' => 'getAdditionalAddressLine1',
+            'additionalAddressLine2' => 'getAdditionalAddressLine2'
+        ];
+
+         $street = strtolower($config['addressFieldsConfiguration']);
+
+        foreach ($mapping as $key => $function){
+            $data = call_user_func([$address, $function]);
+            $street = str_replace('{'.strtolower($key).'}', $data, $street);
+        }
+
         $houseNumber = static::getAddressParts($street, static::RETURN_TYPE_HOUSE_NUMBER);
         $houseNumberAddition = static::getAddressParts($street, static::RETURN_TYPE_HOUSE_NUMBER_EXT);
         $street = static::getAddressParts($street, static::RETURN_TYPE_STREET);
