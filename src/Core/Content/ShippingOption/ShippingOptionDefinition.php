@@ -1,8 +1,8 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Core\Content\ShippingOption;
+namespace MyPa\Shopware\Core\Content\ShippingOption;
 
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentDefinition;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
@@ -66,6 +66,14 @@ class ShippingOptionDefinition extends EntityDefinition
             (new BoolField('only_recipient', 'onlyRecipient')),
             (new BoolField('return_if_not_home', 'returnIfNotHome')),
             (new BoolField('large_format', 'largeFormat')),
+            (new IntField('location_id', 'locationId')),
+            (new StringField('location_name', 'locationName')),
+            (new StringField('location_street', 'locationStreet')),
+            (new StringField('location_number', 'locationNumber')),
+            (new StringField('location_postalcode', 'locationPostalCode')),
+            (new StringField('location_city', 'locationCity')),
+            (new StringField('location_cc', 'locationCc')),
+            (new StringField('retail_network_id', 'retailNetworkId')),
 
             (new OneToManyAssociationField('consignments', ShipmentDefinition::class, 'shipping_option_id')),
             (new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, true))->addFlags(new Required(), new CascadeDelete()),

@@ -32,9 +32,9 @@
                         :sortDirection="sortDirection"
                         :isLoading="isLoading"
                         :allowColumnEdit="false"
-                        identifier="sw-myparcel-orders-list"
+                        @selection-change="onSelectionChanged"
                         @column-sort="onSortColumn"
-                        @selection-change="onSelectionChanged">
+                        identifier="sw-myparcel-orders-list">
 
                     <template #column-order.orderNumber="{ item }">
                         <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">{{ item.order.orderNumber }}</router-link>
@@ -76,6 +76,10 @@
                         </sw-label>
                     </template>
 
+                    <template #column-deliveryDate="{ item }">
+                        {{ item.deliveryDate | date() }}
+                    </template>
+
                     <template #column-carrierId="{ item }">
                         {{ carriers[item.carrierId] }}
                     </template>
@@ -85,11 +89,16 @@
                     </template>
 
                     <template #column-numberOfConsignments="{ item }">
+                        {{ getNumberOfConsignments(item.id) }}
                         <router-link :to="{ name: 'sw.myparcel.consignments', params: { orderId: item.orderId }}"><span :ref="item.id" /></router-link>
                     </template>
 
                     <template #column-order.orderDateTime="{ item }">
                         {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                    </template>
+
+                    <template #column-pickupLocation="{ item }">
+                       {{ getPickupLocation(item) }}
                     </template>
 
                     <template #actions="{ item }">
@@ -101,15 +110,15 @@
                         </sw-context-menu-item>
                     </template>
 
-                    <template slot="pagination">
-                        <sw-pagination
-                                :page="page"
-                                :limit="limit"
-                                :total="total"
-                                :total-visible="25"
-                                @page-change="onPageChange"
-                                :steps="[25]">
-                        </sw-pagination>
+                    <template #pagination>
+                        {% block sw_order_list_grid_pagination %}
+                            <sw-pagination :page="page"
+                                           :limit="limit"
+                                           :total="total"
+                                           :total-visible="7"
+                                           @page-change="onPageChange">
+                            </sw-pagination>
+                        {% endblock %}
                     </template>
 
                 </sw-data-grid>

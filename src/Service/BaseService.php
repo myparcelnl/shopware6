@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Service;
+namespace MyPa\Shopware\Service;
 
 use Psr\Log\LoggerInterface;
 

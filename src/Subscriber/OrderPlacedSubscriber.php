@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace Kiener\KienerMyParcel\Subscriber;
+namespace MyPa\Shopware\Subscriber;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
-use Kiener\KienerMyParcel\Core\Content\ShippingOption\ShippingOptionEntity;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
-use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -27,6 +27,8 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private const PARAM_RETURN_IF_NOT_HOME = 'return_if_not_home';
     private const PARAM_LARGE_FORMAT = 'large_format';
     private const PARAM_SHIPPING_METHOD_ID = 'shipping_method_id';
+    private const PARAM_DELIVERY_LOCATION = 'delivery_location';
+    private const PARAM_PICKUP_DATA = 'pickup_point_data';
 
     /**
      * @var RequestStack
@@ -132,39 +134,66 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 if (isset($params[self::PARAM_DELIVERY_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
                 }else{
-                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $this->configService->get('KienerMyParcel.config.myParcelDefaultDeliveryWindow');
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow');
                 }
 
-                if (isset($params[self::PARAM_DELIVERY_DATE])) {
+                if (isset($params[self::PARAM_DELIVERY_DATE]) && !empty($params[self::PARAM_DELIVERY_DATE])) {
                     $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
+                    if(!$strTime){
+                        $strTime = strtotime("+1 day");
+                    }
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
+                }else{
+                    $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultAgeCheck');
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultSignature');
                 }
 
                 if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
                     $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient');
                 }
 
                 if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
                     $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultReturnNotHome');
                 }
 
                 if (isset($params[self::PARAM_LARGE_FORMAT])) {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
+                }else{
+                    $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultLargeFormat');
                 }
 
                 if (isset($params[self::PARAM_PACKAGE_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
                 }else{
-                    //TODO get from config service
-                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = 1;//$this->configService->get('MolliePayments.config.testApiKey');
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (int)$this->configService->get('MyPaShopware.config.myParcelDefaultPackageType');
+                }
+
+                if(isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup'){
+                    $decodedPickupPointData = json_decode(base64_decode($params[self::PARAM_PICKUP_DATA]), true);
+
+                    $options[ShippingOptionEntity::FIELD_PICKUP_LOCATION_ID] = intval($decodedPickupPointData['location_code']);
+                    $options[ShippingOptionEntity::FIELD_PICKUP_NAME] = $decodedPickupPointData['location'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_STREET] = $decodedPickupPointData['street'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_NUMBER] = $decodedPickupPointData['number'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_POSTAL_CODE] = $decodedPickupPointData['postal_code'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_CITY] = $decodedPickupPointData['city'];
+                    $options[ShippingOptionEntity::FIELD_PICKUP_CC] = $decodedPickupPointData['cc'];
+                    $options[ShippingOptionEntity::FIELD_RETAIL_NETWORK_ID] = $decodedPickupPointData['retail_network_id'];
                 }
 
                 if (!empty($options)) {

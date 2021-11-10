@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Content\ShippingMethod;
+namespace MyPa\Shopware\Core\Content\ShippingMethod;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;

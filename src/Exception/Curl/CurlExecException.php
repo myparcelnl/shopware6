@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Exception\Curl;
+namespace MyPa\Shopware\Exception\Curl;
 
 use Exception;
 

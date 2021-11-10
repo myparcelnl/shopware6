@@ -1,6 +1,6 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Exception\Directory;
+namespace MyPa\Shopware\Exception\Directory;
 
 use Exception;
 

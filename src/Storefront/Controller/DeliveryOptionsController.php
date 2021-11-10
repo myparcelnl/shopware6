@@ -1,9 +1,9 @@
 <?php
 
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
-use Kiener\KienerMyParcel\Helper\AddressHelper;
-use Kiener\KienerMyParcel\Service\ShippingMethod\ShippingMethodService;
+use MyPa\Shopware\Helper\AddressHelper;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Shopware\Core\Framework\Context;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -27,7 +27,6 @@ class DeliveryOptionsController extends StorefrontController
     /** @var SystemConfigService */
     private $configService;
 
-    public const ROUTE_NAME_GET_DELIVERY_OPTIONS = 'myparcel.delivery_options';
     private const RESPONSE_KEY_SUCCESS = 'success';
     private const RESPONSE_KEY_ERROR = 'error';
     private const RESPONSE_KEY_CODE = 'code';
@@ -47,7 +46,7 @@ class DeliveryOptionsController extends StorefrontController
      * @RouteScope(scopes={"storefront"})
      * @Route(
      *     "/myparcel/delivery_options",
-     *     name=DeliveryOptionsController::ROUTE_NAME_GET_DELIVERY_OPTIONS,
+     *     name="myparcel.delivery_options",
      *     methods={"POST|GET"},
      *     defaults={"csrf_protected"=false, "XmlHttpRequest"=true}
      *     )
@@ -67,7 +66,10 @@ class DeliveryOptionsController extends StorefrontController
         /** @var string $postal_code */
         $postal_code = $salesChannelContext->getShippingLocation()->getAddress()->getZipcode();
 
-        $parsedAddress = AddressHelper::parseAddress($salesChannelContext->getShippingLocation()->getAddress());
+        $address = $salesChannelContext->getShippingLocation()->getAddress();
+        $config = $this->configService->get('MyPaShopware.config');
+
+        $parsedAddress = AddressHelper::parseAddress($address, $config);
 
         /** @var string $number */
         $number = $parsedAddress['houseNumber'];
@@ -101,13 +103,30 @@ class DeliveryOptionsController extends StorefrontController
                 ]);
             }
         }
+        $myparcelCookieData = $request->cookies->get('myparcel-cookie-key');
 
+        $cookieArray = explode('_', $myparcelCookieData);
+
+
+        if($cookieArray[0] == "pickup"){
+            $location_id = $cookieArray[6];
+            $delivery_location_type = "pickup";
+        }else{
+            $location_id = null;
+            $delivery_location_type = "address";
+        }
+
+        $data = json_decode($response, true)['data'];
         $viewData = [
-            'options' => json_decode($response, true)['data']['delivery'],
+            'options' => (($data['delivery'])?:null),
+            'pickupPoints' => (($data['pickup'])?:null),
             'carrier_id' => $salesChannelContext->getShippingMethod()->getId(),
+            'carrier' => $carrier,
             'salesContext' => $salesChannelContext,
             'context' => $context,
-            'config' => $this->configService->get('KienerMyParcel.config')
+            'config' => $config,
+            'delivery_location_type' => $delivery_location_type,
+            'location_id' => $location_id
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

@@ -4,12 +4,12 @@
  * @noinspection PhpUndefinedClassInspection
  */
 
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -22,6 +22,11 @@ class ShipmentController extends StorefrontController
 {
     public const ROUTE_NAME_ALL = 'api.action.myparcel.shipment.all';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipment.create';
+
+    /* For backwards compatibility with 6.3*/
+    public const ROUTE_NAME_ALL_LEGACY = 'api.action.myparcel.shipment.all';
+    public const ROUTE_NAME_CREATE_LEGACY = 'api.action.myparcel.shipment.create';
+    /* End backwards compatibility*/
 
     public const REQUEST_KEY_CONSIGNMENT_ID = 'consignment_id';
     public const REQUEST_KEY_SHIPPING_OPTION_ID = 'shipping_option_id';
@@ -59,10 +64,11 @@ class ShipmentController extends StorefrontController
         $this->orderService = $orderService;
         $this->shipmentService = $shipmentService;
     }
+
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipment/all",
+     *     "/api//_action/myparcel/shipment/all",
      *     defaults={"auth_enabled"=true},
      *     name=ShipmentController::ROUTE_NAME_ALL,
      *     methods={"GET"}
@@ -71,6 +77,30 @@ class ShipmentController extends StorefrontController
      * @return JsonResponse
      */
     public function all(): JsonResponse
+    {
+        return $this->allResponse();
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipment/all",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShipmentController::ROUTE_NAME_ALL_LEGACY,
+     *     methods={"GET"}
+     *     )
+     *
+     * @return JsonResponse
+     */
+    public function allLegacy(): JsonResponse
+    {
+        return $this->allResponse();
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    private function allResponse(): JsonResponse
     {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
@@ -81,7 +111,7 @@ class ShipmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/shipment/create",
+     *     "/api/_action/myparcel/shipment/create",
      *     defaults={"auth_enabled"=true},
      *     name=ShipmentController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
@@ -93,6 +123,36 @@ class ShipmentController extends StorefrontController
      * @throws Exception
      */
     public function createForOrder(Request $request): JsonResponse //NOSONAR
+    {
+        return $this->createForOrderResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/shipment/create",
+     *     defaults={"auth_enabled"=true},
+     *     name=ShipmentController::ROUTE_NAME_CREATE_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function createForOrderLegacy(Request $request): JsonResponse //NOSONAR
+    {
+        return $this->createForOrderResponse($request);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    private function createForOrderResponse(Request $request): JsonResponse //NOSONAR
     {
         $context = new Context(new SystemSource());
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Core\Content\Shipment;
+namespace MyPa\Shopware\Core\Content\Shipment;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 

@@ -1,13 +1,12 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
-namespace Kiener\KienerMyParcel\Service\Consignment;
+namespace MyPa\Shopware\Service\Consignment;
 
-use Exception;
-use Kiener\KienerMyParcel\Core\Content\Shipment\ShipmentEntity;
-use Kiener\KienerMyParcel\Helper\AddressHelper;
-use Kiener\KienerMyParcel\Service\Order\OrderService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
-use Kiener\KienerMyParcel\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Helper\AddressHelper;
+use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -15,7 +14,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use RuntimeException;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -51,26 +49,31 @@ class ConsignmentService
     /** @var SystemConfigService */
     private $systemConfigService;
 
+    private $shopwareVersion;
+
     /**
      * ConsignmentService constructor.
      *
-     * @param OrderService           $orderService
+     * @param OrderService $orderService
      * @param ShippingOptionsService $shippingOptionsService
-     * @param ShipmentService        $shipmentService
-     * @param SystemConfigService    $systemConfigService
+     * @param ShipmentService $shipmentService
+     * @param SystemConfigService $systemConfigService
+     * @param $shopwareVersion
      */
     public function __construct(
         OrderService $orderService,
         ShippingOptionsService $shippingOptionsService,
         ShipmentService $shipmentService,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        $shopwareVersion
     )
     {
         $this->orderService = $orderService;
         $this->shippingOptionsService = $shippingOptionsService;
         $this->shipmentService = $shipmentService;
         $this->systemConfigService = $systemConfigService;
-        $this->apiKey = (string)$systemConfigService->get('KienerMyParcel.config.myParcelApiKey');
+        $this->apiKey = (string)$systemConfigService->get('MyPaShopware.config.myParcelApiKey');
+        $this->shopwareVersion = $shopwareVersion;
     }
 
     /**
@@ -99,9 +102,9 @@ class ConsignmentService
     }
 
     /**
-     * @param Context     $context
+     * @param Context $context
      * @param OrderEntity $orderEntity
-     * @param int         $packageType
+     * @param null|int $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
@@ -109,7 +112,7 @@ class ConsignmentService
     private function createConsignment(
         Context $context,
         OrderEntity $orderEntity,
-        int $packageType
+        ?int $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
@@ -121,7 +124,7 @@ class ConsignmentService
             $orderEntity->getDeliveries()->first() === null ||
             $orderEntity->getDeliveries()->first()->getShippingOrderAddress() === null
         ) {
-            throw new RuntimeException('Could not get a shipping address');
+            throw new \RuntimeException('Could not get a shipping address');
         }
 
         $shippingAddress = $orderEntity->getDeliveries()->first()->getShippingOrderAddress();
@@ -129,15 +132,15 @@ class ConsignmentService
         if ($shippingAddress === null ||
             $shippingAddress->getCountry() === null
         ) {
-            throw new RuntimeException('Shipping address is not properly formatted');
+            throw new \RuntimeException('Shipping address is not properly formatted');
         }
 
-        $parsedAddress = AddressHelper::parseAddress($shippingAddress);
+        $parsedAddress = AddressHelper::parseAddress($shippingAddress, $this->systemConfigService->get('MyPaShopware.config'));
 
         $shippingOptions = $this->shippingOptionsService->getShippingOptionsForOrder($orderEntity, $context);
 
         if ($shippingOptions === null) {
-            throw new RuntimeException('No valid Shipping Options found');
+            throw new \RuntimeException('No valid Shipping Options found');
         }
 
         $consignment = (ConsignmentFactory::createByCarrierId($shippingOptions->getCarrierId()))
@@ -154,6 +157,33 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        if ($shippingOptions->getDeliveryDate() !== null) {
+
+            $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
+
+            if (strtotime($shippingDate) <= strtotime("today")) {
+                $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
+            }
+
+            $consignment->setDeliveryDate($shippingDate);
+        }
+
+        if (
+            $shippingOptions->getDeliveryDate() !== null
+            && $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
+
+        if (
+            $shippingOptions->getDeliveryType() !== null
+            && is_int($shippingOptions->getDeliveryType())
+            && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
+        ) {
+            $consignment->setDeliveryType($shippingOptions->getDeliveryType());
+        }
 
         if (
             $shippingOptions->getPackageType() !== null
@@ -161,43 +191,79 @@ class ConsignmentService
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());
-        }else if ($packageType) {
+        } else if ($packageType) {
             $consignment->setPackageType($packageType);
         }
 
+        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
+
+            $totalWeight = 0;
+            $lineItems = $orderEntity->getLineItems();
+            if ($lineItems) {
+                foreach ($lineItems as $lineItem) {
+                    $totalWeight += $lineItem->getProduct()->getWeight();
+                }
+                //Shopware uses KG for weight, MyParcel wants Grams
+                $totalWeight = $totalWeight * 1000;
+            }
+
+            $consignment->setTotalWeight($totalWeight);
+        }
+
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
-            $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
+            if ($consignment instanceof DPDConsignment) {
+                $consignment->setAgeCheck(false);
+            } else {
+                $consignment->setAgeCheck($shippingOptions->getRequiresAgeCheck());
+            }
         }
 
         if ($shippingOptions->getLargeFormat() !== null) {
-            $consignment->setLargeFormat($shippingOptions->getLargeFormat());
+            if ($consignment instanceof DPDConsignment) {
+                $consignment->setLargeFormat(false);
+            } else {
+                $consignment->setLargeFormat($shippingOptions->getLargeFormat());
+            }
         }
 
         if ($shippingOptions->getRequiresSignature() !== null) {
-            $consignment->setSignature($shippingOptions->getRequiresSignature());
+            if ($consignment instanceof DPDConsignment) {
+                $consignment->setSignature(false);
+            } else {
+                $consignment->setSignature($shippingOptions->getRequiresSignature());
+            }
         }
 
         if ($shippingOptions->getOnlyRecipient() !== null) {
-            $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
-        }
-
-        try {
-            if ($shippingOptions->getReturnIfNotHome() !== null) {
-                $consignment->setReturn($shippingOptions->getReturnIfNotHome());
+            if ($consignment instanceof DPDConsignment) {
+                $consignment->setOnlyRecipient(false);
+            } else {
+                $consignment->setOnlyRecipient($shippingOptions->getOnlyRecipient());
             }
-
-            return $consignment;
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
         }
 
-        return null;
+        if ($shippingOptions->getReturnIfNotHome() !== null) {
+            $consignment->setReturn($shippingOptions->getReturnIfNotHome());
+        }
+
+        if($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP){
+            $consignment->setPickupLocationCode(strval($shippingOptions->getLocationId()));
+            $consignment->setPickupLocationName($shippingOptions->getLocationName());
+            $consignment->setPickupStreet($shippingOptions->getLocationStreet());
+            $consignment->setPickupNumber($shippingOptions->getLocationNumber());
+            $consignment->setPickupPostalCode($shippingOptions->getLocationPostalCode());
+            $consignment->setPickupCity($shippingOptions->getLocationCity());
+            $consignment->setPickupCountry($shippingOptions->getLocationCc());
+            $consignment->setRetailNetworkId($shippingOptions->getRetailNetworkId());
+        }
+
+        return $consignment;
     }
 
     /**
-     * @param Context             $context
-     * @param OrderEntity         $orderEntity
-     * @param string              $shippingOptionId
+     * @param Context $context
+     * @param OrderEntity $orderEntity
+     * @param string $shippingOptionId
      * @param AbstractConsignment $consignment
      *
      * @return ShipmentEntity|null
@@ -220,7 +286,7 @@ class ConsignmentService
             ],
         ];
 
-        if($consignment->getBarcode() !== null) {
+        if ($consignment->getBarcode() !== null) {
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
@@ -250,9 +316,9 @@ class ConsignmentService
     }
 
     /**
-     * @param Context        $context
+     * @param Context $context
      * @param ShipmentEntity $shipment
-     * @param string         $labelUrl
+     * @param string $labelUrl
      *
      * @return ShipmentEntity|null
      */
@@ -267,10 +333,12 @@ class ConsignmentService
     }
 
     /**
-     * @param Context    $context
-     * @param array      $ordersData
+     * @param Context $context
+     * @param array $ordersData
      *
      * @param array|null $labelPositions
+     * @param int|null $packageType
+     * @param int|null $numberOfLabels
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
@@ -278,12 +346,16 @@ class ConsignmentService
     public function createConsignments( //NOSONAR
         Context $context,
         array $ordersData,
-        ?array $labelPositions
+        ?array $labelPositions,
+        ?int $packageType,
+        ?int $numberOfLabels
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
         $shipmentData = [];
         $shipments = [];
+
+        $consignments->setUserAgent('Shopware', $this->shopwareVersion);
 
         /** @var OrderEntity $order */
         foreach ($ordersData as $orderData) {
@@ -302,33 +374,28 @@ class ConsignmentService
                 'deliveries',
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
+                'lineItems',
+                'lineItems.product'
             ]);
 
             if ($order !== null) {
-
-                $packageType = null;
-
-                if (
-                    array_key_exists(self::FIELD_PACKAGE_TYPE, $orderData)
-                    && in_array($orderData[self::FIELD_PACKAGE_TYPE], AbstractConsignment::PACKAGE_TYPES_IDS, true)
-                ) {
-                    $packageType = $orderData[self::FIELD_PACKAGE_TYPE];
-                }else{
-                    $packageType = $this->systemConfigService->get('KienerMyParcel.config.myParcelDefaultPackageType');
+                if (!$numberOfLabels || is_null($numberOfLabels)) {
+                    $numberOfLabels = 1;
                 }
+                for ($i = 1; $i <= $numberOfLabels; $i++) {
+                    $consignment = $this->createConsignment($context, $order, $packageType);
 
-                $consignment = $this->createConsignment($context, $order, $packageType);
+                    if ($consignment !== null) {
+                        $consignments->addConsignment($consignment);
+                    }
 
-                if ($consignment !== null) {
-                    $consignments->addConsignment($consignment);
+                    $shipmentData[] = [
+                        'context' => $context,
+                        'order' => $order,
+                        'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
+                        'referenceId' => $consignment->getReferenceId(),
+                    ];
                 }
-
-                $shipmentData[] = [
-                    'context' => $context,
-                    'order' => $order,
-                    'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
-                    'referenceId' => $consignment->getReferenceId(),
-                ];
             }
         }
 

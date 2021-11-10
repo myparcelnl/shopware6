@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Service\Cookie;
+namespace MyPa\Shopware\Service\Cookie;
 
 use Shopware\Storefront\Framework\Cookie\CookieProviderInterface;
 
@@ -21,7 +21,6 @@ class CookieProvider implements CookieProviderInterface {
         $cookies = $this->original->getCookieGroups();
 
         if($getcookies !== null) {
-            print_r('Dit is een if case');
             return $getcookies;
         }
         foreach ($cookies as &$cookie) {

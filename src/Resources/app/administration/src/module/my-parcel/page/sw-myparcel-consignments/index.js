@@ -43,6 +43,7 @@ Component.register('sw-myparcel-consignments', {
     inject: [
         'repositoryFactory',
         'MyParcelConsignmentService',
+        'systemConfigApiService'
     ],
 
     data() {
@@ -74,8 +75,8 @@ Component.register('sw-myparcel-consignments', {
             packageTypes: {
                 [PACKAGE_TYPE_PACKAGE_ID]: this.$tc(PACKAGE_TYPE_PACKAGE_SNIPPET),
                 [PACKAGE_TYPE_MAILBOX_ID]: this.$tc(PACKAGE_TYPE_MAILBOX_SNIPPET),
-                [PACKAGE_TYPE_LETTER_ID]: this.$tc(PACKAGE_TYPE_LETTER_SNIPPET),
-                [PACKAGE_TYPE_DIGITAL_STAMP_ID]: this.$tc(PACKAGE_TYPE_DIGITAL_STAMP_SNIPPET)
+                [PACKAGE_TYPE_LETTER_ID]: this.$tc(PACKAGE_TYPE_LETTER_SNIPPET)
+                //[PACKAGE_TYPE_DIGITAL_STAMP_ID]: this.$tc(PACKAGE_TYPE_DIGITAL_STAMP_SNIPPET)
             },
             deliveryTypes: {
                 [DELIVERY_TYPE_MORNING_ID]: this.$tc(DELIVERY_TYPE_MORNING_SNIPPET),
@@ -87,8 +88,15 @@ Component.register('sw-myparcel-consignments', {
                 [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
                 [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
                 [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET)
-            }
+            },
+            page: 1,
+            total: 0,
+            limit: 25
         };
+    },
+
+    created(){
+        this.setDefaultLabelSize();
     },
 
     metaInfo() {
@@ -101,6 +109,14 @@ Component.register('sw-myparcel-consignments', {
         if (!!this.$route.params.orderId) {
             this.orderIdFilter.push(this.$route.params.orderId);
         }
+
+        const criteria = new Criteria(this.page, this.limit);
+
+        criteria.addAggregation(Criteria.count('countTotal', 'id'));
+
+        this.consignmentRepository.search(criteria, Shopware.Context.api).then((response) => {
+            this.total = response.aggregations.countTotal.count;
+        });
 
         this.getList();
     },
@@ -164,6 +180,10 @@ Component.register('sw-myparcel-consignments', {
                 property: 'shippingOption.packageType',
                 label: 'sw-myparcel.columns.packageTypeColumn',
                 allowResize: true
+            },{
+                property: 'shippingOption.deliveryDate',
+                label: 'sw-myparcel.columns.deliveryDateColumn',
+                allowResize: true
             }, {
                 property: 'shippingOption.carrierId',
                 label: 'sw-myparcel.columns.carrierColumn',
@@ -197,7 +217,22 @@ Component.register('sw-myparcel-consignments', {
                 label: 'sw-myparcel.columns.largeFormatColumn',
                 align: 'center',
                 allowResize: true
+            }, {
+                property: 'pickupLocation',
+                label: 'sw-myparcel.columns.pickupLocation',
+                allowResize: true
             }];
+        },
+
+        setDefaultLabelSize(){
+            this.systemConfigApiService
+                .getValues('MyPaShopware.config')
+                .then(response => {
+                    if(response['MyPaShopware.config.myParcelDefaultLabelFormat'] == 'A6') {
+                        this.createSingleLabel.printSmallLabel = true;
+                        this.createMultipleLabels.printSmallLabel = true;
+                    }
+                });
         },
 
         closeModals() {
@@ -258,7 +293,6 @@ Component.register('sw-myparcel-consignments', {
             this.isLoading = true;
 
             return this.consignmentRepository.search(this.consignmentCriteria, Shopware.Context.api).then((response) => {
-                this.total = response.total;
                 this.consignments = response;
                 this.isLoading = false;
 
@@ -275,6 +309,9 @@ Component.register('sw-myparcel-consignments', {
 
             if (!!this.selectedConsignments) {
                 for (let id in this.selectedConsignments) {
+                    if(!this.selectedConsignments.hasOwnProperty(id)) {
+                        continue;
+                    }
                     this.selectedConsignmentIds.push(id);
                 }
             }
@@ -299,6 +336,7 @@ Component.register('sw-myparcel-consignments', {
         },
 
         onOpenCreateSingleLabelModal(item) {
+            //MyPaShopware.config.myParcelDefaultLabelFormat
             this.createSingleLabel.item = item;
             this.openCreateSingleLabelModal();
         },
@@ -348,6 +386,22 @@ Component.register('sw-myparcel-consignments', {
                     this.createLabels(data);
                 }
             }
+        },
+
+        onPageChange({ page = 1, limit = 25 }) {
+            this.page = page;
+            this.limit = limit;
+            this.isLoading = true;
+
+            this.getList();
+        },
+
+        getPickupLocation(item) {
+            if(!item.locationId){
+                return '-';
+            }
+
+            return item.locationName +" : "+ item.locationStreet+" "+item.locationNumber+" "+item.locationPostalCode+" "+item.locationCity+" "+item.locationCc;
         },
     }
 });

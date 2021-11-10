@@ -3,12 +3,13 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
-namespace Kiener\KienerMyParcel\Storefront\Controller;
+namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
-use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
-use Kiener\KienerMyParcel\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Service\Consignment\ConsignmentService;
+use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -17,20 +18,34 @@ use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConsignmentController extends StorefrontController
 {
     public const ROUTE_NAME_GET_CARRIERS = 'api.action.myparcel.carriers';
-    public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package_types';
+    public const ROUTE_NAME_GET_PACKAGE_TYPES = 'api.action.myparcel.package-types';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.consignment.create';
-    public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create_consignments';
-    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get_by_reference_id';
-    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get_for_shipping_option';
-    public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download_labels';
-    public const ROUTE_NAME_TRACK_AND_TRACE = 'api.action.myparcel.consignment.track_and_trace';
+    public const ROUTE_NAME_CREATE_CONSIGNMENTS = 'api.action.myparcel.consignment.create-consignments';
+    public const ROUTE_NAME_GET_BY_REFERENCE_ID = 'api.action.myparcel.consignment.get-by-reference-id';
+    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION = 'api.action.myparcel.consignment.get-for-shipping-option';
+    public const ROUTE_NAME_DOWNLOAD_LABELS = 'api.action.myparcel.consignment.download-labels';
+    public const ROUTE_NAME_TRACK_AND_TRACE = 'api.action.myparcel.consignment.track-and-trace';
+
+    /* For backwards compatibility with 6.3*/
+    public const ROUTE_NAME_GET_CARRIERS_LEGACY = 'api.action.myparcel.carriers';
+    public const ROUTE_NAME_GET_PACKAGE_TYPES_LEGACY = 'api.action.myparcel.package_types';
+    public const ROUTE_NAME_CREATE_LEGACY = 'api.action.myparcel.consignment.create';
+    public const ROUTE_NAME_CREATE_CONSIGNMENTS_LEGACY = 'api.action.myparcel.consignment.create_consignments';
+    public const ROUTE_NAME_GET_BY_REFERENCE_ID_LEGACY = 'api.action.myparcel.consignment.get_by_reference_id';
+    public const ROUTE_NAME_GET_FOR_SHIPPING_OPTION_LEGACY = 'api.action.myparcel.consignment.get_for_shipping_option';
+    public const ROUTE_NAME_DOWNLOAD_LABELS_LEGACY = 'api.action.myparcel.consignment.download_labels';
+    public const ROUTE_NAME_TRACK_AND_TRACE_LEGACY = 'api.action.myparcel.consignment.track_and_trace';
+    /* End backwards compatibility*/
 
     private const REQUEST_KEY_ORDERS = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS = 'label_positions';
+    private const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
+    private const REQUEST_KEY_NUMBER_OF_LABELS = 'number_of_labels';
     private const REQUEST_KEY_SHIPMENT_ID = 'shipment_id';
     private const REQUEST_KEY_REFERENCE_ID = 'reference_id';
     private const REQUEST_KEY_REFERENCE_IDS = 'reference_ids';
@@ -53,18 +68,43 @@ class ConsignmentController extends StorefrontController
     private $shipmentService;
 
     /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
+
+    /**
      * ConsignmentController constructor.
      *
      * @param ConsignmentService $consignmentService
      * @param ShipmentService    $shipmentService
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
         ConsignmentService $consignmentService,
-        ShipmentService $shipmentService
+        ShipmentService $shipmentService,
+        SystemConfigService $systemConfigService
     )
     {
         $this->consignmentService = $consignmentService;
         $this->shipmentService = $shipmentService;
+        $this->systemConfigService = $systemConfigService;
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/_action/myparcel/consignment/get-for-shipping-option",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getForShippingOption(Request $request): JsonResponse
+    {
+        return $this->getForShippingOptionResponse($request);
     }
 
     /**
@@ -72,13 +112,19 @@ class ConsignmentController extends StorefrontController
      * @Route(
      *     "/api/v{version}/_action/myparcel/consignment/get-for-shipping-option",
      *     defaults={"auth_enabled"=true},
-     *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION,
+     *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION_LEGACY,
      *     methods={"POST"}
      *     )
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getForShippingOption(Request $request): JsonResponse
+    public function getForShippingOptionLegacy(Request $request): JsonResponse
+    {
+       return $this->getForShippingOptionResponse($request);
+    }
+
+    private function getForShippingOptionResponse($request): JsonResponse
     {
         $shippingOptionId = $request->get(self::REQUEST_KEY_SHIPPING_OPTION_ID);
         $consignments = null;
@@ -109,7 +155,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/create-consignments",
+     *     "/api/_action/myparcel/consignment/create-consignments",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_CREATE_CONSIGNMENTS,
      *     methods={"POST"}
@@ -121,6 +167,36 @@ class ConsignmentController extends StorefrontController
      * @throws Exception
      */
     public function createConsignments(Request $request): JsonResponse
+    {
+        return $this->createConsignmentsResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/create-consignments",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_CREATE_CONSIGNMENTS_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function createConsignmentsLegacy(Request $request): JsonResponse
+    {
+        return $this->createConsignmentsResponse($request);
+    }
+
+    /**
+    * @param Request $request
+    *
+    * @return JsonResponse
+    * @throws Exception
+    */
+    private function createConsignmentsResponse(Request $request): JsonResponse
     {
         /**
          * @todo Per consignment een Shipment maken zodat dit niet in Javascript hoeft
@@ -146,12 +222,35 @@ class ConsignmentController extends StorefrontController
             && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
+        }else{
+            if($this->systemConfigService->get('MyPaShopware.config.myParcelDefaultLabelFormat') == 'A6'){
+                $labelPositions = null;
+            }else{
+                $labelPositions = [MyParcelCollection::DEFAULT_A4_POSITION];
+            }
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_PACKAGE_TYPE) !== null
+            && is_array($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+            && !empty($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
+        ) {
+            $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
+        }
+
+        if (
+            $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS) !== null
+            && !empty($request->get(self::REQUEST_KEY_NUMBER_OF_LABELS))
+        ) {
+            $numberOfLabels = $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS);
         }
 
         $consignments = $this->consignmentService->createConsignments(
             $context,
             $request->get(self::REQUEST_KEY_ORDERS),
-            $labelPositions ?? null
+            $labelPositions ?? null,
+            $packageType ?? null,
+            $numberOfLabels ?? null
         );
 
         return new JsonResponse([
@@ -163,16 +262,49 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/download-labels",
+     *     "/api/_action/myparcel/consignment/download-labels",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_DOWNLOAD_LABELS,
      *     methods={"POST"}
      *     )
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      * @throws MissingFieldException
      */
     public function downloadLabels(Request $request): JsonResponse
+    {
+        return $this->downloadLabelsResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/download-labels",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_DOWNLOAD_LABELS_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    public function downloadLabelsLegacy(Request $request): JsonResponse
+    {
+        return $this->downloadLabelsResponse($request);
+    }
+
+    /**
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    private function downloadLabelsResponse(Request $request): JsonResponse
     {
         if (
             $request->get(self::REQUEST_KEY_LABEL_POSITIONS) !== null
@@ -223,7 +355,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/track-and-trace",
+     *     "/api/_action/myparcel/consignment/track-and-trace",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_TRACK_AND_TRACE,
      *     methods={"POST"}
@@ -233,6 +365,32 @@ class ConsignmentController extends StorefrontController
      * @throws MissingFieldException
      */
     public function trackAndTrace(Request $request): JsonResponse
+    {
+        return $this->trackAndTraceResponse($request);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/track-and-trace",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_TRACK_AND_TRACE_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    public function trackAndTraceLegacy(Request $request): JsonResponse
+    {
+        return $this->trackAndTraceResponse($request);
+    }
+
+    /**
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    private function trackAndTraceResponse(Request $request): JsonResponse
     {
         if (
             $request->get(self::REQUEST_KEY_REFERENCE_ID) !== null
@@ -270,7 +428,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @RouteScope(scopes={"api"})
      * @Route(
-     *     "/api/v{version}/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
+     *     "/api/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
      *     defaults={"auth_enabled"=true},
      *     name=ConsignmentController::ROUTE_NAME_GET_BY_REFERENCE_ID,
      *     methods={"POST"}
@@ -282,6 +440,36 @@ class ConsignmentController extends StorefrontController
      * @throws MissingFieldException
      */
     public function getByReferenceId(string $referenceId): JsonResponse
+    {
+        return $this->getByReferenceIdResponse($referenceId);
+    }
+
+    /**
+     * @RouteScope(scopes={"api"})
+     * @Route(
+     *     "/api/v{version}/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
+     *     defaults={"auth_enabled"=true},
+     *     name=ConsignmentController::ROUTE_NAME_GET_BY_REFERENCE_ID_LEGACY,
+     *     methods={"POST"}
+     *     )
+     *
+     * @param string $referenceId
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    public function getByReferenceIdLegacy(string $referenceId): JsonResponse
+    {
+        return $this->getByReferenceIdResponse($referenceId);
+    }
+
+    /**
+     * @param string $referenceId
+     *
+     * @return JsonResponse
+     * @throws MissingFieldException
+     */
+    private function getByReferenceIdResponse(string $referenceId): JsonResponse
     {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,

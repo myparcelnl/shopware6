@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kiener\KienerMyParcel\Service\ShippingMethod;
+namespace MyPa\Shopware\Service\ShippingMethod;
 
-use Kiener\KienerMyParcel\Core\Content\ShippingMethod\ShippingMethodEntity;
-use Kiener\KienerMyParcel\Service\Consignment\ConsignmentService;
+use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
+use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity as ShopwareShippingMethodEntity;
@@ -300,6 +300,11 @@ class ShippingMethodService
                         'quantityStart' => 1,
                     ]
                 ],
+                'customFields' => [
+                    'myparcel' => [
+                        "carrierId" => $carrierId
+                    ]
+                ]
             ],
         ], $context);
 
