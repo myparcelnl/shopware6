@@ -73,48 +73,51 @@ class ContextController extends StorefrontController
             return $response;
         }
 
-        $cookieValue = '';
+        $deliveryLocation = $data->get('delivery_location', 'address');
 
         /* get vars from post */
-        if($data->get('delivery_location') == 'address') {
-            $myparcel_delivery_location_type = $data->get('delivery_location') ?: 0;
-            $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
-            $myparcel_delivery_type = $data->get('myparcel_delivery_type_' . $myparcel_delivery_date) ?: 0;
-            $myparcel_requires_signature = $data->get('myparcel_requires_signature') ?: 0;
-            $myparcel_only_recipient = $data->get('myparcel_only_recipient') ?: 0;
+        switch($deliveryLocation) {
+            case "address":
+            default:
+                $myparcel_delivery_location_type = $deliveryLocation;
+                $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
+                $myparcel_delivery_type = $data->get('myparcel_delivery_type_' . $myparcel_delivery_date) ?: 0;
+                $myparcel_requires_signature = $data->get('myparcel_requires_signature') ?: 0;
+                $myparcel_only_recipient = $data->get('myparcel_only_recipient') ?: 0;
 
-            /* set vars to cookie */
-            $cookieValue = trim(implode('_', [
-                $myparcel_delivery_location_type,
-                $shippingMethodId,
-                $myparcel_delivery_date,
-                $myparcel_delivery_type,
-                $myparcel_requires_signature,
-                $myparcel_only_recipient,
-            ]));
+                /* set vars to cookie */
+                $cookieValue = trim(implode('_', [
+                    $myparcel_delivery_location_type,
+                    $shippingMethodId,
+                    $myparcel_delivery_date,
+                    $myparcel_delivery_type,
+                    $myparcel_requires_signature,
+                    $myparcel_only_recipient,
+                ]));
+                break;
+            case 'pickup':
+                $myparcel_delivery_location_type = $deliveryLocation;
+                $myparcel_delivery_type = 4;
+                $myparcel_requires_signature = 1;
+                $myparcel_pickup_point_id = $data->get('pickup_point');
+                $myparcel_delivery_date = $data->get('myparcel_delivery_date_pickup_'.$myparcel_pickup_point_id) ?: 0;
+                $myparcel_pickupPointData = $data->get('pickup_point_data_' . $myparcel_pickup_point_id) ? \base64_encode( $data->get('pickup_point_data_' . $myparcel_pickup_point_id)): 0;
+                $myparcel_only_recipient = 0;
+
+                /* set vars to cookie */
+                $cookieValue = trim(implode('_', [
+                    $myparcel_delivery_location_type,
+                    $shippingMethodId,
+                    $myparcel_delivery_date,
+                    $myparcel_delivery_type,
+                    $myparcel_requires_signature,
+                    $myparcel_only_recipient,
+                    $myparcel_pickup_point_id,
+                    $myparcel_pickupPointData
+                ]));
+
+                break;
         }
-        if($data->get('delivery_location') == 'pickup') {
-            $myparcel_delivery_location_type = $data->get('delivery_location') ?: 0;
-            $myparcel_delivery_type = 4;
-            $myparcel_requires_signature = 1;
-            $myparcel_pickup_point_id = $data->get('pickup_point');
-            $myparcel_delivery_date = $data->get('myparcel_delivery_date_pickup_'.$myparcel_pickup_point_id) ?: 0;
-            $myparcel_pickupPointData = $data->get('pickup_point_data_' . $myparcel_pickup_point_id) ? \base64_encode( $data->get('pickup_point_data_' . $myparcel_pickup_point_id)): 0;
-            $myparcel_only_recipient = 0;
-
-            /* set vars to cookie */
-            $cookieValue = trim(implode('_', [
-                $myparcel_delivery_location_type,
-                $shippingMethodId,
-                $myparcel_delivery_date,
-                $myparcel_delivery_type,
-                $myparcel_requires_signature,
-                $myparcel_only_recipient,
-                $myparcel_pickup_point_id,
-                $myparcel_pickupPointData
-            ]));
-        }
-
 
         $this->contextSwitcher->update($data, $salesChannelContext);
 
