@@ -114,6 +114,7 @@
             <label>Morning delivery costs</label>
             <label lang="de-DE">Kosten für die morgendliche Zustellung</label>
             <label lang="nl-NL">Kosten ochtendbezorging</label>
+            <defaultValue>0</defaultValue>
         </input-field>
 
         <input-field type="single-select">
@@ -143,6 +144,7 @@
             <label>Evening delivery costs</label>
             <label lang="de-DE">Abendzustellungskosten</label>
             <label lang="nl-NL">Kosten avondbezorging</label>
+            <defaultValue>0</defaultValue>
         </input-field>
     </card>
 
