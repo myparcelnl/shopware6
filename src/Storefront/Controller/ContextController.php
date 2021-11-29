@@ -6,6 +6,8 @@
 
 namespace MyPa\Shopware\Storefront\Controller;
 
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher;
@@ -27,25 +29,53 @@ class ContextController extends StorefrontController
     private $contextSwitcher;
 
     /**
+     * @var ShippingMethodService
+     */
+    private $shippingMethodService;
+
+    /**
      * ContextController constructor.
      * @param SalesChannelContextSwitcher $contextSwitcher
+     * @param ShippingMethodService $shippingMethodService
      */
-    public function __construct(SalesChannelContextSwitcher $contextSwitcher)
+    public function __construct(SalesChannelContextSwitcher $contextSwitcher, ShippingMethodService $shippingMethodService)
     {
         $this->contextSwitcher = $contextSwitcher;
+        $this->shippingMethodService = $shippingMethodService;
     }
 
     /**
      * @Route("/checkout/configure", name="frontend.checkout.configure", methods={"POST"}, options={"seo"="false"}, defaults={"XmlHttpRequest": true})
      * @param Request $request
      * @param RequestDataBag $data
-     * @param SalesChannelContext $context
+     * @param SalesChannelContext $salesChannelContext
+     * @param Context $content
      * @return Response
      */
-    public function configure(Request $request, RequestDataBag $data, SalesChannelContext $context)
+    public function configure(Request $request, RequestDataBag $data, SalesChannelContext $salesChannelContext, Context $content)
     {
-        /* get vars from post */
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
+
+        $response = $this->createActionResponse($request);
+
+        if(!$shippingMethodId){
+            return $response;
+        }
+
+        $shippingMethod = $this->shippingMethodService->getShopwareShippingMethodById($shippingMethodId, $content);
+
+        if(!$shippingMethod){
+            return $response;
+        }
+
+        //check if shipping method is not myparcel then return;
+        if(!$this->shippingMethodService->isMyParcelShippingMethod($shippingMethod, $content)){
+            return $response;
+        }
+
+        $cookieValue = '';
+
+        /* get vars from post */
         if($data->get('delivery_location') == 'address') {
             $myparcel_delivery_location_type = $data->get('delivery_location') ?: 0;
             $myparcel_delivery_date = $data->get('myparcel_delivery_date') ?: 0;
@@ -86,9 +116,11 @@ class ContextController extends StorefrontController
         }
 
 
-        $this->contextSwitcher->update($data, $context);
+        $this->contextSwitcher->update($data, $salesChannelContext);
 
-        $response = $this->createActionResponse($request);
+        if(empty($cookieValue)){
+            return $response;
+        }
 
         /* set cookie */
         $cookie = new Cookie("myparcel-cookie-key", htmlentities($cookieValue), 0, '/');

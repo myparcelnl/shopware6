@@ -171,6 +171,16 @@ class ShippingMethodService
         return $shippingMethods->first();
     }
 
+    public function getShopwareShippingMethodById(string $id, Context $context): ?ShopwareShippingMethodEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('id', $id));
+
+        $shippingMethods = $this->shopwareShippingMethodRepository->search($criteria, $context);
+
+        return $shippingMethods->first();
+    }
+
     /**
      * Creates a shipping method for MyParcel.
      *

@@ -232,7 +232,6 @@ class ConsignmentController extends StorefrontController
 
         if (
             $request->get(self::REQUEST_KEY_PACKAGE_TYPE) !== null
-            && is_array($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
             && !empty($request->get(self::REQUEST_KEY_PACKAGE_TYPE))
         ) {
             $packageType = $request->get(self::REQUEST_KEY_PACKAGE_TYPE);
