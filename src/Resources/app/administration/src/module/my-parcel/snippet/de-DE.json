@@ -47,7 +47,8 @@
             "onlyRecipientColumn": "NurEmpfänger",
             "returnIfNotHomeColumn": "Rückgabe, wenn nicht zu Hause",
             "largeFormatColumn": "Großes Format",
-            "numberOfConsignmentsColumn": "Shipment(s)"
+            "numberOfConsignmentsColumn": "Sendung(en)",
+            "pickupLocation": "Ort der Abholung"
         },
         "orders": {
             "title": "Bestellungen",

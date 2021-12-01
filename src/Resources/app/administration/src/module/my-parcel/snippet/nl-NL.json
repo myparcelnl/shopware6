@@ -47,7 +47,8 @@
             "onlyRecipientColumn": "Alleen thuisadres",
             "returnIfNotHomeColumn": "Retour bij niet aanwezig",
             "largeFormatColumn": "Groot pakket",
-            "numberOfConsignmentsColumn": "Zending(en)"
+            "numberOfConsignmentsColumn": "Zending(en)",
+            "pickupLocation": "Pickup locatie"
         },
         "orders": {
             "title": "Bestellingen",
