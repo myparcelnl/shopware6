@@ -168,15 +168,15 @@ class ShippingOptionsService
 
             if ($cookie != 'empty') {
                 $cookieData = explode('_', $cookie);
-                $deliveryType = $cookieData[2];
+                $deliveryType = $cookieData[3];
             }
 
         }
 
-        switch ($deliveryType) {
-            case ($deliveryType == self::MORNING_TYPE && $this->systemConfigService->get('MyPaShopware.config.costsDelivery1') == 1):
+        switch (true) {
+            case ($deliveryType == self::MORNING_TYPE && $this->systemConfigService->get('MyPaShopware.config.myParcelShowWindowType1') == 1):
                 return $this->systemConfigService->get('MyPaShopware.config.costsDelivery1');
-            case ($deliveryType == self::EVENING_TYPE && $this->systemConfigService->get('MyPaShopware.config.costsDelivery1') == 1):
+            case ($deliveryType == self::EVENING_TYPE && $this->systemConfigService->get('MyPaShopware.config.myParcelShowWindowType3') == 1):
                 return $this->systemConfigService->get('MyPaShopware.config.costsDelivery3');
             default:
                 return 0;

@@ -39,9 +39,9 @@
     </card>
 
     <card>
-        <title>Shipment settings</title>
-        <title lang="de-DE">Versandeinstellungen</title>
-        <title lang="nl-NL">Verzend instellingen</title>
+        <title>Checkout settings</title>
+        <title lang="de-DE">Checkout-Einstellungen</title>
+        <title lang="nl-NL">Checkout instellingen</title>
 
         <input-field type="single-select">
             <name>myParcelShowPickup</name>
@@ -64,6 +64,94 @@
             </options>
             <defaultValue>1</defaultValue>
         </input-field>
+
+        <input-field type="single-select">
+            <name>myParcelShowDeliveryDate</name>
+            <label>Show delivery date in checkout</label>
+            <label lang="de-DE">Lieferdatum im Checkout anzeigen</label>
+            <label lang="nl-NL">Toon leverdatum in checkout</label>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>No</name>
+                    <name lang="de-DE">Nein</name>
+                    <name lang="nl-NL">Nee</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Yes</name>
+                    <name lang="de-DE">Ja</name>
+                    <name lang="nl-NL">Ja</name>
+                </option>
+            </options>
+            <defaultValue>1</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>myParcelShowWindowType1</name>
+            <label>Show morning delivery window</label>
+            <label lang="de-DE">Morgenlieferung anzeigen</label>
+            <label lang="nl-NL">Toon ochtend levering</label>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>No</name>
+                    <name lang="de-DE">Nein</name>
+                    <name lang="nl-NL">Nee</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Yes</name>
+                    <name lang="de-DE">Ja</name>
+                    <name lang="nl-NL">Ja</name>
+                </option>
+            </options>
+            <defaultValue>0</defaultValue>
+        </input-field>
+
+        <input-field type="float">
+            <name>costsDelivery1</name>
+            <label>Morning delivery costs</label>
+            <label lang="de-DE">Kosten für die morgendliche Zustellung</label>
+            <label lang="nl-NL">Kosten ochtendbezorging</label>
+            <defaultValue>0</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>myParcelShowWindowType3</name>
+            <label>Show evening delivery window</label>
+            <label lang="de-DE">Abendlieferung anzeigen</label>
+            <label lang="nl-NL">Toon avond levering</label>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>No</name>
+                    <name lang="de-DE">Nein</name>
+                    <name lang="nl-NL">Nee</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Yes</name>
+                    <name lang="de-DE">Ja</name>
+                    <name lang="nl-NL">Ja</name>
+                </option>
+            </options>
+            <defaultValue>0</defaultValue>
+        </input-field>
+
+        <input-field type="float">
+            <name>costsDelivery3</name>
+            <label>Evening delivery costs</label>
+            <label lang="de-DE">Abendzustellungskosten</label>
+            <label lang="nl-NL">Kosten avondbezorging</label>
+            <defaultValue>0</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Shipment settings</title>
+        <title lang="de-DE">Versandeinstellungen</title>
+        <title lang="nl-NL">Verzend instellingen</title>
 
         <!--Choose default delivery window-->
         <input-field type="single-select">
@@ -242,66 +330,6 @@
                 </option>
             </options>
             <defaultValue>1</defaultValue>
-        </input-field>
-
-        <!--Choose default only house, no neighbours-->
-        <input-field type="single-select">
-            <name>myParcelShowWindowType1</name>
-            <label>Show morning delivery window</label>
-            <label lang="de-DE">Morgenlieferung anzeigen</label>
-            <label lang="nl-NL">Toon ochtend levering</label>
-            <options>
-                <option>
-                    <id>0</id>
-                    <name>No</name>
-                    <name lang="de-DE">Nein</name>
-                    <name lang="nl-NL">Nee</name>
-                </option>
-                <option>
-                    <id>1</id>
-                    <name>Yes</name>
-                    <name lang="de-DE">Ja</name>
-                    <name lang="nl-NL">Ja</name>
-                </option>
-            </options>
-            <defaultValue>0</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>costsDelivery1</name>
-            <label>Morning delivery costs</label>
-            <label lang="de-DE">Kosten für die morgendliche Zustellung</label>
-            <label lang="nl-NL">Kosten ochtendbezorging</label>
-        </input-field>
-
-        <!--Choose default only house, no neighbours-->
-        <input-field type="single-select">
-            <name>myParcelShowWindowType3</name>
-            <label>Show evening delivery window</label>
-            <label lang="de-DE">Abendlieferung anzeigen</label>
-            <label lang="nl-NL">Toon avond levering</label>
-            <options>
-                <option>
-                    <id>0</id>
-                    <name>No</name>
-                    <name lang="de-DE">Nein</name>
-                    <name lang="nl-NL">Nee</name>
-                </option>
-                <option>
-                    <id>1</id>
-                    <name>Yes</name>
-                    <name lang="de-DE">Ja</name>
-                    <name lang="nl-NL">Ja</name>
-                </option>
-            </options>
-            <defaultValue>0</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>costsDelivery3</name>
-            <label>Evening delivery costs</label>
-            <label lang="de-DE">Abendzustellungskosten</label>
-            <label lang="nl-NL">Kosten avondbezorging</label>
         </input-field>
 
         <!--Choose default carrier-->

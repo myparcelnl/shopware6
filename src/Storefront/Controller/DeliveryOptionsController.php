@@ -107,7 +107,6 @@ class DeliveryOptionsController extends StorefrontController
 
         $cookieArray = explode('_', $myparcelCookieData);
 
-
         if($cookieArray[0] == "pickup"){
             $location_id = $cookieArray[6];
             $delivery_location_type = "pickup";
@@ -126,7 +125,8 @@ class DeliveryOptionsController extends StorefrontController
             'context' => $context,
             'config' => $config,
             'delivery_location_type' => $delivery_location_type,
-            'location_id' => $location_id
+            'location_id' => $location_id,
+            'chosenOptions' => $cookieArray
         ];
 
         return $this->renderStorefront('@Storefront/storefront/component/checkout/carrier-options.html.twig', $viewData);

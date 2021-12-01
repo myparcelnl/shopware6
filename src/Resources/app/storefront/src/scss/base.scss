@@ -7,8 +7,20 @@
         display: block;
     }
 }
-.myparcel_delivery_options{
+.myparcel_delivery_options {
     padding-left: 30px;
+
+    .custom-checkbox {
+        > .custom-control-label::before {
+            @include border-radius($custom-checkbox-indicator-border-radius);
+        }
+
+        > .custom-control-input:checked ~ .custom-control-label {
+            &::after {
+                background-image: $custom-checkbox-indicator-icon-checked;
+            }
+        }
+    }
 }
 .myparcel_pickuppoint{
     label{
