@@ -5,48 +5,62 @@
             <label for="location_address" class="custom-control-label">{{ "myparcel.delivery_location.address"| trans }}</label>
         {% endif %}
         <div class="myparcel_delivery_address">
-            <div class="mb-0 date_select">
-                <select name="myparcel_delivery_date">
-                    {% for option in options %}
-                        <option value="{{ option['date'] }}">{{ option['date'] }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% for option in options %}
-                <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
-                    {% for time in option['time'] %}
-
-                        {% if (time['type'] == 2)
-                            or (time['type'] == 1 and config.myParcelShowWindowType1 == '1')
-                            or (time['type'] == 3 and config.myParcelShowWindowType3 == '1')
-                        %}
-
-                            <label class="d-block mb-0">
-                                <input type="radio" class="custom-control-input" name="myparcel_delivery_type_{{ option['date'] }}" data-target="myparcel[delivery_type]" value="{{ time['type'] }}" id="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}" {% if config.myParcelDefaultDeliveryWindow == time['type'] %}checked="checked"{% endif %} />
-                                <label for="myparcel_delivery_type_{{ time['type'] }}_{{ carrier_id }}" class="custom-control-label">
-                                    {{ ("myparcel.delivery_type_" ~ time['type']) | trans | sw_sanitize }}
-                                    <span class="cost">
-                                        {% if attribute(config, "costsDelivery#{time['type']}") > 0 %}
-                                            + {{ attribute(config, "costsDelivery#{time['type']}") | format_currency('EUR') }}
-                                        {% endif %}
-                                    </span>
-                                </label>
-                            </label>
-                        {% endif %}
-
-                    {% endfor %}
+            {% if config.myParcelShowDeliveryDate == '1'%}
+                <div class="mb-0 date_select">
+                    <select name="myparcel_delivery_date">
+                        {% for option in options %}
+                            <option value="{{ option['date'] }}" {% if chosenOptions[2] == option['date'] %}selected{% endif %}>{{ option['date'] }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-            {% endfor %}
+            {% endif %}
+            {% if config.myParcelShowDeliveryDate == '1'%}
+                {% for option in options %}
+                    <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
+                        {% for time in option['time'] %}
+
+                            {% if (time['type'] == 2)
+                                or (time['type'] == 1 and config.myParcelShowWindowType1 == '1')
+                                or (time['type'] == 3 and config.myParcelShowWindowType3 == '1')
+                            %}
+
+                                <label class="d-block mb-0">
+                                    <input type="radio"
+                                           class="custom-control-input"
+                                           name="myparcel_delivery_type_{{ option['date'] }}"
+                                           data-target="myparcel[delivery_type]"
+                                           value="{{ time['type'] }}"
+                                           id="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
+                                           {% if config.myParcelDefaultDeliveryWindow == time['type']
+                                               or chosenOptions[3] == time['type'] %}checked="checked"
+                                        {% endif %} />
+
+                                    <label for="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
+                                           class="custom-control-label">
+                                        {{ ("myparcel.delivery_type_" ~ time['type']) | trans | sw_sanitize }}
+                                        <span class="cost">
+                                            {% if attribute(config, "costsDelivery#{time['type']}") > 0 %}
+                                                + {{ attribute(config, "costsDelivery#{time['type']}") | format_currency('EUR') }}
+                                            {% endif %}
+                                        </span>
+                                    </label>
+                                </label>
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
             {% if carrier.carrierId != 4 %}
-                <label class="d-block mb-0">
-                    <input type="checkbox" class="custom-control-input" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ carrier_id }}" {% if config.myParcelDefaultSignature %}checked{% endif %}>
+                <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="myparcel_requires_signature" data-target="myparcel[requires_signature]" value="1" id="myparcel_requires_signature_{{ carrier_id }}" {% if config.myParcelDefaultSignature or chosenOptions[4] == '1' %}checked{% endif %}>
                     <label for="myparcel_requires_signature_{{ carrier_id }}" class="custom-control-label">{{ "myparcel.delivery_signature" | trans | sw_sanitize }} <span class="cost"></span></label>
                 </label>
             {% endif %}
             {% if carrier.carrierId != 4 %}
-                <label class="d-block mb-0">
-                    <input type="checkbox" class="custom-control-input" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ carrier_id }}" {% if config.myParcelDefaultOnlyRecipient%}checked{% endif %}>
+                <label class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="myparcel_only_recipient" data-target="myparcel[only_recipient]" value="1" id="myparcel_only_recipient_{{ carrier_id }}" {% if config.myParcelDefaultOnlyRecipient or chosenOptions[5] == '1' %}checked{% endif %}>
                     <label for="myparcel_only_recipient_{{ carrier_id }}" class="custom-control-label">{{ "myparcel.delivery_recipient" | trans | sw_sanitize }} <span class="cost"></span></label>
                 </label>
             {% endif %}

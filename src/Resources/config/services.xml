@@ -110,6 +110,7 @@
                 <argument type="service" id="service_container"/>
             </call>
             <argument id="Shopware\Core\System\SalesChannel\SalesChannel\SalesChannelContextSwitcher" type="service"/>
+            <argument id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" type="service"/>
         </service>
 
         <service id="MyPa\Shopware\Storefront\Controller\MyParcelController" public="true">

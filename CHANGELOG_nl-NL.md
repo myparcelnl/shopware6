@@ -9,3 +9,8 @@
 
 ##Version 1.3.0
 - Toevoegen van de mogelijkheid om in te stellen welke velden er voor het adres gebruikt dienen te worden
+
+##Version 1.3.1
+- Optie toegevoegd om de datumkiezer uit te schakelen bij het afrekenen
+- Een bug opgelost die uitzonderingen veroorzaakte wanneer eerst een ander type verzendmethode werd geselecteerd en vervolgens werd overgeschakeld op de MyParcel-optie
+- Enkele andere kleine bugs opgelost
