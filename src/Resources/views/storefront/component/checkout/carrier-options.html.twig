@@ -9,46 +9,51 @@
                 <div class="mb-0 date_select">
                     <select name="myparcel_delivery_date">
                         {% for option in options %}
-                            <option value="{{ option['date'] }}" {% if chosenOptions[2] == option['date'] %}selected{% endif %}>{{ option['date'] }}</option>
+                            {% if not(config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime <= 'now'|date('h:i:s')) %}
+                                <option value="{{ option['date'] }}" {% if chosenOptions[2] == option['date'] %}selected{% endif %}>{{ option['date'] }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
             {% endif %}
+
             {% if config.myParcelShowDeliveryDate == '1'%}
                 {% for option in options %}
-                    <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
-                        {% for time in option['time'] %}
+                    {% if not(config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime <= 'now'|date('h:i:s')) %}
+                        <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
+                            {% for time in option['time'] %}
 
-                            {% if (time['type'] == 2)
-                                or (time['type'] == 1 and config.myParcelShowWindowType1 == '1')
-                                or (time['type'] == 3 and config.myParcelShowWindowType3 == '1')
-                            %}
+                                {% if (time['type'] == 2)
+                                    or (time['type'] == 1 and config.myParcelShowWindowType1 == '1')
+                                    or (time['type'] == 3 and config.myParcelShowWindowType3 == '1')
+                                %}
 
-                                <label class="d-block mb-0">
-                                    <input type="radio"
-                                           class="custom-control-input"
-                                           name="myparcel_delivery_type_{{ option['date'] }}"
-                                           data-target="myparcel[delivery_type]"
-                                           value="{{ time['type'] }}"
-                                           id="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
-                                           {% if config.myParcelDefaultDeliveryWindow == time['type']
-                                               or chosenOptions[3] == time['type'] %}checked="checked"
-                                        {% endif %} />
+                                    <label class="d-block mb-0">
+                                        <input type="radio"
+                                               class="custom-control-input"
+                                               name="myparcel_delivery_type_{{ option['date'] }}"
+                                               data-target="myparcel[delivery_type]"
+                                               value="{{ time['type'] }}"
+                                               id="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
+                                               {% if config.myParcelDefaultDeliveryWindow == time['type']
+                                                   or chosenOptions[3] == time['type'] %}checked="checked"
+                                            {% endif %} />
 
-                                    <label for="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
-                                           class="custom-control-label">
-                                        {{ ("myparcel.delivery_type_" ~ time['type']) | trans | sw_sanitize }}
-                                        <span class="cost">
-                                            {% if attribute(config, "costsDelivery#{time['type']}") > 0 %}
-                                                + {{ attribute(config, "costsDelivery#{time['type']}") | format_currency('EUR') }}
-                                            {% endif %}
-                                        </span>
+                                        <label for="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
+                                               class="custom-control-label">
+                                            {{ ("myparcel.delivery_type_" ~ time['type']) | trans | sw_sanitize }}
+                                            <span class="cost">
+                                                {% if attribute(config, "costsDelivery#{time['type']}") > 0 %}
+                                                    + {{ attribute(config, "costsDelivery#{time['type']}") | format_currency('EUR') }}
+                                                {% endif %}
+                                            </span>
+                                        </label>
                                     </label>
-                                </label>
-                            {% endif %}
+                                {% endif %}
 
-                        {% endfor %}
-                    </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
