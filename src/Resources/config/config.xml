@@ -43,11 +43,22 @@
         <title lang="de-DE">Checkout-Einstellungen</title>
         <title lang="nl-NL">Checkout instellingen</title>
 
+        <input-field type="time">
+            <name>cutoffTime</name>
+            <label>cut-off time</label>
+            <label lang="de-DE">Annahmeschlusszeit</label>
+            <label lang="nl-NL">cut-off tijd</label>
+            <helpText>The cut-off time indicates the time until which an order can be placed for delivery on the following day. After this time, customers will no longer see tomorrow's date as an option in the checkout.</helpText>
+            <helpText lang="de-DE">Die Annahmeschlusszeit gibt an, bis zu welchem Zeitpunkt eine Bestellung für die Lieferung am nächsten Tag aufgegeben werden kann. Nach diesem Zeitpunkt werden die Kunden das morgige Datum nicht mehr als Option in der Kasse sehen.</helpText>
+            <helpText lang="nl-NL">De cut-off tijd geeft aan tot welke tijd er besteld kan worden voor levering op de volgende dag. Klanten krijgen na deze tijd niet meer de datum van morgen te zien als optie in de checkout.</helpText>
+        </input-field>
+
         <input-field type="single-select">
             <name>myParcelShowPickup</name>
             <label>Show Pickup points in checkout</label>
             <label lang="de-DE">Abholpunkte in der Kasse anzeigen</label>
             <label lang="nl-NL">Toon pickup punten bij afrekenen</label>
+            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -62,7 +73,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>1</defaultValue>
         </input-field>
 
         <input-field type="single-select">
@@ -70,6 +80,7 @@
             <label>Show delivery date in checkout</label>
             <label lang="de-DE">Lieferdatum im Checkout anzeigen</label>
             <label lang="nl-NL">Toon leverdatum in checkout</label>
+            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -84,7 +95,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>1</defaultValue>
         </input-field>
 
         <input-field type="single-select">
@@ -92,6 +102,7 @@
             <label>Show morning delivery window</label>
             <label lang="de-DE">Morgenlieferung anzeigen</label>
             <label lang="nl-NL">Toon ochtend levering</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -106,7 +117,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <input-field type="float">
@@ -122,6 +132,7 @@
             <label>Show evening delivery window</label>
             <label lang="de-DE">Abendlieferung anzeigen</label>
             <label lang="nl-NL">Toon avond levering</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -136,7 +147,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <input-field type="float">
@@ -159,6 +169,7 @@
             <label>Default delivery window</label>
             <label lang="de-DE">Standard-Lieferfenster</label>
             <label lang="nl-NL">Standaard afleveringsperiode</label>
+            <defaultValue>2</defaultValue>
             <options>
                 <option>
                     <id>2</id>
@@ -179,7 +190,6 @@
                     <name lang="nl-NL">Avond</name>
                 </option>
             </options>
-            <defaultValue>2</defaultValue>
         </input-field>
 
         <!--Choose default signed delivery-->
@@ -188,6 +198,7 @@
             <label>Default signed delivery</label>
             <label lang="de-DE">Standardmäßige Unterschrift bei Lieferung</label>
             <label lang="nl-NL">Standaard handtekening bij bezorging</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -202,7 +213,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default only house, no neighbours-->
@@ -211,6 +221,7 @@
             <label>Default delivery at neighbours</label>
             <label lang="de-DE">Standardlieferung bei Nachbarn</label>
             <label lang="nl-NL">Standaard aflevering bij buren</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -225,7 +236,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default return when not at home-->
@@ -234,6 +244,7 @@
             <label>Default return package to the sender when recipient is not home</label>
             <label lang="de-DE">Standard-Rücksendepaket an den Absender, wenn der Empfänger nicht zu Hause ist</label>
             <label lang="nl-NL">Stuur standaard het pakket terug naar de afzender als de ontvanger niet thuis is</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -248,7 +259,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default large format-->
@@ -257,6 +267,7 @@
             <label>Default delivery is large format</label>
             <label lang="de-DE">Standardpaket ist großformatig</label>
             <label lang="nl-NL">Standaard pakket is groot formaat</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -271,7 +282,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default age check-->
@@ -280,6 +290,7 @@
             <label>The Customer/Consumer must sign for the package and only receive it when he is at least 18 years</label>
             <label lang="de-DE">Der Kunde, der für das Paket unterschreibt, muss mindestens 18 Jahre alt sein</label>
             <label lang="nl-NL">De klant welke voor het pakket tekent dient minstens 18 jaar te zijn</label>
+            <defaultValue>0</defaultValue>
             <options>
                 <option>
                     <id>0</id>
@@ -294,7 +305,6 @@
                     <name lang="nl-NL">Ja</name>
                 </option>
             </options>
-            <defaultValue>0</defaultValue>
         </input-field>
 
         <!--Choose default package type-->
@@ -303,6 +313,7 @@
             <label>Default package type</label>
             <label lang="de-DE">Standard-Verpackungstyp</label>
             <label lang="nl-NL">Standaard verpakkingssoort</label>
+            <defaultValue>1</defaultValue>
             <options>
                 <option>
                     <id>1</id>
@@ -329,7 +340,6 @@
                     <name lang="nl-NL">Digitale postzegel</name>
                 </option>
             </options>
-            <defaultValue>1</defaultValue>
         </input-field>
 
         <!--Choose default carrier-->
