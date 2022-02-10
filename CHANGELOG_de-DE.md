@@ -17,3 +17,8 @@
 - Option zur Deaktivierung der Datumsauswahl im Checkout hinzugefügt
 - Ein Fehler wurde behoben, der Ausnahmen verursachte, wenn zuerst eine andere Versandart ausgewählt und dann auf die Option MyParcel umgestellt wurde
 - Einige andere kleinere Fehler behoben
+
+##Version 1.3.2
+- Option "Abschaltzeit" hinzugefügt
+- Verbesserte Snippets
+- Versicherte Sendungen hinzugefügt
