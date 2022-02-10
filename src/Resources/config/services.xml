@@ -69,6 +69,7 @@
 
         <service id="MyPa\Shopware\Service\Shipment\InsuranceService" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="country.repository"/>
         </service>
 
         <!-- Entities -->

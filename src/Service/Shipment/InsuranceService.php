@@ -5,6 +5,10 @@ namespace MyPa\Shopware\Service\Shipment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -13,12 +17,16 @@ class InsuranceService
     /** @var SystemConfigService */
     private $systemConfigService;
 
-    public function __construct(SystemConfigService $systemConfigService)
+    /** @var EntityRepository */
+    private $countryRepository;
+
+    public function __construct(SystemConfigService $systemConfigService, EntityRepository $countryRepository)
     {
         $this->systemConfigService = $systemConfigService;
+        $this->countryRepository = $countryRepository;
     }
 
-    public function getInsuranceAmount($cartTotal, $countryCode, $carrierId)
+    public function getInsuranceAmount($cartTotal, CountryEntity $country, $carrierId)
     {
         if(!$this->systemConfigService->get('MyPaShopware.config.myParcelShipInsured')){
             return 0;
@@ -29,10 +37,18 @@ class InsuranceService
         }
 
         if($carrierId == PostNLConsignment::CARRIER_ID){
-            if($countryCode == 'NL'){
+            $countryId = $this->systemConfigService->get('MyPaShopware.config.defaultShipFromCountry');
+
+            $fromCountry = $this->countryRepository->search(
+                (new Criteria())->addFilter(new EqualsFilter('id', $countryId))
+            )->first();
+
+            if($fromCountry->getIso() == 'NL' && $country->getIso() == 'NL'){
                 return $this->systemConfigService->get('MyPaShopware.config.myParcelShipInsuredMaxAmount');
+            } else if ($fromCountry->getIso() == 'NL' && $country->getIso() == 'BE'){
+                return 500;
             }
-            if($countryCode == 'BE'){
+            if($country->getIso() == 'BE'){
                 return 500;
             }
         }
@@ -42,7 +58,6 @@ class InsuranceService
         }
 
         return 0;
-
     }
 
 }
