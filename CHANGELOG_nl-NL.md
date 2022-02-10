@@ -14,3 +14,8 @@
 - Optie toegevoegd om de datumkiezer uit te schakelen bij het afrekenen
 - Een bug opgelost die uitzonderingen veroorzaakte wanneer eerst een ander type verzendmethode werd geselecteerd en vervolgens werd overgeschakeld op de MyParcel-optie
 - Enkele andere kleine bugs opgelost
+
+##Version 1.3.2
+- Optie cut-off tijd toegevoegd
+- Verbeterde vertalingen
+- Verzekerde zendingen toegevoegd

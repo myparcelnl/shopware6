@@ -163,6 +163,87 @@
         <title lang="de-DE">Versandeinstellungen</title>
         <title lang="nl-NL">Verzend instellingen</title>
 
+        <component name="sw-entity-single-select">
+            <name>defaultShipFromCountry</name>
+            <entity>country</entity>
+            <label>Products are shipped from</label>
+            <label lang="de-DE">Der Versand der Produkte erfolgt von</label>
+            <label lang="nl-NL">De producten worden verzonden vanuit</label>
+        </component>
+
+        <input-field type="bool">
+            <name>myParcelShipInsured</name>
+            <label>Insured shipment</label>
+            <label lang="de-DE">Versicherter Versand</label>
+            <label lang="nl-NL">Verzekerde zending</label>
+            <defaultValue>0</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>myParcelShipInsuredFromAmount</name>
+            <label>Insure from amount</label>
+            <label lang="de-DE">Versichern von Betrag</label>
+            <label lang="nl-NL">Verzeker vanaf bedrag</label>
+            <defaultValue>0</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>myParcelShipInsuredMaxAmount</name>
+            <label>Insure up to</label>
+            <label lang="de-DE">Versichern Sie bis zu</label>
+            <label lang="nl-NL">Verzekeren tot maximaal</label>
+            <options>
+                <option>
+                    <id>100</id>
+                    <name>100</name>
+                </option>
+                <option>
+                    <id>250</id>
+                    <name>250</name>
+                </option>
+                <option>
+                    <id>500</id>
+                    <name>500</name>
+                </option>
+                <option>
+                    <id>1000</id>
+                    <name>1000</name>
+                </option>
+                <option>
+                    <id>1500</id>
+                    <name>1500</name>
+                </option>
+                <option>
+                    <id>2000</id>
+                    <name>2000</name>
+                </option>
+                <option>
+                    <id>2500</id>
+                    <name>2500</name>
+                </option>
+                <option>
+                    <id>3000</id>
+                    <name>3000</name>
+                </option>
+                <option>
+                    <id>3500</id>
+                    <name>3500</name>
+                </option>
+                <option>
+                    <id>4000</id>
+                    <name>4000</name>
+                </option>
+                <option>
+                    <id>4500</id>
+                    <name>4500</name>
+                </option>
+                <option>
+                    <id>5000</id>
+                    <name>5000</name>
+                </option>
+            </options>
+        </input-field>
+
         <!--Choose default delivery window-->
         <input-field type="single-select">
             <name>myParcelDefaultDeliveryWindow</name>

@@ -38,6 +38,7 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Shipment\InsuranceService"/>
             <argument>%kernel.shopware_version%</argument>
         </service>
 
@@ -63,6 +64,10 @@
         <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" public="true">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="MyPa\Shopware\Service\Shipment\InsuranceService" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 

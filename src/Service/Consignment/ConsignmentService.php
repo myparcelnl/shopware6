@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Service\Consignment;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
+use MyPa\Shopware\Service\Shipment\InsuranceService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -49,6 +50,9 @@ class ConsignmentService
     /** @var SystemConfigService */
     private $systemConfigService;
 
+    /** @var InsuranceService */
+    private $insuranceService;
+
     private $shopwareVersion;
 
     /**
@@ -58,6 +62,7 @@ class ConsignmentService
      * @param ShippingOptionsService $shippingOptionsService
      * @param ShipmentService $shipmentService
      * @param SystemConfigService $systemConfigService
+     * @param InsuranceService $insuranceService
      * @param $shopwareVersion
      */
     public function __construct(
@@ -65,6 +70,7 @@ class ConsignmentService
         ShippingOptionsService $shippingOptionsService,
         ShipmentService $shipmentService,
         SystemConfigService $systemConfigService,
+        InsuranceService $insuranceService,
         $shopwareVersion
     )
     {
@@ -73,6 +79,7 @@ class ConsignmentService
         $this->shipmentService = $shipmentService;
         $this->systemConfigService = $systemConfigService;
         $this->apiKey = (string)$systemConfigService->get('MyPaShopware.config.myParcelApiKey');
+        $this->insuranceService = $insuranceService;
         $this->shopwareVersion = $shopwareVersion;
     }
 
@@ -255,6 +262,16 @@ class ConsignmentService
             $consignment->setPickupCity($shippingOptions->getLocationCity());
             $consignment->setPickupCountry($shippingOptions->getLocationCc());
             $consignment->setRetailNetworkId($shippingOptions->getRetailNetworkId());
+        }
+
+        $insuranceAmount = $this->insuranceService->getInsuranceAmount(
+            $orderEntity->getAmountNet(),
+            $shippingAddress->getCountry()->getIso(),
+            $shippingOptions->getCarrierId()
+        );
+
+        if($insuranceAmount) {
+            $consignment->setInsurance($insuranceAmount);
         }
 
         return $consignment;
