@@ -54,9 +54,11 @@ class ContextController extends StorefrontController
      */
     public function configure(Request $request, RequestDataBag $data, SalesChannelContext $salesChannelContext, Context $content)
     {
-        $shippingMethodId = $data->get('shippingMethodId') ?: 0;
+        $this->contextSwitcher->update($data, $salesChannelContext);
 
         $response = $this->createActionResponse($request);
+        
+        $shippingMethodId = $data->get('shippingMethodId') ?: 0;
 
         if(!$shippingMethodId){
             return $response;
@@ -118,8 +120,6 @@ class ContextController extends StorefrontController
 
                 break;
         }
-
-        $this->contextSwitcher->update($data, $salesChannelContext);
 
         if(empty($cookieValue)){
             return $response;
