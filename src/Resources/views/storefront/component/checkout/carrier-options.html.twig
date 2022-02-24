@@ -35,7 +35,7 @@
                                                data-target="myparcel[delivery_type]"
                                                value="{{ time['type'] }}"
                                                id="myparcel_delivery_type_{{ option['date'] }}_{{ time['type'] }}_{{ carrier_id }}"
-                                               {% if config.myParcelDefaultDeliveryWindow == time['type']
+                                               {% if (not chosenOptions[3] and config.myParcelDefaultDeliveryWindow == time['type'])
                                                    or chosenOptions[3] == time['type'] %}checked="checked"
                                             {% endif %} />
 
