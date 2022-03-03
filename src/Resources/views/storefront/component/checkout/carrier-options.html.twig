@@ -9,7 +9,10 @@
                 <div class="mb-0 date_select">
                     <select name="myparcel_delivery_date">
                         {% for option in options %}
-                            {% if not(config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime <= 'now'|date('h:i:s')) %}
+                            {% if not(config.cutoffTime)
+                                or (config.cutoffTime and option['date'] != 'now'|date_modify("+1 day")|date('Y-m-d'))
+                                or (config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime|date('U') >= 'now'|date('U'))
+                            %}
                                 <option value="{{ option['date'] }}" {% if chosenOptions[2] == option['date'] %}selected{% endif %}>{{ option['date'] }}</option>
                             {% endif %}
                         {% endfor %}
@@ -19,7 +22,11 @@
 
             {% if config.myParcelShowDeliveryDate == '1'%}
                 {% for option in options %}
-                    {% if not(config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime <= 'now'|date('h:i:s')) %}
+
+                    {% if not(config.cutoffTime)
+                        or (config.cutoffTime and option['date'] != 'now'|date_modify("+1 day")|date('Y-m-d'))
+                        or (config.cutoffTime and option['date'] == 'now'|date_modify("+1 day")|date('Y-m-d') and config.cutoffTime|date('U') >= 'now'|date('U'))
+                    %}
                         <div class="mb-0 delivery_options {% if loop.first == false %}d-none {% endif %}" data-date="{{ option['date'] }}">
                             {% for time in option['time'] %}
 
