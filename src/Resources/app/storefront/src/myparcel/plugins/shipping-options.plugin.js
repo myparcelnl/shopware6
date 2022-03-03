@@ -148,8 +148,13 @@ export default class MyParcelShippingOptions extends Plugin {
         const selectedMethodValue = selectedMethod.value;
         const optionsDiv = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"]');
 
-        if(!optionsDiv || optionsDiv.getAttribute('data-options-loaded') == 'true') {
-            return
+        if(!optionsDiv) {
+            return;
+        }
+
+        if(optionsDiv.getAttribute('data-options-loaded') == 'true') {
+            let deliveryAddress = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"] .myparcel_delivery_options');
+            deliveryAddress.remove();
         }
 
         httpClient.get(methodOptionsUrl+'?method='+selectedMethodValue, function(response) {

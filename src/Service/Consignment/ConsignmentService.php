@@ -267,7 +267,8 @@ class ConsignmentService
         $insuranceAmount = $this->insuranceService->getInsuranceAmount(
             $orderEntity->getAmountNet(),
             $shippingAddress->getCountry(),
-            $shippingOptions->getCarrierId()
+            $shippingOptions->getCarrierId(),
+            $context
         );
 
         if($insuranceAmount) {

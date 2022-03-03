@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Service\Shipment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -26,7 +27,7 @@ class InsuranceService
         $this->countryRepository = $countryRepository;
     }
 
-    public function getInsuranceAmount($cartTotal, CountryEntity $country, $carrierId)
+    public function getInsuranceAmount($cartTotal, CountryEntity $country, $carrierId, Context $context)
     {
         if(!$this->systemConfigService->get('MyPaShopware.config.myParcelShipInsured')){
             return 0;
@@ -41,7 +42,7 @@ class InsuranceService
 
             $fromCountry = $this->countryRepository->search(
                 (new Criteria())->addFilter(new EqualsFilter('id', $countryId))
-            )->first();
+            , $context)->first();
 
             if($fromCountry->getIso() == 'NL' && $country->getIso() == 'NL'){
                 return $this->systemConfigService->get('MyPaShopware.config.myParcelShipInsuredMaxAmount');
