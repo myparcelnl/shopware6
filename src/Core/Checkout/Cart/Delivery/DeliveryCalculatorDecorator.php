@@ -216,7 +216,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $shippingMethod = $this->shippingMethodService->getShippingMethodByShopwareShippingMethodId(
             $context->getShippingMethod()->getId(),
-            new Context(new SystemSource())
+            $context->getContext()
         );
 
         if($shippingMethod) {
