@@ -8,9 +8,9 @@
         <input type="hidden" name="myparcel[only_recipient]" value="{{page.myparcel_values.onlyRecipient }}" />
         <input type="hidden" name="myparcel[delivery_type]" value="{{page.myparcel_values.deliveryType }}" />
         <input type="hidden" name="myparcel[delivery_location]" value="{{page.myparcel_values.deliveryLocation }}" />
-        {% if page.myparcel_values.pickupPointData %}
+{#        {% if page.myparcel_values.pickupPointData %}#}
             <input type="hidden" name="myparcel[pickup_point_data]" value="{{page.myparcel_values.pickupPointData }}" />
-        {% endif %}
+{#        {% endif %}#}
     {% endif %}
     {{ parent() }}
 {% endblock %}

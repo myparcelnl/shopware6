@@ -52,6 +52,7 @@ export default class MyParcelShippingOptions extends Plugin {
         // }else{
         //     const myparcel_only_recipient =  cookieSet[5];
         // }
+
         /* Is myParcel shippingform and is delivery type selected? */
         if (shippingForms && myparcel_delivery_type > 0) {
             let shippingSelectedTxt = '';
@@ -113,8 +114,6 @@ export default class MyParcelShippingOptions extends Plugin {
 
 
             /* Set and place text */
-            //const deliveryOptionId = shippingMethodId;
-            //const deliveryOptionLabel = shippingForm.querySelector('label[for="'+ shippingMethodId + '"]').textContent;
             const shippingSelected = document.querySelector(me.options.currentShipping);
             shippingSelected.innerHTML += '<br/><small>' + shippingSelectedTxt + '</small>';
 
@@ -125,6 +124,7 @@ export default class MyParcelShippingOptions extends Plugin {
             const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type_' + myparcel_delivery_date + ']"]');
             const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
             const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
+            const confirmPickupPoint = confirmOrderForm.querySelector('input[name="myparcel[pickup_point_data]"]');
 
             /* Set orderform values */
             confirmShippingMethod.value = shippingMethodId;
@@ -189,6 +189,7 @@ export default class MyParcelShippingOptions extends Plugin {
             const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
             const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
             const confirmDeliveryLocation = confirmOrderForm.querySelector('input[name="myparcel[delivery_location]"]');
+            const confirmPickupLocation = confirmOrderForm.querySelector('input[name="myparcel[pickup_point_data]"]');
 
             //Event listeners for type
             const deliveryTypeCheckboxes = optionsDiv.querySelectorAll('input[name^="myparcel_delivery_type_"]');
@@ -200,10 +201,26 @@ export default class MyParcelShippingOptions extends Plugin {
 
             //Event listener for Location
             const deliveryLocationCheckboxes = optionsDiv.querySelectorAll('input[name="delivery_location"]');
-
-            deliveryLocationCheckboxes.forEach(value => {
-                value.addEventListener('change', evt => {
+            deliveryLocationCheckboxes.forEach(deliveryLocationCheckbox => {
+                deliveryLocationCheckbox.addEventListener('change', evt => {
                     confirmDeliveryLocation.value = evt.target.value;
+                    if(evt.target.value==="pickup"){
+                        //Get all delivery pickups
+                        const pickupLocationCheckboxes = optionsDiv.querySelectorAll('input[name="pickup_point"]');
+                        let checked = false;
+                        pickupLocationCheckboxes.forEach((pickupLocationCheckbox) => {
+                            checked = checked || pickupLocationCheckbox.checked;
+                            pickupLocationCheckbox.addEventListener('change', event => {
+                                console.log(event.target);
+                                confirmPickupLocation.value = event.target.getAttribute('data-pickuppoint_data');
+                            });
+                        });
+                        //Default check if no options
+                        if (!checked&&pickupLocationCheckboxes[0]){
+                            pickupLocationCheckboxes[0].checked = true;
+                            confirmPickupLocation.value = pickupLocationCheckboxes[0].getAttribute('data-pickuppoint_data');
+                        }
+                    }
                 });
             });
 
@@ -219,6 +236,7 @@ export default class MyParcelShippingOptions extends Plugin {
                 confirmOnlyRecipient.value = evt.target.checked;
             })
 
+
             //EventListener for the date select
             const dateSelect = optionsDiv.querySelector('.date_select select')
             dateSelect.addEventListener('change', (event) => {
@@ -233,14 +251,6 @@ export default class MyParcelShippingOptions extends Plugin {
 
                 const dateOptionsDiv = optionsDiv.querySelector('[data-date="' + event.target.value + '"]');
                 dateOptionsDiv.classList.remove("d-none");
-
-                //Update with all data
-                // const deliveryLocationCheckboxes = optionsDiv.querySelectorAll('input[name="delivery_location"]');
-                // deliveryLocationCheckboxes.forEach(value => {
-                //     if (value.target.checked) {
-                //         confirmDeliveryType.value = value.target.value;
-                //     }
-                // });
 
                 const deliveryOptions = dateOptionsDiv.querySelectorAll('input[name^="myparcel_delivery_type_"]');
 

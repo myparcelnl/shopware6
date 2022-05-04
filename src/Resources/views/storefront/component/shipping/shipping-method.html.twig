@@ -2,7 +2,6 @@
 
     {% block component_shipping_method_label %}
         {{ parent() }}
-        {{dump(page)}}
         {% if shipping.id in page.myparcel_shipping_method_ids %}
             <div class="myparcel_shipping_form mt-3" data-myparcel-option="true" data-shipping-method-id="{{ shipping.id }}" data-target="myparcel[shipping_method_id]" data-options-loaded="false">
             </div>
