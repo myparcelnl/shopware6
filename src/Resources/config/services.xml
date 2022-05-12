@@ -4,6 +4,7 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <defaults public="true"/>
         <service id="MyPa\Shopware\Cart\Checkout\ShippingCostsCollector">
             <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService" />
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator" />
@@ -25,13 +26,6 @@
             <tag name="shopware.snippet.file"/>
         </service>
 
-        <!-- Cookie provider -->
-        <service id="kiener.kiener_my_parcel.service.cookie.cookie_provider"
-                 class="MyPa\Shopware\Service\Cookie\CookieProvider"
-                 decorates="Shopware\Storefront\Framework\Cookie\CookieProviderInterface">
-            <argument type="service" id="kiener.kiener_my_parcel.service.cookie.cookie_provider.inner" />
-        </service>
-
         <!-- Services -->
         <service id="MyPa\Shopware\Service\Consignment\ConsignmentService">
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
@@ -42,17 +36,17 @@
             <argument>%kernel.shopware_version%</argument>
         </service>
 
-        <service id="MyPa\Shopware\Service\Order\OrderService" public="true">
+        <service id="MyPa\Shopware\Service\Order\OrderService" >
             <argument type="service" id="logger"/>
             <argument type="service" id="order.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shipment\ShipmentService" public="true">
+        <service id="MyPa\Shopware\Service\Shipment\ShipmentService" >
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipment.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" public="true">
+        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" >
             <argument type="service" id="logger"/>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
             <argument type="service" id="delivery_time.repository"/>
@@ -61,18 +55,18 @@
             <argument type="service" id="shipping_method.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" public="true">
+        <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" >
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shipment\InsuranceService" public="true">
+        <service id="MyPa\Shopware\Service\Shipment\InsuranceService" >
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="country.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService" public="true">
+        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService" >
             <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="media.repository"/>
             <argument type="service" id="rule.repository"/>
@@ -81,7 +75,7 @@
             <argument type="service" id="myparcel.logger"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService" public="true">
+        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService" >
             <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
             <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="media.repository"/>
@@ -120,7 +114,7 @@
         </service>
 
         <!-- Controller -->
-        <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController" public="true">
+        <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController" >
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -129,14 +123,14 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\MyParcelController" public="true">
+        <service id="MyPa\Shopware\Storefront\Controller\MyParcelController" >
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService" />
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\ShipmentController" public="true">
+        <service id="MyPa\Shopware\Storefront\Controller\ShipmentController" >
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -144,7 +138,7 @@
             <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService" />
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\ShippingOptionsController" public="true">
+        <service id="MyPa\Shopware\Storefront\Controller\ShippingOptionsController" >
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -152,7 +146,7 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController" public="true">
+        <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController" >
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
