@@ -29,10 +29,11 @@ class Migration1652167040DeactivateOldShipping extends MigrationStep
             $myParcelShippingMethodIds = array_map($fromBytesToHex, $result);
 
             foreach ($myParcelShippingMethodIds as $myParcelShippingMethodId) {
-                //Change the
+                //Change the description
                 $connection->update('shipping_method_translation',
                     array('description' => 'This shipping method has been deprecated. Do not activate.'),
                     array('shipping_method_id' => Uuid::fromHexToBytes($myParcelShippingMethodId)));
+                //Set the shipping on inactive
                 $connection->update('shipping_method',
                     array('active' => 0),
                     array('id' => Uuid::fromHexToBytes($myParcelShippingMethodId)));
