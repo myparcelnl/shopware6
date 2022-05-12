@@ -32,7 +32,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function __construct(
         ShippingMethodService $shippingMethodService,
-        SystemConfigService $configService
+        SystemConfigService   $configService
     )
     {
         $this->shippingMethodService = $shippingMethodService;

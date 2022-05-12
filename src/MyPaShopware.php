@@ -2,8 +2,8 @@
 
 namespace MyPa\Shopware;
 
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Doctrine\DBAL\Connection;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -27,11 +27,10 @@ class MyPaShopware extends Plugin
 
     public function activate(ActivateContext $activateContext): void
     {
-        /** @var ShippingMethodService $shippingMethodService */
-        $shippingMethodService = $this->container->get(ShippingMethodService::class);
+        parent::activate($activateContext);
 
-        // Install MyParcel shipping methods
-        $shippingMethodService->createShippingMethods($activateContext->getContext());
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($activateContext,$this->container,$this->getPath());
     }
 
     public function uninstall(UninstallContext $uninstallContext): void

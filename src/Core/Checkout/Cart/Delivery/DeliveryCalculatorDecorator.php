@@ -69,12 +69,12 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $configService;
 
     public function __construct(
-        QuantityPriceCalculator $priceCalculator,
+        QuantityPriceCalculator  $priceCalculator,
         PercentageTaxRuleBuilder $percentageTaxRuleBuilder,
-        TaxDetector $taxDetector,
-        ShippingMethodService $shippingMethodService,
-        ShippingOptionsService $shippingOptionsService,
-        SystemConfigService $configService
+        TaxDetector              $taxDetector,
+        ShippingMethodService    $shippingMethodService,
+        ShippingOptionsService   $shippingOptionsService,
+        SystemConfigService      $configService
     ) {
         $this->priceCalculator = $priceCalculator;
         $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;

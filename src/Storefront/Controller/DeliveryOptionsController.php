@@ -33,9 +33,9 @@ class DeliveryOptionsController extends StorefrontController
     private const RESPONSE_KEY_DELIVERY_OPTIONS = 'delivery_options';
 
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface       $logger,
         ShippingMethodService $shippingMethodService,
-        SystemConfigService $configService
+        SystemConfigService   $configService
     )
     {
         $this->shippingMethodService = $shippingMethodService;
