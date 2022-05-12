@@ -13,6 +13,7 @@ use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Shopware\Core\System\CustomField\CustomFieldTypes;
 
 class MyPaShopware extends Plugin
@@ -21,8 +22,6 @@ class MyPaShopware extends Plugin
     public function install(InstallContext $installContext): void
     {
         parent::install($installContext);
-
-        $this->updateCustomFields($installContext->getCurrentPluginVersion());
     }
 
     public function activate(ActivateContext $activateContext): void
@@ -53,22 +52,6 @@ class MyPaShopware extends Plugin
         $this->deleteCustomFields($uninstallContext);
     }
 
-    private function updateCustomFields(string $to, ?string $from = null)
-    {
-        /** @var EntityRepositoryInterface $customFieldSetRepository */
-        $customFieldSetRepository = $this->container->get('custom_field_set.repository');
-
-        if ($this->version_between('0.1.0', $to, $from)) {
-            $this->updateCustomFields_0_1_0($customFieldSetRepository);
-        }
-    }
-
-    private function version_between(string $between, string $to, ?string $from = null)
-    {
-        return version_compare($to, $between, '>=')
-            && (is_null($from) || version_compare($from, $between, '<'));
-    }
-
     private function deleteCustomFields()
     {
         /** @var EntityRepositoryInterface $customFieldSetRepository */
@@ -93,33 +76,5 @@ class MyPaShopware extends Plugin
         );
     }
 
-    private function updateCustomFields_0_1_0(EntityRepositoryInterface $customFieldSetRepository)
-    {
-        $entityIds = $customFieldSetRepository->search(
-            (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
-            Context::createDefaultContext()
-        )->getEntities()->getIds();
 
-        if (count($entityIds) > 0) {
-            return;
-        }
-
-        $customFieldSetRepository->upsert([
-            [
-                'name' => 'myparcelShopware',
-                'global' => true,
-                'customFields' => [
-                    [
-                        'name' => 'my_parcel',
-                        'type' => CustomFieldTypes::JSON,
-                    ]
-                ],
-                'relations' => [
-                    [
-                        'entityName' => $this->container->get(OrderDefinition::class)->getEntityName()
-                    ]
-                ],
-            ]
-        ], Context::createDefaultContext());
-    }
 }
