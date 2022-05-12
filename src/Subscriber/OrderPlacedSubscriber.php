@@ -98,6 +98,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     public function onOrderPlaced(CheckoutOrderPlacedEvent $event)
     {
+        //TODO: use with values not from hidden fields and transform to the CartConvertedEvent
         /** @var array $params */
         $params = [];
 
