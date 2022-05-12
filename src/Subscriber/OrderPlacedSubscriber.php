@@ -184,7 +184,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 }
 
                 if(isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup'){
-                    $decodedPickupPointData = json_decode(base64_decode($params[self::PARAM_PICKUP_DATA]), true);
+                    $decodedPickupPointData = json_decode($params[self::PARAM_PICKUP_DATA], true);
 
                     $options[ShippingOptionEntity::FIELD_PICKUP_LOCATION_ID] = intval($decodedPickupPointData['location_code']);
                     $options[ShippingOptionEntity::FIELD_PICKUP_NAME] = $decodedPickupPointData['location'];

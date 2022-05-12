@@ -1,6 +1,7 @@
 import HttpClient from 'src/service/http-client.service';
 import Plugin from 'src/plugin-system/plugin.class';
 import CookieStorage from 'src/helper/storage/cookie-storage.helper';
+import DomAccess from 'src/helper/dom-access.helper';
 
 export default class MyParcelShippingOptions extends Plugin {
 
@@ -17,157 +18,49 @@ export default class MyParcelShippingOptions extends Plugin {
 
         const methods = document.querySelectorAll('[name="shippingMethodId"]');
 
-        if(methods.length <= 0){
+        if (methods.length <= 0) {
             return;
         }
 
         me.loadMethodOptions(me);
 
-        methods.forEach(function(method, ) {
+        methods.forEach(function (method,) {
             method.addEventListener('change', (event) => {
                 me.loadMethodOptions(me);
             });
         });
     }
 
-    loadInitialValues(me){
-        const shippingForms = document.querySelectorAll(me.options.shippingForm);
-
-        /* Get cookie value and set some vars  */
-        const cookieMyParcel = CookieStorage.getItem(me.options.cookieName);
-        if(!cookieMyParcel) {
-            return false;
-        }
-
-        const cookieSet = cookieMyParcel.split('_');
-        const myparcel_delivery_location = cookieSet[0]
-        const shippingMethodId  = cookieSet[1];
-        const myparcel_delivery_date  = cookieSet[2];
-        const myparcel_delivery_type =  cookieSet[3];
-        const myparcel_requires_signature =  cookieSet[4];
-
-        if(myparcel_delivery_location == 'pickup') {
-            const myparcel_pickup_id = cookieSet[5]
-        }else{
-            const myparcel_only_recipient =  cookieSet[5];
-        }
-        /* Is myParcel shippingform and is delivery type selected? */
-        if (shippingForms && myparcel_delivery_type > 0) {
-            let shippingSelectedTxt = '';
-
-            /* Get the enclosing elements */
-            const shippingForm = document.querySelector('div[data-shipping-method-id="' + shippingMethodId + '"]');
-            const shippingOptions = shippingForm.querySelector('.delivery_options[data-date="' + myparcel_delivery_date + '"]');
-
-            const selectedDeliveryLocation = shippingForm.querySelector('input[name="delivery_location"][value="'+ myparcel_delivery_location +'"]')
-            selectedDeliveryLocation.checked = true;
-
-            if(myparcel_delivery_location == 'address') {
-                /* Set the selected date */
-                if (myparcel_delivery_date) {
-                    const deliveryDateSelect = shippingForm.querySelector('select[name="myparcel_delivery_date"]');
-                    const selectedDate = deliveryDateSelect.querySelector('[value="' + myparcel_delivery_date + '"]');
-                    selectedDate.selected = true;
-
-                    shippingSelectedTxt = shippingSelectedTxt + selectedDate.text;
-                }
-
-                if (myparcel_delivery_location == 'address') {
-                    /* Set delivery type */
-                    const deliveryOptionType = shippingOptions.querySelector('input[name="myparcel_delivery_type_' + myparcel_delivery_date + '"][value="' + myparcel_delivery_type + '"]');
-                    deliveryOptionType.checked = true;
-                }
-
-                /* Set signature checkbox */
-                if (myparcel_requires_signature > 0) {
-                    const requiresSignatureInput = shippingForm.querySelector('input[name="myparcel_requires_signature"]');
-                    const requiresSignatureLabel = shippingForm.querySelector('label[for="' + requiresSignatureInput.id + '"]').textContent;
-                    requiresSignatureInput.checked = true;
-
-                    shippingSelectedTxt = shippingSelectedTxt + ', ' + requiresSignatureLabel.toLowerCase();
-                }
-
-                /* Set recipient checkbox */
-                if (myparcel_only_recipient > 0) {
-                    const onlyRecipientInput = shippingForm.querySelector('input[name="myparcel_only_recipient"]');
-                    const onlyRecipientLabel = shippingForm.querySelector('label[for="' + onlyRecipientInput.id + '"]').textContent;
-                    onlyRecipientInput.checked = true;
-                    shippingSelectedTxt = shippingSelectedTxt + ', ' + onlyRecipientLabel.toLowerCase();
-                }
-
-                /* Enclose shipment text */
-                if(myparcel_only_recipient > 0 || myparcel_requires_signature > 0) {
-                    shippingSelectedTxt = ' (' + shippingSelectedTxt + ')';
-                }
-            }
-            if(myparcel_delivery_location == 'pickup'){
-                const selectedPickupPoint = shippingForm.querySelector('input[name="pickup_point"][value="'+ myparcel_pickup_id +'"]')
-                selectedPickupPoint.checked = true;
-
-                const pickupPointData = JSON.parse(jsonselectedPickupPoint.dataset.pickuppoint_data);
-                shippingSelectedTxt = pickupPointData.location +"<br />"
-                    + pickupPointData.street +" "+ pickupPointData.number+"<br />"+
-                    pickupPointData.postal_code +" "+ pickupPointData.city;
-            }
-
-
-            /* Set and place text */
-            //const deliveryOptionId = shippingMethodId;
-            //const deliveryOptionLabel = shippingForm.querySelector('label[for="'+ shippingMethodId + '"]').textContent;
-            const shippingSelected = document.querySelector(me.options.currentShipping);
-            shippingSelected.innerHTML += '<br/><small>' + shippingSelectedTxt + '</small>';
-
-            /* Set orderform fields */
-            const confirmOrderForm = document.querySelector(me.options.confirmOrderForm);
-            const confirmShippingMethod = confirmOrderForm.querySelector('input[name="myparcel[shipping_method_id]"]');
-            const confirmDeliveryDate = confirmOrderForm.querySelector('input[name="myparcel[delivery_date]"]');
-            const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type_'+ myparcel_delivery_date +']"]');
-            const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
-            const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
-
-            /* Set orderform values */
-            confirmShippingMethod.value = shippingMethodId;
-            confirmDeliveryDate.value = myparcel_delivery_date;
-            confirmDeliveryType.value = myparcel_delivery_type;
-            confirmSignature.value = myparcel_requires_signature;
-            confirmOnlyRecipient.value = myparcel_only_recipient;
-
-            let optionForms = shippingForm.querySelectorAll('.delivery_options');
-            optionForms.forEach(function(element){
-                element.classList.add("d-none");
-            });
-            shippingOptions.classList.remove("d-none");
-
-        }
-    }
-
-    loadMethodOptions(me){
+    loadMethodOptions(me) {
         const httpClient = new HttpClient(window.accessKey, window.contextToken);
         const methodOptionsUrl = window.router['myparcel.delivery_options'];
         const selectedMethod = document.querySelector("input[name=shippingMethodId]:checked");
         const selectedMethodValue = selectedMethod.value;
-        const optionsDiv = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"]');
+        const optionsDiv = document.querySelector('[data-shipping-method-id="' + selectedMethodValue + '"]');
 
-        if(!optionsDiv) {
+
+        if (!optionsDiv) {
             return;
         }
 
-        if(optionsDiv.getAttribute('data-options-loaded') == 'true') {
-            let deliveryAddress = document.querySelector('[data-shipping-method-id="'+selectedMethodValue+'"] .myparcel_delivery_options');
+        if (optionsDiv.getAttribute('data-options-loaded') == 'true') {
+            let deliveryAddress = document.querySelector('[data-shipping-method-id="' + selectedMethodValue + '"] .myparcel_delivery_options');
             deliveryAddress.remove();
         }
-
-        httpClient.get(methodOptionsUrl+'?method='+selectedMethodValue, function(response) {
-            //check if we have json as response, if so, then it's a error
-            if(me.checkIfJsonString(response)){
+        httpClient.get(methodOptionsUrl + '?method=' + selectedMethodValue, function (response) {
+            if (!response){
+                return;
+            }
+            //check if we have json as response, if so, then it's an error
+            if (me.checkIfJsonString(response)) {
                 const response = JSON.parse(response);
 
-                if(response.success == false && response.code == '422'){
+                if (response.success == false && response.code == '422') {
                     console.log('error 422');
                     return;
                 }
 
-                if(response.success == false){
+                if (response.success == false) {
                     //TODO error about unsuccesfull retrievement of shipping options
                     console.log('no options retrieved');
                     return;
@@ -179,40 +72,112 @@ export default class MyParcelShippingOptions extends Plugin {
             optionsDiv.innerHTML = response;
             optionsDiv.setAttribute('data-options-loaded', 'true');
 
+            //Hidden fields for form
+            const confirmOrderForm = document.querySelector(me.options.confirmOrderForm);
+
+            const confirmDeliveryDate = confirmOrderForm.querySelector('input[name="myparcel[delivery_date]"]');
+            const confirmDeliveryType = confirmOrderForm.querySelector('input[name="myparcel[delivery_type]"]');
+            const confirmSignature = confirmOrderForm.querySelector('input[name="myparcel[requires_signature]"]');
+            const confirmOnlyRecipient = confirmOrderForm.querySelector('input[name="myparcel[only_recipient]"]');
+            const confirmDeliveryLocation = confirmOrderForm.querySelector('input[name="myparcel[delivery_location]"]');
+            const confirmPickupLocation = confirmOrderForm.querySelector('input[name="myparcel[pickup_point_data]"]');
+
+            //Event listeners for type
+            const deliveryTypeCheckboxes = optionsDiv.querySelectorAll('input[name^="myparcel_delivery_type_"]');
+            deliveryTypeCheckboxes.forEach(value => {
+                value.classList.add('shipping-method-input');
+                value.addEventListener('change', evt => {
+                    confirmDeliveryType.value = evt.target.value;
+                });
+            });
+
+            //Event listener for Location
+            const deliveryLocationCheckboxes = optionsDiv.querySelectorAll('input[name="delivery_location"]');
+            deliveryLocationCheckboxes.forEach(deliveryLocationCheckbox => {
+                deliveryLocationCheckbox.addEventListener('change', evt => {
+                    confirmDeliveryLocation.value = evt.target.value;
+                    if (evt.target.value === "pickup") {
+                        //Get all delivery pickups
+                        const pickupLocationCheckboxes = optionsDiv.querySelectorAll('input[name="pickup_point"]');
+                        let checked = false;
+                        pickupLocationCheckboxes.forEach((pickupLocationCheckbox) => {
+                            checked = checked || pickupLocationCheckbox.checked;
+                            pickupLocationCheckbox.addEventListener('change', event => {
+                                confirmPickupLocation.value = event.target.getAttribute('data-pickuppoint_data');
+                            });
+                        });
+                        //Default check if no options
+                        if (!checked && pickupLocationCheckboxes[0]) {
+                            pickupLocationCheckboxes[0].checked = true;
+                            confirmPickupLocation.value = pickupLocationCheckboxes[0].getAttribute('data-pickuppoint_data');
+                        }
+                    }else{
+
+                    }
+                });
+            });
+
+            //Event listener for signature
+            const signatureCheckbox = optionsDiv.querySelector('input[name="myparcel_requires_signature"]');
+            if (signatureCheckbox) {
+
+                signatureCheckbox.addEventListener('change', evt => {
+                    confirmSignature.value = evt.target.checked;
+                });
+            }
+
+            //Event listener for only recipient
+            const onlyRecipientCheckbox = optionsDiv.querySelector('input[name="myparcel_only_recipient"]');
+            if (onlyRecipientCheckbox) {
+                onlyRecipientCheckbox.addEventListener('change', evt => {
+                    confirmOnlyRecipient.value = evt.target.checked;
+                });
+            }
+
             //EventListener for the date select
             const dateSelect = optionsDiv.querySelector('.date_select select')
-            dateSelect.addEventListener('change', (event)=>{
+            dateSelect.addEventListener('change', (event) => {
+
+                //Set the hidden field for submit
+                confirmDeliveryDate.value = event.target.value
 
                 const dateOptionsNotActive = optionsDiv.querySelectorAll('.delivery_options');
-                dateOptionsNotActive.forEach((element)=>{
+                dateOptionsNotActive.forEach((element) => {
                     element.classList.add("d-none");
                 });
 
-                const dateOptionsDiv = optionsDiv.querySelector('[data-date="'+event.target.value+'"]');
+                const dateOptionsDiv = optionsDiv.querySelector('[data-date="' + event.target.value + '"]');
                 dateOptionsDiv.classList.remove("d-none");
 
-                const deliveryOptions = dateOptionsDiv.querySelectorAll('[name="myparcel_delivery_type"]');
-                deliveryOptions.forEach((element)=>{
-                    element.addEventListener('change', (event)=>{
+                const deliveryOptions = dateOptionsDiv.querySelectorAll('input[name^="myparcel_delivery_type_"]');
 
-                        let type = event.target.value
-
-                        if(event.target.checked){
-                            const recipient_option = optionsDiv.querySelector('[name="myparcel_only_recipient"]');
-                            if(type == 1 || type == 3){
-                                recipient_option.checked = true;
-                                //TODO add disabling of option
-                            }
+                function checkNeighbors(type) {
+                    const onlyRecipientCheckbox = optionsDiv.querySelector('input[name="myparcel_only_recipient"]');
+                    if (onlyRecipientCheckbox) {
+                        if (type === "1" || type === "3") {
+                            onlyRecipientCheckbox.checked = true;
+                            confirmOnlyRecipient.value = true;
+                            onlyRecipientCheckbox.disabled = "disabled";
+                        } else {
+                            onlyRecipientCheckbox.disabled = false;
                         }
+                    }
+                }
+
+                deliveryOptions.forEach((element) => {
+                    if (element.checked) {
+                        confirmDeliveryType.value = element.value;
+                        checkNeighbors(element.value);
+                    }
+                    element.addEventListener('change', (event) => {
+                        checkNeighbors(event.target.value);
                     });
                 });
+
             });
 
             const event = new Event('change');
             dateSelect.dispatchEvent(event);
-
-            me.loadInitialValues(me);
-
         });
     }
 
