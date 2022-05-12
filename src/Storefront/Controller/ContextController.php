@@ -57,7 +57,7 @@ class ContextController extends StorefrontController
         $this->contextSwitcher->update($data, $salesChannelContext);
 
         $response = $this->createActionResponse($request);
-        
+
         $shippingMethodId = $data->get('shippingMethodId') ?: 0;
 
         if(!$shippingMethodId){

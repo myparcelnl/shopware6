@@ -72,6 +72,19 @@
             <argument type="service" id="country.repository"/>
         </service>
 
+        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService" public="true">
+            <argument type="service" id="delivery_time.repository"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="rule.repository"/>
+            <argument type="service" id="shipping_method.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+            <argument type="service" id="myparcel.logger"/>
+        </service>
+
+        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService" public="true">
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+        </service>
+
         <!-- Entities -->
         <service id="MyPa\Shopware\Core\Content\Shipment\ShipmentDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipment"/>

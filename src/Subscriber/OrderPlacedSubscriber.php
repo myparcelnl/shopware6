@@ -65,11 +65,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      * @param SystemConfigService       $configService
      */
     public function __construct(
-        RequestStack $requestStack,
-        OrderService $orderService,
-        ShippingMethodService $shippingMethodService,
+        RequestStack           $requestStack,
+        OrderService           $orderService,
+        ShippingMethodService  $shippingMethodService,
         ShippingOptionsService $shippingOptionService,
-        SystemConfigService $configService
+        SystemConfigService    $configService
     )
     {
        $this->requestStack = $requestStack;
