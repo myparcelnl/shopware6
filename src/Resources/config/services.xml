@@ -99,7 +99,6 @@
 
         <!-- Event Subscribers -->
         <service id="MyPa\Shopware\Subscriber\CheckoutConfirmPageSubscriber">
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>

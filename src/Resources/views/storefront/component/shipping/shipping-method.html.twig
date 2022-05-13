@@ -1,6 +1,8 @@
 {% sw_extends '@Storefront/storefront/component/shipping/shipping-method.html.twig' %}
-
     {% block component_shipping_method_label %}
         {{ parent() }}
-        <template data-delivery-options-plugin></template>
+        {% if shipping.customFields.myparcel %}
+            <div id="myparcel-delivery-options"></div>
+        {% endif %}
+        {{ dump() }}
     {% endblock %}

@@ -1,0 +1,14 @@
+{% sw_extends '@Storefront/storefront/page/checkout/_page.html.twig' %}
+{% block base_content %}
+    {% set deliveryOptionsPluginOptions = {
+        address: {
+            cc: page.cart.deliveries.elements[0].location.country.iso,
+            city: page.cart.deliveries.elements[0].location.address.city,
+            postalCode: page.cart.deliveries.elements[0].location.address.zipcode,
+            number:page.cart.deliveries.elements[0].location.address.street
+        }
+    }%}
+    <template data-delivery-options-plugin data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
+    {{ parent() }}
+    {{dump(page)}}
+{% endblock %}

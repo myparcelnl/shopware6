@@ -31,10 +31,751 @@
             <label>Address fields to use</label>
             <label lang="de-DE">Zu verwendende Adressfelder</label>
             <label lang="nl-NL">Te gebruiken adresvelden</label>
-            <helpText>It's possible in this configuration setting to set the formatting of the address based on the fields used in your checkout. By default there are the following fields: {street}, {additionalAddressLine1}, {additionalAddressLine2}. When using one of the additional address lines for parts of the address it's necessary to add them in the configuration, example when using a seperate field for number: {street} {additionalAddressLine1}</helpText>
-            <helpText lang="de-DE">In dieser Konfigurationseinstellung können Sie die Formatierung der Adresse auf der Grundlage der in Ihrer Kasse verwendeten Felder festlegen. Standardmäßig gibt es die folgenden Felder: {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wenn Sie eine der zusätzlichen Adresszeilen für Teile der Adresse verwenden, müssen Sie diese in der Konfiguration hinzufügen, z.B. wenn Sie ein separates Feld für die Telefonnummer verwenden: {street} {additionalAddressLine1}</helpText>
-            <helpText lang="nl-NL">In deze configuratie-instelling is het mogelijk om de opmaak van het adres in te stellen op basis van de velden die in uw checkout worden gebruikt. Standaard zijn er de volgende velden: {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wanneer u een van de extra adresregels gebruikt voor delen van het adres, dan is het noodzakelijk om deze toe te voegen in de configuratie, bijvoorbeeld wanneer u een apart veld voor nummer gebruikt: {street} {additionalAddressLine1}</helpText>
+            <helpText>It's possible in this configuration setting to set the formatting of the address based on the
+                fields used in your checkout. By default there are the following fields: {street},
+                {additionalAddressLine1}, {additionalAddressLine2}. When using one of the additional address lines for
+                parts of the address it's necessary to add them in the configuration, example when using a seperate
+                field for number: {street} {additionalAddressLine1}
+            </helpText>
+            <helpText lang="de-DE">In dieser Konfigurationseinstellung können Sie die Formatierung der Adresse auf der
+                Grundlage der in Ihrer Kasse verwendeten Felder festlegen. Standardmäßig gibt es die folgenden Felder:
+                {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wenn Sie eine der zusätzlichen
+                Adresszeilen für Teile der Adresse verwenden, müssen Sie diese in der Konfiguration hinzufügen, z.B.
+                wenn Sie ein separates Feld für die Telefonnummer verwenden: {street} {additionalAddressLine1}
+            </helpText>
+            <helpText lang="nl-NL">In deze configuratie-instelling is het mogelijk om de opmaak van het adres in te
+                stellen op basis van de velden die in uw checkout worden gebruikt. Standaard zijn er de volgende velden:
+                {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wanneer u een van de extra adresregels
+                gebruikt voor delen van het adres, dan is het noodzakelijk om deze toe te voegen in de configuratie,
+                bijvoorbeeld wanneer u een apart veld voor nummer gebruikt: {street} {additionalAddressLine1}
+            </helpText>
             <defaultValue>{street}</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>General settings</title>
+        <input-field type="single-select">
+            <name>platform</name>
+            <label>Shop country</label>
+            <defaultValue>myparcel</defaultValue>
+            <options>
+                <option>
+                    <id>myparcel</id>
+                    <name>Netherlands</name>
+                </option>
+                <option>
+                    <id>belgie</id>
+                    <name>Belgum</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDelivery</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDelivery</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDelivery</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDelivery</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignature</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipient</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickup</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDays</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTime</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindow</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelay</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
+        </input-field>
+    </card>
+    <card>
+        <title>PostNL settings</title>
+        <input-field type="bool">
+            <name>postNLEnabled</name>
+            <label>Active</label>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDeliveryPostNL</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDeliveryPostNL</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDeliveryPostNL</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDeliveryPostNL</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignaturePostNL</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipientPostNL</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickupPostNL</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDaysPostNL</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTimePostNL</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindowPostNL</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelayPostNL</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
+        </input-field>
+    </card>
+    <card>
+        <title>DHL settings</title>
+        <input-field type="bool">
+            <name>dHLEnabled</name>
+            <label>Active</label>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDeliveryDHL</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDeliveryDHL</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDeliveryDHL</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDeliveryDHL</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignatureDHL</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipientDHL</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickupDHL</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDaysDHL</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTimeDHL</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindowDHL</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelayDHL</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
+        </input-field>
+    </card>
+    <card>
+        <title>Instabox settings</title>
+        <input-field type="bool">
+            <name>instaboxEnabled</name>
+            <label>Active</label>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDeliveryInstabox</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDeliveryInstabox</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDeliveryInstabox</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDeliveryInstabox</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignatureInstabox</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipientInstabox</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickupInstabox</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDaysInstabox</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTimeInstabox</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindowInstabox</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelayInstabox</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
+        </input-field>
+    </card>
+    <card>
+        <title>Bpost settings</title>
+        <input-field type="bool">
+            <name>bpostEnabled</name>
+            <label>Active</label>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDeliveryBpost</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDeliveryBpost</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDeliveryBpost</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDeliveryBpost</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignatureBpost</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipientBpost</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickupBpost</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDaysBpost</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTimeBpost</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindowBpost</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelayBpost</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
+        </input-field>
+    </card>
+    <card>
+        <title>DPD settings</title>
+        <input-field type="bool">
+            <name>dpdEnabled</name>
+            <label>Active</label>
+        </input-field>
+        <input-field type="float">
+            <name>priceMorningDeliveryDpd</name>
+            <label>Morning Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceStandardDeliveryDpd</name>
+            <label>Standard Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSameDayDeliveryDpd</name>
+            <label>Same Day Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceEveningDeliveryDpd</name>
+            <label>Evening Delivery Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceSignatureDpd</name>
+            <label>Signature Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>priceOnlyRecipientDpd</name>
+            <label>Only Recipient Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+        <input-field type="float">
+            <name>pricePickupDpd</name>
+            <label>Pickup Price</label>
+            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
+                green in the delivery options to show it's a discount.
+            </helpText>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>dropOffDaysDpd</name>
+            <label>Drop off day</label>
+            <helpText>The days you normally hand in your parcels.</helpText>
+            <options>
+                <option>
+                    <id>0</id>
+                    <name>Monday</name>
+                </option>
+                <option>
+                    <id>1</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>Wednesday</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>Thursday</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>Friday</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>Saturday</name>
+                </option>
+                <option>
+                    <id>6</id>
+                    <name>Sunday</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="time">
+            <name>cutoffTimeDpd</name>
+            <label>Cut off Time</label>
+            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
+                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
+                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
+                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
+                and delivery on Thursday.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>deliveryDaysWindowDpd</name>
+            <label>Delivery days window</label>
+            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
+                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
+                maximum is 14 days.
+            </helpText>
+        </input-field>
+        <input-field type="int">
+            <name>dropOffDelayDpd</name>
+            <label>Drop Off Delay</label>
+            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
+                ordered before the cutoff time). By default this is 0 and the maximum is 14.
+            </helpText>
         </input-field>
     </card>
 
@@ -43,15 +784,24 @@
         <title lang="de-DE">Checkout-Einstellungen</title>
         <title lang="nl-NL">Checkout instellingen</title>
 
-        <input-field type="time">
-            <name>cutoffTime</name>
-            <label>cut-off time</label>
-            <label lang="de-DE">Annahmeschlusszeit</label>
-            <label lang="nl-NL">cut-off tijd</label>
-            <helpText>The cut-off time indicates the time until which an order can be placed for delivery on the following day. After this time, customers will no longer see tomorrow's date as an option in the checkout.</helpText>
-            <helpText lang="de-DE">Die Annahmeschlusszeit gibt an, bis zu welchem Zeitpunkt eine Bestellung für die Lieferung am nächsten Tag aufgegeben werden kann. Nach diesem Zeitpunkt werden die Kunden das morgige Datum nicht mehr als Option in der Kasse sehen.</helpText>
-            <helpText lang="nl-NL">De cut-off tijd geeft aan tot welke tijd er besteld kan worden voor levering op de volgende dag. Klanten krijgen na deze tijd niet meer de datum van morgen te zien als optie in de checkout.</helpText>
-        </input-field>
+        <!--        <input-field type="time">-->
+        <!--            <name>cutoffTime</name>-->
+        <!--            <label>cut-off time</label>-->
+        <!--            <label lang="de-DE">Annahmeschlusszeit</label>-->
+        <!--            <label lang="nl-NL">cut-off tijd</label>-->
+        <!--            <helpText>The cut-off time indicates the time until which an order can be placed for delivery on the-->
+        <!--                following day. After this time, customers will no longer see tomorrow's date as an option in the-->
+        <!--                checkout.-->
+        <!--            </helpText>-->
+        <!--            <helpText lang="de-DE">Die Annahmeschlusszeit gibt an, bis zu welchem Zeitpunkt eine Bestellung für die-->
+        <!--                Lieferung am nächsten Tag aufgegeben werden kann. Nach diesem Zeitpunkt werden die Kunden das morgige-->
+        <!--                Datum nicht mehr als Option in der Kasse sehen.-->
+        <!--            </helpText>-->
+        <!--            <helpText lang="nl-NL">De cut-off tijd geeft aan tot welke tijd er besteld kan worden voor levering op de-->
+        <!--                volgende dag. Klanten krijgen na deze tijd niet meer de datum van morgen te zien als optie in de-->
+        <!--                checkout.-->
+        <!--            </helpText>-->
+        <!--        </input-field>-->
 
         <input-field type="single-select">
             <name>myParcelShowPickup</name>
@@ -368,7 +1118,8 @@
         <!--Choose default age check-->
         <input-field type="single-select">
             <name>myParcelDefaultAgeCheck</name>
-            <label>The Customer/Consumer must sign for the package and only receive it when he is at least 18 years</label>
+            <label>The Customer/Consumer must sign for the package and only receive it when he is at least 18 years
+            </label>
             <label lang="de-DE">Der Kunde, der für das Paket unterschreibt, muss mindestens 18 Jahre alt sein</label>
             <label lang="nl-NL">De klant welke voor het pakket tekent dient minstens 18 jaar te zijn</label>
             <defaultValue>0</defaultValue>
