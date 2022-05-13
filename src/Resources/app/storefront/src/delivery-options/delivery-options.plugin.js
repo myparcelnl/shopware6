@@ -35,7 +35,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     init() {
         // Init npm package here
         this._configure();
-        this._addListners();
+        this._addListeners();
 
         window.MyParcelConfig.address = this.options.address;
         // Tell the plugin to re-render
@@ -49,7 +49,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         window.MyParcelConfig.config = this.options.config;
     };
 
-    _addListners() {
+    _addListeners() {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             console.log(JSON.stringify(event.detail))
         });
