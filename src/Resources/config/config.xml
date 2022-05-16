@@ -186,8 +186,13 @@
     <card>
         <title>PostNL settings</title>
         <input-field type="bool">
-            <name>postNLEnabled</name>
-            <label>Active</label>
+            <name>enabledPostNL</name>
+            <label>Activate PostNL</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceMorningDeliveryEnabledPostNL</name>
+            <label>Activate Morning Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceMorningDeliveryPostNL</name>
@@ -196,12 +201,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceStandardDeliveryEnabledPostNL</name>
+            <label>Activate Standard Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceStandardDeliveryPostNL</name>
             <label>Standard Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSameDayDeliveryEnabledPostNL</name>
+            <label>Activate Same Day Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSameDayDeliveryPostNL</name>
@@ -210,12 +225,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceEveningDeliveryEnabledPostNL</name>
+            <label>Activate Evening Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceEveningDeliveryPostNL</name>
             <label>Evening Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSignatureEnabledPostNL</name>
+            <label>Activate Signature Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSignaturePostNL</name>
@@ -224,12 +249,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceOnlyRecipientEnabledPostNL</name>
+            <label>Activate Signature Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceOnlyRecipientPostNL</name>
             <label>Only Recipient Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>pricePickupEnabledPostNL</name>
+            <label>Activate Pickup Price</label>
         </input-field>
         <input-field type="float">
             <name>pricePickupPostNL</name>
@@ -239,6 +274,10 @@
             </helpText>
         </input-field>
 
+        <input-field type="bool">
+            <name>dropOffDaysEnabledPostNL</name>
+            <label>Activate Drop off day</label>
+        </input-field>
         <input-field type="multi-select">
             <name>dropOffDaysPostNL</name>
             <label>Drop off day</label>
@@ -275,6 +314,10 @@
             </options>
         </input-field>
 
+        <input-field type="bool">
+            <name>cutoffTimeEnabledPostNL</name>
+            <label>Activate Cut off Time</label>
+        </input-field>
         <input-field type="time">
             <name>cutoffTimePostNL</name>
             <label>Cut off Time</label>
@@ -285,6 +328,11 @@
                 and delivery on Thursday.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>deliveryDaysWindowEnabledPostNL</name>
+            <label>Activate Delivery days window</label>
+        </input-field>
         <input-field type="int">
             <name>deliveryDaysWindowPostNL</name>
             <label>Delivery days window</label>
@@ -293,6 +341,11 @@
                 Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
                 maximum is 14 days.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>dropOffDelayEnabledPostNL</name>
+            <label>Activate Drop Off Delay</label>
         </input-field>
         <input-field type="int">
             <name>dropOffDelayPostNL</name>
@@ -305,8 +358,13 @@
     <card>
         <title>DHL settings</title>
         <input-field type="bool">
-            <name>dHLEnabled</name>
-            <label>Active</label>
+            <name>enabledDHL</name>
+            <label>Activate DHL</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceMorningDeliveryEnabledDHL</name>
+            <label>Activate Morning Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceMorningDeliveryDHL</name>
@@ -315,12 +373,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceStandardDeliveryEnabledDHL</name>
+            <label>Activate Standard Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceStandardDeliveryDHL</name>
             <label>Standard Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSameDayDeliveryEnabledDHL</name>
+            <label>Activate Same Day Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSameDayDeliveryDHL</name>
@@ -329,12 +397,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceEveningDeliveryEnabledDHL</name>
+            <label>Activate Evening Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceEveningDeliveryDHL</name>
             <label>Evening Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSignatureEnabledDHL</name>
+            <label>Activate Signature Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSignatureDHL</name>
@@ -343,12 +421,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceOnlyRecipientEnabledDHL</name>
+            <label>Activate Signature Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceOnlyRecipientDHL</name>
             <label>Only Recipient Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>pricePickupEnabledDHL</name>
+            <label>Activate Pickup Price</label>
         </input-field>
         <input-field type="float">
             <name>pricePickupDHL</name>
@@ -358,6 +446,10 @@
             </helpText>
         </input-field>
 
+        <input-field type="bool">
+            <name>dropOffDaysEnabledDHL</name>
+            <label>Activate Drop off day</label>
+        </input-field>
         <input-field type="multi-select">
             <name>dropOffDaysDHL</name>
             <label>Drop off day</label>
@@ -394,6 +486,10 @@
             </options>
         </input-field>
 
+        <input-field type="bool">
+            <name>cutoffTimeEnabledDHL</name>
+            <label>Activate Cut off Time</label>
+        </input-field>
         <input-field type="time">
             <name>cutoffTimeDHL</name>
             <label>Cut off Time</label>
@@ -404,6 +500,11 @@
                 and delivery on Thursday.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>deliveryDaysWindowEnabledDHL</name>
+            <label>Activate Delivery days window</label>
+        </input-field>
         <input-field type="int">
             <name>deliveryDaysWindowDHL</name>
             <label>Delivery days window</label>
@@ -412,6 +513,11 @@
                 Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
                 maximum is 14 days.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>dropOffDelayEnabledDHL</name>
+            <label>Activate Drop Off Delay</label>
         </input-field>
         <input-field type="int">
             <name>dropOffDelayDHL</name>
@@ -422,129 +528,15 @@
         </input-field>
     </card>
     <card>
-        <title>Instabox settings</title>
+        <title>bpost settings</title>
         <input-field type="bool">
-            <name>instaboxEnabled</name>
-            <label>Active</label>
-        </input-field>
-        <input-field type="float">
-            <name>priceMorningDeliveryInstabox</name>
-            <label>Morning Delivery Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>priceStandardDeliveryInstabox</name>
-            <label>Standard Delivery Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>priceSameDayDeliveryInstabox</name>
-            <label>Same Day Delivery Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>priceEveningDeliveryInstabox</name>
-            <label>Evening Delivery Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>priceSignatureInstabox</name>
-            <label>Signature Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>priceOnlyRecipientInstabox</name>
-            <label>Only Recipient Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-        </input-field>
-        <input-field type="float">
-            <name>pricePickupInstabox</name>
-            <label>Pickup Price</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
+            <name>enabledBpost</name>
+            <label>Activate bpost</label>
         </input-field>
 
-        <input-field type="multi-select">
-            <name>dropOffDaysInstabox</name>
-            <label>Drop off day</label>
-            <helpText>The days you normally hand in your parcels.</helpText>
-            <options>
-                <option>
-                    <id>0</id>
-                    <name>Monday</name>
-                </option>
-                <option>
-                    <id>1</id>
-                    <name>Thursday</name>
-                </option>
-                <option>
-                    <id>2</id>
-                    <name>Wednesday</name>
-                </option>
-                <option>
-                    <id>3</id>
-                    <name>Thursday</name>
-                </option>
-                <option>
-                    <id>4</id>
-                    <name>Friday</name>
-                </option>
-                <option>
-                    <id>5</id>
-                    <name>Saturday</name>
-                </option>
-                <option>
-                    <id>6</id>
-                    <name>Sunday</name>
-                </option>
-            </options>
-        </input-field>
-
-        <input-field type="time">
-            <name>cutoffTimeInstabox</name>
-            <label>Cut off Time</label>
-            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
-                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
-                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed
-                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection
-                and delivery on Thursday.
-            </helpText>
-        </input-field>
-        <input-field type="int">
-            <name>deliveryDaysWindowInstabox</name>
-            <label>Delivery days window</label>
-            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
-                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
-                Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
-                maximum is 14 days.
-            </helpText>
-        </input-field>
-        <input-field type="int">
-            <name>dropOffDelayInstabox</name>
-            <label>Drop Off Delay</label>
-            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
-                ordered before the cutoff time). By default this is 0 and the maximum is 14.
-            </helpText>
-        </input-field>
-    </card>
-    <card>
-        <title>Bpost settings</title>
         <input-field type="bool">
-            <name>bpostEnabled</name>
-            <label>Active</label>
+            <name>priceMorningDeliveryEnabledBpost</name>
+            <label>Activate Morning Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceMorningDeliveryBpost</name>
@@ -553,12 +545,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceStandardDeliveryEnabledBpost</name>
+            <label>Activate Standard Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceStandardDeliveryBpost</name>
             <label>Standard Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSameDayDeliveryEnabledBpost</name>
+            <label>Activate Same Day Delivery Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSameDayDeliveryBpost</name>
@@ -567,12 +569,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceEveningDeliveryEnabledBpost</name>
+            <label>Activate Evening Delivery Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceEveningDeliveryBpost</name>
             <label>Evening Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceSignatureEnabledBpost</name>
+            <label>Activate Signature Price</label>
         </input-field>
         <input-field type="float">
             <name>priceSignatureBpost</name>
@@ -581,12 +593,22 @@
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceOnlyRecipientEnabledBpost</name>
+            <label>Activate Signature Price</label>
+        </input-field>
         <input-field type="float">
             <name>priceOnlyRecipientBpost</name>
             <label>Only Recipient Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>pricePickupEnabledBpost</name>
+            <label>Activate Pickup Price</label>
         </input-field>
         <input-field type="float">
             <name>pricePickupBpost</name>
@@ -596,6 +618,10 @@
             </helpText>
         </input-field>
 
+        <input-field type="bool">
+            <name>dropOffDaysEnabledBpost</name>
+            <label>Activate Drop off day</label>
+        </input-field>
         <input-field type="multi-select">
             <name>dropOffDaysBpost</name>
             <label>Drop off day</label>
@@ -632,6 +658,10 @@
             </options>
         </input-field>
 
+        <input-field type="bool">
+            <name>cutoffTimeEnabledBpost</name>
+            <label>Activate Cut off Time</label>
+        </input-field>
         <input-field type="time">
             <name>cutoffTimeBpost</name>
             <label>Cut off Time</label>
@@ -642,6 +672,11 @@
                 and delivery on Thursday.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>deliveryDaysWindowEnabledBpost</name>
+            <label>Activate Delivery days window</label>
+        </input-field>
         <input-field type="int">
             <name>deliveryDaysWindowBpost</name>
             <label>Delivery days window</label>
@@ -650,6 +685,11 @@
                 Thursday (provided there is no drop-off delay and it's before the cutoff time). The minimum is 1 and
                 maximum is 14 days.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>dropOffDelayEnabledBpost</name>
+            <label>Activate Drop Off Delay</label>
         </input-field>
         <input-field type="int">
             <name>dropOffDelayBpost</name>
@@ -662,61 +702,100 @@
     <card>
         <title>DPD settings</title>
         <input-field type="bool">
-            <name>dpdEnabled</name>
-            <label>Active</label>
+            <name>enabledDPD</name>
+            <label>Activate DPD</label>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceMorningDeliveryEnabledDPD</name>
+            <label>Activate Morning Delivery Price</label>
         </input-field>
         <input-field type="float">
-            <name>priceMorningDeliveryDpd</name>
+            <name>priceMorningDeliveryDPD</name>
             <label>Morning Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceStandardDeliveryEnabledDPD</name>
+            <label>Activate Standard Delivery Price</label>
+        </input-field>
         <input-field type="float">
-            <name>priceStandardDeliveryDpd</name>
+            <name>priceStandardDeliveryDPD</name>
             <label>Standard Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceSameDayDeliveryEnabledDPD</name>
+            <label>Activate Same Day Delivery Price</label>
+        </input-field>
         <input-field type="float">
-            <name>priceSameDayDeliveryDpd</name>
+            <name>priceSameDayDeliveryDPD</name>
             <label>Same Day Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceEveningDeliveryEnabledDPD</name>
+            <label>Activate Evening Delivery Price</label>
+        </input-field>
         <input-field type="float">
-            <name>priceEveningDeliveryDpd</name>
+            <name>priceEveningDeliveryDPD</name>
             <label>Evening Delivery Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceSignatureEnabledDPD</name>
+            <label>Activate Signature Price</label>
+        </input-field>
         <input-field type="float">
-            <name>priceSignatureDpd</name>
+            <name>priceSignatureDPD</name>
             <label>Signature Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>priceOnlyRecipientEnabledDPD</name>
+            <label>Activate Signature Price</label>
+        </input-field>
         <input-field type="float">
-            <name>priceOnlyRecipientDpd</name>
+            <name>priceOnlyRecipientDPD</name>
             <label>Only Recipient Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>pricePickupEnabledDPD</name>
+            <label>Activate Pickup Price</label>
+        </input-field>
         <input-field type="float">
-            <name>pricePickupDpd</name>
+            <name>pricePickupDPD</name>
             <label>Pickup Price</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
             </helpText>
         </input-field>
 
+        <input-field type="bool">
+            <name>dropOffDaysEnabledDPD</name>
+            <label>Activate Drop off day</label>
+        </input-field>
         <input-field type="multi-select">
-            <name>dropOffDaysDpd</name>
+            <name>dropOffDaysDPD</name>
             <label>Drop off day</label>
             <helpText>The days you normally hand in your parcels.</helpText>
             <options>
@@ -751,8 +830,12 @@
             </options>
         </input-field>
 
+        <input-field type="bool">
+            <name>cutoffTimeEnabledDPD</name>
+            <label>Activate Cut off Time</label>
+        </input-field>
         <input-field type="time">
-            <name>cutoffTimeDpd</name>
+            <name>cutoffTimeDPD</name>
             <label>Cut off Time</label>
             <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff
                 day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if
@@ -761,8 +844,13 @@
                 and delivery on Thursday.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>deliveryDaysWindowEnabledDPD</name>
+            <label>Activate Delivery days window</label>
+        </input-field>
         <input-field type="int">
-            <name>deliveryDaysWindowDpd</name>
+            <name>deliveryDaysWindowDPD</name>
             <label>Delivery days window</label>
             <helpText>The number of days into the future for which you want to show delivery days. For example; If set
                 to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
@@ -770,14 +858,21 @@
                 maximum is 14 days.
             </helpText>
         </input-field>
+
+        <input-field type="bool">
+            <name>dropOffDelayEnabledDPD</name>
+            <label>Activate Drop Off Delay</label>
+        </input-field>
         <input-field type="int">
-            <name>dropOffDelayDpd</name>
+            <name>dropOffDelayDPD</name>
             <label>Drop Off Delay</label>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default this is 0 and the maximum is 14.
             </helpText>
         </input-field>
     </card>
+
+
 
     <card>
         <title>Checkout settings</title>

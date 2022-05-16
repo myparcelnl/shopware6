@@ -12,23 +12,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
             postalCode: '',
             number: ''
         },
-        config: {
-            allowRetry: true,
-            carrierSettings: {
-                postnl: {
-                    allowShowDeliveryDate: true,
-                    allowSignature: true,
-                },
-                dhl: {
-                    allowDeliveryOptions: true,
-                    allowShowDeliveryDate: true
-                },
-                instabox: {
-                    allowDeliveryOptions: true,
-                    allowShowDeliveryDate: true
-                }
-            },
-        }
+        config: {}
     };
 
 
@@ -37,14 +21,14 @@ export default class DeliveryOptionsPlugin extends Plugin {
         this._configure();
         this._addListeners();
 
+        //Set address
         window.MyParcelConfig.address = this.options.address;
+
         // Tell the plugin to re-render
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
-        console.log(window.MyParcelConfig);
     };
 
     _configure() {
-        console.log(window.MyParcelConfig);
         window.MyParcelConfig = {config: {}};
         window.MyParcelConfig.config = this.options.config;
     };

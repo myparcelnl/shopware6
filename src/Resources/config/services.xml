@@ -100,6 +100,7 @@
         <!-- Event Subscribers -->
         <service id="MyPa\Shopware\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -151,6 +152,10 @@
             </call>
             <argument type="service" id="logger"/>
             <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="MyPa\Shopware\Service\Config\ConfigReader">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
     </services>

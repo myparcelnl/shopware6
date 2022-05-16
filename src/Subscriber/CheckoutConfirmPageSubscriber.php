@@ -2,15 +2,9 @@
 
 namespace MyPa\Shopware\Subscriber;
 
-use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
-use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
-use Shopware\Core\Framework\Api\Context\SystemSource;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Struct\Struct;
+use MyPa\Shopware\Service\Config\ConfigReader;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
-use Shopware\Storefront\Page\PageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
@@ -22,11 +16,18 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     private $configService;
 
     /**
-     * @param SystemConfigService $configService
+     * @var ConfigReader
      */
-    public function __construct(SystemConfigService $configService)
+    private $configReader;
+
+    /**
+     * @param SystemConfigService $configService
+     * @param ConfigReader $configReader
+     */
+    public function __construct(SystemConfigService $configService, ConfigReader $configReader)
     {
         $this->configService = $configService;
+        $this->configReader = $configReader;
     }
 
 
@@ -51,8 +52,8 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function addMyParcelDataToPage($event): void
     {
-
+        //Add config data
 //        $event->getPage()->assign($data);
-        $event->getPage()->addArrayExtension('test',['test']);
+        $event->getPage()->addArrayExtension('myparcel', ['config'=>$this->configReader->getConfigForPackage()]);
     }
 }
