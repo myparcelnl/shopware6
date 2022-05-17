@@ -41,14 +41,19 @@ class ConfigReader
             'priceEveningDelivery', 'priceSignature', 'priceOnlyRecipient',
             'pricePickup', 'allowSaturdayDelivery', 'allowPickupLocations',
             'allowSignature', 'deliveryDaysWindow', 'dropOffDelay'];
+
         $settings = [];
+
         foreach ($settingsToRetrieve as $settingToRetrieve) {
+            //Check if the setting is enabled, general settings have no enabled flag
             if ($this->systemConfigService->getBool('MyPaShopware.config.' . $settingToRetrieve . 'Enabled' . $carrier) || $carrier == '') {
-                if ($this->getConfigValue($settingToRetrieve, $carrier) != null) {
-                    $settings[$settingToRetrieve] = $this->getConfigValue($settingToRetrieve, $carrier);
+                $setting = $this->getConfigValue($settingToRetrieve, $carrier);
+                if ($setting !== null) {
+                    $settings[$settingToRetrieve] = $setting;
                 }
             }
         }
+
         if (
             $this->getConfigValue('dropOffDays', $carrier) != null &&
             $this->systemConfigService->getBool('MyPaShopware.config.dropOffDaysEnabled' . $carrier)
@@ -104,9 +109,6 @@ class ConfigReader
                         break;
                 }
                 $result[$carrierNPMConfigName] = $this->generateConfig($shopwareConfigCarrierName);
-                if ($carrierNPMConfigName=='postnl'){
-                    dd($carrierNPMConfigName,$this->generateConfig($shopwareConfigCarrierName));
-                }
             }
         }
         return $result;
