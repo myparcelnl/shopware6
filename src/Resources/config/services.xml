@@ -6,13 +6,13 @@
     <services>
         <defaults public="true"/>
         <service id="MyPa\Shopware\Cart\Checkout\ShippingCostsCollector">
-            <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService" />
-            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator" />
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" />
+            <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
 
             <!-- after product collector/processor -->
-            <tag name="shopware.cart.processor" priority="4500" />
-            <tag name="shopware.cart.collector" priority="4500" />
+            <tag name="shopware.cart.processor" priority="4500"/>
+            <tag name="shopware.cart.collector" priority="4500"/>
         </service>
 
         <!-- Snippets -->
@@ -36,17 +36,17 @@
             <argument>%kernel.shopware_version%</argument>
         </service>
 
-        <service id="MyPa\Shopware\Service\Order\OrderService" >
+        <service id="MyPa\Shopware\Service\Order\OrderService">
             <argument type="service" id="logger"/>
             <argument type="service" id="order.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shipment\ShipmentService" >
+        <service id="MyPa\Shopware\Service\Shipment\ShipmentService">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipment.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" >
+        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService">
             <argument type="service" id="logger"/>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
             <argument type="service" id="delivery_time.repository"/>
@@ -55,18 +55,18 @@
             <argument type="service" id="shipping_method.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" >
+        <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shipment\InsuranceService" >
+        <service id="MyPa\Shopware\Service\Shipment\InsuranceService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="country.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService" >
+        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService">
             <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="media.repository"/>
             <argument type="service" id="rule.repository"/>
@@ -75,7 +75,7 @@
             <argument type="service" id="myparcel.logger"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService" >
+        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService">
             <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
             <argument type="service" id="delivery_time.repository"/>
             <argument type="service" id="media.repository"/>
@@ -105,48 +105,48 @@
         </service>
 
         <service id="MyPa\Shopware\Subscriber\OrderPlacedSubscriber">
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService" />
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" />
-            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
+            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
+            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
         <!-- Controller -->
-        <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController" >
+        <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService" />
-            <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService" />
+            <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\MyParcelController" >
+        <service id="MyPa\Shopware\Storefront\Controller\MyParcelController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService" />
+            <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\ShipmentController" >
+        <service id="MyPa\Shopware\Storefront\Controller\ShipmentController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService" />
-            <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService" />
+            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService"/>
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\ShippingOptionsController" >
+        <service id="MyPa\Shopware\Storefront\Controller\ShippingOptionsController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService" />
-            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
+            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
+            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
         </service>
 
-        <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController" >
+        <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -157,6 +157,16 @@
 
         <service id="MyPa\Shopware\Service\Config\ConfigReader">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+        <service id="MyPa\Shopware\Service\Shopware\CartService">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+        </service>
+        <service id="MyPa\Shopware\Storefront\Controller\CartController">
+            <argument type="service" id="MyPa\Shopware\Service\Shopware\CartService"/>
+
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
         </service>
     </services>
 </container>

@@ -60,11 +60,13 @@ class ConfigReader
         ) {
             $settings["dropOffDays"] = implode(";", $this->getConfigValue('dropOffDays', $carrier));
         }
+
         if (!empty($this->getConfigString('cutoffTime', $carrier)) &&
             $this->systemConfigService->getBool('MyPaShopware.config.cutoffTimeEnabled' . $carrier)
         ) {
             $settings["cutoffTime"] = substr($this->getConfigString('cutoffTime', $carrier), 0, -3);
         }
+
         return $settings;
     }
 
