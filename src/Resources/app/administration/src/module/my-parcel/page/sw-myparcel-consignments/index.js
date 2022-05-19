@@ -32,6 +32,8 @@ const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
 const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
 const CARRIER_DPD_SNIPPET = 'sw-myparcel.general.carriers.dpd';
 
+const SHIPPING_STATUSES_SNIPPET = 'sw-myparcel.general.shipmentStatuses';
+
 Component.register('sw-myparcel-consignments', {
     template: template,
 
@@ -137,7 +139,9 @@ Component.register('sw-myparcel-consignments', {
         consignmentRepository() {
             return this.repositoryFactory.create('kiener_my_parcel_shipment');
         },
-
+        shipmentStatuses(id){
+           return this.$tc(SHIPPING_STATUSES_SNIPPET.id);//TODO was here
+        },
         consignmentCriteria() {
             const criteria = new Criteria(this.page, this.limit);
 
@@ -193,6 +197,10 @@ Component.register('sw-myparcel-consignments', {
                 label: 'sw-myparcel.columns.deliveryTypeColumn',
                 allowResize: true
             }, {
+                property: 'shipmentStatus',
+                label: 'sw-myparcel.columns.shippingStatusColumn',
+                allowResize: true
+            },{
                 property: 'shippingOption.requiresAgeCheck',
                 label: 'sw-myparcel.columns.requiresAgeCheckColumn',
                 align: 'center',

@@ -72,6 +72,10 @@
                 {{ deliveryTypes[item.shippingOption.deliveryType] }}
             </template>
 
+            <template #column-shippingOption.shipmentStatus="{ item }">
+                {{ shipmentStatuses(item.shipmentStatus) }}
+            </template>
+
             <template #column-shippingOption.requiresAgeCheck="{ item }">
                 <sw-icon name="default-basic-checkmark-line" v-if="item.shippingOption.requiresAgeCheck === true" small="true" />
                 <span v-else />
