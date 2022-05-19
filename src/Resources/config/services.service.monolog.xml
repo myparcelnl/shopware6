@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true"/>
+
+        <service id="myparcel.logger" class="Symfony\Bridge\Monolog\Logger">
+            <argument>MyParcel</argument>
+
+            <argument type="collection">
+                <argument type="service" id="myparcel.logger.handler.file"/>
+                <argument type="service" id="myparcel.logger.handler.sql"/>
+            </argument>
+
+            <argument type="collection">
+                <argument type="service" id="myparcel.logger.processor.uid"/>
+                <argument type="service" id="myparcel.logger.processor.introspection"/>
+                <argument type="service" id="myparcel.logger.processor.web"/>
+                <argument type="service" id="myparcel.logger.processor.console"/>
+                <argument type="service" id="myparcel.logger.processor.route"/>
+
+                <!-- Custom processors, should run after web processor -->
+                <argument type="service" id="myparcel.logger.processor.ip_anonymize"/>
+                <argument type="service" id="myparcel.logger.processor.session"/>
+            </argument>
+        </service>
+
+        <!-- Handler Factory -->
+        <service id="MyPa\Shopware\Service\Monolog\Factory\LoggerFactory">
+        </service>
+
+        <!-- Handlers -->
+        <service id="myparcel.logger.handler.file" class="Monolog\Handler\RotatingFileHandler">
+            <factory service="MyPa\Shopware\Service\Monolog\Factory\LoggerFactory" method="createFileHandler"/>
+            <argument>%kernel.logs_dir%/myparcel_%kernel.environment%.log</argument>
+            <argument>14</argument>
+        </service>
+
+        <service id="myparcel.logger.handler.sql" class="Shopware\Core\Framework\Log\Monolog\DoctrineSQLHandler">
+            <factory service="MyPa\Shopware\Service\Monolog\Factory\LoggerFactory" method="createSQLHandler"/>
+        </service>
+
+        <!-- Processors -->
+        <service id="myparcel.logger.processor.uid" class="Monolog\Processor\UidProcessor"/>
+
+        <service id="myparcel.logger.processor.introspection" class="Monolog\Processor\IntrospectionProcessor"/>
+
+        <service id="myparcel.logger.processor.web" class="Symfony\Bridge\Monolog\Processor\WebProcessor"/>
+
+        <service id="myparcel.logger.processor.console" class="Symfony\Bridge\Monolog\Processor\ConsoleCommandProcessor">
+            <argument>true</argument>
+            <argument>true</argument>
+        </service>
+
+        <service id="myparcel.logger.processor.route" class="Symfony\Bridge\Monolog\Processor\RouteProcessor"/>
+
+        <!-- Custom Processors -->
+        <service id="myparcel.logger.processor.ip_anonymize"
+                 class="MyPa\Shopware\Service\Monolog\Processor\AnonymizeIPProcessor"/>
+
+        <service id="myparcel.logger.processor.session"
+                 class="MyPa\Shopware\Service\Monolog\Processor\SessionProcessor">
+            <argument type="service" id="session"/>
+        </service>
+    </services>
+</container>
