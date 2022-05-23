@@ -4,6 +4,8 @@ namespace MyPa\Shopware\Controller\Api;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -23,14 +25,15 @@ class WebhookController extends StorefrontController
     /**
      * @var EntityRepository
      */
-    private $orders;
+    private $shipmentsRepository;
 
     /**
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, EntityRepository $shipments)
     {
         $this->logger = $logger;
+        $this->shipmentsRepository = $shipments;
     }
 
 
@@ -44,14 +47,30 @@ class WebhookController extends StorefrontController
      *
      * @return JsonResponse
      */
-    public function webhookCall(Request $request,SalesChannelContext $context): JsonResponse
+    public function webhookCall(Request $request, SalesChannelContext $context): JsonResponse
     {
-        $this->logger->debug('Webhook called:',['request'=>$request]);
-//$apiKey = (string)$this->configService->get('MyPaShopware.config.myParcelApiKey', $salesChannelId);
-        //Get order based on "shipment_id"
-        //Update the order myparcel status with "status"
+        $this->logger->debug('Webhook called:', ['request' => $request]);
+        $data = $request->get('data');
+        if ($data != null && isset($data['hooks'])) {
+            foreach ($data['hooks'] as $hook) {
+                //Update the status
+                if (isset($hook['shipment_reference_identifier']) && isset($hook['status'])) {
+                    //Get shipment based on "consignment_reference"
+                    $criteria = new Criteria();
+                    $criteria->addFilter(new EqualsFilter('consignmentReference', $hook['shipment_reference_identifier']));
+                    $shipmentId = $this->shipmentsRepository->searchIds($criteria, $context->getContext())->firstId();
 
-        return new JsonResponse(null,204);
+                    //Update the order myparcel status with "status"
+                    $this->shipmentsRepository->update([
+                        [
+                            'id' => $shipmentId,
+                            'shipmentStatus' => $hook['status']
+                        ]
+                    ], $context->getContext());
+                }
+            }
+        }
+        return new JsonResponse(null, 204);
     }
 
 }
