@@ -51,6 +51,7 @@
         "39": "Inaktiv - Rücksendung zugestellt",
         "40": "Inaktiv - Rücksendung der Sendung am Abholort",
         "99": "Inaktiv - unbekannter Status"
+      }
     },
     "messages": {
       "error": "Es ist ein Fehler aufgetreten",
