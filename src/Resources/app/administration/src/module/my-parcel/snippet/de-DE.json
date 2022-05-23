@@ -45,12 +45,12 @@
         "33": "Inaktiv - Im Sortierprozess",
         "34": "Inaktiv - Im Vertrieb",
         "35": "Inaktiv - Sendung beim Zoll",
-        "36": "inaktiv - Sendung zugestellt",
-        "37": "inaktiv - Sendung am Abholort",
+        "36": "Inaktiv - Sendung zugestellt",
+        "37": "Inaktiv - Sendung am Abholort",
         "38": "Inaktiv - Sendung am Abholort abgeholt",
         "39": "Inaktiv - Rücksendung zugestellt",
-        "40": "inaktiv - Rücksendung der Sendung am Abholort",
-        "99": "inaktiv - unbekannter Status"
+        "40": "Inaktiv - Rücksendung der Sendung am Abholort",
+        "99": "Inaktiv - unbekannter Status"
     },
     "messages": {
       "error": "Es ist ein Fehler aufgetreten",
