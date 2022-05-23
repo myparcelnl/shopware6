@@ -3,6 +3,7 @@
 namespace MyPa\Shopware\Storefront\Controller;
 
 use MyPa\Shopware\Service\Shopware\CartService;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -15,10 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     protected $cartService;
+    protected $logger;
 
-    public function __construct(CartService $cartService)
+    public function __construct(CartService $cartService,LoggerInterface $logger)
     {
         $this->cartService = $cartService;
+        $this->logger = $logger;
     }
 
     /**
@@ -30,10 +33,14 @@ class CartController extends AbstractController
      */
     public function addDataToCart(RequestDataBag $data, SalesChannelContext $context)
     {
-//        $pickupPointLocationCode = $data->get('pickupPointLocationCode');
-        $this->cartService->addData([
-            'myparcel' => 'put data here'
-        ], $context);
+        $myParcelData = $data->get('myparcel');
+        if (($myParcelData!==null)){
+            $this->cartService->addData([
+                'myparcel' => ['deliveryData'=>json_decode($myParcelData)],
+            ], $context);
+        }else{
+            $this->logger->warning("No deliverData found",$data);
+        }
 
         return $this->json(null, 204);
     }

@@ -38,13 +38,13 @@ export default class DeliveryOptionsPlugin extends Plugin {
 
     _addListeners() {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
-            console.log(JSON.stringify(event.detail))
             const data = this._getRequestData();
-            // data['pickupPointLocationCode'] = e.target.value;
-
-            console.log(data, this.options);
-
-            this._client.post(this.options.url, JSON.stringify(data), content => this._parseRequest(JSON.parse(content)));
+            data['myparcel'] = JSON.stringify(event.detail);
+            console.log(JSON.stringify(event.detail));
+            this._client.post(this.options.url, JSON.stringify(data), content => {
+                // this._parseRequest(JSON.parse(content))
+                this._parseRequest(content);
+            });
         });
     };
 

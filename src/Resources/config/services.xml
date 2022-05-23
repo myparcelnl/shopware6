@@ -113,6 +113,12 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="MyPa\Shopware\Subscriber\CartConversionSubscriber">
+            <argument type="service" id="myparcel.logger"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <!-- Controller -->
         <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController">
             <call method="setContainer">
@@ -163,7 +169,7 @@
         </service>
         <service id="MyPa\Shopware\Storefront\Controller\CartController">
             <argument type="service" id="MyPa\Shopware\Service\Shopware\CartService"/>
-
+            <argument type="service" id="myparcel.logger"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

@@ -46,7 +46,7 @@ class ConfigReader
 
         foreach ($settingsToRetrieve as $settingToRetrieve) {
             //Check if the setting is enabled, general settings have no enabled flag
-            if ($this->systemConfigService->getBool('MyPaShopware.config.' . $settingToRetrieve . 'Enabled' . $carrier, $salesChannelId) || $carrier == '') {
+            if ($this->isSettingEnabled($salesChannelId,$settingToRetrieve) || $carrier == '') {
                 $setting = $this->getConfigValue($salesChannelId, $settingToRetrieve, $carrier);
                 if ($setting !== null) {
                     $settings[$settingToRetrieve] = $setting;
@@ -68,16 +68,6 @@ class ConfigReader
         }
         $settings['allowShowDeliveryDate'] = true;//TODO: Bugfix delete when fixed on NPM side or change to force true
         return $settings;
-    }
-
-    private function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
-    }
-
-    private function getConfigString(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     private function getCarrierSettings(string $salesChannelId): array
@@ -116,17 +106,32 @@ class ConfigReader
         return $result;
     }
 
-    private function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
+    public function isSettingEnabled(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . 'Enabled' . $carrier, $salesChannelId);
+    }
+
+    public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
+    }
+
+    public function getConfigString(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
+    }
+
+    public function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
     {
         return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    private function getConfigFloat(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigFloat(string $salesChannelId, string $field, string $carrier = "")
     {
         return $this->systemConfigService->getFloat('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    private function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
     {
         return $this->systemConfigService->getInt('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
