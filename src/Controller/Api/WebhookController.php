@@ -54,7 +54,12 @@ class WebhookController extends StorefrontController
         if ($data != null && isset($data['hooks'])) {
             foreach ($data['hooks'] as $hook) {
                 //Update the status
-                if (isset($hook['shipment_reference_identifier']) && isset($hook['status'])) {
+                if (
+                    isset($hook['shipment_reference_identifier'])
+                    && isset($hook['status'])
+                    && isset($hook['event'])
+                    && $hook['event'] === 'shipment_status_change'
+                ) {
                     //Get shipment based on "consignment_reference"
                     $criteria = new Criteria();
                     $criteria->addFilter(new EqualsFilter('consignmentReference', $hook['shipment_reference_identifier']));
