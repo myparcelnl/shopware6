@@ -6,6 +6,9 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConfigReader
 {
+    const ALWAYS_ENABLED_SETTINGS = ['allowShowDeliveryDate', 'allowMorningDelivery', 'allowSaturdayDelivery', 'allowPickupLocations',
+        'allowSignature', 'allowEveningDelivery', 'allowOnlyRecipient','allowOnlyRecipient'];
+
     private SystemConfigService $systemConfigService;
 
     /**
@@ -29,24 +32,28 @@ class ConfigReader
 
     private function getGeneralSettings(string $salesChannelId): array
     {
+        //These are the settings that are only valid for the main config
         $settings = [
             "platform" => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelId),
+            "packageType" => $this->systemConfigService->getString('MyPaShopware.config.packageType', $salesChannelId),
         ];
         return array_merge($settings, $this->generateConfig($salesChannelId));
     }
 
     private function generateConfig(string $salesChannelId, string $carrier = ''): array
     {
-        $settingsToRetrieve = ['priceMorningDelivery', 'priceStandardDelivery', 'priceSameDayDelivery',
-            'priceEveningDelivery', 'priceSignature', 'priceOnlyRecipient',
+        $settingsToRetrieve = ['allowShowDeliveryDate', 'allowMorningDelivery',
+            'priceMorningDelivery', 'priceStandardDelivery', 'priceSameDayDelivery',
+            'allowEveningDelivery', 'priceEveningDelivery', 'priceSignature',
+            'allowOnlyRecipient', 'priceOnlyRecipient',
             'pricePickup', 'allowSaturdayDelivery', 'allowPickupLocations',
-            'allowSignature', 'deliveryDaysWindow', 'dropOffDelay'];
+            'allowSignature','allowOnlyRecipient', 'deliveryDaysWindow', 'dropOffDelay'];
 
         $settings = [];
 
         foreach ($settingsToRetrieve as $settingToRetrieve) {
             //Check if the setting is enabled, general settings have no enabled flag
-            if ($this->isSettingEnabled($salesChannelId,$settingToRetrieve) || $carrier == '') {
+            if ($this->isSettingEnabled($salesChannelId, $settingToRetrieve, $carrier)) {
                 $setting = $this->getConfigValue($salesChannelId, $settingToRetrieve, $carrier);
                 if ($setting !== null) {
                     $settings[$settingToRetrieve] = $setting;
@@ -55,19 +62,41 @@ class ConfigReader
         }
 
         if (
-            $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier) != null &&
-            $this->systemConfigService->getBool('MyPaShopware.config.dropOffDaysEnabled' . $carrier, $salesChannelId)
+            $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier) !== null && $this->isSettingEnabled($salesChannelId,'dropOffDays',$carrier)
         ) {
             $settings["dropOffDays"] = implode(";", $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier));
         }
 
-        if (!empty($this->getConfigString($salesChannelId, 'cutoffTime', $carrier)) &&
-            $this->systemConfigService->getBool('MyPaShopware.config.cutoffTimeEnabled' . $carrier, $salesChannelId)
+        if (!empty($this->getConfigString($salesChannelId, 'cutoffTime', $carrier)) && $this->isSettingEnabled($salesChannelId, 'cutoffTime', $carrier)
         ) {
             $settings["cutoffTime"] = substr($this->getConfigString($salesChannelId, 'cutoffTime', $carrier), 0, -3);
         }
-        $settings['allowShowDeliveryDate'] = true;//TODO: Bugfix delete when fixed on NPM side or change to force true
         return $settings;
+    }
+
+    /**
+     * Checks if the setting has been enabled, bool settings will be returned as always enabled
+     * @param string $salesChannelId
+     * @param string $field
+     * @param string $carrier
+     * @return bool
+     */
+    public function isSettingEnabled(string $salesChannelId, string $field, string $carrier = ""): bool
+    {
+        if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
+            return true;
+        }
+        return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . 'Enabled' . $carrier, $salesChannelId);
+    }
+
+    public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
+    }
+
+    public function getConfigString(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     private function getCarrierSettings(string $salesChannelId): array
@@ -104,21 +133,6 @@ class ConfigReader
             }
         }
         return $result;
-    }
-
-    public function isSettingEnabled(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . 'Enabled' . $carrier, $salesChannelId);
-    }
-
-    public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
-    }
-
-    public function getConfigString(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     public function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
