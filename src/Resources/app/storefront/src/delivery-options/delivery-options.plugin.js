@@ -23,7 +23,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         // Init npm package here
         this._configure();
         this._addListeners();
-        console.log(this.options);
+
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
@@ -40,16 +40,15 @@ export default class DeliveryOptionsPlugin extends Plugin {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             const data = this._getRequestData();
             data['myparcel'] = JSON.stringify(event.detail);
-            console.log(JSON.stringify(event.detail));
             this._client.post(this.options.url, JSON.stringify(data), content => {
-                // this._parseRequest(JSON.parse(content))
+                // Retry on error?
                 this._parseRequest(content);
             });
         });
     };
 
     _parseRequest(data) {
-        console.log(data);
+
     }
 
     _getRequestData() {
