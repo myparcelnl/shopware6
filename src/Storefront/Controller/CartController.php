@@ -39,7 +39,8 @@ class CartController extends AbstractController
                 'myparcel' => ['deliveryData'=>json_decode($myParcelData)],
             ], $context);
         }else{
-            $this->logger->warning("No deliverData found",$data);
+            dd($data);
+            $this->logger->warning("No deliverData found",['data'=>$data]);
         }
 
         return $this->json(null, 204);

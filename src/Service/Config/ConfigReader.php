@@ -52,7 +52,7 @@ class ConfigReader
         $settings = [];
 
         foreach ($settingsToRetrieve as $settingToRetrieve) {
-            //Check if the setting is enabled, general settings have no enabled flag
+            //Check if the setting is enabled
             if ($this->isSettingEnabled($salesChannelId, $settingToRetrieve, $carrier)) {
                 $setting = $this->getConfigValue($salesChannelId, $settingToRetrieve, $carrier);
                 if ($setting !== null) {
