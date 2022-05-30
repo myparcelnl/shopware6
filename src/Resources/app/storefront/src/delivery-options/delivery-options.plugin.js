@@ -40,16 +40,12 @@ export default class DeliveryOptionsPlugin extends Plugin {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             const data = this._getRequestData();
             data['myparcel'] = JSON.stringify(event.detail);
+            console.log(event.detail);
             this._client.post(this.options.url, JSON.stringify(data), content => {
                 // Retry on error?
-                this._parseRequest(content);
             });
         });
     };
-
-    _parseRequest(data) {
-
-    }
 
     _getRequestData() {
         const data = {};
