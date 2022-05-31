@@ -85,7 +85,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     public function cartConverted(CartConvertedEvent $event)
     {
         //TODO: check if it is a myparcel shipping
-        $myParcelData = $event->getCart()->getExtension('myparcel-data')->getVars();
+        $myParcelData = $event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY)->getVars();
         $options = $this->setGeneralDefaults($event->getSalesChannelContext()->getSalesChannelId());
 
         //Cart extension data

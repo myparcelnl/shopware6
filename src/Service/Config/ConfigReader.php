@@ -7,7 +7,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class ConfigReader
 {
     const ALWAYS_ENABLED_SETTINGS = ['allowShowDeliveryDate', 'allowMorningDelivery', 'allowSaturdayDelivery', 'allowPickupLocations',
-        'allowSignature', 'allowEveningDelivery', 'allowOnlyRecipient','allowOnlyRecipient'];
+        'allowSignature', 'allowEveningDelivery', 'allowOnlyRecipient', 'allowOnlyRecipient'];
 
     private SystemConfigService $systemConfigService;
 
@@ -18,6 +18,47 @@ class ConfigReader
     {
         $this->systemConfigService = $systemConfigService;
     }
+
+    /**
+     * Calculates the cost based on the selected options
+     * @param array $options
+     * @param string $salesChannelId
+     * @return float
+     */
+    public function getCostForCarrierWithOptions(array $options, string $salesChannelId): float
+    {
+        $settingsWithACost = [
+            'priceMorningDelivery', 'priceStandardDelivery', 'priceSameDayDelivery',
+            'priceEveningDelivery', 'priceSignature', 'priceOnlyRecipient', 'pricePickup'];
+        $totalPrice = 0.0;
+        //convert npm carrier to config carrier
+        $carrier = MyParcelCarriers::NPM_CARRIER_TO_CONFIG_CARRIER[$options['carrier']];
+
+        //Is it pickup?
+        if ($options['isPickup']) {
+            return $this->addPriceForSetting($salesChannelId,'pricePickup',$carrier,$totalPrice);
+        } else {
+            //TODO: Continue here. Don't forget refresh problem
+            // Is delivery type morning, standard or evening?
+            //Is it same day?
+            //Does it have Signature
+            //Does it have recipient only?
+        }
+        return $totalPrice;
+    }
+
+    private function addPriceForSetting(string $salesChannelId, string $field, string $carrier, float $price): float
+    {
+
+        if ($this->isSettingEnabled($salesChannelId, $field, '')) {
+            $price += $this->getConfigFloat($salesChannelId, $field, '');
+        }
+        if ($this->isSettingEnabled($salesChannelId, $field, $carrier)) {
+            $price += $this->getConfigFloat($salesChannelId, $field, $carrier);
+        }
+        return $price;
+    }
+
 
     /**
      * @return array An array with the settings for the NPM package
@@ -47,7 +88,7 @@ class ConfigReader
             'allowEveningDelivery', 'priceEveningDelivery', 'priceSignature',
             'allowOnlyRecipient', 'priceOnlyRecipient',
             'pricePickup', 'allowSaturdayDelivery', 'allowPickupLocations',
-            'allowSignature','allowOnlyRecipient', 'deliveryDaysWindow', 'dropOffDelay'];
+            'allowSignature', 'allowOnlyRecipient', 'deliveryDaysWindow', 'dropOffDelay'];
 
         $settings = [];
 
@@ -62,7 +103,7 @@ class ConfigReader
         }
 
         if (
-            $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier) !== null && $this->isSettingEnabled($salesChannelId,'dropOffDays',$carrier)
+            $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier) !== null && $this->isSettingEnabled($salesChannelId, 'dropOffDays', $carrier)
         ) {
             $settings["dropOffDays"] = implode(";", $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier));
         }
@@ -72,6 +113,22 @@ class ConfigReader
             $settings["cutoffTime"] = substr($this->getConfigString($salesChannelId, 'cutoffTime', $carrier), 0, -3);
         }
         return $settings;
+    }
+
+    private function getCarrierSettings(string $salesChannelId): array
+    {
+        $carriers = MyParcelCarriers::ALL_CARRIERS;
+        $result = [];
+        foreach ($carriers as $carrier) {
+            if ($this->getConfigBool($salesChannelId, 'enabled', $carrier)) {
+
+                $carrierNPMConfigName = MyParcelCarriers::CONFIG_CARRIER_TO_NPM_CARRIER[$carrier];
+                $shopwareConfigCarrierName = $carrier;
+
+                $result[$carrierNPMConfigName] = $this->generateConfig($salesChannelId, $shopwareConfigCarrierName);
+            }
+        }
+        return $result;
     }
 
     /**
@@ -99,45 +156,14 @@ class ConfigReader
         return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    private function getCarrierSettings(string $salesChannelId): array
-    {
-        $carriers = MyParcelCarriers::ALL_CARRIERS;
-        $result = [];
-        foreach ($carriers as $carrier) {
-            if ($this->getConfigBool($salesChannelId, 'enabled', $carrier)) {
-                $carrierNPMConfigName = "";
-                $shopwareConfigCarrierName = "";
-                switch ($carrier) {
-                    case MyParcelCarriers::POSTNL:
-                        $carrierNPMConfigName = 'postnl';
-                        $shopwareConfigCarrierName = MyParcelCarriers::POSTNL;
-                        break;
-                    case MyParcelCarriers::DPD:
-                        $carrierNPMConfigName = 'dpd';
-                        $shopwareConfigCarrierName = MyParcelCarriers::DPD;
-                        break;
-                    case MyParcelCarriers::BPOST:
-                        $carrierNPMConfigName = 'bpost';
-                        $shopwareConfigCarrierName = MyParcelCarriers::BPOST;
-                        break;
-                    case MyParcelCarriers::INSTABOX:
-                        $carrierNPMConfigName = 'instabox';
-                        $shopwareConfigCarrierName = MyParcelCarriers::INSTABOX;
-                        break;
-                    case MyParcelCarriers::DHL:
-                        $carrierNPMConfigName = 'dhl';
-                        $shopwareConfigCarrierName = MyParcelCarriers::DHL;
-                        break;
-                }
-                $result[$carrierNPMConfigName] = $this->generateConfig($salesChannelId, $shopwareConfigCarrierName);
-            }
-        }
-        return $result;
-    }
-
     public function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
     {
         return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
+    }
+
+    public function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
+    {
+        return $this->systemConfigService->getInt('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     public function getConfigFloat(string $salesChannelId, string $field, string $carrier = "")
@@ -145,8 +171,5 @@ class ConfigReader
         return $this->systemConfigService->getFloat('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    public function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
-    {
-        return $this->systemConfigService->getInt('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
-    }
+
 }

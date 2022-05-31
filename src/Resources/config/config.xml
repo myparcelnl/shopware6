@@ -451,8 +451,8 @@
         <input-field type="int">
             <name>deliveryDaysWindow</name>
             <label>Delivery days window</label>
-            <label>Fenster der Liefertage</label>
-            <label>Venster van leveringsdagen</label>
+            <label lang="de-DE">Fenster der Liefertage</label>
+            <label lang="nl-NL">Venster van leveringsdagen</label>
             <helpText>The number of days into the future for which you want to show delivery days. For example; If set
                 to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
                 Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and

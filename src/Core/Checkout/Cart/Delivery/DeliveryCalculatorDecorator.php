@@ -2,6 +2,8 @@
 
 namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
+use MyPa\Shopware\Defaults as MyParcelDefaults;
+use MyPa\Shopware\Service\Config\ConfigReader;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Cart;
@@ -31,6 +33,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use stdClass;
 
 class DeliveryCalculatorDecorator extends DeliveryCalculator
 {
@@ -76,6 +79,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $shippingMethodRepository;
 
     /**
+     * @var ConfigReader
+     */
+    private $configReader;
+
+    /**
      * @param QuantityPriceCalculator $priceCalculator
      * @param PercentageTaxRuleBuilder $percentageTaxRuleBuilder
      * @param TaxDetector $taxDetector
@@ -83,8 +91,9 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
      * @param ShippingOptionsService $shippingOptionsService
      * @param SystemConfigService $configService
      * @param EntityRepository $shippingMethodRepository
+     * @param ConfigReader $configReader
      */
-    public function __construct(QuantityPriceCalculator $priceCalculator, PercentageTaxRuleBuilder $percentageTaxRuleBuilder, TaxDetector $taxDetector, ShippingMethodService $shippingMethodService, ShippingOptionsService $shippingOptionsService, SystemConfigService $configService, EntityRepository $shippingMethodRepository)
+    public function __construct(QuantityPriceCalculator $priceCalculator, PercentageTaxRuleBuilder $percentageTaxRuleBuilder, TaxDetector $taxDetector, ShippingMethodService $shippingMethodService, ShippingOptionsService $shippingOptionsService, SystemConfigService $configService, EntityRepository $shippingMethodRepository, ConfigReader $configReader)
     {
         $this->priceCalculator = $priceCalculator;
         $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
@@ -93,6 +102,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $this->shippingOptionsService = $shippingOptionsService;
         $this->configService = $configService;
         $this->shippingMethodRepository = $shippingMethodRepository;
+        $this->configReader = $configReader;
     }
 
 
@@ -119,7 +129,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                 ]),
                 $delivery->getPositions()->getLineItems(),
                 $context,
-            $cart);
+                $cart);
 
             $delivery->setShippingCosts($costs);
 
@@ -176,7 +186,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $delivery->setShippingCosts($costs);
     }
 
-    private function calculateShippingCosts(PriceCollection $priceCollection, LineItemCollection $calculatedLineItems, SalesChannelContext $context,Cart $cart): CalculatedPrice
+    private function calculateShippingCosts(PriceCollection $priceCollection, LineItemCollection $calculatedLineItems, SalesChannelContext $context, Cart $cart): CalculatedPrice
     {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
             $calculatedLineItems->getPrices()->sum()
@@ -185,19 +195,28 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
         //Check if it is a my parcel shipping method
-        $criteria =  new Criteria();
-        $criteria->addFilter(new EqualsFilter('active',true));
-        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR,[
-            new EqualsFilter('customFields.myparcel',null)
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('active', true));
+        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
+            new EqualsFilter('customFields.myparcel', null)
         ]));
-        $shippingMethod =$this->shippingMethodRepository->search($criteria,$context->getContext())->first();
+        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
-        dd($shippingMethod); //TODO: continue here, calculate the price with the carrier from the cart
+         //TODO: continue here, calculate the price with the carrier from the cart
         if ($shippingMethod) {
-            $raise = $this->shippingOptionsService->getShippingOptionsRaisePrice();
-            $price += $raise;
+            $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
+            if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
+                /** @var stdClass $deliveryData */
+                $deliveryData = $myParcelData['myparcel']['deliveryData'];
+                $deliveryData = json_decode(json_encode($deliveryData), true);
+                $raise = $this->configReader->getCostForCarrierWithOptions(
+                    $deliveryData,
+                    $context->getSalesChannelId()
+                );
+                $price += $raise;
+            }
         }
-
+//        dd($shippingMethod, $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars());
         /* Backwards compatibility with 6.3*/
         if (method_exists($context->getContext(), 'getCurrencyPrecision')) {
             $precision = $context->getContext()->getCurrencyPrecision();
@@ -207,16 +226,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         }
 
         return $this->priceCalculator->calculate($definition, $context);
-    }
-
-    /**
-     * Gets the price set in the config
-     * @param string $carrier
-     * @return float
-     */
-    private function getShippingPriceForCarrier(string $carrier) : float
-    {
-
     }
 
     private function getCurrencyPrice(PriceCollection $priceCollection, SalesChannelContext $context): float
