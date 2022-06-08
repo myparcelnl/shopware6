@@ -7,6 +7,10 @@
         <defaults public="true">
         </defaults>
 
+        <service id="MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService">
+
+        </service>
+
         <service id="MyPa\Shopware\Service\WebhookBuilder\WebhookBuilder">
             <argument type="service" id="router"/>
         </service>

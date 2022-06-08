@@ -105,10 +105,6 @@
         </service>
 
         <!-- Controller -->
-        <service id="MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService">
-
-        </service>
-
         <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController" public="true">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
