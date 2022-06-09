@@ -38,11 +38,55 @@ class ConfigReader
         if ($options['isPickup']) {
             return $this->addPriceForSetting($salesChannelId,'pricePickup',$carrier,$totalPrice);
         } else {
-            //TODO: Continue here. Don't forget refresh problem
-            // Is delivery type morning, standard or evening?
+            //TODO: Continue here. Don't forget refresh problem (Price needs to refresh for update, but this also resets plugin)
+            /*
+             * New plan, After the add-to-cart url is called, calculate the price and give that back as a result
+             * Update the price in the html tree only with that.
+             */
+            //Is delivery type morning, standard or evening?
+            switch ($options['deliveryType']){
+                case 'morning':
+                    $totalPrice=$this->addPriceForSetting(
+                        $salesChannelId,
+                        'priceMorningDelivery',
+                        $carrier,
+                        $totalPrice);
+                    break;
+                case 'standard':
+                    $totalPrice=$this->addPriceForSetting(
+                        $salesChannelId,
+                        'priceStandardDelivery',
+                        $carrier,
+                        $totalPrice);
+                    break;
+                case 'evening':
+                    $totalPrice=$this->addPriceForSetting(
+                        $salesChannelId,
+                        'priceEveningDelivery',
+                        $carrier,
+                        $totalPrice);
+                    break;
+            }
             //Is it same day?
+            //TODO: TEST AND LOOK AT SAME DAY
+
+            $shipmentOptions = $options['shipmentOptions'];
             //Does it have Signature
+            if ($shipmentOptions['signature']){
+                $totalPrice=$this->addPriceForSetting(
+                    $salesChannelId,
+                    'priceSignature',
+                    $carrier,
+                    $totalPrice);
+            }
             //Does it have recipient only?
+            if ($shipmentOptions['only_recipient']){
+                $totalPrice=$this->addPriceForSetting(
+                    $salesChannelId,
+                    'priceOnlyRecipient',
+                    $carrier,
+                    $totalPrice);
+            }
         }
         return $totalPrice;
     }

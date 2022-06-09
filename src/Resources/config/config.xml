@@ -486,8 +486,8 @@
         <input-field type="int">
             <name>dropOffDelay</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -495,7 +495,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>
@@ -890,8 +890,8 @@
         <input-field type="int">
             <name>dropOffDelayPostNL</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -899,7 +899,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>
@@ -1293,8 +1293,8 @@
         <input-field type="int">
             <name>dropOffDelayDPD</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -1302,7 +1302,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>
@@ -1696,8 +1696,8 @@
         <input-field type="int">
             <name>dropOffDelayInstabox</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -1705,7 +1705,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>
@@ -2099,8 +2099,8 @@
         <input-field type="int">
             <name>dropOffDelayBPost</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -2108,7 +2108,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>
@@ -2502,8 +2502,8 @@
         <input-field type="int">
             <name>dropOffDelayDHL</name>
             <label>Drop Off Delay</label>
-            <label>Abwurfverzögerung</label>
-            <label>Drop Off Vertraging</label>
+            <label lang="de-DE">Abwurfverzögerung</label>
+            <label lang="nl-NL">Afleververtraging</label>
             <defaultValue>0</defaultValue>
             <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
                 ordered before the cutoff time). By default, this is 0 and the maximum is 14.
@@ -2511,7 +2511,7 @@
             <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn
                 vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket op te halen, in te pakken en af te leveren op het
+            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het
                 postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
             </helpText>
         </input-field>

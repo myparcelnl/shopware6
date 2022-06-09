@@ -186,7 +186,12 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $delivery->setShippingCosts($costs);
     }
 
-    private function calculateShippingCosts(PriceCollection $priceCollection, LineItemCollection $calculatedLineItems, SalesChannelContext $context, Cart $cart): CalculatedPrice
+    private function calculateShippingCosts(
+        PriceCollection $priceCollection,
+        LineItemCollection $calculatedLineItems,
+        SalesChannelContext $context,
+        Cart $cart
+    ): CalculatedPrice
     {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
             $calculatedLineItems->getPrices()->sum()
@@ -203,7 +208,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
          //TODO: continue here, calculate the price with the carrier from the cart
-        if ($shippingMethod) {
+        if ($shippingMethod&&$cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
             $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
             if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
                 /** @var stdClass $deliveryData */
@@ -216,7 +221,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                 $price += $raise;
             }
         }
-//        dd($shippingMethod, $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars());
+
         /* Backwards compatibility with 6.3*/
         if (method_exists($context->getContext(), 'getCurrencyPrecision')) {
             $precision = $context->getContext()->getCurrencyPrecision();

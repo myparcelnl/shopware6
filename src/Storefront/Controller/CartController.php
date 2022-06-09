@@ -18,7 +18,7 @@ class CartController extends AbstractController
     protected $cartService;
     protected $logger;
 
-    public function __construct(CartService $cartService,LoggerInterface $logger)
+    public function __construct(CartService $cartService, LoggerInterface $logger)
     {
         $this->cartService = $cartService;
         $this->logger = $logger;
@@ -34,14 +34,14 @@ class CartController extends AbstractController
     public function addDataToCart(RequestDataBag $data, SalesChannelContext $context)
     {
         $myParcelData = $data->get('myparcel');
-        if (($myParcelData!==null)){
+        if (($myParcelData !== null)) {
             $this->cartService->addData([
-                'myparcel' => ['deliveryData'=>json_decode($myParcelData)],
+                'myparcel' => ['deliveryData' => json_decode($myParcelData)],
             ], $context);
-        }else{
-            $this->logger->warning("No deliverData found",['data'=>$data]);
+        } else {
+            $this->logger->warning("No deliverData found", ['data' => $data]);
         }
-
+//TODO: calculate the cart price here too and return it
         return $this->json(null, 204);
     }
 }
