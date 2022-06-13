@@ -187,10 +187,10 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     }
 
     private function calculateShippingCosts(
-        PriceCollection $priceCollection,
-        LineItemCollection $calculatedLineItems,
+        PriceCollection     $priceCollection,
+        LineItemCollection  $calculatedLineItems,
         SalesChannelContext $context,
-        Cart $cart
+        Cart                $cart
     ): CalculatedPrice
     {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
@@ -205,30 +205,25 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
             new EqualsFilter('customFields.myparcel', null)
         ]));
+        /** @var ShippingMethodEntity $shippingMethod */
         $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
-         //TODO: continue here, calculate the price with the carrier from the cart
-        if ($shippingMethod&&$cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
-            $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
-            if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
-                /** @var stdClass $deliveryData */
-                $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                $deliveryData = json_decode(json_encode($deliveryData), true);
-                $raise = $this->configReader->getCostForCarrierWithOptions(
-                    $deliveryData,
-                    $context->getSalesChannelId()
-                );
-                $price += $raise;
+        if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
+            if ($shippingMethod && $cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
+                $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
+                if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
+                    /** @var stdClass $deliveryData */
+                    $deliveryData = $myParcelData['myparcel']['deliveryData'];
+                    $deliveryData = json_decode(json_encode($deliveryData), true);
+                    $raise = $this->configReader->getCostForCarrierWithOptions(
+                        $deliveryData,
+                        $context->getSalesChannelId()
+                    );
+                    $price += $raise;
+                }
             }
         }
-
-        /* Backwards compatibility with 6.3*/
-        if (method_exists($context->getContext(), 'getCurrencyPrecision')) {
-            $precision = $context->getContext()->getCurrencyPrecision();
-            $definition = new QuantityPriceDefinition($price, $rules, $precision, 1, true);
-        } else {
-            $definition = new QuantityPriceDefinition($price, $rules, 1);
-        }
+        $definition = new QuantityPriceDefinition($price, $rules, 1);
 
         return $this->priceCalculator->calculate($definition, $context);
     }

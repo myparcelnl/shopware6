@@ -2,6 +2,7 @@
 
 namespace MyPa\Shopware\Storefront\Controller;
 
+use MyPa\Shopware\Service\Config\ConfigReader;
 use MyPa\Shopware\Service\Shopware\CartService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -15,14 +16,22 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CartController extends AbstractController
 {
-    protected $cartService;
-    protected $logger;
+    protected CartService $cartService;
+    protected LoggerInterface $logger;
+    protected ConfigReader $configReader;
 
-    public function __construct(CartService $cartService, LoggerInterface $logger)
+    /**
+     * @param CartService $cartService
+     * @param LoggerInterface $logger
+     * @param ConfigReader $configReader
+     */
+    public function __construct(CartService $cartService, LoggerInterface $logger, ConfigReader $configReader)
     {
         $this->cartService = $cartService;
         $this->logger = $logger;
+        $this->configReader = $configReader;
     }
+
 
     /**
      * @Route("/widget/checkout/myparcel/add-to-cart", name="frontend.checkout.myparcel.add-to-cart", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=true})
@@ -38,10 +47,15 @@ class CartController extends AbstractController
             $this->cartService->addData([
                 'myparcel' => ['deliveryData' => json_decode($myParcelData)],
             ], $context);
+
+            $calculatedCard = $this->cartService->recalculate($context);
+            $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCard]]);
+
+            return $this->json($html, 200);
         } else {
             $this->logger->warning("No deliverData found", ['data' => $data]);
         }
-//TODO: calculate the cart price here too and return it
+
         return $this->json(null, 204);
     }
 }

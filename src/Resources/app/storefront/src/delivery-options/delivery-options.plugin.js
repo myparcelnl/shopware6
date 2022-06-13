@@ -1,6 +1,9 @@
 import Plugin from "src/plugin-system/plugin.class";
 import HttpClient from 'src/service/http-client.service';
+import ElementReplaceHelper from 'src/helper/element-replace.helper';
+
 import '@myparcel'
+
 
 export default class DeliveryOptionsPlugin extends Plugin {
     static options = {
@@ -13,7 +16,8 @@ export default class DeliveryOptionsPlugin extends Plugin {
             postalCode: '',
             number: ''
         },
-        config: {}
+        config: {},
+        price:{}
     };
 
 
@@ -40,9 +44,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             const data = this._getRequestData();
             data['myparcel'] = JSON.stringify(event.detail);
-            console.log(event.detail);
+            // console.log(event.detail);
             this._client.post(this.options.url, JSON.stringify(data), content => {
                 // Retry on error?
+                this._procesShippingCostsPage(JSON.parse(content));
             });
         });
     };
@@ -55,5 +60,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
         }
 
         return data;
+    }
+
+    _procesShippingCostsPage(html){
+
+        ElementReplaceHelper.replaceFromMarkup(html.content,'.checkout-aside-summary-container');
     }
 }

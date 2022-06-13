@@ -17,6 +17,12 @@ class CartService
         $this->cartService = $cartService;
     }
 
+    public function recalculate(SalesChannelContext $context): Cart
+    {
+        $cart = $this->cartService->getCart($context->getToken(), $context);
+        return $this->cartService->recalculate($cart, $context);
+    }
+
     public function hasData(SalesChannelContext $context, ?string $key = null): bool
     {
         $cart = $this->cartService->getCart($context->getToken(), $context);
