@@ -31,7 +31,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         this._configure();
         this._addListeners();
         this._registerElements();
-        
+
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
