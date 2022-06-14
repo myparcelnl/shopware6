@@ -42,7 +42,6 @@ class ConfigReader
         if ($options['isPickup']) {
             return $this->addPriceForSetting($salesChannelId, 'pricePickup', $carrier, $totalPrice);
         } else {
-            //TODO: Continue here. Don't forget refresh problem (Price needs to refresh for update, but this also resets plugin)
             //Is delivery type morning, standard or evening?
             switch ($options['deliveryType']) {
                 case 'morning':

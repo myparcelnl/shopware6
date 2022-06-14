@@ -51,11 +51,13 @@ class CartController extends AbstractController
             $calculatedCard = $this->cartService->recalculate($context);
             $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCard]]);
 
+
             return $this->json($html, 200);
         } else {
             $this->logger->warning("No deliverData found", ['data' => $data]);
+            return $this->json("No delivery data found", 500);
         }
 
-        return $this->json(null, 204);
+
     }
 }

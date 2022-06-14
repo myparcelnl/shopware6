@@ -6,7 +6,7 @@
 
 {% block page_checkout_confirm_shipping_form_label %}
     {{ parent() }}
-    {% if shipping.customFields.myparcel %}
+    {% if shipping.customFields.myparcel  and context.shippingMethod.customFields.myparcel %}
         <div id="myparcel-delivery-options"></div>
     {% endif %}
 {% endblock %}

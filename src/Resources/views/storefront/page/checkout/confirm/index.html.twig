@@ -1,0 +1,29 @@
+{% sw_extends '@Storefront/storefront/page/checkout/confirm/index.html.twig' %}
+
+{% block page_checkout_confirm_form_submit %}
+    {# @deprecated tag:v6.5.0 - Bootstrap v5 removes `btn-block` class, use `d-grid` wrapper instead #}
+    {% if feature('v6.5.0.0') %}
+        <div class="d-grid">
+            <button id="confirmFormSubmit"
+                    class="btn btn-primary btn-lg"
+                    form="confirmOrderForm"
+                {% if page.cart.errors.blockOrder or context.shippingMethod.customFields.myparcel %}
+                    disabled
+                {% endif %}
+                    type="submit">
+                {{ "checkout.confirmSubmit"|trans|sw_sanitize }}
+            </button>
+        </div>
+    {% else %}
+        <button id="confirmFormSubmit"
+                class="btn btn-primary btn-block btn-lg"
+                form="confirmOrderForm"
+            {% if page.cart.errors.blockOrder or context.shippingMethod.customFields.myparcel %}
+                disabled
+            {% endif %}
+                type="submit">
+            {{ "checkout.confirmSubmit"|trans|sw_sanitize }}
+        </button>
+    {% endif %}
+{% endblock %}
+
