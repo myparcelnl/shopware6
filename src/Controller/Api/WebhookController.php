@@ -51,38 +51,46 @@ class WebhookController extends StorefrontController
     {
         $this->logger->debug('Webhook called:', ['request' => $request]);
         $data = $request->get('data');
-        if ($data != null && isset($data['hooks'])) {
-            foreach ($data['hooks'] as $hook) {
 
-                if (!isset($hook['shipment_reference_identifier'])) {
-                    continue;
-                }
-                if (!isset($hook['status'])) {
-                    continue;
-                }
-                if (!isset($hook['event'])) {
-                    continue;
-                }
-                if ($hook['event'] !== 'shipment_status_change') {
-                    continue;
-                }
-
-                //Update the status
-                //Get shipment based on "consignment_reference"
-                $criteria = new Criteria();
-                $criteria->addFilter(new EqualsFilter('consignmentReference', $hook['shipment_reference_identifier']));
-                $shipmentId = $this->shipmentsRepository->searchIds($criteria, $context->getContext())->firstId();
-
-                //Update the order myparcel status with "status"
-                $this->shipmentsRepository->update([
-                    [
-                        'id' => $shipmentId,
-                        'shipmentStatus' => $hook['status']
-                    ]
-                ], $context->getContext());
-
-            }
+        if ($data == null) {
+            return new JsonResponse(null, 204);
         }
+
+        if (!isset($data['hooks'])) {
+            return new JsonResponse(null, 204);
+        }
+
+        foreach ($data['hooks'] as $hook) {
+
+            if (!isset($hook['shipment_reference_identifier'])) {
+                continue;
+            }
+            if (!isset($hook['status'])) {
+                continue;
+            }
+            if (!isset($hook['event'])) {
+                continue;
+            }
+            if ($hook['event'] !== 'shipment_status_change') {
+                continue;
+            }
+
+            //Update the status
+            //Get shipment based on "consignment_reference"
+            $criteria = new Criteria();
+            $criteria->addFilter(new EqualsFilter('consignmentReference', $hook['shipment_reference_identifier']));
+            $shipmentId = $this->shipmentsRepository->searchIds($criteria, $context->getContext())->firstId();
+
+            //Update the order myparcel status with "status"
+            $this->shipmentsRepository->update([
+                [
+                    'id' => $shipmentId,
+                    'shipmentStatus' => $hook['status']
+                ]
+            ], $context->getContext());
+
+        }
+
         return new JsonResponse(null, 204);
     }
 
