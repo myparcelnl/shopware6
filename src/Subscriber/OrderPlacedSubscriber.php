@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace MyPa\Shopware\Subscriber;
 
 use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
 use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
@@ -58,11 +59,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     /**
      * Creates a new instance of the order placed subscriber.
      *
-     * @param RequestStack              $requestStack
-     * @param OrderService              $orderService
-     * @param ShippingMethodService     $shippingMethodService
-     * @param ShippingOptionsService    $shippingOptionService
-     * @param SystemConfigService       $configService
+     * @param RequestStack $requestStack
+     * @param OrderService $orderService
+     * @param ShippingMethodService $shippingMethodService
+     * @param ShippingOptionsService $shippingOptionService
+     * @param SystemConfigService $configService
      */
     public function __construct(
         RequestStack           $requestStack,
@@ -72,11 +73,11 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         SystemConfigService    $configService
     )
     {
-       $this->requestStack = $requestStack;
-       $this->orderService = $orderService;
-       $this->shippingMethodService = $shippingMethodService;
-       $this->shippingOptionsService = $shippingOptionService;
-       $this->configService = $configService;
+        $this->requestStack = $requestStack;
+        $this->orderService = $orderService;
+        $this->shippingMethodService = $shippingMethodService;
+        $this->shippingOptionsService = $shippingOptionService;
+        $this->configService = $configService;
     }
 
     /**
@@ -91,12 +92,40 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         ];
     }
 
+    public function onOrderPlaced(CheckoutOrderPlacedEvent $event)
+    {
+        //Get order
+        $order = $event->getOrder();
+        //Get order custom fields with key
+        if (!empty($order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY])) {
+
+            $myparcelOptions = $order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY];
+
+            // Add the order to the shipping options
+            $myparcelOptions[ShippingOptionEntity::FIELD_ORDER] = [
+                'id' => $order->getId(),
+                'versionId' => $order->getVersionId(),
+            ];
+
+            //Store shipping options in the database
+            $this->shippingOptionsService->createOrUpdateShippingOptions($myparcelOptions, $event->getContext());
+            //Update custom fields on the order
+            $this->orderService->createOrUpdateOrder([
+                'id' => $order->getId(),
+                'versionId' => $order->getVersionId(),
+                'customFields' => [
+                    self::PARAM_MY_PARCEL => json_encode($myparcelOptions),
+                ]
+            ], $event->getContext());
+        }
+    }
+
     /**
      * Creates a shipping option record in the database.
      *
      * @param CheckoutOrderPlacedEvent $event
      */
-    public function onOrderPlaced(CheckoutOrderPlacedEvent $event)
+    public function onOrderPlacedOld(CheckoutOrderPlacedEvent $event)
     {
         //TODO: use with values not from hidden fields and transform to the CartConvertedEvent
         /** @var array $params */
@@ -134,57 +163,57 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
                 if (isset($params[self::PARAM_DELIVERY_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$params[self::PARAM_DELIVERY_TYPE];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = (int)$this->configService->get('MyPaShopware.config.myParcelDefaultDeliveryWindow');
                 }
 
                 if (isset($params[self::PARAM_DELIVERY_DATE]) && !empty($params[self::PARAM_DELIVERY_DATE])) {
                     $strTime = \strtotime($params[self::PARAM_DELIVERY_DATE]);
-                    if(!$strTime){
+                    if (!$strTime) {
                         $strTime = strtotime("+1 day");
                     }
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', $strTime);
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_DELIVERY_DATE] = \date('Y-m-d', strtotime("+1 day"));
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_AGE_CHECK])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$params[self::PARAM_REQUIRES_AGE_CHECK];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultAgeCheck');
                 }
 
                 if (isset($params[self::PARAM_REQUIRES_SIGNATURE])) {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$params[self::PARAM_REQUIRES_SIGNATURE];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultSignature');
                 }
 
                 if (isset($params[self::PARAM_ONLY_RECIPIENT])) {
                     $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$params[self::PARAM_ONLY_RECIPIENT];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultOnlyRecipient');
                 }
 
                 if (isset($params[self::PARAM_RETURN_IF_NOT_HOME])) {
                     $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$params[self::PARAM_RETURN_IF_NOT_HOME];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultReturnNotHome');
                 }
 
                 if (isset($params[self::PARAM_LARGE_FORMAT])) {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$params[self::PARAM_LARGE_FORMAT];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = (bool)$this->configService->get('MyPaShopware.config.myParcelDefaultLargeFormat');
                 }
 
                 if (isset($params[self::PARAM_PACKAGE_TYPE])) {
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (bool)$params[self::PARAM_LARGE_FORMAT];
-                }else{
+                } else {
                     $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = (int)$this->configService->get('MyPaShopware.config.myParcelDefaultPackageType');
                 }
 
-                if(isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup'){
+                if (isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup') {
                     $decodedPickupPointData = json_decode($params[self::PARAM_PICKUP_DATA], true);
 
                     $options[ShippingOptionEntity::FIELD_PICKUP_LOCATION_ID] = intval($decodedPickupPointData['location_code']);

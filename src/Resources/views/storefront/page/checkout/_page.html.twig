@@ -1,0 +1,63 @@
+{% sw_extends '@Storefront/storefront/page/checkout/_page.html.twig' %}
+{% block base_content %}
+    {% set translations = {
+        "addressNotFound":'myparcel.shipping_selector.addressNotFound' | trans,
+        "cc":'myparcel.shipping_selector.cc' | trans,
+        "city":'myparcel.shipping_selector.city' | trans,
+        "closed":'myparcel.shipping_selector.closed' | trans,
+        "deliveryEveningTitle":'myparcel.shipping_selector.deliveryEveningTitle' | trans,
+        "deliveryMorningTitle":'myparcel.shipping_selector.deliveryMorningTitle' | trans,
+        "deliveryStandardTitle":'myparcel.shipping_selector.deliveryStandardTitle' | trans,
+        "deliveryTitle":'myparcel.shipping_selector.deliveryTitle' | trans,
+        "free":'myparcel.shipping_selector.free' | trans,
+        "from":'myparcel.shipping_selector.from' | trans,
+        "loadMore":'myparcel.shipping_selector.loadMore' | trans,
+        "number":'myparcel.shipping_selector.number' | trans,
+        "onlyRecipientTitle":'myparcel.shipping_selector.onlyRecipientTitle' | trans,
+        "openingHours":'myparcel.shipping_selector.openingHours' | trans,
+        "options":'myparcel.shipping_selector.options' | trans,
+        "packageTypeDigitalStamp":'myparcel.shipping_selector.packageTypeDigitalStamp' | trans,
+        "packageTypeMailbox":'myparcel.shipping_selector.packageTypeMailbox' | trans,
+        "pickUpFrom":'myparcel.shipping_selector.pickUpFrom' | trans,
+        "pickupLocationsListButton":'myparcel.shipping_selector.pickupLocationsListButton' | trans,
+        "pickupLocationsMapButton":'myparcel.shipping_selector.pickupLocationsMapButton' | trans,
+        "pickupTitle":'myparcel.shipping_selector.pickupTitle' | trans,
+        "postalCode":'myparcel.shipping_selector.postalCode' | trans,
+        "retry":'myparcel.shipping_selector.retry' | trans,
+        "signatureTitle":'myparcel.shipping_selector.signatureTitle' | trans,
+        "mondayDeliveryTitle":'myparcel.shipping_selector.mondayDeliveryTitle' | trans,
+        "wrongnumberPostalCode":'myparcel.shipping_selector.wrongnumberPostalCode' | trans,
+        "beDeliveryStandardTitle":'myparcel.shipping_selector.beDeliveryStandardTitle' | trans,
+        "beDeliveryTitle":'myparcel.shipping_selector.beDeliveryTitle' | trans,
+        "saturdayDeliveryTitle":'myparcel.shipping_selector.saturdayDeliveryTitle' | trans,
+        "wrongPostalCodeCity":'myparcel.shipping_selector.wrongPostalCodeCity' | trans,
+        "refreshMessage":'myparcel.shipping_selector.refreshMessage' | trans,
+    } %}
+
+    {% set deliveryOptionsPluginOptions =
+        {
+            url:path('frontend.checkout.myparcel.add-to-cart') ,
+            csrfToken: sw_csrf('frontend.checkout.myparcel.add-to-cart', {"mode": "token"}),
+            config:page.extensions.myparcel.config,
+            translations:translations,
+            address: {
+            cc: page.cart.deliveries.elements[0].location.country.iso,
+            city: page.cart.deliveries.elements[0].location.address.city,
+            postalCode: page.cart.deliveries.elements[0].location.address.zipcode,
+            number:page.cart.deliveries.elements[0].location.address.street
+        }
+        } %}
+    {% block myparcel_component_address_form_alerts %}
+        <div id="myparcel-alert" hidden="hidden">
+            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                content: '',
+                type: "warning"
+            } %}
+        </div>
+    {% endblock %}
+    {% if context.shippingMethod.customFields.myparcel %}
+        <template data-delivery-options-plugin
+                  data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}
