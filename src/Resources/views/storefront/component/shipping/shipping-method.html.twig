@@ -1,7 +1,8 @@
 {% sw_extends '@Storefront/storefront/component/shipping/shipping-method.html.twig' %}
     {% block component_shipping_method_label %}
         {{ parent() }}
-        {% if shipping.customFields.myparcel and context.shippingMethod.customFields.myparcel %}
+        
+        {% if shipping.translated.customFields.myparcel and shipping.id is same as(context.shippingMethod.id) %}
             <div id="myparcel-delivery-options"></div>
         {% endif %}
     {% endblock %}
