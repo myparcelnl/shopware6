@@ -9,7 +9,7 @@ use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Order\CartConvertedEvent;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CartConversionSubscriber implements EventSubscriberInterface
@@ -19,15 +19,23 @@ class CartConversionSubscriber implements EventSubscriberInterface
      * ShippingOptionEntity::FIELD_PACKAGE_TYPE is not needed because it will always be read from the checkout settings
      * ShippingOptionEntity::FIELD_ONLY_RECIPIENT will only be read in defaults, not from checkout
      */
-    private const SHIPPING_OPTIONS_WITH_DEFAULT = [ShippingOptionEntity::FIELD_DELIVERY_DATE => "",
-        ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK => "myParcelDefaultAgeCheck", ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE => "myParcelDefaultSignature",
-        ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient", ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
-        ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat"];
+    private const SHIPPING_OPTIONS_WITH_DEFAULT = [
+        ShippingOptionEntity::FIELD_DELIVERY_DATE => "",
+        ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK => "myParcelDefaultAgeCheck",
+        ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE => "myParcelDefaultSignature",
+        ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient",
+        ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
+        ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat",
+    ];
 
-    private const CARRIER_TO_ID = ['postnl' => 1, 'bpost' => 2, 'cheapcargo' => 3, 'dpd' => 4, 'instabox' => 5, 'dhl' => 6];
-
-    private const PARAM_MY_PARCEL = 'my_parcel';
-
+    private const CARRIER_TO_ID = [
+        'postnl' => 1,
+        'bpost' => 2,
+        'cheapcargo' => 3,
+        'dpd' => 4,
+        'instabox' => 5,
+        'dhl' => 6,
+    ];
 
     /**
      * @var LoggerInterface
@@ -40,7 +48,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $configReader;
 
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     private $orderRepository;
 
@@ -55,13 +63,19 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $orderService;
 
     /**
-     * @param LoggerInterface $logger
-     * @param ConfigReader $configReader
-     * @param EntityRepository $orderRepository
-     * @param ShippingOptionsService $shippingOptionsService
-     * @param OrderService $orderService
+     * @param LoggerInterface           $logger
+     * @param ConfigReader              $configReader
+     * @param EntityRepositoryInterface $orderRepository
+     * @param ShippingOptionsService    $shippingOptionsService
+     * @param OrderService              $orderService
      */
-    public function __construct(LoggerInterface $logger, ConfigReader $configReader, EntityRepository $orderRepository, ShippingOptionsService $shippingOptionsService, OrderService $orderService)
+    public function __construct(
+        LoggerInterface           $logger,
+        ConfigReader              $configReader,
+        EntityRepositoryInterface $orderRepository,
+        ShippingOptionsService    $shippingOptionsService,
+        OrderService              $orderService
+    )
     {
         $this->logger = $logger;
         $this->configReader = $configReader;
@@ -75,7 +89,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [CartConvertedEvent::class => 'cartConverted'];
+        return [
+            CartConvertedEvent::class => 'cartConverted'
+        ];
     }
 
     /**
@@ -148,6 +164,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     /**
      * Sets all the defaults for values that will not be filled but the implementation of createOrUpdateShippingOptions()
      * still needs.
+     *
      * @param string $salesChannelId
      * @return array
      */
