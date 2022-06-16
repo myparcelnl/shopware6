@@ -3,7 +3,7 @@
 namespace MyPa\Shopware\Controller\Api;
 
 use Psr\Log\LoggerInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -15,27 +15,25 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WebhookController extends StorefrontController
 {
-
     /**
      * @var LoggerInterface
      */
     private $logger;
 
-
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     private $shipmentsRepository;
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface           $logger
+     * @param EntityRepositoryInterface $shipments
      */
-    public function __construct(LoggerInterface $logger, EntityRepository $shipments)
+    public function __construct(LoggerInterface $logger, EntityRepositoryInterface $shipments)
     {
         $this->logger = $logger;
         $this->shipmentsRepository = $shipments;
     }
-
 
     /**
      * @RouteScope(scopes={"storefront"})
@@ -61,21 +59,22 @@ class WebhookController extends StorefrontController
         }
 
         foreach ($data['hooks'] as $hook) {
-
-            if (!isset($hook['shipment_reference_identifier'])) {
-                continue;
-            }
-            if (!isset($hook['status'])) {
-                continue;
-            }
             if (!isset($hook['event'])) {
                 continue;
             }
+
             if ($hook['event'] !== 'shipment_status_change') {
                 continue;
             }
 
-            //Update the status
+            if (!isset($hook['shipment_reference_identifier'])) {
+                continue;
+            }
+
+            if (!isset($hook['status'])) {
+                continue;
+            }
+
             //Get shipment based on "consignment_reference"
             $criteria = new Criteria();
             $criteria->addFilter(new EqualsFilter('consignmentReference', $hook['shipment_reference_identifier']));
