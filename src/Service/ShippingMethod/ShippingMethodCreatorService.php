@@ -3,8 +3,9 @@
 namespace MyPa\Shopware\Service\ShippingMethod;
 
 use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Media\MediaService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -12,26 +13,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ShippingMethodCreatorService
 {
     private MediaService $mediaService;
-    private EntityRepository $deliveryTimeRepository;
-    private EntityRepository $mediaRepository;
-    private EntityRepository $ruleRepository;
-    private EntityRepository $shippingMethodRepository;
+    private EntityRepositoryInterface $deliveryTimeRepository;
+    private EntityRepositoryInterface $mediaRepository;
+    private EntityRepositoryInterface $ruleRepository;
+    private EntityRepositoryInterface $shippingMethodRepository;
     private LoggerInterface $logger;
 
     /**
      * @param MediaService $mediaService
-     * @param EntityRepository $deliveryTimeRepository
-     * @param EntityRepository $mediaRepository
-     * @param EntityRepository $ruleRepository
-     * @param EntityRepository $shippingMethodRepository
+     * @param EntityRepositoryInterface $deliveryTimeRepository
+     * @param EntityRepositoryInterface $mediaRepository
+     * @param EntityRepositoryInterface $ruleRepository
+     * @param EntityRepositoryInterface $shippingMethodRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
         MediaService $mediaService,
-        EntityRepository $deliveryTimeRepository,
-        EntityRepository $mediaRepository,
-        EntityRepository $ruleRepository,
-        EntityRepository $shippingMethodRepository,
+        EntityRepositoryInterface $deliveryTimeRepository,
+        EntityRepositoryInterface $mediaRepository,
+        EntityRepositoryInterface $ruleRepository,
+        EntityRepositoryInterface $shippingMethodRepository,
         LoggerInterface $logger
     )
     {
