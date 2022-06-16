@@ -51,8 +51,10 @@ class DeliveryOptionsController extends StorefrontController
      *     defaults={"csrf_protected"=false, "XmlHttpRequest"=true}
      *     )
      *
+     * @param Request $request
+     * @param SalesChannelContext $salesChannelContext
+     * @param Context $context
      * @return Response
-     * @throws Exception
      */
     public function getDeliveryOptions(Request $request, SalesChannelContext $salesChannelContext, Context $context): Response
     {

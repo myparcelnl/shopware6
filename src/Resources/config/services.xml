@@ -98,6 +98,9 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService" />
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="myparcel.logger"/>
+            <argument type="service" id="MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService"/>
+            <argument type="service" id="MyPa\Shopware\Service\WebhookBuilder\WebhookBuilder"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -150,5 +153,6 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
+
     </services>
 </container>

@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true">
+        </defaults>
+
+        <service id="MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService">
+
+        </service>
+
+        <service id="MyPa\Shopware\Service\WebhookBuilder\WebhookBuilder">
+            <argument type="service" id="router"/>
+        </service>
+    </services>
+</container>

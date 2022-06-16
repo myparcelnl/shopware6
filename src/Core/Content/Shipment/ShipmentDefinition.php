@@ -11,6 +11,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -47,6 +48,7 @@ class ShipmentDefinition extends EntityDefinition
             (new FloatField('insured_amount', 'insuredAmount')),
             (new StringField('bar_code', 'barCode')),
             (new StringField('track_and_trace_url', 'trackAndTraceUrl')),
+            (new IntField('shipment_status', 'shipmentStatus')),
 
             (new ManyToOneAssociationField('shippingOption', 'shipping_option_id', ShippingOptionDefinition::class, 'id', true))->addFlags(new Required()),
             (new ManyToOneAssociationField('order', 'order_id', OrderDefinition::class, 'id', true))->addFlags(new Required(), new CascadeDelete()),

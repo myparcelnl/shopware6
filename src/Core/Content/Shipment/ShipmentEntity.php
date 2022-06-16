@@ -74,6 +74,11 @@ class ShipmentEntity extends Entity
      */
     protected $trackAndTraceUrl;
 
+    /**
+     * @var int
+     */
+    protected $shipmentStatus = 1;
+
 
     /**
      * @return int|null
@@ -264,4 +269,21 @@ class ShipmentEntity extends Entity
         $this->trackAndTraceUrl = $trackAndTraceUrl;
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getShipmentStatus(): int
+    {
+        return $this->shipmentStatus;
+    }
+
+    /**
+     * @param int $shipmentStatus
+     */
+    public function setShipmentStatus(int $shipmentStatus): void
+    {
+        $this->shipmentStatus = $shipmentStatus;
+    }
+
 }
