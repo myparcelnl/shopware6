@@ -6,24 +6,9 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use Shopware\Core\Framework\Log\Monolog\DoctrineSQLHandler;
 use Shopware\Core\Kernel;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class LoggerFactory
 {
-    /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-
-    /**
-     * @param SystemConfigService $systemConfigService
-     */
-    public function __construct(
-        SystemConfigService $systemConfigService
-    )
-    {
-        $this->systemConfigService = $systemConfigService;
-    }
 
     /**
      * @param $filename
@@ -43,18 +28,4 @@ class LoggerFactory
         return new DoctrineSQLHandler(Kernel::getConnection(), Logger::INFO);
     }
 
-//    /**
-//     * @return int
-//     */
-//    private function getConfigurationBasedLogLevel(): int
-//    {
-//        try {
-//            if ($this->systemConfigService->getBool(ConfigService::DOMAIN . 'debugMode')) {
-//                return Logger::DEBUG;
-//            }
-//        } catch (\Exception $e) {
-//        }
-//
-//        return Logger::INFO;
-//    }
 }

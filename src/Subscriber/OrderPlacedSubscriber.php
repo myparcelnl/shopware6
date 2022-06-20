@@ -8,6 +8,12 @@ use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Service\WebhookBuilder\WebhookBuilder;
+use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
+use MyParcelNL\Sdk\src\Exception\ApiException;
+use MyParcelNL\Sdk\src\Exception\MissingFieldException;
+use MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
@@ -30,31 +36,41 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     private const PARAM_SHIPPING_METHOD_ID = 'shipping_method_id';
     private const PARAM_DELIVERY_LOCATION = 'delivery_location';
     private const PARAM_PICKUP_DATA = 'pickup_point_data';
-
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
     /**
      * @var RequestStack
      */
     private $requestStack;
-
     /**
      * @var OrderService
      */
     private $orderService;
-
     /**
      * @var ShippingMethodService
      */
     private $shippingMethodService;
-
     /**
      * @var ShippingOptionsService
      */
     private $shippingOptionsService;
-
     /**
      * @var SystemConfigService
      */
     private $configService;
+
+    /**
+     * @var ShipmentStatusChangeWebhookWebService
+     */
+    private $shipmentStatusChangeWebhookWebService;
+
+    /**
+     * @var WebhookBuilder
+     */
+    private $builder;
+
 
     /**
      * Creates a new instance of the order placed subscriber.
@@ -64,13 +80,19 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      * @param ShippingMethodService $shippingMethodService
      * @param ShippingOptionsService $shippingOptionService
      * @param SystemConfigService $configService
+     * @param LoggerInterface $logger
+     * @param ShipmentStatusChangeWebhookWebService $shipmentStatusChangeWebhookWebService
+     * @param WebhookBuilder $builder
      */
     public function __construct(
-        RequestStack           $requestStack,
-        OrderService           $orderService,
-        ShippingMethodService  $shippingMethodService,
-        ShippingOptionsService $shippingOptionService,
-        SystemConfigService    $configService
+        RequestStack                          $requestStack,
+        OrderService                          $orderService,
+        ShippingMethodService                 $shippingMethodService,
+        ShippingOptionsService                $shippingOptionService,
+        SystemConfigService                   $configService,
+        LoggerInterface                       $logger,
+        ShipmentStatusChangeWebhookWebService $shipmentStatusChangeWebhookWebService,
+        WebhookBuilder                        $builder
     )
     {
         $this->requestStack = $requestStack;
@@ -78,6 +100,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         $this->shippingMethodService = $shippingMethodService;
         $this->shippingOptionsService = $shippingOptionService;
         $this->configService = $configService;
+        $this->logger = $logger;
+        $this->shipmentStatusChangeWebhookWebService = $shipmentStatusChangeWebhookWebService;
+        $this->builder = $builder;
     }
 
     /**
@@ -214,7 +239,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 }
 
                 if (isset($params[self::PARAM_DELIVERY_LOCATION]) && $params[self::PARAM_DELIVERY_LOCATION] == 'pickup') {
-                    $decodedPickupPointData = json_decode($params[self::PARAM_PICKUP_DATA], true);
+                    $decodedPickupPointData = json_decode(base64_decode($params[self::PARAM_PICKUP_DATA]), true);
 
                     $options[ShippingOptionEntity::FIELD_PICKUP_LOCATION_ID] = intval($decodedPickupPointData['location_code']);
                     $options[ShippingOptionEntity::FIELD_PICKUP_NAME] = $decodedPickupPointData['location'];
@@ -227,6 +252,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 }
 
                 if (!empty($options)) {
+                    //Start the webhook subscriber for updates
+                    $this->subscribeToWebhook($event->getSalesChannelId());
+
                     // Add the order to the shipping options
                     $options[ShippingOptionEntity::FIELD_ORDER] = [
                         'id' => $event->getOrder()->getId(),
@@ -252,5 +280,23 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
                 }
             }
         }
+    }
+
+    /**
+     * Subscribes to the webhook
+     */
+    public function subscribeToWebhook(string $salesChannelId)
+    {
+        $apiKey = (string)$this->configService->get('MyPaShopware.config.myParcelApiKey', $salesChannelId);
+        try {
+            $subID = $this->shipmentStatusChangeWebhookWebService->setApiKey($apiKey)
+                ->subscribe($this->builder->buildWebhook());
+            $this->logger->debug('Hooked to myparcel', [
+                'Hook id' => $subID
+            ]);
+        } catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
+            $this->logger->error('Error subscribing to webhook', ['error' => $e]);
+        }
+
     }
 }

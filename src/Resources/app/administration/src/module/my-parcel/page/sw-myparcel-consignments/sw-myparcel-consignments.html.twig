@@ -69,7 +69,11 @@
             </template>
 
             <template #column-shippingOption.deliveryType="{ item }">
-                {{ deliveryTypes[item.shippingOption.deliveryType] }}
+                {{ deliveryTypes[item.shippingOption.deliveryType]}}
+            </template>
+
+            <template #column-shipmentStatus="{ item }">
+                {{ shipmentStatuses(item.shipmentStatus) }}
             </template>
 
             <template #column-shippingOption.requiresAgeCheck="{ item }">

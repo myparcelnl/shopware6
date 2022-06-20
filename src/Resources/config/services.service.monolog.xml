@@ -29,7 +29,6 @@
 
         <!-- Handler Factory -->
         <service id="MyPa\Shopware\Service\Monolog\Factory\LoggerFactory">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <!-- Handlers -->
