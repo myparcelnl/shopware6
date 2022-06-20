@@ -52,14 +52,14 @@ class MyPaShopware extends Plugin
         $this->deleteCustomFields($uninstallContext);
     }
 
-    private function deleteCustomFields()
+    private function deleteCustomFields(UninstallContext $uninstallContext)
     {
         /** @var EntityRepositoryInterface $customFieldSetRepository */
         $customFieldSetRepository = $this->container->get('custom_field_set.repository');
 
         $entityIds = $customFieldSetRepository->search(
             (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
-            Context::createDefaultContext()
+            $uninstallContext->getContext()
         )->getEntities()->getIds();
 
         if (count($entityIds) < 1) {
@@ -72,7 +72,7 @@ class MyPaShopware extends Plugin
 
         $customFieldSetRepository->delete(
             $entityIds,
-            Context::createDefaultContext()
+            $uninstallContext->getContext()
         );
     }
 

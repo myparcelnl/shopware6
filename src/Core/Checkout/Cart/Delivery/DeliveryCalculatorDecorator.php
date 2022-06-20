@@ -172,7 +172,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             /** @var ShippingMethodPriceCollection $shippingPrices */
             $shippingPrices = $shippingMethod->getPrices()->filterByProperty('ruleId', $ruleId);
 
-            $costs = $this->getMatchingPriceOfRule($delivery, $context, $shippingPrices);
+            $costs = $this->getMatchingPriceOfRule($delivery, $context, $shippingPrices,$cart);
             if ($costs !== null) {
                 break;
             }
@@ -182,7 +182,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         if ($costs === null) {
             /** @var ShippingMethodPriceCollection $shippingPrices */
             $shippingPrices = $shippingMethod->getPrices()->filterByProperty('ruleId', null);
-            $costs = $this->getMatchingPriceOfRule($delivery, $context, $shippingPrices);
+            $costs = $this->getMatchingPriceOfRule($delivery, $context, $shippingPrices,$cart);
         }
 
         if (!$costs) {
@@ -276,7 +276,8 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private function getMatchingPriceOfRule(
         Delivery $delivery,
         SalesChannelContext $context,
-        ShippingMethodPriceCollection $shippingPrices
+        ShippingMethodPriceCollection $shippingPrices,
+        Cart $cart
     ): ?CalculatedPrice
     {
         $shippingPrices->sort(
@@ -302,7 +303,8 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             $costs = $this->calculateShippingCosts(
                 $price,
                 $delivery->getPositions()->getLineItems(),
-                $context
+                $context,
+                $cart
             );
 
             break;
