@@ -219,7 +219,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
         if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-            if ($shippingMethod && $cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
+            if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
                 $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
                 if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
                     /** @var stdClass $deliveryData */
