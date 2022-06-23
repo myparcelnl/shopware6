@@ -7,8 +7,9 @@ abstract class MyParcelCarriers
     const POSTNL = 'PostNL';
     const DHL = 'DHL';
     const INSTABOX = 'Instabox';
-    const BPOST = 'Bpost';
-    const DPD = 'Dpd';
+    const BPOST = 'BPost';
+    const DPD = 'DPD';
+
     const ALL_CARRIERS = [self::POSTNL,self::DHL,self::INSTABOX,self::BPOST,self::DPD];
     const NPM_CARRIER_TO_CONFIG_CARRIER = [
         'postnl' =>self::POSTNL,
@@ -21,7 +22,7 @@ abstract class MyParcelCarriers
         self::POSTNL=>'postnl',
         self::DHL=>'dhl',
         self::INSTABOX=>'instabox',
-        self::BPOST=>'bopost',
+        self::BPOST=>'bpost',
         self::DPD=>'dpd',
     ];
 }

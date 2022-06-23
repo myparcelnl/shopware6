@@ -171,6 +171,7 @@ class ConfigReader
     {
         $carriers = MyParcelCarriers::ALL_CARRIERS;
         $result = [];
+
         foreach ($carriers as $carrier) {
             if ($this->getConfigBool($salesChannelId, 'enabled', $carrier)) {
 
@@ -180,6 +181,7 @@ class ConfigReader
                 $result[$carrierNPMConfigName] = $this->generateConfig($salesChannelId, $shopwareConfigCarrierName);
             }
         }
+
         return $result;
     }
 

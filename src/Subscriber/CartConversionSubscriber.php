@@ -131,7 +131,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
                             $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = $value['only_recipient'];
                         }
                         if ($this->configReader->isSettingEnabled($event->getSalesChannelContext()->getSalesChannelId(), 'allowSignature', '') &&
-                            isset($value['only_recipient'])) {
+                            isset($value['signature'])) {
                             $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = $value['signature'];
                         }
                         break;
