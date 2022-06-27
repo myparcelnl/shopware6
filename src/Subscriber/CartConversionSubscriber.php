@@ -16,7 +16,6 @@ class CartConversionSubscriber implements EventSubscriberInterface
 {
     /**
      * ShippingOptionEntity::FIELD_DELIVERY_TYPE is not needed because it will always be read from the checkout settings
-     * ShippingOptionEntity::FIELD_PACKAGE_TYPE is not needed because it will always be read from the checkout settings
      * ShippingOptionEntity::FIELD_ONLY_RECIPIENT will only be read in defaults, not from checkout
      */
     private const SHIPPING_OPTIONS_WITH_DEFAULT = [
@@ -26,6 +25,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
         ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient",
         ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
         ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat",
+        ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType"
     ];
 
     private const CARRIER_TO_ID = [
@@ -190,6 +190,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
                     break;
                 case ShippingOptionEntity::FIELD_LARGE_FORMAT:
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = $this->configReader->getConfigBool($salesChannelId, $value);
+                    break;
+                case ShippingOptionEntity::FIELD_PACKAGE_TYPE:
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $this->configReader->getConfigInt($salesChannelId, $value);
                     break;
             }
         }
