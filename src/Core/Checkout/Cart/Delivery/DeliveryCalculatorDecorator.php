@@ -59,11 +59,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $taxDetector;
 
     /**
-     * @var ShippingMethodService
-     */
-    private $shippingMethodService;
-
-    /**
      * @var ShippingOptionsService
      */
     private $shippingOptionsService;
@@ -97,7 +92,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         QuantityPriceCalculator   $priceCalculator,
         PercentageTaxRuleBuilder  $percentageTaxRuleBuilder,
         TaxDetector               $taxDetector,
-        ShippingMethodService     $shippingMethodService,
         ShippingOptionsService    $shippingOptionsService,
         SystemConfigService       $configService,
         EntityRepositoryInterface $shippingMethodRepository,
@@ -107,7 +101,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $this->priceCalculator = $priceCalculator;
         $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
         $this->taxDetector = $taxDetector;
-        $this->shippingMethodService = $shippingMethodService;
         $this->shippingOptionsService = $shippingOptionsService;
         $this->configService = $configService;
         $this->shippingMethodRepository = $shippingMethodRepository;
