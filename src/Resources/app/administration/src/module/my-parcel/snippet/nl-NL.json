@@ -21,6 +21,7 @@
       "carriers": {
         "postNL": "PostNL",
         "bPost": "bpost",
+        "instabox": "Instabox",
         "dpd": "DPD"
       },
       "shipmentStatuses": {

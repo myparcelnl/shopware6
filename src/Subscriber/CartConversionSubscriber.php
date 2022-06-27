@@ -63,11 +63,11 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $orderService;
 
     /**
-     * @param LoggerInterface           $logger
-     * @param ConfigReader              $configReader
+     * @param LoggerInterface $logger
+     * @param ConfigReader $configReader
      * @param EntityRepositoryInterface $orderRepository
-     * @param ShippingOptionsService    $shippingOptionsService
-     * @param OrderService              $orderService
+     * @param ShippingOptionsService $shippingOptionsService
+     * @param OrderService $orderService
      */
     public function __construct(
         LoggerInterface           $logger,
@@ -207,6 +207,8 @@ class CartConversionSubscriber implements EventSubscriberInterface
                 return 1;
             case 'evening':
                 return 3;
+            case 'pickup':
+                return 4;
             default:
                 return 2;
         }
@@ -221,7 +223,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
         switch ($packageType) {
             case 'mailbox':
                 return 2;
-            case'letter':
+            case 'letter':
                 return 3;
             case 'digital_stamp':
                 return 4;
