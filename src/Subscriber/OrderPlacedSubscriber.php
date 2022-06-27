@@ -124,6 +124,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         //Get order custom fields with key
         if (!empty($order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY])) {
 
+            //Start the webhook subscriber for updates
+            $this->subscribeToWebhook($event->getSalesChannelId());
+
             $myparcelOptions = $order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY];
 
             // Add the order to the shipping options
