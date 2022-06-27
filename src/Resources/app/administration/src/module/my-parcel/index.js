@@ -1,12 +1,11 @@
 import './page/sw-myparcel-orders';
 import './page/sw-myparcel-consignments';
-import './page/sw-myparcel-shipping-methods';
 
 import nlNL from './snippet/nl-NL.json';
 import deDE from './snippet/de-DE.json';
 import enGB from './snippet/en-GB.json';
 
-const { Module } = Shopware;
+const {Module} = Shopware;
 
 Module.register('sw-myparcel', {
     type: 'plugin',
@@ -36,13 +35,6 @@ Module.register('sw-myparcel', {
                 parentPath: 'sw.myparcel.orders'
             }
         },
-        shippingMethods: {
-            component: 'sw-myparcel-shipping-methods',
-            path: 'shipping/methods',
-            meta: {
-                parentPath: 'sw.myparcel.orders'
-            }
-        }
     },
 
     navigation: [
@@ -60,12 +52,6 @@ Module.register('sw-myparcel', {
             path: 'sw.myparcel.consignments',
             parent: 'sw-order'
         },
-        {
-            id: 'sw-myparcel-shipping-methods',
-            label: 'sw-myparcel.general.shippingMethodsMenuItemGeneral',
-            color: '#0f5c47',
-            path: 'sw.myparcel.shippingMethods',
-            parent: 'sw-order'
-        }
+
     ]
 });

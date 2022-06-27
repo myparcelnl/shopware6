@@ -41,17 +41,9 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     protected $logger;
     /**
-     * @var RequestStack
-     */
-    private $requestStack;
-    /**
      * @var OrderService
      */
     private $orderService;
-    /**
-     * @var ShippingMethodService
-     */
-    private $shippingMethodService;
     /**
      * @var ShippingOptionsService
      */
@@ -75,9 +67,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     /**
      * Creates a new instance of the order placed subscriber.
      *
-     * @param RequestStack $requestStack
      * @param OrderService $orderService
-     * @param ShippingMethodService $shippingMethodService
      * @param ShippingOptionsService $shippingOptionService
      * @param SystemConfigService $configService
      * @param LoggerInterface $logger
@@ -85,9 +75,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      * @param WebhookBuilder $builder
      */
     public function __construct(
-        RequestStack                          $requestStack,
         OrderService                          $orderService,
-        ShippingMethodService                 $shippingMethodService,
         ShippingOptionsService                $shippingOptionService,
         SystemConfigService                   $configService,
         LoggerInterface                       $logger,
@@ -95,9 +83,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
         WebhookBuilder                        $builder
     )
     {
-        $this->requestStack = $requestStack;
         $this->orderService = $orderService;
-        $this->shippingMethodService = $shippingMethodService;
         $this->shippingOptionsService = $shippingOptionService;
         $this->configService = $configService;
         $this->logger = $logger;

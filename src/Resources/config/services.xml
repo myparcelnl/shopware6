@@ -5,15 +5,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="true"/>
-        <service id="MyPa\Shopware\Cart\Checkout\ShippingCostsCollector">
-            <argument type="service" id="Shopware\Administration\Service\AdminOrderCartService"/>
-            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
-
-            <!-- after product collector/processor -->
-            <tag name="shopware.cart.processor" priority="4500"/>
-            <tag name="shopware.cart.collector" priority="4500"/>
-        </service>
 
         <!-- Snippets -->
         <service class="MyPa\Shopware\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB"
@@ -46,15 +37,6 @@
             <argument type="service" id="kiener_my_parcel_shipment.repository"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService">
-            <argument type="service" id="logger"/>
-            <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
-            <argument type="service" id="delivery_time.repository"/>
-            <argument type="service" id="kiener_my_parcel_shipping_method.repository"/>
-            <argument type="service" id="rule_condition.repository"/>
-            <argument type="service" id="shipping_method.repository"/>
-        </service>
-
         <service id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService">
             <argument type="service" id="logger"/>
             <argument type="service" id="kiener_my_parcel_shipping_option.repository"/>
@@ -75,22 +57,9 @@
             <argument type="service" id="myparcel.logger"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService">
-            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
-            <argument type="service" id="delivery_time.repository"/>
-            <argument type="service" id="media.repository"/>
-            <argument type="service" id="rule.repository"/>
-            <argument type="service" id="shipping_method.repository"/>
-            <argument type="service" id="myparcel.logger"/>
-        </service>
-
         <!-- Entities -->
         <service id="MyPa\Shopware\Core\Content\Shipment\ShipmentDefinition">
             <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipment"/>
-        </service>
-
-        <service id="MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodDefinition">
-            <tag name="shopware.entity.definition" entity="kiener_my_parcel_shipping_method"/>
         </service>
 
         <service id="MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionDefinition">
@@ -105,9 +74,7 @@
         </service>
 
         <service id="MyPa\Shopware\Subscriber\OrderPlacedSubscriber">
-            <argument type="service" id="request_stack"/>
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="myparcel.logger"/>
@@ -156,15 +123,6 @@
             </call>
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
-        </service>
-
-        <service id="MyPa\Shopware\Storefront\Controller\DeliveryOptionsController">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <argument type="service" id="logger"/>
-            <argument type="service" id="MyPa\Shopware\Service\ShippingMethod\ShippingMethodService"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <service id="MyPa\Shopware\Service\Config\ConfigReader">
