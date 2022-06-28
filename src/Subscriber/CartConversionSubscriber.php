@@ -100,6 +100,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
      */
     public function cartConverted(CartConvertedEvent $event)
     {
+        if (empty($event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY))){
+            return;
+        }
         $myParcelData = $event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY)->getVars();
         $options = $this->setGeneralDefaults($event->getSalesChannelContext()->getSalesChannelId());
 

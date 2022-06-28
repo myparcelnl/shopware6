@@ -35,7 +35,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         // Init npm package here
         this._configure();
         this._addListeners();
-        
+
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
@@ -54,8 +54,9 @@ export default class DeliveryOptionsPlugin extends Plugin {
         const shippingMethod = DomAccess.querySelector(document, '.shipping-methods');
         // Options for the observer (which mutations to observe)
         const config = {attributes: true, childList: true, subtree: true, attributeOldValue: true};
-        // Callback function to execute when mutations are observed
-        const callback = function (mutationList, observer) {
+
+        // Create an observer instance linked to the callback function
+        const observer = new MutationObserver((mutationList, observer) => {
             // Use traditional 'for loops' for IE 11
             for (const mutation of mutationList) {
                 //Check for added nodes because we are going to search for myparcel-delivery-options
@@ -63,17 +64,30 @@ export default class DeliveryOptionsPlugin extends Plugin {
                     if ("classList" in addedNode) {
                         // If myparcel-delivery-options come by, it has been loaded
                         if (addedNode.classList.contains('myparcel-delivery-options')) {
-                            //Diable the button if delivery options was added
-                            const submitButton = DomAccess.querySelector(document, '#confirmFormSubmit');
-                            submitButton.disabled = false;
+                            //Check if NL or BE
+                            if (this.options.address.cc!=='NL'&&this.options.address.cc!=='BE') {
+                                const tomorrow = new Date();
+                                tomorrow.setUTCHours(0, 0, 0, 0);
+                                tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+
+                                const data = this._getRequestData();
+                                data['myparcel'] = JSON.stringify({
+                                    "date": tomorrow.toISOString(),
+                                    "carrier": "postnl",
+                                    "isPickup": false,
+                                    "deliveryType": "standard"
+                                });
+
+                                this._submitMyparcelData(data);
+                                //Disable the button if delivery options was added
+                                const submitButton = DomAccess.querySelector(document, '#confirmFormSubmit');
+                                submitButton.disabled = false;
+                            }
                         }
                     }
                 }
             }
-        };
-
-        // Create an observer instance linked to the callback function
-        const observer = new MutationObserver(callback);
+        });
 
         // Start observing the target node for configured mutations
         observer.observe(shippingMethod, config);
@@ -100,6 +114,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
         const data = this._getRequestData();
         data['myparcel'] = JSON.stringify(event.detail);
         this._disableButton(true);
+        this._submitMyparcelData(data);
+    }
+
+    _submitMyparcelData(data) {
         this._client.post(this.options.url, JSON.stringify(data), (content, request) => {
             // Retry on error?
             if (request.status === 200) {

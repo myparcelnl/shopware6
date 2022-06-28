@@ -55,9 +55,6 @@
             } %}
         </div>
     {% endblock %}
-    {% if context.shippingMethod.customFields.myparcel %}
-        <template data-delivery-options-plugin
-                  data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
-    {% endif %}
+
     {{ parent() }}
 {% endblock %}
