@@ -507,6 +507,11 @@
         <input-field type="bool">
             <name>enabledPostNL</name>
             <label>Activate PostNL</label>
+            <disabled>true</disabled>
+            <defaultValue>true</defaultValue>
+            <helpText>This setting can't be disabled</helpText>
+            <helpText lang="nl-NL">Deze instelling kan niet worden uitgeschakeld</helpText>
+            <helpText lang="de-DE">Diese Einstellung kann nicht deaktiviert werden</helpText>
         </input-field>
 
         <input-field type="bool">

@@ -43,6 +43,7 @@ class CartController extends AbstractController
     public function addDataToCart(RequestDataBag $data, SalesChannelContext $context)
     {
         $myParcelData = $data->get('myparcel');
+
         if (($myParcelData !== null)) {
             $this->cartService->addData([
                 'myparcel' => ['deliveryData' => json_decode($myParcelData)],
@@ -50,7 +51,6 @@ class CartController extends AbstractController
 
             $calculatedCard = $this->cartService->recalculate($context);
             $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCard]]);
-
 
             return $this->json($html, 200);
         } else {

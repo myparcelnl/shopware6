@@ -16,7 +16,6 @@ class CartConversionSubscriber implements EventSubscriberInterface
 {
     /**
      * ShippingOptionEntity::FIELD_DELIVERY_TYPE is not needed because it will always be read from the checkout settings
-     * ShippingOptionEntity::FIELD_PACKAGE_TYPE is not needed because it will always be read from the checkout settings
      * ShippingOptionEntity::FIELD_ONLY_RECIPIENT will only be read in defaults, not from checkout
      */
     private const SHIPPING_OPTIONS_WITH_DEFAULT = [
@@ -26,6 +25,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
         ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient",
         ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
         ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat",
+        ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType"
     ];
 
     private const CARRIER_TO_ID = [
@@ -63,11 +63,11 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $orderService;
 
     /**
-     * @param LoggerInterface           $logger
-     * @param ConfigReader              $configReader
+     * @param LoggerInterface $logger
+     * @param ConfigReader $configReader
      * @param EntityRepositoryInterface $orderRepository
-     * @param ShippingOptionsService    $shippingOptionsService
-     * @param OrderService              $orderService
+     * @param ShippingOptionsService $shippingOptionsService
+     * @param OrderService $orderService
      */
     public function __construct(
         LoggerInterface           $logger,
@@ -100,6 +100,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
      */
     public function cartConverted(CartConvertedEvent $event)
     {
+        if (empty($event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY))){
+            return;
+        }
         $myParcelData = $event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY)->getVars();
         $options = $this->setGeneralDefaults($event->getSalesChannelContext()->getSalesChannelId());
 
@@ -191,6 +194,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
                 case ShippingOptionEntity::FIELD_LARGE_FORMAT:
                     $options[ShippingOptionEntity::FIELD_LARGE_FORMAT] = $this->configReader->getConfigBool($salesChannelId, $value);
                     break;
+                case ShippingOptionEntity::FIELD_PACKAGE_TYPE:
+                    $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $this->configReader->getConfigInt($salesChannelId, $value);
+                    break;
             }
         }
         return $options;
@@ -207,6 +213,8 @@ class CartConversionSubscriber implements EventSubscriberInterface
                 return 1;
             case 'evening':
                 return 3;
+            case 'pickup':
+                return 4;
             default:
                 return 2;
         }
@@ -221,7 +229,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
         switch ($packageType) {
             case 'mailbox':
                 return 2;
-            case'letter':
+            case 'letter':
                 return 3;
             case 'digital_stamp':
                 return 4;

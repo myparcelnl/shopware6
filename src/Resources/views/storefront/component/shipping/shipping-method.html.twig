@@ -2,7 +2,10 @@
 
 {% block component_shipping_method_label %}
     {{ parent() }}
-
+    {% if context.shippingMethod.customFields.myparcel %}
+        <template data-delivery-options-plugin
+                  data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
+    {% endif %}
     {% if shipping.translated.customFields.myparcel and shipping.id is same as(context.shippingMethod.id) %}
         <div id="myparcel-delivery-options"></div>
     {% endif %}
