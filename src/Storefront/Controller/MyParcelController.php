@@ -3,10 +3,13 @@
  * @noinspection PhpUnused
  * @noinspection PhpUndefinedClassInspection
  */
+
 namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
+use MyPa\Shopware\Facade\MyParcelFacade;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,17 +34,22 @@ class MyParcelController extends StorefrontController
      */
     private $consignmentService;
 
+
     /**
      * MyParcelController constructor.
      *
      * @param ConsignmentService $consignmentService
      */
     public function __construct(
-        ConsignmentService $consignmentService
+        ConsignmentService $consignmentService,
+        MyParcelFacade     $myParcelFacade
     )
     {
         $this->consignmentService = $consignmentService;
+        $this->myParcelFacade = $myParcelFacade;
     }
+
+
 
     /**
      * @RouteScope(scopes={"api"})

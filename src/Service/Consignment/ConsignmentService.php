@@ -2,12 +2,16 @@
 
 namespace MyPa\Shopware\Service\Consignment;
 
+use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
+use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
+use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\InsuranceService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
+use MyPa\Shopware\Struct\DropOffPointStruct;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -19,6 +23,8 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 
 class ConsignmentService
 {
@@ -66,12 +72,12 @@ class ConsignmentService
      * @param $shopwareVersion
      */
     public function __construct(
-        OrderService $orderService,
+        OrderService           $orderService,
         ShippingOptionsService $shippingOptionsService,
-        ShipmentService $shipmentService,
-        SystemConfigService $systemConfigService,
-        InsuranceService $insuranceService,
-        $shopwareVersion
+        ShipmentService        $shipmentService,
+        SystemConfigService    $systemConfigService,
+        InsuranceService       $insuranceService,
+                               $shopwareVersion
     )
     {
         $this->orderService = $orderService;
@@ -117,15 +123,24 @@ class ConsignmentService
      * @throws MissingFieldException
      */
     private function createConsignment(
-        Context $context,
+        Context     $context,
         OrderEntity $orderEntity,
-        ?int $packageType
+        ?int        $packageType
     ): ?AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
             throw new RuntimeException('Could not get a customer');
         }
-
+//                //TODO: Check for instabox deliveries and add the nearest pickup point if it is one
+//                $options = $order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY];
+//                if (!empty($options[ShippingOptionEntity::FIELD_CARRIER_ID])
+//                    && $options[ShippingOptionEntity::FIELD_CARRIER_ID] == Defaults::CARRIER_TO_ID['instabox']) {
+//                    //Get the closest point
+//                    $dropOffPoints = (new DropOffPointWebService(new CarrierInstabox()))
+//                        ->setApiKey($this->apiKey)
+//                        ->getDropOffPoints($order->getDeliveries()->first()->getShippingOrderAddress()->getZipcode());
+//                    dd($dropOffPoints);
+//                }
         if (
             $orderEntity->getDeliveries() === null ||
             $orderEntity->getDeliveries()->first() === null ||
@@ -163,6 +178,17 @@ class ConsignmentService
             ->setPostalCode($shippingAddress->getZipcode())
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
+
+        if ($shippingOptions->getCarrierId()== Defaults::CARRIER_TO_ID['instabox']){
+            //Add drop off point if instabox
+            $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
+            if (!empty($dropOffJson)){
+                $dropOffStruct = new DropOffPointStruct();
+                $dropOffStruct->assign(json_decode($dropOffJson,true));
+                $consignment->setDropOffPoint($dropOffStruct->getDropOffPoint());
+            }
+            //TODO: error to go to config?
+        }
 
         if ($shippingOptions->getDeliveryDate() !== null) {
 
@@ -253,7 +279,7 @@ class ConsignmentService
             $consignment->setReturn($shippingOptions->getReturnIfNotHome());
         }
 
-        if($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP){
+        if ($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP) {
             $consignment->setPickupLocationCode(strval($shippingOptions->getLocationId()));
             $consignment->setPickupLocationName($shippingOptions->getLocationName());
             $consignment->setPickupStreet($shippingOptions->getLocationStreet());
@@ -271,7 +297,7 @@ class ConsignmentService
             $context
         );
 
-        if($insuranceAmount) {
+        if ($insuranceAmount) {
             $consignment->setInsurance($insuranceAmount);
         }
 
@@ -287,9 +313,9 @@ class ConsignmentService
      * @return ShipmentEntity|null
      */
     private function createShipment(
-        Context $context,
-        OrderEntity $orderEntity,
-        string $shippingOptionId,
+        Context             $context,
+        OrderEntity         $orderEntity,
+        string              $shippingOptionId,
         AbstractConsignment $consignment
     ): ?ShipmentEntity
     {
@@ -360,13 +386,14 @@ class ConsignmentService
      *
      * @return MyParcelCollection
      * @throws MissingFieldException
+     * @throws Exception
      */
     public function createConsignments( //NOSONAR
         Context $context,
-        array $ordersData,
-        ?array $labelPositions,
-        ?int $packageType,
-        ?int $numberOfLabels
+        array   $ordersData,
+        ?array  $labelPositions,
+        ?int    $packageType,
+        ?int    $numberOfLabels
     ): MyParcelCollection //NOSONAR
     {
         $consignments = (new MyParcelCollection());
@@ -400,6 +427,7 @@ class ConsignmentService
                 if (!$numberOfLabels || is_null($numberOfLabels)) {
                     $numberOfLabels = 1;
                 }
+
                 for ($i = 1; $i <= $numberOfLabels; $i++) {
                     $consignment = $this->createConsignment($context, $order, $packageType);
 

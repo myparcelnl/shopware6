@@ -28,14 +28,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
         ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType"
     ];
 
-    private const CARRIER_TO_ID = [
-        'postnl' => 1,
-        'bpost' => 2,
-        'cheapcargo' => 3,
-        'dpd' => 4,
-        'instabox' => 5,
-        'dhl' => 6,
-    ];
+
 
     /**
      * @var LoggerInterface
@@ -140,7 +133,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
                         break;
 
                     case 'carrier':
-                        $options[ShippingOptionEntity::FIELD_CARRIER_ID] = self::CARRIER_TO_ID[$value];
+                        $options[ShippingOptionEntity::FIELD_CARRIER_ID] = Defaults::CARRIER_TO_ID[$value];
                         break;
 
                     case 'pickupLocation':

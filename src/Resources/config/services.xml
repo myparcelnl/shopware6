@@ -91,8 +91,18 @@
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-
+        <!-- Facade -->
+        <service id="MyPa\Shopware\Facade\MyParcelFacade">
+            <argument type="service" id="logger"/>
+        </service>
         <!-- Controller -->
+        <service id="MyPa\Shopware\Controller\Api\DropOffController">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <argument type="service" id="MyPa\Shopware\Facade\MyParcelFacade"/>
+        </service>
+
         <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

@@ -154,6 +154,16 @@
       "buttons": {
         "viewShippingMethodButton": "Bekijk verzendmethode"
       }
+    },
+    "config": {
+      "instaboxSelector": {
+        "title": "select your box here {dashboardLink}",
+        "linkText": "dashboard",
+        "currentAddress": "Current address",
+        "newAddress": "Current address",
+        "settingNotSaved": "sw-myparcel.config.instaboxSelector.settingNotSaved",
+        "somethingWrongMessage": "sw-myparcel.config.instaboxSelector.somethingWrongMessage"
+      }
     }
   }
 }
