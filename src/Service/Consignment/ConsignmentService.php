@@ -4,7 +4,6 @@ namespace MyPa\Shopware\Service\Consignment;
 
 use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
-use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
@@ -19,12 +18,11 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use MyParcelNL\Sdk\src\Services\Web\DropOffPointWebService;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierInstabox;
 
 class ConsignmentService
 {
@@ -61,6 +59,9 @@ class ConsignmentService
 
     private $shopwareVersion;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     /**
      * ConsignmentService constructor.
      *
@@ -77,7 +78,8 @@ class ConsignmentService
         ShipmentService        $shipmentService,
         SystemConfigService    $systemConfigService,
         InsuranceService       $insuranceService,
-                               $shopwareVersion
+                               $shopwareVersion,
+        LoggerInterface        $logger
     )
     {
         $this->orderService = $orderService;
@@ -87,6 +89,7 @@ class ConsignmentService
         $this->apiKey = (string)$systemConfigService->get('MyPaShopware.config.myParcelApiKey');
         $this->insuranceService = $insuranceService;
         $this->shopwareVersion = $shopwareVersion;
+        $this->logger = $logger;
     }
 
     /**
@@ -131,16 +134,6 @@ class ConsignmentService
         if ($orderEntity->getOrderCustomer() === null) {
             throw new RuntimeException('Could not get a customer');
         }
-//                //TODO: Check for instabox deliveries and add the nearest pickup point if it is one
-//                $options = $order->getCustomFields()[Defaults::MYPARCEL_DELIVERY_OPTIONS_KEY];
-//                if (!empty($options[ShippingOptionEntity::FIELD_CARRIER_ID])
-//                    && $options[ShippingOptionEntity::FIELD_CARRIER_ID] == Defaults::CARRIER_TO_ID['instabox']) {
-//                    //Get the closest point
-//                    $dropOffPoints = (new DropOffPointWebService(new CarrierInstabox()))
-//                        ->setApiKey($this->apiKey)
-//                        ->getDropOffPoints($order->getDeliveries()->first()->getShippingOrderAddress()->getZipcode());
-//                    dd($dropOffPoints);
-//                }
         if (
             $orderEntity->getDeliveries() === null ||
             $orderEntity->getDeliveries()->first() === null ||
@@ -179,15 +172,19 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
-        if ($shippingOptions->getCarrierId()== Defaults::CARRIER_TO_ID['instabox']){
+        if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
             //Add drop off point if instabox
             $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
-            if (!empty($dropOffJson)){
+            if (!empty($dropOffJson)) {
                 $dropOffStruct = new DropOffPointStruct();
-                $dropOffStruct->assign(json_decode($dropOffJson,true));
+                $dropOffStruct->assign(json_decode($dropOffJson, true));
                 $consignment->setDropOffPoint($dropOffStruct->getDropOffPoint());
             }
-            //TODO: error to go to config?
+            $this->logger->error('Instabox drop off location not set while trying to make an instabox consignment',
+                [
+                    'order' => $orderEntity,
+                    'shippingOptions' => $shippingOptions
+                ]);
         }
 
         if ($shippingOptions->getDeliveryDate() !== null) {

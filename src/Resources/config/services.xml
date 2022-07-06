@@ -25,6 +25,7 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="MyPa\Shopware\Service\Shipment\InsuranceService"/>
             <argument>%kernel.shopware_version%</argument>
+            <argument type="service" id="myparcel.logger"/>
         </service>
 
         <service id="MyPa\Shopware\Service\Order\OrderService">
