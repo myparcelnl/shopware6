@@ -14,40 +14,42 @@
             {{ $tc('sw-myparcel.config.instaboxSelector.settingNotSaved') }}
         </sw-alert>
     </sw-container>
-    <sw-container class="myparcel-address-container" gap="16px" v-if="!hasNewDropOffPoint" columns="1fr 1fr">
-        <div v-if="loadedDropOffPoint">
-            <div>{{ loadedDropOffPoint.locationName }} </div>
-            <div>{{ loadedDropOffPoint.street }} {{ loadedDropOffPoint.number }}{{ loadedDropOffPoint.numberSuffix }}</div>
-            <div>{{ loadedDropOffPoint.postalCode }} {{ loadedDropOffPoint.city }}</div>
-        </div>
-    </sw-container>
-    <sw-container columns="1fr 1fr" gap="16px" v-else>
-        <sw-radio-panel name="myparcel_instabox_address" class="myparcel-address-sw-radio-panel"
-                        :value="loadedDropOffPoint.locationCode"
-                        :modelValue="selectedDropOffPoint.locationCode"
-                        @input="dropOffLocationSelected"
-                        checked>
-            <template>
-                <div>
-                    <div>{{ $tc('sw-myparcel.config.instaboxSelector.currentAddress') }}</div>
-                    <div>{{ loadedDropOffPoint.locationName }} </div>
-                    <div>{{ loadedDropOffPoint.street }} {{ loadedDropOffPoint.number }}{{ loadedDropOffPoint.numberSuffix }}</div>
-                    <div>{{ loadedDropOffPoint.postalCode }} {{ loadedDropOffPoint.city }}</div>
-                </div>
-            </template>
-        </sw-radio-panel>
-        <sw-radio-panel name="myparcel_instabox_address" class="myparcel-address-sw-radio-panel"
-                        @input="dropOffLocationSelected"
-                        :value="newDropOffPoint.locationCode"
-                        :modelValue="selectedDropOffPoint.locationCode">
-            <template>
-                <div>
-                    <div>{{ $tc('sw-myparcel.config.instaboxSelector.newAddress') }}</div>
-                    <div>{{ newDropOffPoint.locationName }} </div>
-                    <div>{{ newDropOffPoint.street }} {{ newDropOffPoint.number }}{{ newDropOffPoint.numberSuffix }}</div>
-                    <div>{{ newDropOffPoint.postalCode }} {{ newDropOffPoint.city }}</div>
-                </div>
-            </template>
-        </sw-radio-panel>
-    </sw-container>
+    <template v-if="showAddressBar">
+        <sw-container class="myparcel-address-container" gap="16px" v-if="!hasNewDropOffPoint" columns="1fr 1fr">
+            <div v-if="loadedDropOffPoint">
+                <div>{{ loadedDropOffPoint.locationName }} </div>
+                <div>{{ loadedDropOffPoint.street }} {{ loadedDropOffPoint.number }}{{ loadedDropOffPoint.numberSuffix }}</div>
+                <div>{{ loadedDropOffPoint.postalCode }} {{ loadedDropOffPoint.city }}</div>
+            </div>
+        </sw-container>
+        <sw-container columns="1fr 1fr" gap="16px" v-else>
+            <sw-radio-panel name="myparcel_instabox_address" class="myparcel-address-sw-radio-panel"
+                            :value="loadedDropOffPoint.locationCode"
+                            :modelValue="selectedDropOffPoint.locationCode"
+                            @input="dropOffLocationSelected"
+                            checked>
+                <template>
+                    <div>
+                        <div>{{ $tc('sw-myparcel.config.instaboxSelector.currentAddress') }}</div>
+                        <div>{{ loadedDropOffPoint.locationName }} </div>
+                        <div>{{ loadedDropOffPoint.street }} {{ loadedDropOffPoint.number }}{{ loadedDropOffPoint.numberSuffix }}</div>
+                        <div>{{ loadedDropOffPoint.postalCode }} {{ loadedDropOffPoint.city }}</div>
+                    </div>
+                </template>
+            </sw-radio-panel>
+            <sw-radio-panel name="myparcel_instabox_address" class="myparcel-address-sw-radio-panel"
+                            @input="dropOffLocationSelected"
+                            :value="newDropOffPoint.locationCode"
+                            :modelValue="selectedDropOffPoint.locationCode">
+                <template>
+                    <div>
+                        <div>{{ $tc('sw-myparcel.config.instaboxSelector.newAddress') }}</div>
+                        <div>{{ newDropOffPoint.locationName }} </div>
+                        <div>{{ newDropOffPoint.street }} {{ newDropOffPoint.number }}{{ newDropOffPoint.numberSuffix }}</div>
+                        <div>{{ newDropOffPoint.postalCode }} {{ newDropOffPoint.city }}</div>
+                    </div>
+                </template>
+            </sw-radio-panel>
+        </sw-container>
+    </template>
 </sw-container>

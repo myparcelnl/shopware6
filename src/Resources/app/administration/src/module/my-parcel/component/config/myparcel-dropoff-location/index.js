@@ -4,7 +4,6 @@ import './myparcel-dropoff-location.scss';
 const {Component, Mixin} = Shopware;
 
 
-
 Component.register('myparcel-dropoff-location', {
     template,
 
@@ -22,12 +21,16 @@ Component.register('myparcel-dropoff-location', {
             loadedDropOffPoint: null,
             newDropOffPoint: null,
             hasBeenSaved: true,
+            hasShownDropOffError: false,
+            showAddressBar: false
         }
     },
     mounted() {
         this.check();
-        window.addEventListener('focus', ()=>{this.check()});
-        if (this.value){
+        window.addEventListener('focus', () => {
+            this.check()
+        });
+        if (this.value) {
             this.loadedDropOffPoint = JSON.parse(this.value);
         }
     },
@@ -61,25 +64,47 @@ Component.register('myparcel-dropoff-location', {
 
     methods: {
         check() {
-            this.isLoading = true;
-            this.myParcelDropOffService.getDropOffLocation({apiKey: this.pluginConfig['MyPaShopware.config.myParcelApiKey']}).then((res) => {
-                this._parseResult(res);
-                this.isLoading = false;
-            });
-        },
-        _parseResult(result) {
-            //Check if error
-            if (result['errorMessage']) {
-                this.createNotificationSuccess({
-                    title: this.$tc('global.default.warning'),
-                    message: this.$tc('sw-myparcel.config.instaboxSelector.somethingWrongMessage')
-                });
+            //Is there any api key set?
+            if (!this.pluginConfig['MyPaShopware.config.myParcelApiKey']) {
                 return;
             }
+            //Is instabox set and enabled?
+            if (!this.pluginConfig['MyPaShopware.config.enabledInstabox']) {
+                return;
+            }
+
+            this.isLoading = true;
+            this.myParcelDropOffService.getDropOffLocation({apiKey: this.pluginConfig['MyPaShopware.config.myParcelApiKey']})
+                .then((result) => {
+                    this.showAddressBar = true;
+                    this._parseResult(result);
+                    this.isLoading = false;
+                })
+                .catch((result) => {
+                    this.isLoading = false;
+                    //Check if error
+                    if (result['errorMessage']) {
+                        if (result['errorMessage'] === 'error') {
+                            this.createNotificationWarning({
+                                title: this.$tc('global.default.warning'),
+                                message: this.$tc('sw-myparcel.config.instaboxSelector.somethingWrongMessage')
+                            });
+                        }
+                        if (result['errorMessage'] === 'dropOff' && !this.hasShownDropOffError) {
+                            this.createNotificationWarning({
+                                title: this.$tc('global.default.warning'),
+                                message: this.$tc('sw-myparcel.config.instaboxSelector.dropOffWrongMessage')
+                            });
+                            this.hasShownDropOffError = true;
+                        }
+                    }
+                });
+        },
+        _parseResult(result) {
             this.newDropOffPoint = result;
             //If there was no previous point make this the selected one
             if (this.loadedDropOffPoint == null) {
-                this.loadedDropOffPoint=result;
+                this.loadedDropOffPoint = result;
                 this._saveDropOffLocation(result);
                 this.hasBeenSaved = false;
             }

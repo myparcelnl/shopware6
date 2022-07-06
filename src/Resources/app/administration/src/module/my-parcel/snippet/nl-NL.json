@@ -157,12 +157,13 @@
     },
     "config": {
       "instaboxSelector": {
-        "title": "select your box here {dashboardLink}",
-        "linkText": "dashboard",
-        "currentAddress": "Current address",
-        "newAddress": "Current address",
-        "settingNotSaved": "sw-myparcel.config.instaboxSelector.settingNotSaved",
-        "somethingWrongMessage": "sw-myparcel.config.instaboxSelector.somethingWrongMessage"
+        "title": "Selecteer of wijzig uw afgiftepunt op uw {dashboardLink}",
+        "linkText": "MyParcel dashboard",
+        "currentAddress": "Gebruik het huidige adres:",
+        "newAddress": "Gebruik nieuw adres:",
+        "settingNotSaved": "Deze instelling is nog niet opgeslagen",
+        "somethingWrongMessage": "Er is iets misgegaan, laad de pagina opnieuw en probeer het opnieuw",
+        "dropOffWrongMessage": "Er is geen afgiftepunt gevonden, selecteer er een op uw MyParcel-dashboard"
       }
     }
   }

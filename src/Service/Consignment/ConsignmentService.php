@@ -18,6 +18,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -197,6 +198,8 @@ class ConsignmentService
 
             $consignment->setDeliveryDate($shippingDate);
         }
+
+        //TODO: use addItem to add al order items to the shipment for international shipping
 
         if (
             $shippingOptions->getDeliveryDate() !== null

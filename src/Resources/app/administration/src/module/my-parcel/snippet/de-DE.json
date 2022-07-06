@@ -156,12 +156,13 @@
     },
     "config": {
       "instaboxSelector": {
-        "title": "select your box here {dashboardLink}",
-        "linkText": "dashboard",
-        "currentAddress": "Current address",
-        "newAddress": "Current address",
-        "settingNotSaved": "sw-myparcel.config.instaboxSelector.settingNotSaved",
-        "somethingWrongMessage": "sw-myparcel.config.instaboxSelector.somethingWrongMessage"
+        "title": "Wählen oder ändern Sie Ihren Absetzpunkt auf Ihrem {dashboardLink}",
+        "linkText": "MyParcel-Dashboard",
+        "currentAddress": "Aktuelle Adresse verwenden:",
+        "newAddress": "Neue Adresse verwenden:",
+        "settingNotSaved": "Diese Einstellung wurde noch nicht gespeichert",
+        "somethingWrongMessage": "Etwas ist schief gelaufen, bitte laden Sie die Seite neu und versuchen Sie es erneut",
+        "dropOffWrongMessage": "Es wurde kein Übergabepunkt gefunden, wählen Sie einen auf Ihrem MyParcel-Dashboard"
       }
     }
   }

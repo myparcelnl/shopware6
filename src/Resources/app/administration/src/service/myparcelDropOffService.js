@@ -18,7 +18,8 @@ class MyparcelDropOffService extends ApiService {
             )
             .then((response) => {
                 return ApiService.handleResponse(response);
-            });
+            })
+            .catch(error => Promise.reject(ApiService.handleResponse(error.response)))
     }
 }
 

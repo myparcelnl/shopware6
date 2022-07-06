@@ -7,6 +7,7 @@ use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
 use MyParcelNL\Sdk\src\Exception\ApiException;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Model\Account\CarrierOptions;
+use MyParcelNL\Sdk\src\Model\Account\Shop;
 use MyParcelNL\Sdk\src\Services\Web\AccountWebService;
 use MyParcelNL\Sdk\src\Services\Web\CarrierConfigurationWebService;
 use MyParcelNL\Sdk\src\Services\Web\CarrierOptionsWebService;
@@ -37,22 +38,29 @@ class MyParcelFacade
 
         try {
             $account = $this->accountWebService->getAccount();
+            /** @var Shop $shop */
             $shop = $account->getShops()->first();
+
             $carrierOptions = $this->carrierOptionsService->getCarrierOptions($shop->getId());
             /** @var CarrierOptions $myParcelCarrier */
             $myParcelCarrier = $carrierOptions->filter(function (CarrierOptions $options) {
                 return $options->getCarrier()->getName() == 'instabox';
             })->first();
-            $dropOffPoint = $this->carrierConfigurationWebService->getCarrierConfiguration(
+            $carrierConfiguration = $this->carrierConfigurationWebService->getCarrierConfiguration(
                 $shop->getId(),
                 $myParcelCarrier->getCarrier()->getId(),
-                true)->getDefaultDropOffPoint();
+                true);
+            if ($carrierConfiguration == null) {
+                $this->logger->warning('No carrier config for ', ['Shop' => $shop]);
+                return new JsonResponse(['errorMessage' => 'dropOff'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            $dropOffPoint = $carrierConfiguration->getDefaultDropOffPoint();
             $dropOffPointStruct = new DropOffPointStruct();
             $dropOffPointStruct->setWithDropOffPoint($dropOffPoint);
             return new JsonResponse($dropOffPointStruct->jsonSerialize());
         } catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
             $this->logger->error('Error retrieving drop off location', ['Error' => $e]);
-            return new JsonResponse(['errorMessage' => 'Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['errorMessage' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

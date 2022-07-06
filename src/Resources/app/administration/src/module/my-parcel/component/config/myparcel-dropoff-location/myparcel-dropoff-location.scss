@@ -1,3 +1,11 @@
+@import "~scss/variables";
+
+.myparcel-dropoff-location{
+    border:1px solid #d1d9e0;
+    border-radius: 4px;
+    padding: 16px 24px;
+    font-size: $font-size-small;
+}
 .myparcel-address-container{
     border:1px solid #c2ccd6;
     border-radius: 4px;

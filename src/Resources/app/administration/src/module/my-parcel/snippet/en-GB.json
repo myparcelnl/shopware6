@@ -156,12 +156,13 @@
     },
     "config": {
       "instaboxSelector": {
-        "title": "Select your drop off point on your {dashboardLink}",
+        "title": "Select or change your drop off point on your {dashboardLink}",
         "linkText": "MyParcel dashboard",
         "currentAddress": "Use current address:",
         "newAddress": "Use new address:",
         "settingNotSaved": "This setting has not been saved yet",
-        "somethingWrongMessage": "Something went wrong, please reload the page and try again"
+        "somethingWrongMessage": "Something went wrong, please reload the page and try again",
+        "dropOffWrongMessage": "No drop off point has been found, select one on your MyParcel dashboard"
       }
     }
   }
