@@ -195,11 +195,10 @@ class ConsignmentService
             if (strtotime($shippingDate) <= strtotime("today")) {
                 $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
             }
-
             $consignment->setDeliveryDate($shippingDate);
         }
 
-        //TODO: use addItem to add al order items to the shipment for international shipping
+        //TODO: use addItem to add al order items to the shipment for international shipping.
 
         if (
             $shippingOptions->getDeliveryDate() !== null
