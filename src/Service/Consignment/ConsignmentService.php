@@ -18,7 +18,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
-use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -199,7 +198,12 @@ class ConsignmentService
         }
 
         //TODO: use addItem to add al order items to the shipment for international shipping.
-
+        //Add weight of all items for international shipping
+        foreach ($orderEntity->getLineItems() as $lineItem) {
+            dump($lineItem);
+//            $consignment->addItem()
+        }
+        dd('dead');
         if (
             $shippingOptions->getDeliveryDate() !== null
             && $shippingOptions->getDeliveryType() !== null
