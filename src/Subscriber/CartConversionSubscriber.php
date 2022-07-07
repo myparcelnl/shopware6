@@ -4,7 +4,7 @@ namespace MyPa\Shopware\Subscriber;
 
 use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Psr\Log\LoggerInterface;
@@ -36,7 +36,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     protected $logger;
 
     /**
-     * @var ConfigReader
+     * @var ConfigGenerator
      */
     private $configReader;
 
@@ -57,14 +57,14 @@ class CartConversionSubscriber implements EventSubscriberInterface
 
     /**
      * @param LoggerInterface $logger
-     * @param ConfigReader $configReader
+     * @param ConfigGenerator $configReader
      * @param EntityRepositoryInterface $orderRepository
      * @param ShippingOptionsService $shippingOptionsService
      * @param OrderService $orderService
      */
     public function __construct(
         LoggerInterface           $logger,
-        ConfigReader              $configReader,
+        ConfigGenerator           $configReader,
         EntityRepositoryInterface $orderRepository,
         ShippingOptionsService    $shippingOptionsService,
         OrderService              $orderService

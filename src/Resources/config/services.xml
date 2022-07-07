@@ -70,7 +70,7 @@
         <!-- Event Subscribers -->
         <service id="MyPa\Shopware\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -86,7 +86,7 @@
 
         <service id="MyPa\Shopware\Subscriber\CartConversionSubscriber">
             <argument type="service" id="myparcel.logger"/>
-            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
             <argument type="service" id="order.repository"/>
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
@@ -136,7 +136,7 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
         </service>
 
-        <service id="MyPa\Shopware\Service\Config\ConfigReader">
+        <service id="MyPa\Shopware\Service\Config\ConfigGenerator">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
         <service id="MyPa\Shopware\Service\Shopware\CartService">
@@ -145,7 +145,7 @@
         <service id="MyPa\Shopware\Storefront\Controller\CartController">
             <argument type="service" id="MyPa\Shopware\Service\Shopware\CartService"/>
             <argument type="service" id="myparcel.logger"/>
-            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
