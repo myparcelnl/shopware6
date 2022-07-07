@@ -2,7 +2,7 @@
 
 namespace MyPa\Shopware\Storefront\Controller;
 
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Shopware\CartService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -18,14 +18,14 @@ class CartController extends AbstractController
 {
     protected CartService $cartService;
     protected LoggerInterface $logger;
-    protected ConfigReader $configReader;
+    protected ConfigGenerator $configReader;
 
     /**
      * @param CartService $cartService
      * @param LoggerInterface $logger
-     * @param ConfigReader $configReader
+     * @param ConfigGenerator $configReader
      */
-    public function __construct(CartService $cartService, LoggerInterface $logger, ConfigReader $configReader)
+    public function __construct(CartService $cartService, LoggerInterface $logger, ConfigGenerator $configReader)
     {
         $this->cartService = $cartService;
         $this->logger = $logger;

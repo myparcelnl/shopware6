@@ -2,7 +2,7 @@
 
 namespace MyPa\Shopware\Subscriber;
 
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -16,18 +16,18 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     private $configService;
 
     /**
-     * @var ConfigReader
+     * @var ConfigGenerator
      */
-    private $configReader;
+    private $configGenerator;
 
     /**
      * @param SystemConfigService $configService
-     * @param ConfigReader $configReader
+     * @param ConfigGenerator $configGenerator
      */
-    public function __construct(SystemConfigService $configService, ConfigReader $configReader)
+    public function __construct(SystemConfigService $configService, ConfigGenerator $configGenerator)
     {
         $this->configService = $configService;
-        $this->configReader = $configReader;
+        $this->configGenerator = $configGenerator;
     }
 
 
@@ -55,7 +55,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
         //Add config data
         $event->getPage()->addArrayExtension('myparcel',
             [
-                'config'=>$this->configReader->getConfigForPackage($event->getSalesChannelContext()->getSalesChannelId())
+                'config'=>$this->configGenerator->generateConfigForPackage($event->getSalesChannelContext(),$event->getRequest()->getLocale())
             ]);
     }
 }

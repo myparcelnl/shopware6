@@ -199,8 +199,6 @@ class ConsignmentService
             $consignment->setDeliveryDate($shippingDate);
         }
 
-        //TODO: use addItem to add al order items to the shipment for international shipping
-
         if (
             $shippingOptions->getDeliveryDate() !== null
             && $shippingOptions->getDeliveryType() !== null

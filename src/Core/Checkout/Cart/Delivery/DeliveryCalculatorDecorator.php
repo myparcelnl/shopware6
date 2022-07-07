@@ -3,7 +3,7 @@
 namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
 use MyPa\Shopware\Defaults as MyParcelDefaults;
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Cart;
@@ -74,9 +74,9 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $shippingMethodRepository;
 
     /**
-     * @var ConfigReader
+     * @var ConfigGenerator
      */
-    private $configReader;
+    private $configGenerator;
 
     /**
      * @param QuantityPriceCalculator   $priceCalculator
@@ -86,7 +86,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
      * @param ShippingOptionsService    $shippingOptionsService
      * @param SystemConfigService       $configService
      * @param EntityRepositoryInterface $shippingMethodRepository
-     * @param ConfigReader              $configReader
+     * @param ConfigGenerator              $configGenerator
      */
     public function __construct(
         QuantityPriceCalculator   $priceCalculator,
@@ -95,7 +95,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         ShippingOptionsService    $shippingOptionsService,
         SystemConfigService       $configService,
         EntityRepositoryInterface $shippingMethodRepository,
-        ConfigReader              $configReader
+        ConfigGenerator $configGenerator
     )
     {
         $this->priceCalculator = $priceCalculator;
@@ -104,7 +104,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $this->shippingOptionsService = $shippingOptionsService;
         $this->configService = $configService;
         $this->shippingMethodRepository = $shippingMethodRepository;
-        $this->configReader = $configReader;
+        $this->configGenerator = $configGenerator;
     }
 
 
@@ -218,7 +218,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                     /** @var stdClass $deliveryData */
                     $deliveryData = $myParcelData['myparcel']['deliveryData'];
                     $deliveryData = json_decode(json_encode($deliveryData), true);
-                    $raise = $this->configReader->getCostForCarrierWithOptions(
+                    $raise = $this->configGenerator->getCostForCarrierWithOptions(
                         $deliveryData,
                         $context->getSalesChannelId()
                     );
