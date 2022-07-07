@@ -20,7 +20,7 @@
       },
       "carriers": {
         "postNL": "PostNL",
-        "bPost": "bpost",
+        "bpost": "bpost",
         "instabox": "Instabox",
         "dpd": "DPD"
       },

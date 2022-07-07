@@ -73,7 +73,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
                                 }else{
                                     carrier = "bpost";
                                 }
-                                
+
                                 const tomorrow = new Date();
                                 tomorrow.setUTCHours(0, 0, 0, 0);
                                 tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
