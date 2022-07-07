@@ -66,6 +66,14 @@ export default class DeliveryOptionsPlugin extends Plugin {
                         if (addedNode.classList.contains('myparcel-delivery-options')) {
                             //Check if NL or BE
                             if (this.options.address.cc!=='NL'&&this.options.address.cc!=='BE') {
+                                //Choose a standard shipping method based on the sender country
+                                let carrier = "";
+                                if (this.options.config.platform==="myparcel"){
+                                    carrier= "postnl";
+                                }else{
+                                    carrier = "bpost";
+                                }
+                                
                                 const tomorrow = new Date();
                                 tomorrow.setUTCHours(0, 0, 0, 0);
                                 tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
@@ -73,7 +81,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
                                 const data = this._getRequestData();
                                 data['myparcel'] = JSON.stringify({
                                     "date": tomorrow.toISOString(),
-                                    "carrier": "postnl",
+                                    "carrier": carrier,
                                     "isPickup": false,
                                     "deliveryType": "standard"
                                 });
@@ -120,7 +128,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     _submitMyparcelData(data) {
         this._client.post(this.options.url, JSON.stringify(data), (content, request) => {
             // Retry on error?
-            if (request.status === 200) {
+            if (request.status < 400) {
                 this._showWarningAlert("");
                 this._disableButton(false);
                 this._procesShippingCostsPage(JSON.parse(content));

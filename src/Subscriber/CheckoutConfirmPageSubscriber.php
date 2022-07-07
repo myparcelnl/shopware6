@@ -55,7 +55,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
         //Add config data
         $event->getPage()->addArrayExtension('myparcel',
             [
-                'config'=>$this->configGenerator->generateConfigForPackage($event->getSalesChannelContext(),$event->getRequest()->getLocale())
+                'config' => $this->configGenerator->generateConfigForPackage(
+                    $event->getSalesChannelContext(),
+                    $event->getRequest()->getLocale()
+                )
             ]);
     }
 }
