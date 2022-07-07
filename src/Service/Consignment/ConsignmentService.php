@@ -18,7 +18,9 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
+use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use Psr\Log\LoggerInterface;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -124,6 +126,7 @@ class ConsignmentService
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
+     * @throws Exception
      */
     private function createConsignment(
         Context     $context,
@@ -172,6 +175,12 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+        //TODO: get latest invoice document else use ordernumber
+        if (false){
+
+        }else{
+            $consignment->setInvoice($orderEntity->getOrderNumber());
+        }
         if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
             //Add drop off point if instabox
             $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
@@ -197,13 +206,30 @@ class ConsignmentService
             $consignment->setDeliveryDate($shippingDate);
         }
 
-        //TODO: use addItem to add al order items to the shipment for international shipping.
         //Add weight of all items for international shipping
+        /** @var OrderLineItemEntity $lineItem */
         foreach ($orderEntity->getLineItems() as $lineItem) {
-            dump($lineItem);
-//            $consignment->addItem()
+
+            $customsItem = new MyParcelCustomsItem();
+            if ($lineItem->getProduct()->getWeight()) {
+                $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
+            } else {
+                $customsItem->setWeight(0.01);
+            }
+            $customsItem->setAmount($lineItem->getQuantity());
+            $customsItem->setDescription($lineItem->getLabel());
+            $customsItem->setItemValue($lineItem->getUnitPrice());
+            if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
+                $customsItem->setCountry('NL');
+            } else {
+                $customsItem->setCountry('BE');
+            }
+            //TODO: get and set classifications in config and products
+            $customsItem->setClassification(0001);
+
+            $consignment->addItem($customsItem);
         }
-        dd('dead');
+
         if (
             $shippingOptions->getDeliveryDate() !== null
             && $shippingOptions->getDeliveryType() !== null
