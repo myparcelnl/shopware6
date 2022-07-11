@@ -19,7 +19,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class ShipmentDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'kiener_my_parcel_shipment';
+    public const ENTITY_NAME = 'myparcel_shipment';
 
     public function getEntityName(): string
     {
