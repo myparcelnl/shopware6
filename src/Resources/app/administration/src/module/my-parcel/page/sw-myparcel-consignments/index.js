@@ -137,7 +137,7 @@ Component.register('sw-myparcel-consignments', {
         },
 
         consignmentRepository() {
-            return this.repositoryFactory.create('kiener_my_parcel_shipment');
+            return this.repositoryFactory.create('myparcel_shipment');
         },
 
         consignmentCriteria() {

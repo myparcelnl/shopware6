@@ -125,7 +125,7 @@ Component.register('sw-myparcel-orders', {
         },
 
         shippingOptionRepository() {
-            return this.repositoryFactory.create('kiener_my_parcel_shipping_option');
+            return this.repositoryFactory.create('myparcel_shipping_option');
         },
 
         shippingOptionCriteria() {

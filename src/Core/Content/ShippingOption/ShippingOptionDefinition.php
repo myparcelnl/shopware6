@@ -22,7 +22,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class ShippingOptionDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'kiener_my_parcel_shipping_option';
+    public const ENTITY_NAME = 'myparcel_shipping_option';
 
     /**
      * @return string

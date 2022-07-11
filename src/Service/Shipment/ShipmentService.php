@@ -114,8 +114,8 @@ class ShipmentService
     public function getShipments(Context $context): array
     {
         $criteria = new Criteria();
-        $criteria->addAssociation('kiener_my_parcel_shipment.shipping_option');
-        $criteria->addAssociation('kiener_my_parcel_shipment.order');
+        $criteria->addAssociation('shipping_option');
+        $criteria->addAssociation('order');
 
         return $this->shipmentRepository->search($criteria, $context)->getElements();
     }
