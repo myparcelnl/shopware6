@@ -1,8 +1,0 @@
-{% sw_extends '@Storefront/storefront/base.html.twig' %}
-
-{% block base_script_router %}
-    {{ parent() }}
-    <script>
-        window.router['myparcel.delivery_options'] = '{{ path('myparcel.delivery_options') }}';
-    </script>
-{% endblock %}

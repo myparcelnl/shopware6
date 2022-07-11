@@ -1,6 +1,7 @@
 import './init/api-service.init';
 import './module/my-parcel';
 import './service/myparcelApiTestService';
+import './service/myparcelDropOffService'
 import './component/myparcel-api-test-button';
 
 import localeDE from './snippet/de_DE.json';

@@ -20,7 +20,8 @@
       },
       "carriers": {
         "postNL": "PostNL",
-        "bPost": "bpost",
+        "bpost": "bpost",
+        "instabox": "Instabox",
         "dpd": "DPD"
       },
       "shipmentStatuses": {
@@ -152,6 +153,17 @@
       "title": "Verzendmethoden",
       "buttons": {
         "viewShippingMethodButton": "Bekijk verzendmethode"
+      }
+    },
+    "config": {
+      "instaboxSelector": {
+        "title": "Selecteer of wijzig uw afgiftepunt op uw {dashboardLink}",
+        "linkText": "MyParcel dashboard",
+        "currentAddress": "Gebruik het huidige adres:",
+        "newAddress": "Gebruik nieuw adres:",
+        "settingNotSaved": "Deze instelling is nog niet opgeslagen",
+        "somethingWrongMessage": "Er is iets misgegaan, laad de pagina opnieuw en probeer het opnieuw",
+        "dropOffWrongMessage": "Er is geen afgiftepunt gevonden, selecteer er een op uw MyParcel-dashboard"
       }
     }
   }

@@ -1,14 +1,43 @@
 {
-    "myparcel": {
-        "delivery_type_1": "Morgenlieferung",
-        "delivery_type_2": "Standardlieferung",
-        "delivery_type_3": "Abendlieferung",
-        "delivery_signature": "Unterschrift für den Empfang",
-        "delivery_recipient": "Nicht an Nachbarn liefern"
-    },
-    "cookie": {
-        "myparcel": {
-            "Name": "MeinParzelle"
-        }
+  "myparcel": {
+    "delivery_type_1": "Morgenlieferung",
+    "delivery_type_2": "Standardlieferung",
+    "delivery_type_3": "Abendlieferung",
+    "delivery_signature": "Unterschrift für den Empfang",
+    "delivery_recipient": "Nicht an Nachbarn liefern",
+    "shipping_selector": {
+      "addressNotFound": "Adresse nicht gefunden",
+      "cc": "Ländercode",
+      "city": "Stadt",
+      "closed": "Geschlossen",
+      "deliveryEveningTitle": "",
+      "deliveryMorningTitle": "",
+      "deliveryStandardTitle": "",
+      "deliveryTitle": "Zustellung zu Hause oder am Arbeitsplatz",
+      "free": "Frei",
+      "from": "Von",
+      "headerDeliveryOptions": "",
+      "loadMore": "Mehr laden",
+      "number": "Number",
+      "onlyRecipientTitle": "Nur Empfänger",
+      "openingHours": "Öffnungszeiten",
+      "options": "Optionen",
+      "packageTypeDigitalStamp": "Digitaler Stempel",
+      "packageTypeMailbox": "Mailbox",
+      "pickUpFrom": "Von",
+      "pickupLocationsListButton": "Liste",
+      "pickupLocationsMapButton": "Karte",
+      "pickupTitle": "Abholung am Ort",
+      "postalCode": "Postleitzahl",
+      "retry": "Wiederholungsversuch",
+      "signatureTitle": "Unterschrift erforderlich",
+      "mondayDeliveryTitle": "Montagszustellung",
+      "wrongnumberPostalCode": "Hausnummer/Postleitzahlenkombination unbekannt",
+      "beDeliveryStandardTitle": "Standaardzustellung",
+      "beDeliveryTitle": "Levering",
+      "saturdayDeliveryTitle": "Zaterdaglevering",
+      "wrongPostalCodeCity": "Postleitzahl/Stadt-Kombination unbekannt",
+      "refreshMessage": "Es ist ein Fehler aufgetreten, bitte aktualisieren Sie die Seite."
     }
+  }
 }

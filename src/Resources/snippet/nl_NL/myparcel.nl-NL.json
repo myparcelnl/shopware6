@@ -1,14 +1,43 @@
 {
-    "myparcel": {
-        "delivery_type_1": "Ochtendlevering",
-        "delivery_type_2": "Standaardlevering",
-        "delivery_type_3": "Avondlevering",
-        "delivery_signature": "Handtekening voor ontvangst",
-        "delivery_recipient": "Niet bij de buren bezorgen"
-    },
-  "cookie": {
-    "myparcel": {
-      "name": "MyParcel"
+  "myparcel": {
+    "delivery_type_1": "Ochtendlevering",
+    "delivery_type_2": "Standaardlevering",
+    "delivery_type_3": "Avondlevering",
+    "delivery_signature": "Handtekening voor ontvangst",
+    "delivery_recipient": "Niet bij de buren bezorgen",
+    "shipping_selector": {
+      "addressNotFound": "Adres niet gevonden",
+      "cc": "Landcode",
+      "city": "Stad",
+      "closed": "Gesloten",
+      "deliveryEveningTitle": "",
+      "deliveryMorningTitle": "",
+      "deliveryStandardTitle": "",
+      "deliveryTitle": "Thuis of op het werk bezorgen",
+      "gratis": "Gratis",
+      "from": "From",
+      "headerDeliveryOptions": "",
+      "loadMore": "Load more",
+      "number": "Number",
+      "onlyRecipientTitle": "Alleen ontvanger",
+      "openingHours": "Openingstijden",
+      "options": "Opties",
+      "packageTypeDigitalStamp": "Digitale postzegel",
+      "packageTypeMailbox": "Mailbox",
+      "pickUpFrom": "Van",
+      "pickupLocationsListButton": "List",
+      "afhalenLocatiesMapButton": "Map",
+      "pickupTitle": "Afhalen op locatie",
+      "postalCode": "Postcode",
+      "retry": "Retry",
+      "signatureTitle": "Handtekening vereisen",
+      "mondayDeliveryTitle": "Maandag levering",
+      "wrongnumberPostalCode": "Huisnummer/postcode combinatie onbekend",
+      "beDeliveryStandardTitle": "Standaard levering",
+      "beDeliveryTitle": "Levering",
+      "saturdayDeliveryTitle": "Zaterdaglevering",
+      "wrongPostalCodeCity": "Postcode/plaats combinatie onbekend",
+      "refreshMessage": "Er is een fout opgetreden, gelieve de pagina te vernieuwen."
     }
   }
 }

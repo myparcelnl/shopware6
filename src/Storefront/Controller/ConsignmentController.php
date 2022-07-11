@@ -226,7 +226,7 @@ class ConsignmentController extends StorefrontController
             if($this->systemConfigService->get('MyPaShopware.config.myParcelDefaultLabelFormat') == 'A6'){
                 $labelPositions = null;
             }else{
-                $labelPositions = [MyParcelCollection::DEFAULT_A4_POSITION];
+                $labelPositions = [1];
             }
         }
 
