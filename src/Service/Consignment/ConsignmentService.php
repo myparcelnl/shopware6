@@ -20,6 +20,8 @@ use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use Psr\Log\LoggerInterface;
+use Shopware\Core\Checkout\Document\DocumentEntity;
+use Shopware\Core\Checkout\Document\DocumentGenerator\InvoiceGenerator;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -73,6 +75,7 @@ class ConsignmentService
      * @param SystemConfigService $systemConfigService
      * @param InsuranceService $insuranceService
      * @param $shopwareVersion
+     * @param LoggerInterface $logger
      */
     public function __construct(
         OrderService           $orderService,
@@ -175,12 +178,21 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
-        //TODO: get latest invoice document else use ordernumber
-        if (false){
 
-        }else{
-            $consignment->setInvoice($orderEntity->getOrderNumber());
+        //Set invoice number to the latest invoice document number or order number if none is available
+        $invoice = $orderEntity->getDocuments()->filter(function ($document) {
+            /** @var DocumentEntity $document */
+            return $document->getDocumentType()->getTechnicalName() === InvoiceGenerator::INVOICE;
+        })->last();
+
+        if ($invoice instanceof DocumentEntity) {
+            $invoiceNumber = $invoice->getConfig()['documentNumber'];
+        } else {
+            $invoiceNumber = $orderEntity->getOrderNumber();
         }
+        $consignment->setInvoice($invoiceNumber);
+
+
         if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
             //Add drop off point if instabox
             $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
@@ -218,7 +230,7 @@ class ConsignmentService
             }
             $customsItem->setAmount($lineItem->getQuantity());
             $customsItem->setDescription($lineItem->getLabel());
-            $customsItem->setItemValue($lineItem->getUnitPrice());
+            $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
             if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
                 $customsItem->setCountry('NL');
             } else {
@@ -449,7 +461,8 @@ class ConsignmentService
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
                 'lineItems',
-                'lineItems.product'
+                'lineItems.product',
+                'documents.documentType'
             ]);
 
             if ($order !== null) {
