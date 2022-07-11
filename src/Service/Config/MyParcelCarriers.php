@@ -25,4 +25,11 @@ abstract class MyParcelCarriers
         self::BPOST=>'bpost',
         self::DPD=>'dpd',
     ];
+    const CARRIER_ID_TO_CONFIG_CARRIER = [
+        1 =>self::POSTNL,
+        2 =>self::DHL,
+        3 =>self::INSTABOX,
+        4 =>self::BPOST,
+        5 =>self::DPD,
+    ];
 }
