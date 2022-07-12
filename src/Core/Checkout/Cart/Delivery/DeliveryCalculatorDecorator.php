@@ -82,7 +82,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
      * @param QuantityPriceCalculator   $priceCalculator
      * @param PercentageTaxRuleBuilder  $percentageTaxRuleBuilder
      * @param TaxDetector               $taxDetector
-     * @param ShippingMethodService     $shippingMethodService
      * @param ShippingOptionsService    $shippingOptionsService
      * @param SystemConfigService       $configService
      * @param EntityRepositoryInterface $shippingMethodRepository
@@ -208,21 +207,22 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
             new EqualsFilter('customFields.myparcel', null),
         ]));
-        /** @var ShippingMethodEntity $shippingMethod */
-        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
-        if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-            if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
-                $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
-                if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
-                    /** @var stdClass $deliveryData */
-                    $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                    $deliveryData = json_decode(json_encode($deliveryData), true);
-                    $raise = $this->configGenerator->getCostForCarrierWithOptions(
-                        $deliveryData,
-                        $context->getSalesChannelId()
-                    );
-                    $price += $raise;
+        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
+        if($shippingMethod instanceof ShippingMethodEntity) {
+            if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
+                if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
+                    $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
+                    if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
+                        /** @var stdClass $deliveryData */
+                        $deliveryData = $myParcelData['myparcel']['deliveryData'];
+                        $deliveryData = json_decode(json_encode($deliveryData), true);
+                        $raise = $this->configGenerator->getCostForCarrierWithOptions(
+                            $deliveryData,
+                            $context->getSalesChannelId()
+                        );
+                        $price += $raise;
+                    }
                 }
             }
         }
