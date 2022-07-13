@@ -3,8 +3,7 @@
 namespace MyPa\Shopware;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Core\Checkout\Order\OrderDefinition;
-use Shopware\Core\Framework\Context;
+use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodCreatorService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -13,7 +12,6 @@ use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
-use Shopware\Core\System\CustomField\CustomFieldTypes;
 
 class MyPaShopware extends Plugin
 {
@@ -27,7 +25,18 @@ class MyPaShopware extends Plugin
     {
         parent::activate($activateContext);
 
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($this->getPath(), $activateContext->getContext());
     }
+
+    public function update(UpdateContext $updateContext): void
+    {
+        parent::update($updateContext);
+
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($this->getPath(), $updateContext->getContext());
+    }
+
 
     public function uninstall(UninstallContext $uninstallContext): void
     {

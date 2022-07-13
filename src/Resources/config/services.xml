@@ -56,6 +56,16 @@
             <argument type="service" id="myparcel.logger"/>
         </service>
 
+        <service id="MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodCreatorService">
+            <argument type="service" id="Shopware\Core\Content\Media\MediaService"/>
+            <argument type="service" id="delivery_time.repository"/>
+            <argument type="service" id="media.repository"/>
+            <argument type="service" id="rule.repository"/>
+            <argument type="service" id="shipping_method.repository"/>
+            <argument type="service" id="myparcel.logger"/>
+        </service>
+
+
         <!-- Entities -->
         <service id="MyPa\Shopware\Core\Content\Shipment\ShipmentDefinition">
             <tag name="shopware.entity.definition" entity="myparcel_shipment"/>
