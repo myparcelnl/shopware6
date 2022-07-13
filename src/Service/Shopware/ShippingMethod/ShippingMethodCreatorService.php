@@ -1,13 +1,11 @@
 <?php
 
-namespace MyPa\Shopware\Service\ShippingMethod;
+namespace MyPa\Shopware\Service\Shopware\ShippingMethod;
 
-use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Media\MediaService;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\Framework\Plugin\Context\ActivateContext;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class ShippingMethodCreatorService
@@ -20,20 +18,20 @@ class ShippingMethodCreatorService
     private LoggerInterface $logger;
 
     /**
-     * @param MediaService $mediaService
+     * @param MediaService              $mediaService
      * @param EntityRepositoryInterface $deliveryTimeRepository
      * @param EntityRepositoryInterface $mediaRepository
      * @param EntityRepositoryInterface $ruleRepository
      * @param EntityRepositoryInterface $shippingMethodRepository
-     * @param LoggerInterface $logger
+     * @param LoggerInterface           $logger
      */
     public function __construct(
-        MediaService $mediaService,
+        MediaService              $mediaService,
         EntityRepositoryInterface $deliveryTimeRepository,
         EntityRepositoryInterface $mediaRepository,
         EntityRepositoryInterface $ruleRepository,
         EntityRepositoryInterface $shippingMethodRepository,
-        LoggerInterface $logger
+        LoggerInterface           $logger
     )
     {
         $this->mediaService = $mediaService;
@@ -45,7 +43,7 @@ class ShippingMethodCreatorService
     }
 
 
-    public function create(ActivateContext $activateContext, ContainerInterface $container,string $path)
+    public function create(string $path, Context $context)
     {
         $shippingMethodService = new ShippingMethodService(
             $this->deliveryTimeRepository,
@@ -55,6 +53,6 @@ class ShippingMethodCreatorService
             $this->mediaService,
             $this->logger
         );
-        $shippingMethodService->createShippingMethods($path, $activateContext->getContext());
+        $shippingMethodService->createShippingMethods($path, $context);
     }
 }
