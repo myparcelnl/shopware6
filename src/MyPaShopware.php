@@ -3,6 +3,7 @@
 namespace MyPa\Shopware;
 
 use Doctrine\DBAL\Connection;
+use MyPa\Shopware\Service\ShippingMethod\ShippingMethodCreatorService;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -27,6 +28,8 @@ class MyPaShopware extends Plugin
     {
         parent::activate($activateContext);
 
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($activateContext,$this->container,$this->getPath());
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
