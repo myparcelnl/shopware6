@@ -1,7 +1,7 @@
 {
   "name": "mypashopware/myparcel",
   "description": "MyParcel integration for Shopware 6",
-  "version": "2.0.0-rc.3",
+  "version": "2.0.0-rc.4",
   "type": "shopware-platform-plugin",
   "license": "proprietary",
   "authors": [
