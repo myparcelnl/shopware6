@@ -2,7 +2,7 @@
 
 {% block page_checkout_confirm_form_submit %}
     {# @deprecated tag:v6.5.0 - Bootstrap v5 removes `btn-block` class, use `d-grid` wrapper instead #}
-    {% if feature('v6.5.0.0') %}
+    {% if MyParcelBootstrapCompatibility.isBootstrap5 %}
         <div class="d-grid">
             <button id="confirmFormSubmit"
                     class="btn btn-primary btn-lg"
