@@ -3,6 +3,7 @@
 namespace MyPa\Shopware\Subscriber;
 
 use MyPa\Shopware\Service\Config\ConfigGenerator;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,7 +23,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 
     /**
      * @param SystemConfigService $configService
-     * @param ConfigGenerator $configGenerator
+     * @param ConfigGenerator     $configGenerator
      */
     public function __construct(SystemConfigService $configService, ConfigGenerator $configGenerator)
     {
@@ -40,8 +41,8 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     {
         return [
             CheckoutConfirmPageLoadedEvent::class => [
-                ['addMyParcelDataToPage', 500]
-            ]
+                ['addMyParcelDataToPage', 500],
+            ],
         ];
     }
 
@@ -53,12 +54,12 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     public function addMyParcelDataToPage($event): void
     {
         //Add config data
-        $event->getPage()->addArrayExtension('myparcel',
-            [
+        $event->getPage()->addExtension('myparcel', new ArrayStruct([
                 'config' => $this->configGenerator->generateConfigForPackage(
                     $event->getSalesChannelContext(),
                     $event->getRequest()->getLocale()
-                )
-            ]);
+                ),
+            ])
+        );
     }
 }
