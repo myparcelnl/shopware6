@@ -32,6 +32,15 @@ clean-node: ## Removes node_modules
 
 # ------------------------------------------------------------------------------------------------------------
 
-release: ## Creates a new ZIP package
+build: ## Builds the package
+	@cd ../../.. && PUPPETEER_SKIP_DOWNLOAD=1 ./bin/build-js.sh
+
+release: ## Create a new release
+	@make clean
+	@make install
+	@make build
+	@make zip
+
+zip: ## Creates a new ZIP package
 	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
 	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '.editorconfig' '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store' '*/phpunit.xml' '*/.phpstan.neon' '*/.php_cs.php' '*/phpinsights.php'
