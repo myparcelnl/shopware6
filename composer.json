@@ -1,75 +1,75 @@
 {
-    "name": "mypashopware/myparcel",
-    "description": "MyParcel integration for Shopware 6",
-    "version": "v1.3.2",
-    "type": "shopware-platform-plugin",
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "MyParcel",
-            "homepage": "https://www.myparcel.nl",
-            "role": "Manufacturer"
-        },
-        {
-            "name": "Memo ICT",
-            "homepage": "https://memo-ict.nl",
-            "role": "Developer"
-        }
+  "name": "mypashopware/myparcel",
+  "description": "MyParcel integration for Shopware 6",
+  "version": "v1.3.2",
+  "type": "shopware-platform-plugin",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "MyParcel",
+      "homepage": "https://www.myparcel.nl",
+      "role": "Manufacturer"
+    },
+    {
+      "name": "Memo ICT",
+      "homepage": "https://memo-ict.nl",
+      "role": "Developer"
+    }
+  ],
+  "extra": {
+    "shopware-plugin-class": "MyPa\\Shopware\\MyPaShopware",
+    "copyright": "(c) by MyParcel",
+    "label": {
+      "en-GB": "MyParcel integration for Shopware 6",
+      "nl-NL": "MyParcel integratie voor Shopware 6",
+      "de-DE": "MyParcel-Integration f\u00fcr Shopware 6"
+    },
+    "description": {
+      "en-GB": "With MyParcel, you can quickly and easily create shipping labels. All parcels, letterbox parcels, post and pallets can be prepared for shipment in no time.",
+      "nl-NL": "Met MyParcel maak je eenvoudig en snel verzendlabels aan. Zo zijn al jouw pakketten, brievenbuspakjes, post en pallets in een handomdraai klaar om te versturen.",
+      "de-DE": "Mit MyParcel k\u00f6nnen Sie schnell und einfach Versandetiketten erstellen. Alle Pakete, Briefkastenpakete, Post und Paletten k\u00f6nnen im Handumdrehen f\u00fcr den Versand vorbereitet werden."
+    },
+    "manufacturerLink": {
+      "en-GB": "https://www.myparcel.nl/en/",
+      "de-DE": "https://www.myparcel.nl/en/",
+      "nl-NL": "https://www.myparcel.nl"
+    },
+    "supportLink": {
+      "en-GB": "https://www.myparcel.nl/en/contact/",
+      "de-DE": "https://www.myparcel.nl/en/contact/",
+      "nl-NL": "https://www.myparcel.nl/services/contact/"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "MyPa\\Shopware\\": "src/",
+      "MyParcelNL\\Sdk\\src\\": "vendor/myparcelnl/sdk/src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MyPa\\Shopware\\PHPUnit\\": "tests/PHPUnit/",
+      "MyPa\\Shopware\\PHPStan\\": "tests/PHPStan/"
+    }
+  },
+  "require": {
+    "composer-runtime-api": "^2.0",
+    "myparcelnl/sdk": "^7"
+  },
+  "require-dev": {
+    "shopware/core": "^6.4.1",
+    "shopware/administration": "^6.4.1",
+    "shopware/storefront": "^6.4.1"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
     ],
-    "extra": {
-        "shopware-plugin-class": "MyPa\\Shopware\\MyPaShopware",
-        "copyright": "(c) by MyParcel",
-        "label": {
-            "en-GB": "MyParcel integration for Shopware 6",
-            "nl-NL": "MyParcel integratie voor Shopware 6",
-            "de-DE": "MyParcel-Integration f\u00fcr Shopware 6"
-        },
-        "description": {
-            "en-GB": "With MyParcel, you can quickly and easily create shipping labels. All parcels, letterbox parcels, post and pallets can be prepared for shipment in no time.",
-            "nl-NL": "Met MyParcel maak je eenvoudig en snel verzendlabels aan. Zo zijn al jouw pakketten, brievenbuspakjes, post en pallets in een handomdraai klaar om te versturen.",
-            "de-DE": "Mit MyParcel k\u00f6nnen Sie schnell und einfach Versandetiketten erstellen. Alle Pakete, Briefkastenpakete, Post und Paletten k\u00f6nnen im Handumdrehen f\u00fcr den Versand vorbereitet werden."
-        },
-        "manufacturerLink": {
-            "en-GB": "https://www.myparcel.nl/en/",
-            "de-DE": "https://www.myparcel.nl/en/",
-            "nl-NL": "https://www.myparcel.nl"
-        },
-        "supportLink": {
-            "en-GB": "https://www.myparcel.nl/en/contact/",
-            "de-DE": "https://www.myparcel.nl/en/contact/",
-            "nl-NL": "https://www.myparcel.nl/services/contact/"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "MyPa\\Shopware\\": "src/",
-            "MyParcelNL\\Sdk\\src\\": "vendor/myparcelnl/sdk/src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "MyPa\\Shopware\\PHPUnit\\": "tests/PHPUnit/",
-            "MyPa\\Shopware\\PHPStan\\": "tests/PHPStan/"
-        }
-    },
-    "require": {
-        "composer-runtime-api": "^2.0",
-        "myparcelnl/sdk": "^7"
-    },
-    "require-dev": {
-        "shopware/core": "^6.4.1",
-        "shopware/administration": "^6.4.1",
-        "shopware/storefront": "^6.4.1"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
-        ],
-        "post-update-cmd": [
-            "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
-        ]
-    },
-    "config": {
+    "post-update-cmd": [
+      "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
+    ]
+  },
+  "config": {
         "optimize-autoloader": true
     }
 }
