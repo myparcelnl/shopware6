@@ -22,3 +22,6 @@
 - Added cut-off time option
 - Improved snippets
 - Added insured shipments
+
+##Version 1.3.3
+- Fixed administration module not being available

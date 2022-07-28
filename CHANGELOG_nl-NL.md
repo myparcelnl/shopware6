@@ -19,3 +19,6 @@
 - Optie cut-off tijd toegevoegd
 - Verbeterde vertalingen
 - Verzekerde zendingen toegevoegd
+
+##Version 1.3.3
+- Probleem opgelost waardoor de administratie module niet beschikbaar was

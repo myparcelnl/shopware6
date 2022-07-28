@@ -22,3 +22,6 @@
 - Option "Abschaltzeit" hinzugefügt
 - Verbesserte Snippets
 - Versicherte Sendungen hinzugefügt
+
+##Version 1.3.3
+- Behoben: Administrationsmodul ist nicht verfügbar
