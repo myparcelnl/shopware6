@@ -1,3 +1,6 @@
+# Version 1.3.3
+- Behoben: Administrationsmodul ist nicht verfügbar
+
 # Version 1.3.2
 - Option "Abschaltzeit" hinzugefügt
 - Verbesserte Snippets

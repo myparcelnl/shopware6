@@ -1,3 +1,6 @@
+# Version 1.3.3
+- Fixed administration module not being available
+
 # Version 1.3.2
 - Added cut-off time option
 - Improved snippets

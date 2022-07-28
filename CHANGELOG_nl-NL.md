@@ -1,3 +1,6 @@
+# Version 1.3.3
+- Probleem opgelost waardoor de administratie module niet beschikbaar was
+
 # Version 1.3.2
 - Optie cut-off tijd toegevoegd
 - Verbeterde vertalingen
