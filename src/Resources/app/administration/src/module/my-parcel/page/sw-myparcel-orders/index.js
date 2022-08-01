@@ -506,6 +506,10 @@ Component.register('sw-myparcel-orders', {
         onCloseCreateMultipleConsignmentsModal() {
             this.closeCreateMultipleConsignmentsModal();
         },
+        onCloseConsignmentModal() {
+            this.showConsignmentModal = false;
+            this.consignments = [];
+        },
 
         onCreateMultipleConsignments() {
             this.saveMultipleConsignments(this.createMultipleConsignments);
