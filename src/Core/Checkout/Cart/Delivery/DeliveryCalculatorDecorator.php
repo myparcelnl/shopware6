@@ -3,7 +3,7 @@
 namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
 use MyPa\Shopware\Defaults as MyParcelDefaults;
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Shopware\Core\Checkout\Cart\Cart;
@@ -74,19 +74,18 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $shippingMethodRepository;
 
     /**
-     * @var ConfigReader
+     * @var ConfigGenerator
      */
-    private $configReader;
+    private $configGenerator;
 
     /**
      * @param QuantityPriceCalculator   $priceCalculator
      * @param PercentageTaxRuleBuilder  $percentageTaxRuleBuilder
      * @param TaxDetector               $taxDetector
-     * @param ShippingMethodService     $shippingMethodService
      * @param ShippingOptionsService    $shippingOptionsService
      * @param SystemConfigService       $configService
      * @param EntityRepositoryInterface $shippingMethodRepository
-     * @param ConfigReader              $configReader
+     * @param ConfigGenerator              $configGenerator
      */
     public function __construct(
         QuantityPriceCalculator   $priceCalculator,
@@ -95,7 +94,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         ShippingOptionsService    $shippingOptionsService,
         SystemConfigService       $configService,
         EntityRepositoryInterface $shippingMethodRepository,
-        ConfigReader              $configReader
+        ConfigGenerator $configGenerator
     )
     {
         $this->priceCalculator = $priceCalculator;
@@ -104,7 +103,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $this->shippingOptionsService = $shippingOptionsService;
         $this->configService = $configService;
         $this->shippingMethodRepository = $shippingMethodRepository;
-        $this->configReader = $configReader;
+        $this->configGenerator = $configGenerator;
     }
 
 
@@ -208,21 +207,22 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
             new EqualsFilter('customFields.myparcel', null),
         ]));
-        /** @var ShippingMethodEntity $shippingMethod */
-        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
 
-        if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-            if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
-                $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
-                if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
-                    /** @var stdClass $deliveryData */
-                    $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                    $deliveryData = json_decode(json_encode($deliveryData), true);
-                    $raise = $this->configReader->getCostForCarrierWithOptions(
-                        $deliveryData,
-                        $context->getSalesChannelId()
-                    );
-                    $price += $raise;
+        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
+        if($shippingMethod instanceof ShippingMethodEntity) {
+            if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
+                if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
+                    $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
+                    if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
+                        /** @var stdClass $deliveryData */
+                        $deliveryData = $myParcelData['myparcel']['deliveryData'];
+                        $deliveryData = json_decode(json_encode($deliveryData), true);
+                        $raise = $this->configGenerator->getCostForCarrierWithOptions(
+                            $deliveryData,
+                            $context->getSalesChannelId()
+                        );
+                        $price += $raise;
+                    }
                 }
             }
         }

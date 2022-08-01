@@ -57,15 +57,21 @@
         <input-field type="single-select">
             <name>platform</name>
             <label>Shop country</label>
+            <label lang="nl-NL">Winkelland</label>
+            <label lang="de-DE">Land einkaufen</label>
             <defaultValue>myparcel</defaultValue>
             <options>
                 <option>
                     <id>myparcel</id>
                     <name>Netherlands</name>
+                    <name lang="nl-NL">Nederland</name>
+                    <name lang="de-DE">Niederlande</name>
                 </option>
                 <option>
                     <id>belgie</id>
-                    <name>Belgum</name>
+                    <name>Belgium</name>
+                    <name lang="nl-NL">België</name>
+                    <name lang="de-DE">Belgien</name>
                 </option>
             </options>
         </input-field>
@@ -508,7 +514,6 @@
         <input-field type="bool">
             <name>enabledPostNL</name>
             <label>Activate PostNL</label>
-            <disabled>true</disabled>
             <defaultValue>true</defaultValue>
             <helpText>This setting can't be disabled</helpText>
             <helpText lang="nl-NL">Deze instelling kan niet worden uitgeschakeld</helpText>

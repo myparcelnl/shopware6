@@ -2,9 +2,10 @@
 
 namespace MyPa\Shopware\Service\Config;
 
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
-class ConfigReader
+class ConfigGenerator
 {
     const ALWAYS_ENABLED_SETTINGS = ['allowShowDeliveryDate', 'allowMorningDelivery', 'allowSaturdayDelivery', 'allowPickupLocations',
         'allowSignature', 'allowEveningDelivery', 'allowOnlyRecipient', 'allowOnlyRecipient'];
@@ -115,22 +116,24 @@ class ConfigReader
     /**
      * @return array An array with the settings for the NPM package
      */
-    public function getConfigForPackage(string $salesChannelId): array
+    public function generateConfigForPackage(SalesChannelContext $salesChannelContext,string $locale): array
     {
         $config = [];
-        $config = array_merge($config, $this->getGeneralSettings($salesChannelId));
-        $config['carrierSettings'] = $this->getCarrierSettings($salesChannelId);
+        $config = array_merge($config, $this->getGeneralSettings($salesChannelContext,$locale));
+        $config['carrierSettings'] = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
         return $config;
     }
 
-    private function getGeneralSettings(string $salesChannelId): array
+    private function getGeneralSettings(SalesChannelContext $salesChannelContext,string $locale): array
     {
         //These are the settings that are only valid for the main config
         $settings = [
-            "platform" => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelId),
-            "packageType" => $this->systemConfigService->getString('MyPaShopware.config.packageType', $salesChannelId),
+            "platform" => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelContext->getSalesChannelId()),
+            "packageType" => $this->systemConfigService->getString('MyPaShopware.config.packageType', $salesChannelContext->getSalesChannelId()),
+            "currency"=>$salesChannelContext->getCurrency()->getIsoCode(),
+            "locale"=>$locale
         ];
-        return array_merge($settings, $this->generateConfig($salesChannelId));
+        return array_merge($settings, $this->generateConfig($salesChannelContext->getSalesChannelId()));
     }
 
     private function generateConfig(string $salesChannelId, string $carrier = ''): array

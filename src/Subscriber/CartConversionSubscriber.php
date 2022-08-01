@@ -4,7 +4,8 @@ namespace MyPa\Shopware\Subscriber;
 
 use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
-use MyPa\Shopware\Service\Config\ConfigReader;
+use MyPa\Shopware\Service\Config\ConfigGenerator;
+use MyPa\Shopware\Service\Config\MyParcelCarriers;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Psr\Log\LoggerInterface;
@@ -25,9 +26,8 @@ class CartConversionSubscriber implements EventSubscriberInterface
         ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient",
         ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
         ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat",
-        ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType"
+        ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType",
     ];
-
 
 
     /**
@@ -36,7 +36,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     protected $logger;
 
     /**
-     * @var ConfigReader
+     * @var ConfigGenerator
      */
     private $configReader;
 
@@ -56,15 +56,15 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $orderService;
 
     /**
-     * @param LoggerInterface $logger
-     * @param ConfigReader $configReader
+     * @param LoggerInterface           $logger
+     * @param ConfigGenerator           $configReader
      * @param EntityRepositoryInterface $orderRepository
-     * @param ShippingOptionsService $shippingOptionsService
-     * @param OrderService $orderService
+     * @param ShippingOptionsService    $shippingOptionsService
+     * @param OrderService              $orderService
      */
     public function __construct(
         LoggerInterface           $logger,
-        ConfigReader              $configReader,
+        ConfigGenerator           $configReader,
         EntityRepositoryInterface $orderRepository,
         ShippingOptionsService    $shippingOptionsService,
         OrderService              $orderService
@@ -83,7 +83,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            CartConvertedEvent::class => 'cartConverted'
+            CartConvertedEvent::class => 'cartConverted',
         ];
     }
 
@@ -93,7 +93,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
      */
     public function cartConverted(CartConvertedEvent $event)
     {
-        if (empty($event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY))){
+        if (empty($event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY))) {
             return;
         }
         $myParcelData = $event->getCart()->getExtension(Defaults::CART_EXTENSION_KEY)->getVars();
@@ -122,11 +122,22 @@ class CartConversionSubscriber implements EventSubscriberInterface
 
                     case 'shipmentOptions':
                         //Check if the option was even shown via 'allowSignature' and 'allowOnlyRecipient', otherwise use the given value
-                        if ($this->configReader->isSettingEnabled($event->getSalesChannelContext()->getSalesChannelId(), 'allowOnlyRecipient', '') &&
+                        $carrierId = $deliveryData['carrier'];
+
+                        if ($this->configReader->isSettingEnabled(
+                                $event->getSalesChannelContext()->getSalesChannelId(),
+                                'allowOnlyRecipient',
+                                MyParcelCarriers::NPM_CARRIER_TO_CONFIG_CARRIER[$carrierId]
+                            ) &&
                             isset($value['only_recipient'])) {
-                            $options[ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME] = $value['only_recipient'];
+                            $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = $value['only_recipient'];
                         }
-                        if ($this->configReader->isSettingEnabled($event->getSalesChannelContext()->getSalesChannelId(), 'allowSignature', '') &&
+                        
+                        if ($this->configReader->isSettingEnabled(
+                                $event->getSalesChannelContext()->getSalesChannelId(),
+                                'allowSignature',
+                                MyParcelCarriers::NPM_CARRIER_TO_CONFIG_CARRIER[$carrierId]
+                            ) &&
                             isset($value['signature'])) {
                             $options[ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE] = $value['signature'];
                         }

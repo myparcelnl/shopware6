@@ -12,7 +12,7 @@
             <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="shipping_method.repository"/>
-            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigReader"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
         </service>
     </services>
 </container>
