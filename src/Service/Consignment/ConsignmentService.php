@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Service\Consignment;
 use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use MyPa\Shopware\Defaults;
+use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\InsuranceService;
@@ -218,28 +219,42 @@ class ConsignmentService
             $consignment->setDeliveryDate($shippingDate);
         }
 
-        //Add weight of all items for international shipping
-        /** @var OrderLineItemEntity $lineItem */
-        foreach ($orderEntity->getLineItems() as $lineItem) {
+        // Not in europe
+        if (!in_array($shippingAddress->getCountry()->getIso(),AbstractConsignment::EURO_COUNTRIES)) {
+            //Add weight of all items for international shipping
+            /** @var OrderLineItemEntity $lineItem */
+            foreach ($orderEntity->getLineItems() as $lineItem) {
 
-            $customsItem = new MyParcelCustomsItem();
-            if ($lineItem->getProduct()->getWeight()) {
-                $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
-            } else {
-                $customsItem->setWeight(0.01);
-            }
-            $customsItem->setAmount($lineItem->getQuantity());
-            $customsItem->setDescription($lineItem->getLabel());
-            $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
-            if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
-                $customsItem->setCountry('NL');
-            } else {
-                $customsItem->setCountry('BE');
-            }
-            //TODO: get and set classifications in config and products
-            $customsItem->setClassification(0001);
+                $customsItem = new MyParcelCustomsItem();
+                if ($lineItem->getProduct()->getWeight()) {
+                    $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
+                } else {
+                    $customsItem->setWeight(0.01);
+                }
+                $customsItem->setAmount($lineItem->getQuantity());
+                $customsItem->setDescription($lineItem->getLabel());
+                $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
+                if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
+                    $customsItem->setCountry('NL');
+                } else {
+                    $customsItem->setCountry('BE');
+                }
+                //Get custom field HS code
 
-            $consignment->addItem($customsItem);
+                $customFields = $lineItem->getProduct()->getCustomFields();
+                $hsCode = $this->systemConfigService->getString('MyPaShopware.config.myParcelFallbackHSCode');
+
+                if ($customFields && array_key_exists('myparcel_product_hs_code', $customFields)) {
+                    $hsCode = $customFields['myparcel_product_hs_code'];
+                }
+                if (empty($hsCode)) {
+                    throw new ConfigFieldValueMissingException();
+                }
+
+                $customsItem->setClassification(intval($hsCode));
+
+                $consignment->addItem($customsItem);
+            }
         }
 
         if (
