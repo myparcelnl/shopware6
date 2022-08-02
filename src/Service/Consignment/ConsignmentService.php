@@ -240,8 +240,7 @@ class ConsignmentService
                     $customsItem->setCountry('BE');
                 }
                 //Get custom field HS code
-
-                $customFields = $lineItem->getProduct()->getCustomFields();
+                $customFields = $lineItem->getPayload()['customFields'];
                 $hsCode = $this->systemConfigService->getString('MyPaShopware.config.myParcelFallbackHSCode');
 
                 if ($customFields && array_key_exists('myparcel_product_hs_code', $customFields)) {
@@ -476,7 +475,7 @@ class ConsignmentService
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
                 'lineItems',
-                'lineItems.product',
+                'lineItems.product.customFields',
                 'documents.documentType'
             ]);
 

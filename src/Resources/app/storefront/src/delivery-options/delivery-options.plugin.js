@@ -3,8 +3,6 @@ import HttpClient from 'src/service/http-client.service';
 import ElementReplaceHelper from 'src/helper/element-replace.helper';
 import DomAccess from 'src/helper/dom-access.helper';
 
-import '@myparcel'
-
 export default class DeliveryOptionsPlugin extends Plugin {
     static options = {
         /**
