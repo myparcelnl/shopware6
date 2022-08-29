@@ -95,9 +95,6 @@
         <service id="MyPa\Shopware\Subscriber\CartConversionSubscriber">
             <argument type="service" id="myparcel.logger"/>
             <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
-            <argument type="service" id="order.repository"/>
-            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
-            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
         <!-- Facade -->

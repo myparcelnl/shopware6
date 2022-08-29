@@ -6,11 +6,8 @@ use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Config\MyParcelCarriers;
-use MyPa\Shopware\Service\Order\OrderService;
-use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Order\CartConvertedEvent;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CartConversionSubscriber implements EventSubscriberInterface
@@ -20,15 +17,14 @@ class CartConversionSubscriber implements EventSubscriberInterface
      * ShippingOptionEntity::FIELD_ONLY_RECIPIENT will only be read in defaults, not from checkout
      */
     private const SHIPPING_OPTIONS_WITH_DEFAULT = [
-        ShippingOptionEntity::FIELD_DELIVERY_DATE => "",
+        ShippingOptionEntity::FIELD_DELIVERY_DATE      => "",
         ShippingOptionEntity::FIELD_REQUIRES_AGE_CHECK => "myParcelDefaultAgeCheck",
         ShippingOptionEntity::FIELD_REQUIRES_SIGNATURE => "myParcelDefaultSignature",
-        ShippingOptionEntity::FIELD_ONLY_RECIPIENT => "myParcelDefaultOnlyRecipient",
+        ShippingOptionEntity::FIELD_ONLY_RECIPIENT     => "myParcelDefaultOnlyRecipient",
         ShippingOptionEntity::FIELD_RETURN_IF_NOT_HOME => "myParcelDefaultReturnNotHome",
-        ShippingOptionEntity::FIELD_LARGE_FORMAT => "myParcelDefaultLargeFormat",
-        ShippingOptionEntity::FIELD_PACKAGE_TYPE => "myParcelDefaultPackageType",
+        ShippingOptionEntity::FIELD_LARGE_FORMAT       => "myParcelDefaultLargeFormat",
+        ShippingOptionEntity::FIELD_PACKAGE_TYPE       => "myParcelDefaultPackageType",
     ];
-
 
     /**
      * @var LoggerInterface
@@ -41,40 +37,16 @@ class CartConversionSubscriber implements EventSubscriberInterface
     private $configReader;
 
     /**
-     * @var EntityRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var ShippingOptionsService
-     */
-    private $shippingOptionsService;
-
-    /**
-     * @var OrderService
-     */
-    private $orderService;
-
-    /**
-     * @param LoggerInterface           $logger
-     * @param ConfigGenerator           $configReader
-     * @param EntityRepositoryInterface $orderRepository
-     * @param ShippingOptionsService    $shippingOptionsService
-     * @param OrderService              $orderService
+     * @param LoggerInterface $logger
+     * @param ConfigGenerator $configReader
      */
     public function __construct(
-        LoggerInterface           $logger,
-        ConfigGenerator           $configReader,
-        EntityRepositoryInterface $orderRepository,
-        ShippingOptionsService    $shippingOptionsService,
-        OrderService              $orderService
+        LoggerInterface $logger,
+        ConfigGenerator $configReader
     )
     {
         $this->logger = $logger;
         $this->configReader = $configReader;
-        $this->orderRepository = $orderRepository;
-        $this->shippingOptionsService = $shippingOptionsService;
-        $this->orderService = $orderService;
     }
 
     /**
@@ -132,7 +104,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
                             isset($value['only_recipient'])) {
                             $options[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = $value['only_recipient'];
                         }
-                        
+
                         if ($this->configReader->isSettingEnabled(
                                 $event->getSalesChannelContext()->getSalesChannelId(),
                                 'allowSignature',
@@ -240,7 +212,6 @@ class CartConversionSubscriber implements EventSubscriberInterface
             default:
                 //package and unknown values
                 return 1;
-
         }
     }
 }
