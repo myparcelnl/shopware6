@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Service\Consignment;
 use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use MyPa\Shopware\Defaults;
+use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\InsuranceService;
@@ -20,6 +21,9 @@ use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use Psr\Log\LoggerInterface;
+use Shopware\Core\Checkout\Document\DocumentEntity;
+use Shopware\Core\Checkout\Document\DocumentGenerator\InvoiceGenerator;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -72,6 +76,7 @@ class ConsignmentService
      * @param SystemConfigService $systemConfigService
      * @param InsuranceService $insuranceService
      * @param $shopwareVersion
+     * @param LoggerInterface $logger
      */
     public function __construct(
         OrderService           $orderService,
@@ -125,6 +130,7 @@ class ConsignmentService
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
+     * @throws Exception
      */
     private function createConsignment(
         Context     $context,
@@ -173,6 +179,21 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
+
+        //Set invoice number to the latest invoice document number or order number if none is available
+        $invoice = $orderEntity->getDocuments()->filter(function ($document) {
+            /** @var DocumentEntity $document */
+            return $document->getDocumentType()->getTechnicalName() === InvoiceGenerator::INVOICE;
+        })->last();
+
+        if ($invoice instanceof DocumentEntity) {
+            $invoiceNumber = $invoice->getConfig()['documentNumber'];
+        } else {
+            $invoiceNumber = $orderEntity->getOrderNumber();
+        }
+        $consignment->setInvoice($invoiceNumber);
+
+
         if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
             //Add drop off point if instabox
             $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
@@ -195,13 +216,48 @@ class ConsignmentService
             if (strtotime($shippingDate) <= strtotime("today")) {
                 $shippingDate = \date("Y-m-d", \strtotime('tomorrow'));
             }
-
             $consignment->setDeliveryDate($shippingDate);
+        }
+
+        // Not in europe
+        if (!in_array($shippingAddress->getCountry()->getIso(),AbstractConsignment::EURO_COUNTRIES)) {
+            //Add weight of all items for international shipping
+            /** @var OrderLineItemEntity $lineItem */
+            foreach ($orderEntity->getLineItems() as $lineItem) {
+
+                $customsItem = new MyParcelCustomsItem();
+                if ($lineItem->getProduct()->getWeight()) {
+                    $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
+                } else {
+                    $customsItem->setWeight(0.01);
+                }
+                $customsItem->setAmount($lineItem->getQuantity());
+                $customsItem->setDescription($lineItem->getLabel());
+                $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
+                if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
+                    $customsItem->setCountry('NL');
+                } else {
+                    $customsItem->setCountry('BE');
+                }
+                //Get custom field HS code
+                $customFields = $lineItem->getPayload()['customFields'];
+                $hsCode = $this->systemConfigService->getString('MyPaShopware.config.myParcelFallbackHSCode');
+
+                if ($customFields && array_key_exists('myparcel_product_hs_code', $customFields)) {
+                    $hsCode = $customFields['myparcel_product_hs_code'];
+                }
+                if (empty($hsCode)) {
+                    throw new ConfigFieldValueMissingException();
+                }
+
+                $customsItem->setClassification(intval($hsCode));
+
+                $consignment->addItem($customsItem);
+            }
         }
 
         if (
             $shippingOptions->getDeliveryDate() !== null
-            && $shippingOptions->getDeliveryType() !== null
             && is_int($shippingOptions->getDeliveryType())
             && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
         ) {
@@ -209,16 +265,14 @@ class ConsignmentService
         }
 
         if (
-            $shippingOptions->getDeliveryType() !== null
-            && is_int($shippingOptions->getDeliveryType())
+            is_int($shippingOptions->getDeliveryType())
             && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
         ) {
             $consignment->setDeliveryType($shippingOptions->getDeliveryType());
         }
 
         if (
-            $shippingOptions->getPackageType() !== null
-            && is_int($shippingOptions->getPackageType())
+            is_int($shippingOptions->getPackageType())
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());
@@ -418,7 +472,8 @@ class ConsignmentService
                 'deliveries.shippingOrderAddress',
                 'deliveries.shippingOrderAddress.country',
                 'lineItems',
-                'lineItems.product'
+                'lineItems.product.customFields',
+                'documents.documentType'
             ]);
 
             if ($order !== null) {

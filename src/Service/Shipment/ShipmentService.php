@@ -2,13 +2,12 @@
 
 namespace MyPa\Shopware\Service\Shipment;
 
+use MyPa\Shopware\Core\Content\Shipment\ShipmentCollection;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
@@ -27,10 +26,11 @@ class ShipmentService
     /**
      * Creates a new instance of the shipment service
      *
+     * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shipmentRepository
      */
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface           $logger,
         EntityRepositoryInterface $shipmentRepository
     )
     {
@@ -92,16 +92,17 @@ class ShipmentService
      * @param string  $shippingOptionId
      * @param Context $context
      *
-     * @return array
+     * @return ShipmentCollection
      */
-    public function getShipmentsByShippingOptionId(string $shippingOptionId, Context $context): array
+    public function getShipmentsByShippingOptionId(string $shippingOptionId, Context $context): ShipmentCollection
     {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('shippingOptionId', $shippingOptionId));
         $criteria->addAssociation('shipping_option');
         $criteria->addAssociation('order');
 
-        return $this->shipmentRepository->search($criteria, $context)->getElements();
+        /** @var ShipmentCollection */
+        return $this->shipmentRepository->search($criteria, $context)->getEntities();
     }
 
     /**
