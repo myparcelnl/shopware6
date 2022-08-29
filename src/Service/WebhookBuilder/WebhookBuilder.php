@@ -6,10 +6,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class WebhookBuilder
 {
-
-    /**
-     *
-     */
     private const CUSTOM_DOMAIN_ENV_KEY = 'MYPARCEL_SHOP_DOMAIN';
 
     /**
@@ -20,6 +16,7 @@ class WebhookBuilder
 
     /**
      * WebhookBuilder constructor.
+     *
      * @param RouterInterface $router
      */
     public function __construct(RouterInterface $router)

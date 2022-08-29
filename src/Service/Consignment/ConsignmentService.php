@@ -258,7 +258,6 @@ class ConsignmentService
 
         if (
             $shippingOptions->getDeliveryDate() !== null
-            && $shippingOptions->getDeliveryType() !== null
             && is_int($shippingOptions->getDeliveryType())
             && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
         ) {
@@ -266,16 +265,14 @@ class ConsignmentService
         }
 
         if (
-            $shippingOptions->getDeliveryType() !== null
-            && is_int($shippingOptions->getDeliveryType())
+            is_int($shippingOptions->getDeliveryType())
             && in_array($shippingOptions->getDeliveryType(), AbstractConsignment::DELIVERY_TYPES_IDS, true)
         ) {
             $consignment->setDeliveryType($shippingOptions->getDeliveryType());
         }
 
         if (
-            $shippingOptions->getPackageType() !== null
-            && is_int($shippingOptions->getPackageType())
+            is_int($shippingOptions->getPackageType())
             && in_array($shippingOptions->getPackageType(), AbstractConsignment::PACKAGE_TYPES_IDS, true)
         ) {
             $consignment->setPackageType($shippingOptions->getPackageType());

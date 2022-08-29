@@ -25,6 +25,7 @@ class OrderService
     /**
      * Creates a new instance of the shipment service
      *
+     * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $orderRepository
      */
     public function __construct(
@@ -72,7 +73,7 @@ class OrderService
     }
 
     /**
-     * Returns a order object from the database.
+     * Returns an order object from the database.
      *
      * @param string     $id
      * @param string     $versionId
@@ -90,7 +91,7 @@ class OrderService
         {
             foreach ($associations as $association)
             {
-                if($association !== null && is_string($association))
+                if(is_string($association))
                 {
                     $criteria->addAssociation($association);
                 }

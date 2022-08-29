@@ -5,10 +5,8 @@ namespace MyPa\Shopware\Service\Shipment;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
 
@@ -27,10 +25,11 @@ class ShipmentService
     /**
      * Creates a new instance of the shipment service
      *
+     * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shipmentRepository
      */
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface           $logger,
         EntityRepositoryInterface $shipmentRepository
     )
     {

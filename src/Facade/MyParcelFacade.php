@@ -17,10 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MyParcelFacade
 {
-    private AccountWebService $accountWebService;
-    private CarrierOptionsWebService $carrierOptionsService;
+    private AccountWebService              $accountWebService;
+    private CarrierOptionsWebService       $carrierOptionsService;
     private CarrierConfigurationWebService $carrierConfigurationWebService;
-    private LoggerInterface $logger;
+    private LoggerInterface                $logger;
 
     public function __construct(LoggerInterface $logger)
     {
@@ -42,23 +42,29 @@ class MyParcelFacade
             $shop = $account->getShops()->first();
 
             $carrierOptions = $this->carrierOptionsService->getCarrierOptions($shop->getId());
+
             /** @var CarrierOptions $myParcelCarrier */
             $myParcelCarrier = $carrierOptions->filter(function (CarrierOptions $options) {
                 return $options->getCarrier()->getName() == 'instabox';
             })->first();
+
             $carrierConfiguration = $this->carrierConfigurationWebService->getCarrierConfiguration(
                 $shop->getId(),
                 $myParcelCarrier->getCarrier()->getId(),
                 true);
+
             if ($carrierConfiguration == null) {
                 $this->logger->warning('No carrier config for ', ['Shop' => $shop]);
                 return new JsonResponse(['errorMessage' => 'dropOff'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
+
             $dropOffPoint = $carrierConfiguration->getDefaultDropOffPoint();
             $dropOffPointStruct = new DropOffPointStruct();
             $dropOffPointStruct->setWithDropOffPoint($dropOffPoint);
+
             return new JsonResponse($dropOffPointStruct->jsonSerialize());
-        } catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
+        }
+        catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
             $this->logger->error('Error retrieving drop off location', ['Error' => $e]);
             return new JsonResponse(['errorMessage' => 'error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
