@@ -30,8 +30,8 @@ class ConfigGenerator
     {
         /**
          * Settings with a cost:
-         * 'priceMorningDelivery', 'priceStandardDelivery', 'priceSameDayDelivery',
-         * 'priceEveningDelivery', 'priceSignature', 'priceOnlyRecipient', 'pricePickup'];
+         * 'priceMorningDelivery', 'priceStandardDelivery', 'priceEveningDelivery',
+         * 'priceSameDayDelivery', 'priceSignature', 'priceOnlyRecipient', 'pricePickup';
          */
 
 
@@ -43,33 +43,16 @@ class ConfigGenerator
         if ($options['isPickup']) {
             return $this->addPriceForSetting($salesChannelId, 'pricePickup', $carrier, $totalPrice);
         } else {
-            //Is delivery type morning, standard or evening?
-            switch ($options['deliveryType']) {
-                case 'morning':
-                    $totalPrice = $this->addPriceForSetting(
-                        $salesChannelId,
-                        'priceMorningDelivery',
-                        $carrier,
-                        $totalPrice);
-                    break;
-                case 'standard':
-                    $totalPrice = $this->addPriceForSetting(
-                        $salesChannelId,
-                        'priceStandardDelivery',
-                        $carrier,
-                        $totalPrice);
-                    break;
-                case 'evening':
-                    $totalPrice = $this->addPriceForSetting(
-                        $salesChannelId,
-                        'priceEveningDelivery',
-                        $carrier,
-                        $totalPrice);
-                    break;
-            }
+            $totalPrice = $this->addPriceForSetting(
+                $salesChannelId,
+                sprintf('price%sDelivery', ucfirst($options['deliveryType'])),
+                $carrier,
+                $totalPrice
+            );
 
             if (isset($options['shipmentOptions'])) {
                 $shipmentOptions = $options['shipmentOptions'];
+
                 //Does it have Signature
                 if (isset($shipmentOptions['signature']) && $shipmentOptions['signature']) {
                     $totalPrice = $this->addPriceForSetting(
@@ -78,6 +61,7 @@ class ConfigGenerator
                         $carrier,
                         $totalPrice);
                 }
+
                 //Does it have recipient only?
                 if (isset($shipmentOptions['only_recipient']) && $shipmentOptions['only_recipient']) {
                     $totalPrice = $this->addPriceForSetting(
@@ -86,6 +70,7 @@ class ConfigGenerator
                         $carrier,
                         $totalPrice);
                 }
+
                 //Is it same day?
                 if (isset($shipmentOptions['same_day_delivery']) && $shipmentOptions['same_day_delivery']) {
                     $totalPrice = $this->addPriceForSetting(
