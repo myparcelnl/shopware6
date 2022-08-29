@@ -1,7 +1,7 @@
 {
   "name": "mypashopware/myparcel",
   "description": "MyParcel integration for Shopware 6",
-  "version": "2.0.0-rc.5",
+  "version": "2.0.0",
   "type": "shopware-platform-plugin",
   "license": "proprietary",
   "authors": [
@@ -22,12 +22,12 @@
     "label": {
       "en-GB": "MyParcel integration for Shopware 6",
       "nl-NL": "MyParcel integratie voor Shopware 6",
-      "de-DE": "MyParcel-Integration f\u00fcr Shopware 6"
+      "de-DE": "MyParcel-Integration fúr Shopware 6"
     },
     "description": {
       "en-GB": "With MyParcel, you can quickly and easily create shipping labels. All parcels, letterbox parcels, post and pallets can be prepared for shipment in no time.",
       "nl-NL": "Met MyParcel maak je eenvoudig en snel verzendlabels aan. Zo zijn al jouw pakketten, brievenbuspakjes, post en pallets in een handomdraai klaar om te versturen.",
-      "de-DE": "Mit MyParcel k\u00f6nnen Sie schnell und einfach Versandetiketten erstellen. Alle Pakete, Briefkastenpakete, Post und Paletten k\u00f6nnen im Handumdrehen f\u00fcr den Versand vorbereitet werden."
+      "de-DE": "Mit MyParcel kónnen Sie schnell und einfach Versandetiketten erstellen. Alle Pakete, Briefkastenpakete, Post und Paletten kónnen im Handumdrehen fúr den Versand vorbereitet werden."
     },
     "manufacturerLink": {
       "en-GB": "https://www.myparcel.nl/en/",
