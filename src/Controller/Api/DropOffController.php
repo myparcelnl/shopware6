@@ -2,12 +2,10 @@
 
 namespace MyPa\Shopware\Controller\Api;
 
+use MyPa\Shopware\Facade\MyParcelFacade;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
-use Shopware\Core\Framework\Validation\DataBag\DataBag;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use MyPa\Shopware\Facade\MyParcelFacade;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 

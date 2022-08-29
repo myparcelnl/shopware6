@@ -83,6 +83,4 @@ class MyPaShopware extends Plugin
             $uninstallContext->getContext()
         );
     }
-
-
 }
