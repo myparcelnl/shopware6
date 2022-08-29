@@ -348,7 +348,7 @@ Component.register('sw-myparcel-orders', {
                         order_id: item.orderId,
                         order_version_id: item.orderVersionId,
                         shipping_option_id: id,
-                        package_type: consignmentData.packageType,
+                        package_type: consignmentData.packageType, // this does nothing
                     });
                 }
             }
