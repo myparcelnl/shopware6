@@ -57,7 +57,10 @@
     "messages": {
       "error": "An error has occurred",
       "consignmentSuccess": "The shipment is successfully created",
-      "createLabelSuccess": "The label is successfully created"
+      "createLabelSuccess": "The label is successfully created",
+      "errors": {
+        "ConfigFieldValueMissingException": "No HS code could be found, please enter a default HS code in the MyParcel plugin, or add an HS code to all ordered products."
+      }
     },
     "columns": {
       "idColumn": "ID",

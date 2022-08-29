@@ -57,7 +57,10 @@
     "messages": {
       "error": "Er heeft een fout plaatsgevonden",
       "consignmentSuccess": "De verzending is succesvol aangemaakt",
-      "createLabelSuccess": "Het label is succesvol aangemaakt"
+      "createLabelSuccess": "Het label is succesvol aangemaakt",
+      "errors": {
+        "ConfigFieldValueMissingException": "Geen GS-tariefcode (HS-tariefcode) gevonden, voer een standaard GS-tariefcode in in de MyParcel plugin, of voeg een GS-tariefcode toe aan alle bestelde producten."
+      }
     },
     "columns": {
       "idColumn": "ID",

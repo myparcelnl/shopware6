@@ -6,6 +6,8 @@
 namespace MyPa\Shopware\Storefront\Controller;
 
 use Exception;
+
+use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
@@ -56,6 +58,7 @@ class ConsignmentController extends StorefrontController
     private const RESPONSE_KEY_LABEL_URL = 'labelUrl';
     private const RESPONSE_KEY_TRACK_TRACE_INFO = 'trackTraceInfo';
     private const RESPONSE_KEY_SUCCESS = 'success';
+    private const RESPONSE_KEY_TRANSLATION = 'translation';
 
     /**
      * @var ConsignmentService
@@ -244,13 +247,22 @@ class ConsignmentController extends StorefrontController
             $numberOfLabels = $request->get(self::REQUEST_KEY_NUMBER_OF_LABELS);
         }
 
-        $consignments = $this->consignmentService->createConsignments(
-            $context,
-            $request->get(self::REQUEST_KEY_ORDERS),
-            $labelPositions ?? null,
-            $packageType ?? null,
-            $numberOfLabels ?? null
-        );
+        try {
+            $consignments = $this->consignmentService->createConsignments(
+                $context,
+                $request->get(self::REQUEST_KEY_ORDERS),
+                $labelPositions ?? null,
+                $packageType ?? null,
+                $numberOfLabels ?? null
+            );
+        }catch (ConfigFieldValueMissingException $exception){
+            return new JsonResponse([
+                self::RESPONSE_KEY_SUCCESS => false,
+                self::RESPONSE_KEY_ERROR => $exception->getMessage(),
+                self::RESPONSE_KEY_TRANSLATION => 'ConfigFieldValueMissingException'
+            ]);
+        }
+
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => $consignments !== null,
