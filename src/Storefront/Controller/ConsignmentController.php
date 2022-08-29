@@ -126,7 +126,7 @@ class ConsignmentController extends StorefrontController
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS      => true,
-            self::RESPONSE_KEY_CONSIGNMENTS => $consignments,
+            self::RESPONSE_KEY_CONSIGNMENTS => $consignments->getElements(),
         ]);
     }
 

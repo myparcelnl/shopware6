@@ -97,12 +97,12 @@ class ShipmentController extends StorefrontController
         $orderVersionId = $request->get(self::REQUEST_KEY_ORDER_VERSION_ID);
         $shippingOptionId = $request->get(self::REQUEST_KEY_SHIPPING_OPTION_ID);
 
-        $existingShipmentEntity = $this->shipmentService->getShipmentByShippingOptionId(
+        $existingShipmentEntity = $this->shipmentService->getShipmentsByShippingOptionId(
             $shippingOptionId,
             $context
-        );
+        )->first();
 
-        if ($existingShipmentEntity !== null) {
+        if (!$existingShipmentEntity instanceof ShipmentEntity) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => true,
                 self::RESPONSE_KEY_SHIPMENT => $existingShipmentEntity
