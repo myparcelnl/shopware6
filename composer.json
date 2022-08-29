@@ -57,9 +57,9 @@
         "myparcelnl/sdk": "^7"
     },
     "require-dev": {
-        "shopware/core": "6.4.1",
-        "shopware/administration": "6.4.1",
-        "shopware/storefront": "6.4.1"
+        "shopware/core": "^6.4.1",
+        "shopware/administration": "^6.4.1",
+        "shopware/storefront": "^6.4.1"
     },
     "scripts": {
         "post-install-cmd": [
