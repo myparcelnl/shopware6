@@ -18,22 +18,6 @@ class CredentialsTestController
      */
     public function check(RequestDataBag $dataBag): JsonResponse
     {
-       return $this->checkResponse($dataBag);
-    }
-
-    /**
-     * @Route(path="/api/v{version}/_action/myparcel-api-test/verify")
-     */
-    public function checkLegacy(RequestDataBag $dataBag): JsonResponse
-    {
-        return $this->checkResponse($dataBag);
-    }
-
-    /**
-     *
-     */
-    public function checkResponse(RequestDataBag $dataBag): JsonResponse
-    {
         $apiKey = $dataBag->get('MyPaShopware.config.myParcelApiKey');
 
         if(!$apiKey){
