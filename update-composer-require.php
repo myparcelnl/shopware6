@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 $output = new Output();
+$jsonFormatter = new JsonFormatter($output);
 
 $opts = getopt("", ['env::', 'shopware:']);
 
@@ -23,41 +24,19 @@ switch ($opts['env']) {
         break;
 }
 
-if(!isset($require)) {
+if (!isset($require)) {
     $output->error('Env needs to be one of: dev, develop, development, prod, production');
     return;
 }
 
 $shopware = '*';
 
-if(isset($opts['shopware'])) {
+if (isset($opts['shopware'])) {
     $shopware = (string)$opts['shopware'];
 }
 
 try {
-    $composerContent = file_get_contents(__DIR__ . '/composer.json');
-    if(empty($composerContent)) {
-        throw new \Exception('Something went wrong reading the composer.json string. Exiting');
-    }
-
-    $currentEncoding = mb_detect_encoding($composerContent, ['UTF-8', 'ISO-8859-1'], true);
-
-    switch($currentEncoding) {
-        case 'UTF-8': // Already UTF-8, do nothing
-            break;
-        case 'ISO-8859-1':
-            $output->warn('Detected ISO-8859-1 encoding. Attempting to switch to UTF-8');
-
-            $composerContent = mb_convert_encoding($composerContent, 'UTF-8', 'ISO-8859-1');
-            break;
-        default: // Unknown encoding, warn user they should convert manually.
-            throw new \Exception('Unable to detect current composer.json encoding. Please convert to UTF-8 manually.');
-    }
-
-    $composerContent = json_decode($composerContent, true);
-    if(empty($composerContent)) {
-        throw new \Exception('Something went wrong decoding the composer.json string. Exiting');
-    }
+    $composerContent = $jsonFormatter->read(__DIR__ . '/composer.json');
 
     unset($composerContent['require']['shopware/core']);
     unset($composerContent['require']['shopware/administration']);
@@ -66,11 +45,11 @@ try {
     unset($composerContent['require-dev']['shopware/administration']);
     unset($composerContent['require-dev']['shopware/storefront']);
 
-    if(empty($composerContent['require'])) {
+    if (empty($composerContent['require'])) {
         unset($composerContent['require']);
     }
 
-    if(empty($composerContent['require-dev'])) {
+    if (empty($composerContent['require-dev'])) {
         unset($composerContent['require-dev']);
     }
 
@@ -78,12 +57,85 @@ try {
     $composerContent[$require]['shopware/administration'] = $shopware;
     $composerContent[$require]['shopware/storefront'] = $shopware;
 
-    file_put_contents(__DIR__ . '/composer.json', json_encode($composerContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+    $jsonFormatter->write(__DIR__ . '/composer.json', $jsonFormatter->sort($composerContent, [
+        "name", "description", "version", "type", "license", "authors", "extra", "autoload", "autoload-dev", "require",
+        "require-dev", "scripts", "config",
+    ]));
 
     $output->success(sprintf('Switched composer.json to %s requiring Shopware version %s', $env, $shopware));
-} catch (\Exception $e) {
+}
+catch (\Exception $e) {
     $output->error($e->getMessage());
 }
+
+class JsonFormatter
+{
+    /** @var Output */
+    private $output;
+
+    public function __construct(Output $output)
+    {
+        $this->output = $output;
+    }
+
+    public function read(string $path)
+    {
+        $json = file_get_contents($path);
+        if (empty($json)) {
+            throw new \Exception(sprintf('Something went wrong reading %s', $path));
+        }
+
+        $json = json_decode($this->fixEncoding($json), true);
+        if (empty($json)) {
+            throw new \Exception(sprintf('Something went wrong decoding %s', $path));
+        }
+
+        return $json;
+    }
+
+    public function write(string $path, array $json): bool
+    {
+        return (bool) file_put_contents($path, json_encode($json, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+    }
+
+    public function fixEncoding(string $json): string
+    {
+        $currentEncoding = mb_detect_encoding($json, ['UTF-8', 'ISO-8859-1'], true);
+
+        switch ($currentEncoding) {
+            case 'UTF-8': // Already UTF-8, do nothing
+                break;
+            case 'ISO-8859-1':
+                $this->output->warn('Detected ISO-8859-1 encoding. Attempting to switch to UTF-8');
+
+                $json = mb_convert_encoding($json, 'UTF-8', 'ISO-8859-1');
+                break;
+            default: // Unknown encoding, warn user they should convert manually.
+                throw new \Exception('Unable to detect current json file encoding. Please convert to UTF-8 manually.');
+        }
+
+        return $json;
+    }
+
+    public function sort(array $json, array $keyOrder): array
+    {
+        $sortedArray = [];
+
+        foreach($keyOrder as $key) {
+            if(isset($json[$key])) {
+                $sortedArray[$key] = $json[$key];
+                unset($json[$key]);
+            }
+        }
+
+        if(!empty($json)) {
+            $sortedArray += $json;
+        }
+
+        return $sortedArray;
+    }
+}
+
 
 class Output
 {
