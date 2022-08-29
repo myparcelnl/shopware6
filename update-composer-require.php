@@ -36,7 +36,28 @@ if(isset($opts['shopware'])) {
 
 try {
     $composerContent = file_get_contents(__DIR__ . '/composer.json');
+    if(empty($composerContent)) {
+        throw new \Exception('Something went wrong reading the composer.json string. Exiting');
+    }
+
+    $currentEncoding = mb_detect_encoding($composerContent, ['UTF-8', 'ISO-8859-1'], true);
+
+    switch($currentEncoding) {
+        case 'UTF-8': // Already UTF-8, do nothing
+            break;
+        case 'ISO-8859-1':
+            $output->warn('Detected ISO-8859-1 encoding. Attempting to switch to UTF-8');
+
+            $composerContent = mb_convert_encoding($composerContent, 'UTF-8', 'ISO-8859-1');
+            break;
+        default: // Unknown encoding, warn user they should convert manually.
+            throw new \Exception('Unable to detect current composer.json encoding. Please convert to UTF-8 manually.');
+    }
+
     $composerContent = json_decode($composerContent, true);
+    if(empty($composerContent)) {
+        throw new \Exception('Something went wrong decoding the composer.json string. Exiting');
+    }
 
     unset($composerContent['require']['shopware/core']);
     unset($composerContent['require']['shopware/administration']);
@@ -59,7 +80,7 @@ try {
 
     file_put_contents(__DIR__ . '/composer.json', json_encode($composerContent, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
-    $output->info(sprintf('Switched composer.json to %s requiring Shopware version %s', $env, $shopware));
+    $output->success(sprintf('Switched composer.json to %s requiring Shopware version %s', $env, $shopware));
 } catch (\Exception $e) {
     $output->error($e->getMessage());
 }
@@ -80,15 +101,29 @@ class Output
 
     public function info($text)
     {
+        $this->writeLn($this->createBlock([$text]), self::COLORS['black'], self::COLORS['cyan']);
+        $this->writeLn();
+    }
+
+    public function success($text)
+    {
         $this->writeLn($this->createBlock([$text]), self::COLORS['black'], self::COLORS['green']);
+        $this->writeLn();
+    }
+
+    public function warn($text)
+    {
+        $this->writeLn($this->createBlock([$text]), self::COLORS['black'], self::COLORS['yellow']);
+        $this->writeLn();
     }
 
     public function error($text)
     {
         $this->writeLn($this->createBlock([$text]), self::COLORS['white'], self::COLORS['red']);
+        $this->writeLn();
     }
 
-    public function writeLn($messages, $fg = self::COLORS['default'], $bg = self::COLORS['default'])
+    public function writeLn($messages = "", $fg = self::COLORS['default'], $bg = self::COLORS['default'])
     {
         if (!is_iterable($messages)) {
             $messages = [$messages];
