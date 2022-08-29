@@ -77,7 +77,6 @@
 
         <!-- Event Subscribers -->
         <service id="MyPa\Shopware\Subscriber\CheckoutConfirmPageSubscriber">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
             <tag name="kernel.event_subscriber"/>
         </service>

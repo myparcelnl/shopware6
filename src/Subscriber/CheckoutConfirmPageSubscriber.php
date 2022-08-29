@@ -10,12 +10,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
 {
-
-    /**
-     * @var SystemConfigService
-     */
-    private $configService;
-
     /**
      * @var ConfigGenerator
      */
@@ -25,12 +19,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      * @param SystemConfigService $configService
      * @param ConfigGenerator     $configGenerator
      */
-    public function __construct(SystemConfigService $configService, ConfigGenerator $configGenerator)
+    public function __construct(ConfigGenerator $configGenerator)
     {
-        $this->configService = $configService;
         $this->configGenerator = $configGenerator;
     }
-
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -55,11 +47,10 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     {
         //Add config data
         $event->getPage()->addExtension('myparcel', new ArrayStruct([
-                'config' => $this->configGenerator->generateConfigForPackage(
-                    $event->getSalesChannelContext(),
-                    $event->getRequest()->getLocale()
-                ),
-            ])
-        );
+            'config' => $this->configGenerator->generateConfigForPackage(
+                $event->getSalesChannelContext(),
+                $event->getRequest()->getLocale()
+            ),
+        ]));
     }
 }
