@@ -1,3 +1,13 @@
+# Version 2.0.0
+
+#### Breaking changes
+- To provide a better customer experience in the checkout we've reduced the number of MyParcel shipping methods in Shopware to one. This means the old shipping methods have been disabled, and should not be re-enabled again. Orders made with those shipping methods also no longer show up in the MyParcel Orders section in the administration.
+- In preparation for upcoming features and enhancements, we've had to drop support for older Shopware versions. As such, the minimum required version of Shopware is now 6.4.1.
+
+#### New features
+- Improved customer experience in the checkout: The available shipping options dynamically change based on the shipping address and the selected settings from your MyParcel backoffice.
+- Worldwide shipments: Shipping to countries outside of Europe is now available.
+
 # Version 1.3.3
 - Fixed administration module not being available
 

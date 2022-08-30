@@ -52,8 +52,8 @@ release: ## Create a new release
 	@make zip
 
 zip: ## Creates a new ZIP package
-	@php update-composer-require.php --shopware=^6.4.1 --env=prod
-	@cd .. && echo "\nCreating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
+	@php update-composer-require.php --env=prod --shopware=^6.4.1 --admin --storefront
+	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
 	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
 	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '*.editorconfig' '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store' '*/phpunit.xml' '*/.phpstan.neon' '*/.php_cs.php' '*/phpinsights.php' '*node_modules*' '*administration/build*' '*storefront/build*' '*/update-composer-require.php'
-	@php update-composer-require.php --shopware=^6.4.1 --env=dev
+	@php update-composer-require.php --env=dev --shopware=^6.4.1 --admin --storefront
