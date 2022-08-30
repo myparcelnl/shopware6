@@ -3,13 +3,14 @@
 $output = new Output();
 $jsonFormatter = new JsonFormatter($output);
 
-$opts = getopt("", ['env::', 'shopware:']);
+$opts = getopt("", ['env::', 'shopware:', 'admin', 'storefront']);
 
 if (!$opts) {
     $output->error('No options set. Option "env" is required.');
     return;
 }
 
+// Get selected env
 switch ($opts['env']) {
     case 'dev':
     case 'develop':
@@ -29,11 +30,18 @@ if (!isset($require)) {
     return;
 }
 
+// Get minimum Shopware version
 $shopware = '*';
 
 if (isset($opts['shopware'])) {
     $shopware = (string)$opts['shopware'];
 }
+
+// Should admin package be added to require
+$requireAdmin = array_key_exists('admin', $opts);
+
+// Should storefront package be added to require
+$requireStorefront = array_key_exists('storefront', $opts);
 
 try {
     $composerContent = $jsonFormatter->read(__DIR__ . '/composer.json');
@@ -54,8 +62,14 @@ try {
     }
 
     $composerContent[$require]['shopware/core'] = $shopware;
-    $composerContent[$require]['shopware/administration'] = $shopware;
-    $composerContent[$require]['shopware/storefront'] = $shopware;
+
+    if($requireAdmin) {
+        $composerContent[$require]['shopware/administration'] = $shopware;
+    }
+
+    if($requireStorefront) {
+        $composerContent[$require]['shopware/storefront'] = $shopware;
+    }
 
     $jsonFormatter->write(__DIR__ . '/composer.json', $jsonFormatter->sort($composerContent, [
         "name", "description", "version", "type", "license", "authors", "extra", "autoload", "autoload-dev", "require",
