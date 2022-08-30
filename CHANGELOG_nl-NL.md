@@ -1,3 +1,13 @@
+# Versie 2.0.0
+
+#### Brekende veranderingen
+- Om een betere klantervaring te bieden in de checkout, hebben we het aantal MyParcel verzendmethoden in Shopware teruggebracht naar één. Dit betekent dat de oude verzendmethoden zijn uitgeschakeld, en niet opnieuw moeten worden ingeschakeld. Orders die met deze verzendmethoden zijn gemaakt, worden ook niet meer weergegeven in de MyParcel Orders sectie in de administratie.
+- Ter voorbereiding op nieuwe functies en verbeteringen hebben we de ondersteuning voor oudere Shopware-versies moeten stopzetten. De minimaal vereiste versie van Shopware is nu 6.4.1.
+
+#### Nieuwe functies
+- Verbeterde klantervaring in de checkout: De beschikbare verzendopties veranderen dynamisch op basis van het verzendadres en de geselecteerde instellingen uit uw MyParcel backoffice.
+- Wereldwijde verzendingen: Verzending naar landen buiten Europa is nu beschikbaar.
+
 # Version 1.3.3
 - Probleem opgelost waardoor de administratie module niet beschikbaar was
 
