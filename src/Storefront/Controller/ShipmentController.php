@@ -1,8 +1,4 @@
 <?php
-/**
- * @noinspection PhpUnused
- * @noinspection PhpUndefinedClassInspection
- */
 
 namespace MyPa\Shopware\Storefront\Controller;
 
@@ -22,11 +18,6 @@ class ShipmentController extends StorefrontController
 {
     public const ROUTE_NAME_ALL = 'api.action.myparcel.shipment.all';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipment.create';
-
-    /* For backwards compatibility with 6.3*/
-    public const ROUTE_NAME_ALL_LEGACY = 'api.action.myparcel.shipment.all';
-    public const ROUTE_NAME_CREATE_LEGACY = 'api.action.myparcel.shipment.create';
-    /* End backwards compatibility*/
 
     public const REQUEST_KEY_CONSIGNMENT_ID = 'consignment_id';
     public const REQUEST_KEY_SHIPPING_OPTION_ID = 'shipping_option_id';
@@ -78,30 +69,6 @@ class ShipmentController extends StorefrontController
      */
     public function all(): JsonResponse
     {
-        return $this->allResponse();
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipment/all",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShipmentController::ROUTE_NAME_ALL_LEGACY,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     */
-    public function allLegacy(): JsonResponse
-    {
-        return $this->allResponse();
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    private function allResponse(): JsonResponse
-    {
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS => true,
             self::RESPONSE_KEY_SHIPMENTS => $this->shipmentService->getShipments(new Context(new SystemSource())),
@@ -124,48 +91,18 @@ class ShipmentController extends StorefrontController
      */
     public function createForOrder(Request $request): JsonResponse //NOSONAR
     {
-        return $this->createForOrderResponse($request);
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipment/create",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShipmentController::ROUTE_NAME_CREATE_LEGACY,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function createForOrderLegacy(Request $request): JsonResponse //NOSONAR
-    {
-        return $this->createForOrderResponse($request);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    private function createForOrderResponse(Request $request): JsonResponse //NOSONAR
-    {
         $context = new Context(new SystemSource());
 
         $orderId = $request->get(self::REQUEST_KEY_ORDER_ID);
         $orderVersionId = $request->get(self::REQUEST_KEY_ORDER_VERSION_ID);
         $shippingOptionId = $request->get(self::REQUEST_KEY_SHIPPING_OPTION_ID);
 
-        $existingShipmentEntity = $this->shipmentService->getShipmentByShippingOptionId(
+        $existingShipmentEntity = $this->shipmentService->getShipmentsByShippingOptionId(
             $shippingOptionId,
             $context
-        );
+        )->first();
 
-        if ($existingShipmentEntity !== null) {
+        if (!$existingShipmentEntity instanceof ShipmentEntity) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => true,
                 self::RESPONSE_KEY_SHIPMENT => $existingShipmentEntity

@@ -10,3 +10,4 @@ src/Resources/app/storefront/node_modules
 
 src/Resources/app/storefront/dist/
 src/Resources/public/administration/
+/node_modules/

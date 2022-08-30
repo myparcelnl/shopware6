@@ -16,11 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ShippingOptionsService
 {
-    private const FIELD_NAME = 'name';
-    private const FIELD_COSTS = 'costs';
-    private const MORNING_TYPE = '1';
+    private const FIELD_NAME    = 'name';
+    private const FIELD_COSTS   = 'costs';
+    private const MORNING_TYPE  = '1';
     private const STANDARD_TYPE = '2';
-    private const EVENING_TYPE = '3';
+    private const EVENING_TYPE  = '3';
 
     /**
      * @var LoggerInterface
@@ -40,14 +40,14 @@ class ShippingOptionsService
     /**
      * ShippingOptionsService constructor.
      *
-     * @param LoggerInterface $logger
+     * @param LoggerInterface           $logger
      * @param EntityRepositoryInterface $shippingOptionsRepository
-     * @param SystemConfigService $systemConfigService
+     * @param SystemConfigService       $systemConfigService
      */
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface           $logger,
         EntityRepositoryInterface $shippingOptionsRepository,
-        SystemConfigService $systemConfigService
+        SystemConfigService       $systemConfigService
     )
     {
         $this->logger = $logger;
@@ -56,7 +56,7 @@ class ShippingOptionsService
     }
 
     /**
-     * @param array $params
+     * @param array   $params
      * @param Context $context
      *
      * @return ShippingOptionEntity|null
@@ -85,7 +85,7 @@ class ShippingOptionsService
     }
 
     /**
-     * @param string $id
+     * @param string  $id
      * @param Context $context
      *
      * @return ShippingOptionEntity|null
@@ -94,13 +94,12 @@ class ShippingOptionsService
     {
         $criteria = new Criteria([$id]);
         $criteria->addAssociation('order');
-        //$criteria->addAssociation('consignments');
 
         return $this->shippingOptionsRepository->search($criteria, $context)->get($id);
     }
 
     /**
-     * @param string $id
+     * @param string  $id
      * @param Context $context
      *
      * @return array
@@ -116,7 +115,7 @@ class ShippingOptionsService
 
     /**
      * @param OrderEntity $orderEntity
-     * @param Context $context
+     * @param Context     $context
      *
      * @return ShippingOptionEntity|null
      */
@@ -135,20 +134,20 @@ class ShippingOptionsService
     public function getDeliveryTypes(): array
     {
         return [
-            AbstractConsignment::DELIVERY_TYPE_MORNING => [
-                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
+            AbstractConsignment::DELIVERY_TYPE_MORNING  => [
+                self::FIELD_NAME  => AbstractConsignment::DELIVERY_TYPE_MORNING_NAME,
                 self::FIELD_COSTS => 0,
             ],
             AbstractConsignment::DELIVERY_TYPE_STANDARD => [
-                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
+                self::FIELD_NAME  => AbstractConsignment::DELIVERY_TYPE_STANDARD_NAME,
                 self::FIELD_COSTS => 0,
             ],
-            AbstractConsignment::DELIVERY_TYPE_EVENING => [
-                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
+            AbstractConsignment::DELIVERY_TYPE_EVENING  => [
+                self::FIELD_NAME  => AbstractConsignment::DELIVERY_TYPE_EVENING_NAME,
                 self::FIELD_COSTS => 0,
             ],
-            AbstractConsignment::DELIVERY_TYPE_PICKUP => [
-                self::FIELD_NAME => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
+            AbstractConsignment::DELIVERY_TYPE_PICKUP   => [
+                self::FIELD_NAME  => AbstractConsignment::DELIVERY_TYPE_PICKUP_NAME,
                 self::FIELD_COSTS => 0,
             ],
         ];

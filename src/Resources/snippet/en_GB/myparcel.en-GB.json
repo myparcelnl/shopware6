@@ -1,18 +1,47 @@
 {
-    "myparcel": {
-        "delivery_type_1": "Morning delivery",
-        "delivery_type_2": "Standard delivery",
-        "delivery_type_3": "Evening delivery",
-        "delivery_signature": "Signature on delivery",
-        "delivery_recipient": "Do not deliver to the neighbors",
-        "delivery_location": {
-            "address": "Deliver to address",
-            "pickup": "Deliver to a Pickup Point"
-        }
+  "myparcel": {
+    "delivery_type_1": "Morning delivery",
+    "delivery_type_2": "Standard delivery",
+    "delivery_type_3": "Evening delivery",
+    "delivery_signature": "Signature on delivery",
+    "delivery_recipient": "Do not deliver to the neighbors",
+    "delivery_location": {
+      "address": "Deliver to address",
+      "pickup": "Deliver to a Pickup Point"
     },
-    "cookie": {
-        "myparcel": {
-          "name": "MyParcel"
-        }
+    "shipping_selector": {
+      "addressNotFound": "Address not found",
+      "cc": "Country code",
+      "city": "City",
+      "closed": "Closed",
+      "deliveryEveningTitle": "",
+      "deliveryMorningTitle": "",
+      "deliveryStandardTitle": "",
+      "deliveryTitle": "Deliver at home or at work",
+      "free": "Free",
+      "from": "From",
+      "headerDeliveryOptions": "",
+      "loadMore": "Load more",
+      "number": "Number",
+      "onlyRecipientTitle": "Recipient only",
+      "openingHours": "Opening hours",
+      "options": "Options",
+      "packageTypeDigitalStamp": "Digital stamp",
+      "packageTypeMailbox": "Mailbox",
+      "pickUpFrom": "From",
+      "pickupLocationsListButton": "List",
+      "pickupLocationsMapButton": "Map",
+      "pickupTitle": "Pickup at location",
+      "postalCode": "Postal code",
+      "retry": "Retry",
+      "signatureTitle": "Require signature",
+      "mondayDeliveryTitle": "Monday delivery",
+      "wrongnumberPostalCode": "Housenumber/postal code combination unknown",
+      "beDeliveryStandardTitle": "Standaard levering",
+      "beDeliveryTitle": "Levering",
+      "saturdayDeliveryTitle": "Zaterdaglevering",
+      "wrongPostalCodeCity": "Postal code/ City combination unknown",
+      "refreshMessage": "An error occurred, please refresh the page"
     }
+  }
 }

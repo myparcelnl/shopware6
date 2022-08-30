@@ -1,14 +1,4 @@
-import 'regenerator-runtime';
+import DeliveryOptionsPlugin from "./delivery-options/delivery-options.plugin";
 
-// Import all necessary Storefront plugins and scss files
-import MyParcelShippingOptions
-    from './myparcel/plugins/shipping-options.plugin';
-
-// Register them via the existing PluginManager
 const PluginManager = window.PluginManager;
-PluginManager.register('MyParcelShippingOptions', MyParcelShippingOptions);
-
-// Necessary for the webpack hot module reloading server
-if (module.hot) {
-    module.hot.accept();
-}
+PluginManager.register('DeliveryOptionsPlugin',DeliveryOptionsPlugin,'[data-delivery-options-plugin]');

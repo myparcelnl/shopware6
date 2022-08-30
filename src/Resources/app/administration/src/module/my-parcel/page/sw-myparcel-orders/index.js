@@ -12,10 +12,12 @@ const ACTION_TYPE_CREATE = 'create';
 const CARRIER_POSTNL_ID = 1;
 const CARRIER_BPOST_ID = 2;
 const CARRIER_DPD_ID = 4;
+const CARRIER_INSTABOX_ID = 5;
 
 const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
 const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
 const CARRIER_DPD_SNIPPET = 'sw-myparcel.general.carriers.dpd';
+const CARRIER_INSTABOX_SNIPPET = 'sw-myparcel.general.carriers.instabox';
 
 const DELIVERY_TYPE_MORNING_ID = 1;
 const DELIVERY_TYPE_STANDARD_ID = 2;
@@ -78,7 +80,8 @@ Component.register('sw-myparcel-orders', {
             carriers: {
                 [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
                 [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
-                [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET)
+                [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET),
+                [CARRIER_INSTABOX_ID]: this.$tc(CARRIER_INSTABOX_SNIPPET)
             },
             deliveryTypes: {
                 [DELIVERY_TYPE_MORNING_ID]: this.$tc(DELIVERY_TYPE_MORNING_SNIPPET),
@@ -122,7 +125,7 @@ Component.register('sw-myparcel-orders', {
         },
 
         shippingOptionRepository() {
-            return this.repositoryFactory.create('kiener_my_parcel_shipping_option');
+            return this.repositoryFactory.create('myparcel_shipping_option');
         },
 
         shippingOptionCriteria() {
@@ -241,7 +244,7 @@ Component.register('sw-myparcel-orders', {
 
                             if (!!response.consignments) {
                                 for (let id in response.consignments) {
-                                    if(!response.consignments.hasOwnProperty(id)) {
+                                    if (!response.consignments.hasOwnProperty(id)) {
                                         continue;
                                     }
                                     length = length + 1;
@@ -261,11 +264,11 @@ Component.register('sw-myparcel-orders', {
         },
 
         getPickupLocation(item) {
-            if(!item.locationId){
+            if (!item.locationId) {
                 return '-';
             }
 
-            return item.locationName +" : "+ item.locationStreet+" "+item.locationNumber+" "+item.locationPostalCode+" "+item.locationCity+" "+item.locationCc;
+            return item.locationName + " : " + item.locationStreet + " " + item.locationNumber + " " + item.locationPostalCode + " " + item.locationCity + " " + item.locationCc;
         },
 
         getVariantFromOrderState(order) {
@@ -345,7 +348,7 @@ Component.register('sw-myparcel-orders', {
                         order_id: item.orderId,
                         order_version_id: item.orderVersionId,
                         shipping_option_id: id,
-                        package_type: consignmentData.packageType,
+                        package_type: consignmentData.packageType, // this does nothing
                     });
                 }
             }
@@ -376,15 +379,26 @@ Component.register('sw-myparcel-orders', {
                             document.location = response.labelUrl;
                         }
                     } else {
+                        console.log('1');
+                        console.log(response)
+                        console.log(response.translation)
+                        let message;
+                        switch (response.translation) {
+                            case 'ConfigFieldValueMissingException':
+                                message = this.$tc('sw-myparcel.messages.errors.ConfigFieldValueMissingException');
+                                break;
+                            default:
+                                message = this.$tc('sw-myparcel.messages.error');
+                        }
                         this.createNotificationError({
                             title: this.$tc('sw-myparcel.general.mainMenuItemGeneral'),
-                            message: this.$tc('sw-myparcel.messages.error')
+                            message: message
                         });
                     }
 
                     this.closeModals();
                 })
-                .catch(() => {
+                .catch((error) => {
                     this.createNotificationError({
                         title: this.$tc('sw-myparcel.general.mainMenuItemGeneral'),
                         message: this.$tc('sw-myparcel.messages.error')
@@ -502,6 +516,10 @@ Component.register('sw-myparcel-orders', {
 
         onCloseCreateMultipleConsignmentsModal() {
             this.closeCreateMultipleConsignmentsModal();
+        },
+        onCloseConsignmentModal() {
+            this.showConsignmentModal = false;
+            this.consignments = [];
         },
 
         onCreateMultipleConsignments() {

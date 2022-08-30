@@ -1,127 +1,172 @@
 {
-    "sw-myparcel": {
-        "general": {
-            "mainMenuItemGeneral": "MyParcel",
-            "ordersMenuItemGeneral": "MyParcel Orders",
-            "consignmentsMenuItemGeneral": "MyParcel Shipments",
-            "shippingMethodsMenuItemGeneral": "MyParcel Shipping methods",
-            "descriptionTextModule": "Tagline for MyParcel",
-            "packageTypes": {
-                "package": "Package",
-                "mailbox": "Mailbox",
-                "letter": "Letter",
-                "digitalStamp": "Digital stamp"
-            },
-            "deliveryTypes": {
-                "morning": "Morning delivery",
-                "standard": "Standard delivery",
-                "evening": "Evening delivery",
-                "pickup": "Pickup point"
-            },
-            "carriers": {
-                "postNL": "PostNL",
-                "bPost": "bpost",
-                "dpd": "DPD"
-            }
-        },
-        "messages": {
-            "error": "An error has occurred",
-            "consignmentSuccess": "The shipment is successfully created",
-            "createLabelSuccess": "The label is successfully created"
-        },
-        "columns": {
-            "idColumn": "ID",
-            "orderColumn": "Order",
-            "orderDateColumn": "Ordered",
-            "consignmentDateColumn": "Created",
-            "totalAmountColumn": "Total amount",
-            "trackingCodesColumn": "Track & trace",
-            "statusColumn": "Status",
-            "actionsColumn": "Actions",
-            "packageTypeColumn": "Package type",
-            "deliveryDateColumn": "Delivery date",
-            "carrierColumn": "Carrier",
-            "deliveryTypeColumn": "Delivery type",
-            "requiresAgeCheckColumn": "Requires age check",
-            "requiresSignatureColumn": "Requires signature",
-            "onlyRecipientColumn": "Recipient only",
-            "returnIfNotHomeColumn": "Return if not home",
-            "largeFormatColumn": "Large format",
-            "numberOfConsignmentsColumn": "Shipment(s)",
-            "pickupLocation": "Pickup location"
-        },
-        "orders": {
-            "title": "Orders",
-            "modals": {
-                "createConsignment": {
-                    "titleSingle": "Create a shipment",
-                    "titleMultiple": "Create shipments ({numberOfItems} item(s))",
-                    "actionTypeDownloadLabel": "Download",
-                    "actionTypeCreateLabel": "Create label",
-                    "actionTypeCreateConsignment": "Create shipment",
-                    "packageTypePackageLabel": "Package",
-                    "packageTypeMailboxLabel": "Mailbox",
-                    "packageTypeLetterLabel": "Letter",
-                    "packageTypeDigitalStampLabel": "Digital stamp",
-                    "optionOnlyRecipientLabel": "Only recipient",
-                    "optionRequiresAgeCheckLabel": "Requires age check 18+",
-                    "optionRequiresSignatureLabel": "Requires signature",
-                    "optionReturnIfNotHomeLabel": "Return if not home",
-                    "optionLargeFormatLabel": "Large format",
-                    "positionTopLeftLabel": "Top left",
-                    "positionTopRightLabel": "Top right",
-                    "positionBottomLeftLabel": "Bottom left",
-                    "positionBottomRightLabel": "Bottom right",
-                    "printSmallLabelLabel": "A6 label",
-                    "actionTypeHeading": "Action type",
-                    "deliveryTypeHeading": "Delivery type",
-                    "packageTypeHeading": "Package type",
-                    "numberOfLabelsHeading": "Number of labels",
-                    "printOptionsHeading": "Print options",
-                    "printPositionHeading": "Print position",
-                    "shippingOptionsHeading": "Shipping options"
-                }
-            },
-            "buttons": {
-                "viewOrderButton": "View the order",
-                "cancelButton": "Cancel",
-                "createConsignmentButton": "Create shipment",
-                "createConsignmentsButton": "Create shipments",
-                "downloadLabelButton": "Download label"
-            }
-        },
-        "consignments": {
-            "title": "Shipments",
-            "modals": {
-                "createLabels": {
-                    "titleSingle": "Create label",
-                    "titleMultiple": "Create labels ({numberOfItems} item(s))",
-                    "positionTopLeftLabel": "Top left",
-                    "positionTopRightLabel": "Top right",
-                    "positionBottomLeftLabel": "Bottom left",
-                    "positionBottomRightLabel": "Bottom right",
-                    "printSmallLabelLabel": "A6 label",
-                    "numberOfLabelsHeading": "Number of labels",
-                    "printOptionsHeading": "Print options",
-                    "printPositionHeading": "Print position"
-                }
-            },
-            "buttons": {
-                "cancelButton": "Cancel",
-                "clearFiltersButton": "Show all",
-                "createLabelButton": "Create label",
-                "createLabelsButton": "Create labels",
-                "downloadLabelButton": "Download label",
-                "downloadLabelsButton": "Download labels",
-                "downloadDefaultLabelButton": "Download label (default settings)",
-                "downloadDefaultLabelsButton": "Download labels (default settings)"
-            }
-        },
-        "shippingMethods": {
-            "title": "Shipping methods",
-            "buttons": {
-                "viewShippingMethodButton": "View shipping method"
-            }
+  "sw-myparcel": {
+    "general": {
+      "mainMenuItemGeneral": "MyParcel",
+      "ordersMenuItemGeneral": "MyParcel Orders",
+      "consignmentsMenuItemGeneral": "MyParcel Shipments",
+      "shippingMethodsMenuItemGeneral": "MyParcel Shipping methods",
+      "descriptionTextModule": "Tagline for MyParcel",
+      "packageTypes": {
+        "package": "Package",
+        "mailbox": "Mailbox",
+        "letter": "Letter",
+        "digitalStamp": "Digital stamp"
+      },
+      "deliveryTypes": {
+        "morning": "Morning delivery",
+        "standard": "Standard delivery",
+        "evening": "Evening delivery",
+        "pickup": "Pickup point"
+      },
+      "carriers": {
+        "postNL": "PostNL",
+        "bpost": "bpost",
+        "instabox": "Instabox",
+        "dpd": "DPD"
+      },
+      "shipmentStatuses": {
+        "1": "Concept",
+        "2": "Registered",
+        "3": "En route - Handed to carrier",
+        "4": "En route - Sorting",
+        "5": "En route - Distribution",
+        "6": "En route - Customs",
+        "7": "Delivered - At recipient",
+        "8": "Delivered - Ready for pickup",
+        "9": "Delivered - Package picked up",
+        "10": "Delivered - Return shipment",
+        "11": "Delivered - Return shipment pickup location",
+        "12": "Unrelated label printed",
+        "13": "Credited",
+        "14": "Printed - Digital Stamp",
+        "17": "Cancelled",
+        "30": "Inactive - Concept",
+        "31": "Inactive - Registered",
+        "32": "Inactive - En route - Handed to carrier",
+        "33": "Inactive - En route - Sorting",
+        "34": "Inactive - En route - Distribution",
+        "35": "Inactive - En route - Customs",
+        "36": "Inactive - Delivered - At recipient",
+        "37": "Inactive - Delivered - Ready for pickup",
+        "38": "Inactive - Delivered - Package picked up",
+        "39": "Inactive - delivered - package picked up",
+        "40": "Inactive - Return shipment pickup location",
+        "99": "Inactive - Unknown"
+      }
+    },
+    "messages": {
+      "error": "An error has occurred",
+      "consignmentSuccess": "The shipment is successfully created",
+      "createLabelSuccess": "The label is successfully created",
+      "errors": {
+        "ConfigFieldValueMissingException": "No HS code could be found, please enter a default HS code in the MyParcel plugin, or add an HS code to all ordered products."
+      }
+    },
+    "columns": {
+      "idColumn": "ID",
+      "orderColumn": "Order",
+      "orderDateColumn": "Ordered",
+      "consignmentDateColumn": "Created",
+      "totalAmountColumn": "Total amount",
+      "trackingCodesColumn": "Track & trace",
+      "statusColumn": "Status",
+      "actionsColumn": "Actions",
+      "packageTypeColumn": "Package type",
+      "deliveryDateColumn": "Delivery date",
+      "carrierColumn": "Carrier",
+      "deliveryTypeColumn": "Delivery type",
+      "shippingStatusColumn": "Status",
+      "requiresAgeCheckColumn": "Requires age check",
+      "requiresSignatureColumn": "Requires signature",
+      "onlyRecipientColumn": "Recipient only",
+      "returnIfNotHomeColumn": "Return if not home",
+      "largeFormatColumn": "Large format",
+      "numberOfConsignmentsColumn": "Shipment(s)",
+      "pickupLocation": "Pickup location"
+    },
+    "orders": {
+      "title": "Orders",
+      "modals": {
+        "createConsignment": {
+          "titleSingle": "Create a shipment",
+          "titleMultiple": "Create shipments ({numberOfItems} item(s))",
+          "actionTypeDownloadLabel": "Download",
+          "actionTypeCreateLabel": "Create label",
+          "actionTypeCreateConsignment": "Create shipment",
+          "packageTypePackageLabel": "Package",
+          "packageTypeMailboxLabel": "Mailbox",
+          "packageTypeLetterLabel": "Letter",
+          "packageTypeDigitalStampLabel": "Digital stamp",
+          "optionOnlyRecipientLabel": "Only recipient",
+          "optionRequiresAgeCheckLabel": "Requires age check 18+",
+          "optionRequiresSignatureLabel": "Requires signature",
+          "optionReturnIfNotHomeLabel": "Return if not home",
+          "optionLargeFormatLabel": "Large format",
+          "positionTopLeftLabel": "Top left",
+          "positionTopRightLabel": "Top right",
+          "positionBottomLeftLabel": "Bottom left",
+          "positionBottomRightLabel": "Bottom right",
+          "printSmallLabelLabel": "A6 label",
+          "actionTypeHeading": "Action type",
+          "deliveryTypeHeading": "Delivery type",
+          "packageTypeHeading": "Package type",
+          "numberOfLabelsHeading": "Number of labels",
+          "printOptionsHeading": "Print options",
+          "printPositionHeading": "Print position",
+          "shippingOptionsHeading": "Shipping options"
         }
+      },
+      "buttons": {
+        "viewOrderButton": "View the order",
+        "cancelButton": "Cancel",
+        "createConsignmentButton": "Create shipment",
+        "createConsignmentsButton": "Create shipments",
+        "downloadLabelButton": "Download label"
+      }
+    },
+    "consignments": {
+      "title": "Shipments",
+      "modals": {
+        "createLabels": {
+          "titleSingle": "Create label",
+          "titleMultiple": "Create labels ({numberOfItems} item(s))",
+          "positionTopLeftLabel": "Top left",
+          "positionTopRightLabel": "Top right",
+          "positionBottomLeftLabel": "Bottom left",
+          "positionBottomRightLabel": "Bottom right",
+          "printSmallLabelLabel": "A6 label",
+          "numberOfLabelsHeading": "Number of labels",
+          "printOptionsHeading": "Print options",
+          "printPositionHeading": "Print position"
+        }
+      },
+      "buttons": {
+        "cancelButton": "Cancel",
+        "clearFiltersButton": "Show all",
+        "createLabelButton": "Create label",
+        "createLabelsButton": "Create labels",
+        "downloadLabelButton": "Download label",
+        "downloadLabelsButton": "Download labels",
+        "downloadDefaultLabelButton": "Download label (default settings)",
+        "downloadDefaultLabelsButton": "Download labels (default settings)"
+      }
+    },
+    "shippingMethods": {
+      "title": "Shipping methods",
+      "buttons": {
+        "viewShippingMethodButton": "View shipping method"
+      }
+    },
+    "config": {
+      "instaboxSelector": {
+        "title": "Select or change your drop off point on your {dashboardLink}",
+        "linkText": "MyParcel dashboard",
+        "currentAddress": "Use current address:",
+        "newAddress": "Use new address:",
+        "settingNotSaved": "This setting has not been saved yet",
+        "somethingWrongMessage": "Something went wrong, please reload the page and try again",
+        "dropOffWrongMessage": "No drop off point has been found, select one on your MyParcel dashboard"
+      }
     }
+  }
 }

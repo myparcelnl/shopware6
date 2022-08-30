@@ -40,6 +40,7 @@ build: ## Builds the package
 	@cd ../../.. && php bin/console plugin:refresh
 	@cd ../../.. && php bin/console theme:dump
 	@cd ../../.. && PUPPETEER_SKIP_DOWNLOAD=1 ./bin/build-js.sh
+	@cd src/Resources/app/storefront && cp 'node_modules/@myparcel/delivery-options/dist/myparcel.js' 'dist/storefront/js/myparcel.js'
 	@cd ../../.. && php bin/console theme:refresh
 	@cd ../../.. && php bin/console theme:compile
 	@cd ../../.. && php bin/console theme:refresh
@@ -51,8 +52,8 @@ release: ## Create a new release
 	@make zip
 
 zip: ## Creates a new ZIP package
-	@php update-composer-require.php --shopware=^6.3.0 --env=prod
-	@cd .. && echo "\nCreating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
+	@php update-composer-require.php --env=prod --shopware=^6.4.1 --admin --storefront
+	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
 	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
 	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '*.editorconfig' '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store' '*/phpunit.xml' '*/.phpstan.neon' '*/.php_cs.php' '*/phpinsights.php' '*node_modules*' '*administration/build*' '*storefront/build*' '*/update-composer-require.php'
-	@php update-composer-require.php --shopware=^6.3.0 --env=dev
+	@php update-composer-require.php --env=dev --shopware=^6.4.1 --admin --storefront

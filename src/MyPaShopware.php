@@ -2,10 +2,9 @@
 
 namespace MyPa\Shopware;
 
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use Doctrine\DBAL\Connection;
-use Shopware\Core\Checkout\Order\OrderDefinition;
-use Shopware\Core\Framework\Context;
+use MyPa\Shopware\Service\Shopware\CustomField\CustomFieldInstaller;
+use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodCreatorService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -13,7 +12,7 @@ use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
-use Shopware\Core\System\CustomField\CustomFieldTypes;
+use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 
 class MyPaShopware extends Plugin
 {
@@ -21,18 +20,26 @@ class MyPaShopware extends Plugin
     public function install(InstallContext $installContext): void
     {
         parent::install($installContext);
-
-        $this->updateCustomFields($installContext->getCurrentPluginVersion());
+        CustomFieldInstaller::createFactory($this->container)->install($installContext->getContext());
     }
 
     public function activate(ActivateContext $activateContext): void
     {
-        /** @var ShippingMethodService $shippingMethodService */
-        $shippingMethodService = $this->container->get(ShippingMethodService::class);
+        parent::activate($activateContext);
 
-        // Install MyParcel shipping methods
-        $shippingMethodService->createShippingMethods($activateContext->getContext());
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($this->getPath(), $activateContext->getContext());
     }
+
+    public function update(UpdateContext $updateContext): void
+    {
+        parent::update($updateContext);
+
+        $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
+        $shippingMethodCreator->create($this->getPath(), $updateContext->getContext());
+        CustomFieldInstaller::createFactory($this->container)->install($updateContext->getContext());
+    }
+
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
@@ -45,39 +52,22 @@ class MyPaShopware extends Plugin
         $connection = $this->container->get(Connection::class);
 
         $connection->exec('SET FOREIGN_KEY_CHECKS=0;');
-        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipment`');
-        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipping_method`');
-        $connection->exec('DROP TABLE IF EXISTS `kiener_my_parcel_shipping_option`');
+        $connection->exec('DROP TABLE IF EXISTS `myparcel_shipment`');
+        $connection->exec('DROP TABLE IF EXISTS `myparcel_shipping_option`');
 
         $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->deleteCustomFields($uninstallContext);
     }
 
-    private function updateCustomFields(string $to, ?string $from = null)
-    {
-        /** @var EntityRepositoryInterface $customFieldSetRepository */
-        $customFieldSetRepository = $this->container->get('custom_field_set.repository');
-
-        if ($this->version_between('0.1.0', $to, $from)) {
-            $this->updateCustomFields_0_1_0($customFieldSetRepository);
-        }
-    }
-
-    private function version_between(string $between, string $to, ?string $from = null)
-    {
-        return version_compare($to, $between, '>=')
-            && (is_null($from) || version_compare($from, $between, '<'));
-    }
-
-    private function deleteCustomFields()
+    private function deleteCustomFields(UninstallContext $uninstallContext)
     {
         /** @var EntityRepositoryInterface $customFieldSetRepository */
         $customFieldSetRepository = $this->container->get('custom_field_set.repository');
 
         $entityIds = $customFieldSetRepository->search(
             (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
-            Context::createDefaultContext()
+            $uninstallContext->getContext()
         )->getEntities()->getIds();
 
         if (count($entityIds) < 1) {
@@ -90,37 +80,7 @@ class MyPaShopware extends Plugin
 
         $customFieldSetRepository->delete(
             $entityIds,
-            Context::createDefaultContext()
+            $uninstallContext->getContext()
         );
-    }
-
-    private function updateCustomFields_0_1_0(EntityRepositoryInterface $customFieldSetRepository)
-    {
-        $entityIds = $customFieldSetRepository->search(
-            (new Criteria())->addFilter(new EqualsFilter('name', 'myparcelShopware')),
-            Context::createDefaultContext()
-        )->getEntities()->getIds();
-
-        if (count($entityIds) > 0) {
-            return;
-        }
-
-        $customFieldSetRepository->upsert([
-            [
-                'name' => 'myparcelShopware',
-                'global' => true,
-                'customFields' => [
-                    [
-                        'name' => 'my_parcel',
-                        'type' => CustomFieldTypes::JSON,
-                    ]
-                ],
-                'relations' => [
-                    [
-                        'entityName' => $this->container->get(OrderDefinition::class)->getEntityName()
-                    ]
-                ],
-            ]
-        ], Context::createDefaultContext());
     }
 }
