@@ -7,8 +7,16 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConfigGenerator
 {
-    const ALWAYS_ENABLED_SETTINGS = ['allowShowDeliveryDate', 'allowMorningDelivery', 'allowSaturdayDelivery', 'allowPickupLocations',
-        'allowSignature', 'allowEveningDelivery', 'allowOnlyRecipient', 'allowOnlyRecipient'];
+    const ALWAYS_ENABLED_SETTINGS = [
+        'allowShowDeliveryDate',
+        'allowMorningDelivery',
+        'allowSaturdayDelivery',
+        'allowPickupLocations',
+        'allowSignature',
+        'allowEveningDelivery',
+        'allowOnlyRecipient',
+        'allowOnlyRecipient',
+    ];
 
     private SystemConfigService $systemConfigService;
 
@@ -22,8 +30,10 @@ class ConfigGenerator
 
     /**
      * Calculates the cost based on the selected options
-     * @param array $options
-     * @param string $salesChannelId
+     *
+     * @param  array  $options
+     * @param  string $salesChannelId
+     *
      * @return float
      */
     public function getCostForCarrierWithOptions(array $options, string $salesChannelId): float
@@ -116,12 +126,50 @@ class ConfigGenerator
     /**
      * @return array An array with the settings for the NPM package
      */
-    public function generateConfigForPackage(SalesChannelContext $salesChannelContext,string $locale): array
+    public function generateConfigForPackage(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        $config = [];
-        $config = array_merge($config, $this->getGeneralSettings($salesChannelContext,$locale));
+        $config                    = [];
+        $config                    = array_merge($config, $this->getGeneralSettings($salesChannelContext, $locale));
         $config['carrierSettings'] = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
+        $config['strings']         = $this->getConfigStrings($salesChannelContext->getSalesChannelId());
         return $config;
+    }
+
+    /**
+     * @param  string $salesChannelId
+     *
+     * @return array
+     */
+    private function getConfigStrings(string $salesChannelId): array
+    {
+        $stringsConfig = [];
+        $strings = [
+            'addressNotFound',
+            'city',
+            'closed',
+            'deliveryEveningTitle',
+            'deliveryMorningTitle',
+            'deliveryStandardTitle',
+            'deliverySameDayTitle',
+            'deliveryTitle',
+            'from',
+            'headerDeliveryOptions',
+            'houseNumber',
+            'onlyRecipientTitle',
+            'openingHours',
+            'pickUpFrom',
+            'pickupTitle',
+            'postcode',
+            'retry',
+            'signatureTitle',
+            'wrongHouseNumberCity',
+        ];
+
+        foreach($strings as $string) {
+            $stringsConfig[$string] = $this->getConfigString($salesChannelId, $string);
+        }
+
+        return $stringsConfig;
     }
 
     private function getGeneralSettings(SalesChannelContext $salesChannelContext,string $locale): array
@@ -138,12 +186,25 @@ class ConfigGenerator
 
     private function generateConfig(string $salesChannelId, string $carrier = ''): array
     {
-        $settingsToRetrieve = ['allowShowDeliveryDate', 'allowMorningDelivery',
-            'priceMorningDelivery', 'priceStandardDelivery', 'priceSameDayDelivery',
-            'allowEveningDelivery', 'priceEveningDelivery', 'priceSignature',
-            'allowOnlyRecipient', 'priceOnlyRecipient',
-            'pricePickup', 'allowSaturdayDelivery', 'allowPickupLocations',
-            'allowSignature', 'allowOnlyRecipient', 'deliveryDaysWindow', 'dropOffDelay'];
+        $settingsToRetrieve = [
+            'allowEveningDelivery',
+            'allowMorningDelivery',
+            'allowOnlyRecipient',
+            'allowOnlyRecipient',
+            'allowPickupLocations',
+            'allowSaturdayDelivery',
+            'allowShowDeliveryDate',
+            'allowSignature',
+            'deliveryDaysWindow',
+            'dropOffDelay',
+            'priceEveningDelivery',
+            'priceMorningDelivery',
+            'priceOnlyRecipient',
+            'pricePickup',
+            'priceSameDayDelivery',
+            'priceSignature',
+            'priceStandardDelivery',
+        ];
 
         $settings = [];
 
@@ -203,27 +264,62 @@ class ConfigGenerator
         return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . 'Enabled' . $carrier, $salesChannelId);
     }
 
+    /**
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return mixed
+     */
     public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
     {
         return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    public function getConfigString(string $salesChannelId, string $field, string $carrier = "")
+    /**
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return string
+     */
+    public function getConfigString(string $salesChannelId, string $field, string $carrier = ""): string
     {
         return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    public function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
+    /**
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return bool
+     */
+    public function getConfigBool(string $salesChannelId, string $field, string $carrier = ""): bool
     {
         return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    public function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
+    /**
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return int
+     */
+    public function getConfigInt(string $salesChannelId, string $field, string $carrier = ""): int
     {
         return $this->systemConfigService->getInt('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
-    public function getConfigFloat(string $salesChannelId, string $field, string $carrier = "")
+    /**
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return float
+     */
+    public function getConfigFloat(string $salesChannelId, string $field, string $carrier = ""): float
     {
         return $this->systemConfigService->getFloat('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }

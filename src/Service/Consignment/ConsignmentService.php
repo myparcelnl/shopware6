@@ -125,6 +125,7 @@ class ConsignmentService
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
+     * @throws Exception
      */
     private function createConsignment(
         Context     $context,
@@ -169,7 +170,7 @@ class ConsignmentService
             ->setFullStreet(
                 sprintf('%s %s %s', $parsedAddress['street'], $parsedAddress['houseNumber'], $parsedAddress['houseNumberAddition'])
             )
-            ->setPostalCode($shippingAddress->getZipcode())
+            ->setPostalCode(trim($shippingAddress->getZipcode()))
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
@@ -226,7 +227,7 @@ class ConsignmentService
             $consignment->setPackageType($packageType);
         }
 
-        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
+        if ($consignment->getPackageType() === AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
 
             $totalWeight = 0;
             $lineItems = $orderEntity->getLineItems();
@@ -235,7 +236,7 @@ class ConsignmentService
                     $totalWeight += $lineItem->getProduct()->getWeight();
                 }
                 //Shopware uses KG for weight, MyParcel wants Grams
-                $totalWeight = $totalWeight * 1000;
+                $totalWeight *= 1000;
             }
 
             $consignment->setTotalWeight($totalWeight);
@@ -277,8 +278,8 @@ class ConsignmentService
             $consignment->setReturn($shippingOptions->getReturnIfNotHome());
         }
 
-        if ($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP) {
-            $consignment->setPickupLocationCode(strval($shippingOptions->getLocationId()));
+        if ($shippingOptions->getDeliveryType() === AbstractConsignment::DELIVERY_TYPE_PICKUP) {
+            $consignment->setPickupLocationCode((string) $shippingOptions->getLocationId());
             $consignment->setPickupLocationName($shippingOptions->getLocationName());
             $consignment->setPickupStreet($shippingOptions->getLocationStreet());
             $consignment->setPickupNumber($shippingOptions->getLocationNumber());
@@ -332,7 +333,7 @@ class ConsignmentService
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
-                $consignment->getPostalCode(),
+                trim($consignment->getPostalCode()),
                 $consignment->getCountry()
             );
 

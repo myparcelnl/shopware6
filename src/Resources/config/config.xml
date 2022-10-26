@@ -2816,6 +2816,164 @@
     </card>
 
     <card>
+        <title>Delivery options text</title>
+        <title lang="de-DE">Delivery Options Text</title>
+        <title lang="nl-NL">Delivery options teksten</title>
+
+        <input-field type="text">
+            <name>addressNotFound</name>
+            <label>Address not found</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Adres niet gevonden</label>
+            <defaultValue>Address not found</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>city</name>
+            <label>City</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Stad</label>
+            <defaultValue>City</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>closed</name>
+            <label>Closed</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Gesloten</label>
+            <defaultValue>Closed</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>deliveryEveningTitle</name>
+            <label>Evening delivery</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Avond bezorging</label>
+            <defaultValue>Evening delivery</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>deliveryMorningTitle</name>
+            <label>Morning delivery</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Ochtend bezorging</label>
+            <defaultValue>Morning delivery</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>deliveryStandardTitle</name>
+            <label>Standard delivery</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Standaard bezorging</label>
+            <defaultValue>Standard delivery</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>deliverySameDayTitle</name>
+            <label>Same day delivery</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Zelfde dag bezorgd</label>
+            <defaultValue>Same day delivery</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>deliveryTitle</name>
+            <label>Delivery</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Bezorging</label>
+            <defaultValue>Delivery</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>headerDeliveryOptions</name>
+            <label>Delivery options title</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Delivery options titel</label>
+            <defaultValue>Delivery Options</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>houseNumber</name>
+            <label>House number</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Huisnummer</label>
+            <defaultValue>House number</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>onlyRecipientTitle</name>
+            <label>Only recipient</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Alleen huisadres</label>
+            <defaultValue>Only recipient</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>openingHours</name>
+            <label>Opening hours</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Openingstijden</label>
+            <defaultValue>Opening hours</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>pickUpFrom</name>
+            <label>Pickup from</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Ophalen vanaf</label>
+            <defaultValue>Pickup from</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>pickupTitle</name>
+            <label>Pickup</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Ophalen</label>
+            <defaultValue>Pickup</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>postcode</name>
+            <label>Postal code</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Postcode</label>
+            <defaultValue>Postal code</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>retry</name>
+            <label>Retry</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Opnieuw proberen</label>
+            <defaultValue>Retry</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>signatureTitle</name>
+            <label>Signature</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Handtekening voor ontvangst</label>
+            <defaultValue>Signature</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>wrongHouseNumberCity</name>
+            <label>Invalid postal code/city combination</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Postcode/plaats combinatie onbekend</label>
+            <defaultValue>Invalid postal code/city combination</defaultValue>
+        </input-field>
+
+        <input-field type="text">
+            <name>from</name>
+            <label>From</label>
+            <label lang="de-DE">Standard-Druckformat für Versandetiketten</label>
+            <label lang="nl-NL">Vanaf</label>
+            <defaultValue>From</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
         <title>Label settings</title>
         <title lang="de-DE">Label-Einstellungen</title>
         <title lang="nl-NL">Label instellingen</title>
