@@ -7,7 +7,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConfigGenerator
 {
-    const ALWAYS_ENABLED_SETTINGS = [
+    public const ALWAYS_ENABLED_SETTINGS = [
         'allowShowDeliveryDate',
         'allowMorningDelivery',
         'allowSaturdayDelivery',
@@ -116,18 +116,57 @@ class ConfigGenerator
      */
     public function generateConfigForPackage(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        $config = [];
-        $config = array_merge($config, $this->getGeneralSettings($salesChannelContext, $locale));
+        $config                    = [];
+        $config                    = array_merge($config, $this->getGeneralSettings($salesChannelContext, $locale));
         $config['carrierSettings'] = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
+        $config['translations']    = $this->getConfigStrings($salesChannelContext->getSalesChannelId());
         return $config;
     }
 
     /**
-     * @param SalesChannelContext $salesChannelContext
-     * @param string              $locale
+     * @param  string $salesChannelId
+     *
      * @return array
      */
-    private function getGeneralSettings(SalesChannelContext $salesChannelContext, string $locale): array
+    private function getConfigStrings(string $salesChannelId): array
+    {
+        $stringsConfig = [];
+        $strings = [
+            'addressNotFound',
+            'city',
+            'closed',
+            'deliveryEveningTitle',
+            'deliveryMorningTitle',
+            'deliveryStandardTitle',
+            'deliverySameDayTitle',
+            'deliveryTitle',
+            'from',
+            'headerDeliveryOptions',
+            'houseNumber',
+            'onlyRecipientTitle',
+            'openingHours',
+            'pickUpFrom',
+            'pickupTitle',
+            'postcode',
+            'retry',
+            'signatureTitle',
+            'wrongHouseNumberCity',
+        ];
+
+        foreach($strings as $string) {
+            $stringsConfig[$string] = $this->getConfigString($salesChannelId, $string);
+        }
+
+        return $stringsConfig;
+    }
+
+    /**
+     * @param  \Shopware\Core\System\SalesChannel\SalesChannelContext $salesChannelContext
+     * @param  string                                                 $locale
+     *
+     * @return array
+     */
+    private function getGeneralSettings(SalesChannelContext $salesChannelContext,string $locale): array
     {
         //These are the settings that are only valid for the main config
         $settings = [
@@ -215,7 +254,6 @@ class ConfigGenerator
 
     /**
      * Checks if the setting has been enabled, bool settings will be returned as always enabled
-     *
      * @param string $salesChannelId
      * @param string $field
      * @param string $carrier
@@ -230,10 +268,11 @@ class ConfigGenerator
     }
 
     /**
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
-     * @return array|bool|float|int|string|null
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
+     * @return mixed
      */
     public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
     {
@@ -241,45 +280,49 @@ class ConfigGenerator
     }
 
     /**
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
      * @return string
      */
-    public function getConfigString(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigString(string $salesChannelId, string $field, string $carrier = ""): string
     {
         return $this->systemConfigService->getString('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     /**
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
      * @return bool
      */
-    public function getConfigBool(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigBool(string $salesChannelId, string $field, string $carrier = ""): bool
     {
         return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     /**
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
      * @return int
      */
-    public function getConfigInt(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigInt(string $salesChannelId, string $field, string $carrier = ""): int
     {
         return $this->systemConfigService->getInt('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }
 
     /**
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
+     * @param  string $salesChannelId
+     * @param  string $field
+     * @param  string $carrier
+     *
      * @return float
      */
-    public function getConfigFloat(string $salesChannelId, string $field, string $carrier = "")
+    public function getConfigFloat(string $salesChannelId, string $field, string $carrier = ""): float
     {
         return $this->systemConfigService->getFloat('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
     }

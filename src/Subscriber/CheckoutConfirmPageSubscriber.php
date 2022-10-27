@@ -41,11 +41,19 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     /**
      * Adds an array of MyParcel shipping method ids to the checkout page.
      *
-     * @param CheckoutConfirmPageLoadedEvent $event
+     * @param  CheckoutConfirmPageLoadedEvent $event
      */
-    public function addMyParcelDataToPage($event): void
+    public function addMyParcelDataToPage(CheckoutConfirmPageLoadedEvent $event): void
     {
-        //Add config data
+        $var1 = new ArrayStruct([
+            'config' => $this->configGenerator->generateConfigForPackage(
+                $event->getSalesChannelContext(),
+                $event->getRequest()->getLocale()
+            ),
+        ]);
+
+        var_dump($var1);
+//        Add config data
         $event->getPage()->addExtension('myparcel', new ArrayStruct([
             'config' => $this->configGenerator->generateConfigForPackage(
                 $event->getSalesChannelContext(),

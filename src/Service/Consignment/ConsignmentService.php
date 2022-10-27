@@ -124,13 +124,13 @@ class ConsignmentService
     }
 
     /**
-     * @param Context $context
-     * @param OrderEntity $orderEntity
-     * @param null|int $packageType
+     * @param  Context     $context
+     * @param  OrderEntity $orderEntity
+     * @param  null|int    $packageType
      *
      * @return AbstractConsignment|null
      * @throws MissingFieldException
-     * @throws Exception
+     * @throws \Exception
      */
     private function createConsignment(
         Context     $context,

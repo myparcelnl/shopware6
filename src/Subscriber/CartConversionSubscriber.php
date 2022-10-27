@@ -81,7 +81,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
             foreach ($deliveryData as $key => $value) {
                 switch ($key) {
                     case 'deliveryType':
-                        $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $this->deliveryTypeToInt($value);
+                        $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$value ?? 'standard'];
                         break;
 
                     case 'date':
