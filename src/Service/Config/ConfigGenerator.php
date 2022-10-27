@@ -280,7 +280,7 @@ class ConfigGenerator
         if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
             return true;
         }
-        return $this->systemConfigService->getBool('MyPaShopware.config.' . $field . 'Enabled' . $carrier, $salesChannelId);
+        return $this->systemConfigService->getBool(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
     }
 
     /**
@@ -292,7 +292,7 @@ class ConfigGenerator
      */
     public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
     {
-        return $this->systemConfigService->get('MyPaShopware.config.' . $field . $carrier, $salesChannelId);
+        return $this->systemConfigService->get(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
     }
 
     /**
