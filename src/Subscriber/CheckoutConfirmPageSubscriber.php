@@ -45,14 +45,6 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
      */
     public function addMyParcelDataToPage(CheckoutConfirmPageLoadedEvent $event): void
     {
-        $var1 = new ArrayStruct([
-            'config' => $this->configGenerator->generateConfigForPackage(
-                $event->getSalesChannelContext(),
-                $event->getRequest()->getLocale()
-            ),
-        ]);
-
-        var_dump($var1);
 //        Add config data
         $event->getPage()->addExtension('myparcel', new ArrayStruct([
             'config' => $this->configGenerator->generateConfigForPackage(
