@@ -6,6 +6,7 @@ use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Config\MyParcelCarriers;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Order\CartConvertedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
