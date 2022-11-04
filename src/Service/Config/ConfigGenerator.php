@@ -11,7 +11,6 @@ class ConfigGenerator
         'allowEveningDelivery',
         'allowMorningDelivery',
         'allowOnlyRecipient',
-        'allowOnlyRecipient',
         'allowPickupLocations',
         'allowSaturdayDelivery',
         'allowShowDeliveryDate',
