@@ -279,7 +279,7 @@ class ConfigGenerator
         if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
             return true;
         }
-        return $this->systemConfigService->getBool(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->getBool("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 
     /**
@@ -291,7 +291,7 @@ class ConfigGenerator
      */
     public function getConfigValue(string $salesChannelId, string $field, string $carrier = "")
     {
-        return $this->systemConfigService->get(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->get("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 
     /**
@@ -303,7 +303,7 @@ class ConfigGenerator
      */
     public function getConfigString(string $salesChannelId, string $field, string $carrier = ''): string
     {
-        return $this->systemConfigService->getString(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->getString("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 
     /**
@@ -315,7 +315,7 @@ class ConfigGenerator
      */
     public function getConfigBool(string $salesChannelId, string $field, string $carrier = ''): bool
     {
-        return $this->systemConfigService->getBool(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->getBool("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 
     /**
@@ -327,7 +327,7 @@ class ConfigGenerator
      */
     public function getConfigInt(string $salesChannelId, string $field, string $carrier = ''): int
     {
-        return $this->systemConfigService->getInt(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->getInt("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 
     /**
@@ -339,6 +339,6 @@ class ConfigGenerator
      */
     public function getConfigFloat(string $salesChannelId, string $field, string $carrier = ''): float
     {
-        return $this->systemConfigService->getFloat(sprintf('MyPaShopware.config.%s%s', $field, $carrier), $salesChannelId);
+        return $this->systemConfigService->getFloat("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 }

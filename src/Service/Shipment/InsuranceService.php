@@ -2,8 +2,10 @@
 
 namespace MyPa\Shopware\Service\Shipment;
 
+use Aws\AmplifyBackend\AmplifyBackendClient;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -43,7 +45,7 @@ class InsuranceService
             return 0;
         }
 
-        if ($carrierId === CarrierPostNL::ID) {
+        if (CarrierPostNL::ID === $carrierId) {
             $countryId = $this->systemConfigService->get('MyPaShopware.config.defaultShipFromCountry');
 
             $fromCountry = $this->countryRepository->search(
@@ -53,11 +55,11 @@ class InsuranceService
             )
                 ->first();
 
-            if ($fromCountry->getIso() === 'NL' && $country->getIso() === 'NL') {
+            if (AbstractConsignment::CC_NL === $fromCountry->getIso() && AbstractConsignment::CC_NL === $country->getIso()) {
                 return $this->systemConfigService->get('MyPaShopware.config.myParcelShipInsuredMaxAmount');
             }
 
-            if ($country->getIso() === 'BE') {
+            if (AbstractConsignment::CC_BE === $country->getIso()) {
                 return 500;
             }
         }
