@@ -188,13 +188,6 @@ class ConfigGenerator
         return $result;
     }
 
-    /**
-     * Checks if the setting has been enabled, bool settings will be returned as always enabled
-     * @param string $salesChannelId
-     * @param string $field
-     * @param string $carrier
-     * @return bool
-     */
     public function isSettingEnabled(string $salesChannelId, string $field, string $carrier = ""): bool
     {
         if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {

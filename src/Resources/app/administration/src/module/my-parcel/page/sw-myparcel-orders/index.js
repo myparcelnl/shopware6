@@ -12,12 +12,10 @@ const ACTION_TYPE_CREATE = 'create';
 const CARRIER_POSTNL_ID = 1;
 const CARRIER_BPOST_ID = 2;
 const CARRIER_DPD_ID = 4;
-const CARRIER_INSTABOX_ID = 5;
 
 const CARRIER_POSTNL_SNIPPET = 'sw-myparcel.general.carriers.postNL';
 const CARRIER_BPOST_SNIPPET = 'sw-myparcel.general.carriers.bpost';
 const CARRIER_DPD_SNIPPET = 'sw-myparcel.general.carriers.dpd';
-const CARRIER_INSTABOX_SNIPPET = 'sw-myparcel.general.carriers.instabox';
 
 const DELIVERY_TYPE_MORNING_ID = 1;
 const DELIVERY_TYPE_STANDARD_ID = 2;
@@ -81,7 +79,6 @@ Component.register('sw-myparcel-orders', {
                 [CARRIER_POSTNL_ID]: this.$tc(CARRIER_POSTNL_SNIPPET),
                 [CARRIER_BPOST_ID]: this.$tc(CARRIER_BPOST_SNIPPET),
                 [CARRIER_DPD_ID]: this.$tc(CARRIER_DPD_SNIPPET),
-                [CARRIER_INSTABOX_ID]: this.$tc(CARRIER_INSTABOX_SNIPPET)
             },
             deliveryTypes: {
                 [DELIVERY_TYPE_MORNING_ID]: this.$tc(DELIVERY_TYPE_MORNING_SNIPPET),

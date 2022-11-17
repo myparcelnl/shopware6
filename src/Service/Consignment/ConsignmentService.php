@@ -173,21 +173,6 @@ class ConsignmentService
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
-        if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
-            //Add drop off point if instabox
-            $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
-            if (!empty($dropOffJson)) {
-                $dropOffStruct = new DropOffPointStruct();
-                $dropOffStruct->assign(json_decode($dropOffJson, true));
-                $consignment->setDropOffPoint($dropOffStruct->getDropOffPoint());
-            }
-            $this->logger->error('Instabox drop off location not set while trying to make an instabox consignment',
-                [
-                    'order' => $orderEntity,
-                    'shippingOptions' => $shippingOptions
-                ]);
-        }
-
         if ($shippingOptions->getDeliveryDate() !== null) {
 
             $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
