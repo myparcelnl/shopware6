@@ -21,32 +21,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ShippingOptionsController extends StorefrontController
 {
-    public const ROUTE_NAME_ALL = 'api.action.myparcel.shipping_options.all';
+    public const ROUTE_NAME_ALL    = 'api.action.myparcel.shipping_options.all';
     public const ROUTE_NAME_CREATE = 'api.action.myparcel.shipping_options.create';
-    public const ROUTE_NAME_SHOW = 'api.action.myparcel.shipping_options.show';
+    public const ROUTE_NAME_SHOW   = 'api.action.myparcel.shipping_options.show';
 
     /* For backwards compatibility with 6.3*/
-    public const ROUTE_NAME_ALL_LEGACY = 'api.action.myparcel.shipping_options.all';
+    public const ROUTE_NAME_ALL_LEGACY    = 'api.action.myparcel.shipping_options.all';
     public const ROUTE_NAME_CREATE_LEGACY = 'api.action.myparcel.shipping_options.create';
-    public const ROUTE_NAME_SHOW_LEGACY = 'api.action.myparcel.shipping_options.show';
+    public const ROUTE_NAME_SHOW_LEGACY   = 'api.action.myparcel.shipping_options.show';
     /* End backwards compatibility*/
 
-    private const RESPONSE_KEY_SUCCESS = 'success';
-    private const RESPONSE_KEY_ERROR = 'error';
+    private const RESPONSE_KEY_SUCCESS          = 'success';
+    private const RESPONSE_KEY_ERROR            = 'error';
     private const RESPONSE_KEY_SHIPPING_OPTIONS = 'shipping_options';
-    private const RESPONSE_KEY_DELIVERY_TYPES = 'delivery_types';
+    private const RESPONSE_KEY_DELIVERY_TYPES   = 'delivery_types';
 
     public const REQUEST_KEY_SHIPPING_OPTIONS_ID = 'shipping_options_id';
-    public const REQUEST_KEY_ORDER_ID = 'order_id';
-    public const REQUEST_KEY_ORDER_VERSION_ID = 'order_version_id';
-    public const REQUEST_KEY_CARRIER_ID = 'carrier_id';
-    public const REQUEST_KEY_AGE_CHECK = 'age_check';
-    public const REQUEST_KEY_LARGE_FORMAT = 'large_format';
-    public const REQUEST_KEY_RETURN_IF_NOT_HOME = 'return_if_not_home';
-    public const REQUEST_KEY_REQUIRES_SIGNATURE = 'requires_signature';
-    public const REQUEST_KEY_ONLY_RECIPIENT = 'only_recipient';
-    public const REQUEST_KEY_PACKAGE_TYPE = 'package_type';
-    public const REQUEST_KEY_DELIVERY_TYPE = 'package_type';
+    public const REQUEST_KEY_ORDER_ID            = 'order_id';
+    public const REQUEST_KEY_ORDER_VERSION_ID    = 'order_version_id';
+    public const REQUEST_KEY_CARRIER_ID          = 'carrier_id';
+    public const REQUEST_KEY_AGE_CHECK           = 'age_check';
+    public const REQUEST_KEY_LARGE_FORMAT        = 'large_format';
+    public const REQUEST_KEY_RETURN_IF_NOT_HOME  = 'return_if_not_home';
+    public const REQUEST_KEY_REQUIRES_SIGNATURE  = 'requires_signature';
+    public const REQUEST_KEY_ONLY_RECIPIENT      = 'only_recipient';
+    public const REQUEST_KEY_PACKAGE_TYPE        = 'package_type';
+    public const REQUEST_KEY_DELIVERY_TYPE       = 'package_type';
 
     /**
      * @var OrderService
@@ -65,7 +65,7 @@ class ShippingOptionsController extends StorefrontController
      * @param ShippingOptionsService $shippingOptionsService
      */
     public function __construct(
-        OrderService $orderService,
+        OrderService           $orderService,
         ShippingOptionsService $shippingOptionsService
     )
     {
@@ -87,36 +87,9 @@ class ShippingOptionsController extends StorefrontController
      */
     public function getDeliveryTypes(): JsonResponse
     {
-        return $this->getDeliveryTypesResponse();
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true},
-     *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS_LEGACY,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function getDeliveryTypesLegacy(): JsonResponse
-    {
-        return $this->getDeliveryTypesResponse();
-    }
-
-    /**
-     * @return JsonResponse
-     * @throws Exception
-     */
-    private function getDeliveryTypesResponse(): JsonResponse
-    {
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => true,
+            self::RESPONSE_KEY_SUCCESS        => true,
             self::RESPONSE_KEY_DELIVERY_TYPES => $this->shippingOptionsService->getDeliveryTypes(),
-
         ]);
     }
 
@@ -134,37 +107,7 @@ class ShippingOptionsController extends StorefrontController
      * @return JsonResponse
      * @throws Exception
      */
-    public function createForOrder(Request $request): JsonResponse //NOSONAR
-    {
-        return $this->createForOrderResponse($request);
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/create",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShippingOptionsController::ROUTE_NAME_CREATE_LEGACY,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function createForOrderLegacy(Request $request): JsonResponse //NOSONAR
-    {
-        return $this->createForOrderResponse($request);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    private function createForOrderResponse (Request $request): JsonResponse //NOSONAR
+    public function createForOrder(Request $request): JsonResponse
     {
         $orderId = $request->get(self::REQUEST_KEY_ORDER_ID);
         $orderVersionId = $request->get(self::REQUEST_KEY_ORDER_VERSION_ID);
@@ -172,11 +115,11 @@ class ShippingOptionsController extends StorefrontController
         if ((string)$orderId === '' || (string)$orderVersionId === '') {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => sprintf(
+                self::RESPONSE_KEY_ERROR   => sprintf(
                     'Request is missing a valid %s or %s',
                     self::REQUEST_KEY_ORDER_ID,
                     self::REQUEST_KEY_ORDER_VERSION_ID
-                )
+                ),
             ]);
         }
 
@@ -187,17 +130,17 @@ class ShippingOptionsController extends StorefrontController
         if ($order === null) {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => sprintf(
+                self::RESPONSE_KEY_ERROR   => sprintf(
                     'Could not find an order with id %s and version id %s',
                     $orderId,
                     $orderVersionId
-                )
+                ),
             ]);
         }
 
         $shippingOptions = [
             ShippingOptionEntity::FIELD_ORDER => [
-                ShippingOptionEntity::FIELD_ORDER_ID => $orderId,
+                ShippingOptionEntity::FIELD_ORDER_ID   => $orderId,
                 ShippingOptionEntity::FIELD_VERSION_ID => $orderVersionId,
             ],
         ];
@@ -257,8 +200,10 @@ class ShippingOptionsController extends StorefrontController
         ) {
             $shippingOptions[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $deliveryType;
 
-            if(in_array($deliveryType, [AbstractConsignment::DELIVERY_TYPE_MORNING, AbstractConsignment::DELIVERY_TYPE_EVENING], true))
-            {
+            if (in_array($deliveryType, [
+                AbstractConsignment::DELIVERY_TYPE_MORNING,
+                AbstractConsignment::DELIVERY_TYPE_EVENING,
+            ], true)) {
                 $shippingOptions[ShippingOptionEntity::FIELD_ONLY_RECIPIENT] = true;
             }
 
@@ -270,8 +215,8 @@ class ShippingOptionsController extends StorefrontController
         );
 
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
-            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity
+            self::RESPONSE_KEY_SUCCESS          => $shippingOptionsEntity !== null,
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity,
         ]);
     }
 
@@ -288,41 +233,9 @@ class ShippingOptionsController extends StorefrontController
      */
     public function all(): JsonResponse
     {
-        return $this->allResponse();
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/all",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     */
-    public function allLegacy(): JsonResponse
-    {
-        return $this->allResponse();
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/all",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     */
-    private function allResponse(): JsonResponse
-    {
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => true,
-            self::RESPONSE_KEY_SHIPPING_OPTIONS => $this->shippingOptionsService->getAllShippingOptions(new Context(new SystemSource()))
+            self::RESPONSE_KEY_SUCCESS          => true,
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $this->shippingOptionsService->getAllShippingOptions(new Context(new SystemSource())),
         ]);
     }
 
@@ -342,50 +255,12 @@ class ShippingOptionsController extends StorefrontController
      */
     public function show(Request $request): JsonResponse
     {
-        return $this->showResponse($request);
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/show",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function showLegacy(Request $request): JsonResponse
-    {
-        return $this->showResponse($request);
-    }
-
-    /**
-     * @RouteScope(scopes={"api"})
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/show",
-     *     defaults={"auth_enabled"=true},
-     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
-    private function showResponse(Request $request): JsonResponse
-    {
         $shippingOptionsId = $request->get(self::REQUEST_KEY_SHIPPING_OPTIONS_ID);
 
         if ((string)$shippingOptionsId === '') {
             return new JsonResponse([
                 self::RESPONSE_KEY_SUCCESS => false,
-                self::RESPONSE_KEY_ERROR => sprintf('Could not find Shipping Options with id %s', $shippingOptionsId)
+                self::RESPONSE_KEY_ERROR   => sprintf('Could not find Shipping Options with id %s', $shippingOptionsId),
             ]);
         }
 
@@ -394,8 +269,8 @@ class ShippingOptionsController extends StorefrontController
         $shippingOptionsEntity = $this->shippingOptionsService->getShippingOptions($shippingOptionsId, $context);
 
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS => $shippingOptionsEntity !== null,
-            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity
+            self::RESPONSE_KEY_SUCCESS          => $shippingOptionsEntity !== null,
+            self::RESPONSE_KEY_SHIPPING_OPTIONS => $shippingOptionsEntity,
         ]);
     }
 }

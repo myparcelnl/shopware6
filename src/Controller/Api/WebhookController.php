@@ -40,7 +40,7 @@ class WebhookController extends StorefrontController
      * @Route("/myparcel/webhook", defaults={"csrf_protected"=false}, name="frontend.myparcel.webhook",
      *                                           options={"seo"="false"}, methods={"GET", "POST"})
      *
-     * @param Request $request
+     * @param Request             $request
      * @param SalesChannelContext $context
      *
      * @return JsonResponse
@@ -83,9 +83,9 @@ class WebhookController extends StorefrontController
             //Update the order myparcel status with "status"
             $this->shipmentsRepository->update([
                 [
-                    'id' => $shipmentId,
-                    'shipmentStatus' => $hook['status']
-                ]
+                    'id'             => $shipmentId,
+                    'shipmentStatus' => $hook['status'],
+                ],
             ], $context->getContext());
 
         }

@@ -3,6 +3,7 @@
 namespace MyPa\Shopware;
 
 use Doctrine\DBAL\Connection;
+use MyPa\Shopware\Service\Shopware\CustomField\CustomFieldInstaller;
 use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodCreatorService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -19,6 +20,7 @@ class MyPaShopware extends Plugin
     public function install(InstallContext $installContext): void
     {
         parent::install($installContext);
+        CustomFieldInstaller::createFactory($this->container)->install($installContext->getContext());
     }
 
     public function activate(ActivateContext $activateContext): void
@@ -35,6 +37,7 @@ class MyPaShopware extends Plugin
 
         $shippingMethodCreator = $this->container->get(ShippingMethodCreatorService::class);
         $shippingMethodCreator->create($this->getPath(), $updateContext->getContext());
+        CustomFieldInstaller::createFactory($this->container)->install($updateContext->getContext());
     }
 
 
@@ -80,6 +83,4 @@ class MyPaShopware extends Plugin
             $uninstallContext->getContext()
         );
     }
-
-
 }

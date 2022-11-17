@@ -20,7 +20,7 @@ class InsuranceService
     private $countryRepository;
 
     public function __construct(
-        SystemConfigService $systemConfigService,
+        SystemConfigService       $systemConfigService,
         EntityRepositoryInterface $countryRepository
     )
     {
@@ -28,6 +28,13 @@ class InsuranceService
         $this->countryRepository = $countryRepository;
     }
 
+    /**
+     * @param               $cartTotal
+     * @param CountryEntity $country
+     * @param               $carrierId
+     * @param Context       $context
+     * @return array|bool|float|int|string|null
+     */
     public function getInsuranceAmount($cartTotal, CountryEntity $country, $carrierId, Context $context)
     {
         if (!$this->systemConfigService->get('MyPaShopware.config.myParcelShipInsured')) {

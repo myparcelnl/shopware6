@@ -2,11 +2,9 @@
 
 namespace MyPa\Shopware\Subscriber;
 
-use MyPa\Shopware\Core\Content\ShippingMethod\ShippingMethodEntity;
 use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Order\OrderService;
-use MyPa\Shopware\Service\ShippingMethod\ShippingMethodService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyPa\Shopware\Service\WebhookBuilder\WebhookBuilder;
 use MyParcelNL\Sdk\src\Exception\AccountNotActiveException;
@@ -15,39 +13,39 @@ use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Services\Web\Webhook\ShipmentStatusChangeWebhookWebService;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
-use Shopware\Core\Framework\Api\Context\SystemSource;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderPlacedSubscriber implements EventSubscriberInterface
 {
-    private const PARAM_MY_PARCEL = 'my_parcel';
-    private const PARAM_DELIVERY_DATE = 'delivery_date';
-    private const PARAM_DELIVERY_TYPE = 'delivery_type';
-    private const PARAM_PACKAGE_TYPE = 'package_type';
+    private const PARAM_MY_PARCEL          = 'my_parcel';
+    private const PARAM_DELIVERY_DATE      = 'delivery_date';
+    private const PARAM_DELIVERY_TYPE      = 'delivery_type';
+    private const PARAM_PACKAGE_TYPE       = 'package_type';
     private const PARAM_REQUIRES_AGE_CHECK = 'requires_age_check';
     private const PARAM_REQUIRES_SIGNATURE = 'requires_signature';
-    private const PARAM_ONLY_RECIPIENT = 'only_recipient';
+    private const PARAM_ONLY_RECIPIENT     = 'only_recipient';
     private const PARAM_RETURN_IF_NOT_HOME = 'return_if_not_home';
-    private const PARAM_LARGE_FORMAT = 'large_format';
+    private const PARAM_LARGE_FORMAT       = 'large_format';
     private const PARAM_SHIPPING_METHOD_ID = 'shipping_method_id';
-    private const PARAM_DELIVERY_LOCATION = 'delivery_location';
-    private const PARAM_PICKUP_DATA = 'pickup_point_data';
+    private const PARAM_DELIVERY_LOCATION  = 'delivery_location';
+    private const PARAM_PICKUP_DATA        = 'pickup_point_data';
+
     /**
      * @var LoggerInterface
      */
     protected $logger;
+
     /**
      * @var OrderService
      */
     private $orderService;
+
     /**
      * @var ShippingOptionsService
      */
     private $shippingOptionsService;
+
     /**
      * @var SystemConfigService
      */
@@ -63,16 +61,15 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
      */
     private $builder;
 
-
     /**
      * Creates a new instance of the order placed subscriber.
      *
-     * @param OrderService $orderService
-     * @param ShippingOptionsService $shippingOptionService
-     * @param SystemConfigService $configService
-     * @param LoggerInterface $logger
+     * @param OrderService                          $orderService
+     * @param ShippingOptionsService                $shippingOptionService
+     * @param SystemConfigService                   $configService
+     * @param LoggerInterface                       $logger
      * @param ShipmentStatusChangeWebhookWebService $shipmentStatusChangeWebhookWebService
-     * @param WebhookBuilder $builder
+     * @param WebhookBuilder                        $builder
      */
     public function __construct(
         OrderService                          $orderService,
@@ -99,7 +96,7 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            CheckoutOrderPlacedEvent::class => 'onOrderPlaced'
+            CheckoutOrderPlacedEvent::class => 'onOrderPlaced',
         ];
     }
 
@@ -117,19 +114,20 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
 
             // Add the order to the shipping options
             $myparcelOptions[ShippingOptionEntity::FIELD_ORDER] = [
-                'id' => $order->getId(),
+                'id'        => $order->getId(),
                 'versionId' => $order->getVersionId(),
             ];
 
             //Store shipping options in the database
             $this->shippingOptionsService->createOrUpdateShippingOptions($myparcelOptions, $event->getContext());
+
             //Update custom fields on the order
             $this->orderService->createOrUpdateOrder([
-                'id' => $order->getId(),
-                'versionId' => $order->getVersionId(),
+                'id'           => $order->getId(),
+                'versionId'    => $order->getVersionId(),
                 'customFields' => [
                     self::PARAM_MY_PARCEL => json_encode($myparcelOptions),
-                ]
+                ],
             ], $event->getContext());
         }
     }
@@ -144,9 +142,10 @@ class OrderPlacedSubscriber implements EventSubscriberInterface
             $subID = $this->shipmentStatusChangeWebhookWebService->setApiKey($apiKey)
                 ->subscribe($this->builder->buildWebhook());
             $this->logger->debug('Hooked to myparcel', [
-                'Hook id' => $subID
+                'Hook id' => $subID,
             ]);
-        } catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
+        }
+        catch (AccountNotActiveException|MissingFieldException|ApiException $e) {
             $this->logger->error('Error subscribing to webhook', ['error' => $e]);
         }
 

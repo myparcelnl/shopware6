@@ -241,7 +241,7 @@ Component.register('sw-myparcel-orders', {
 
                             if (!!response.consignments) {
                                 for (let id in response.consignments) {
-                                    if(!response.consignments.hasOwnProperty(id)) {
+                                    if (!response.consignments.hasOwnProperty(id)) {
                                         continue;
                                     }
                                     length = length + 1;
@@ -261,11 +261,11 @@ Component.register('sw-myparcel-orders', {
         },
 
         getPickupLocation(item) {
-            if(!item.locationId){
+            if (!item.locationId) {
                 return '-';
             }
 
-            return item.locationName +" : "+ item.locationStreet+" "+item.locationNumber+" "+item.locationPostalCode+" "+item.locationCity+" "+item.locationCc;
+            return item.locationName + " : " + item.locationStreet + " " + item.locationNumber + " " + item.locationPostalCode + " " + item.locationCity + " " + item.locationCc;
         },
 
         getVariantFromOrderState(order) {
@@ -345,7 +345,7 @@ Component.register('sw-myparcel-orders', {
                         order_id: item.orderId,
                         order_version_id: item.orderVersionId,
                         shipping_option_id: id,
-                        package_type: consignmentData.packageType,
+                        package_type: consignmentData.packageType, // this does nothing
                     });
                 }
             }
@@ -376,15 +376,26 @@ Component.register('sw-myparcel-orders', {
                             document.location = response.labelUrl;
                         }
                     } else {
+                        console.log('1');
+                        console.log(response)
+                        console.log(response.translation)
+                        let message;
+                        switch (response.translation) {
+                            case 'ConfigFieldValueMissingException':
+                                message = this.$tc('sw-myparcel.messages.errors.ConfigFieldValueMissingException');
+                                break;
+                            default:
+                                message = this.$tc('sw-myparcel.messages.error');
+                        }
                         this.createNotificationError({
                             title: this.$tc('sw-myparcel.general.mainMenuItemGeneral'),
-                            message: this.$tc('sw-myparcel.messages.error')
+                            message: message
                         });
                     }
 
                     this.closeModals();
                 })
-                .catch(() => {
+                .catch((error) => {
                     this.createNotificationError({
                         title: this.$tc('sw-myparcel.general.mainMenuItemGeneral'),
                         message: this.$tc('sw-myparcel.messages.error')
@@ -502,6 +513,10 @@ Component.register('sw-myparcel-orders', {
 
         onCloseCreateMultipleConsignmentsModal() {
             this.closeCreateMultipleConsignmentsModal();
+        },
+        onCloseConsignmentModal() {
+            this.showConsignmentModal = false;
+            this.consignments = [];
         },
 
         onCreateMultipleConsignments() {

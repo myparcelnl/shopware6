@@ -32,7 +32,6 @@ class CartController extends AbstractController
         $this->configReader = $configReader;
     }
 
-
     /**
      * @Route("/widget/checkout/myparcel/add-to-cart", name="frontend.checkout.myparcel.add-to-cart", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=true})
      *
@@ -57,7 +56,5 @@ class CartController extends AbstractController
             $this->logger->warning("No deliverData found", ['data' => $data]);
             return $this->json("No delivery data found", 500);
         }
-
-
     }
 }

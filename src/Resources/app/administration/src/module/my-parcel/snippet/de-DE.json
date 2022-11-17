@@ -56,7 +56,10 @@
     "messages": {
       "error": "Es ist ein Fehler aufgetreten",
       "consignmentSuccess": "Die Sendung wurde erfolgreich erstellt",
-      "createLabelSuccess": "Das Etikett wurde erfolgreich erstellt"
+      "createLabelSuccess": "Das Etikett wurde erfolgreich erstellt",
+      "errors": {
+        "ConfigFieldValueMissingException": "Kein HS-Tarifcode gefunden, geben Sie einen Standard-HS-Tarifcode in das MyParcel-Plugin ein oder fügen Sie einen HS-Tarifcode zu allen bestellten Produkten hinzu."
+      }
     },
     "columns": {
       "idColumn": "ID",
