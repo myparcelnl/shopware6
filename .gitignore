@@ -1,13 +1,16 @@
-/.idea
-/vendor
-
-.reports
 .DS_Store
-/tests/Cypress/package-lock.json
+.idea
+vendor
+node_modules
+dist
+.reports
+*.zip
 
-src/Resources/app/administration/node_modules
-src/Resources/app/storefront/node_modules
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
-src/Resources/app/storefront/dist/
 src/Resources/public/administration/
-/node_modules/

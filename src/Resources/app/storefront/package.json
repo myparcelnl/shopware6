@@ -1,14 +1,8 @@
 {
   "name": "storefront",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
+  "license": "MIT",
   "dependencies": {
     "@myparcel/delivery-options": "^5.1.1"
   }
