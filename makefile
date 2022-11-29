@@ -13,38 +13,35 @@ help:
 # ------------------------------------------------------------------------------------------------------------
 
 install-prod: ## Installs only production dependencies
-	@composer install --no-dev
-	@yarn install
+	@composer install --no-dev --no-autoloader --no-scripts --no-suggest --no-interaction
+	@yarn workspaces focus
+	@yarn install --frozen-lockfile
 
 install: ## Installs dev dependencies
 	@composer install
 	@yarn install
 
-clean: ## Cleans all dependencies and dist folders
-	rm -rf vendor
-	rm -rf node_modules
-	rm -rf src/**/dist
+clean: ## Cleans dist folders
+	@rm -rf src/**/dist
 
 # ------------------------------------------------------------------------------------------------------------
 
+install-plugin: ## Builds the package and installs the plugin
+	@cd $$PROJECT_ROOT && bin/console plugin:refresh
+	make build
+	@cd $$PROJECT_ROOT && bin/console plugin:install MyPaShopware --activate --clearCache
+
 build: ## Builds the package
 	@rm -rf "src/Resources/app/storefront/dist"
-	@cd ../../.. && php bin/console plugin:refresh
-	@cd ../../.. && php bin/console plugin:install MyPaShopware --activate --clearCache
-	@cd ../../.. && php bin/console plugin:refresh
-	@cd ../../.. && php bin/console theme:dump
-	@cd ../../.. && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar administration:build
-	@cd ../../.. && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar storefront:build
+	@cd $$PROJECT_ROOT && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar administration:build
+	@cd $$PROJECT_ROOT && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar storefront:build
 	@cp 'node_modules/@myparcel/delivery-options/dist/myparcel.js' 'src/Resources/app/storefront/dist/storefront/js/myparcel.js'
-	@cd ../../.. && php bin/console theme:refresh
-	@cd ../../.. && php bin/console theme:compile
-	@cd ../../.. && php bin/console theme:refresh
 
 release: ## Create a new release
-	@make clean
-	@make install-prod
-	@make build
-	@make zip
+	make clean
+	make install-prod
+	make build
+	make zip
 
 zip: ## Create a zip file
 	@php update-composer-require.php --env=prod --shopware=^6.4.1 --admin --storefront
