@@ -15,7 +15,7 @@ help:
 install-prod: ## Installs only production dependencies
 	@composer install --no-dev --no-autoloader --no-scripts --no-suggest --no-interaction
 	@yarn workspaces focus
-	@yarn install --frozen-lockfile
+	@yarn install --immutable
 
 install: ## Installs dev dependencies
 	@composer install
@@ -27,14 +27,14 @@ clean: ## Cleans dist folders
 # ------------------------------------------------------------------------------------------------------------
 
 install-plugin: ## Builds the package and installs the plugin
-	@cd $$PROJECT_ROOT && bin/console plugin:refresh
+	@php "$$PROJECT_ROOT/bin/console" plugin:refresh
 	make build
-	@cd $$PROJECT_ROOT && bin/console plugin:install MyPaShopware --activate --clearCache
+	@php "$$PROJECT_ROOT/bin/console" plugin:install MyPaShopware --activate --clearCache
 
 build: ## Builds the package
 	@rm -rf "src/Resources/app/storefront/dist"
-	@cd $$PROJECT_ROOT && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar administration:build
-	@cd $$PROJECT_ROOT && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar storefront:build
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar administration:build
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar storefront:build
 	@cp 'node_modules/@myparcel/delivery-options/dist/myparcel.js' 'src/Resources/app/storefront/dist/storefront/js/myparcel.js'
 
 release: ## Create a new release
@@ -47,5 +47,5 @@ zip: ## Create a zip file
 	@php update-composer-require.php --env=prod --shopware=^6.4.1 --admin --storefront
 	@rm -rf "MyPaShopware-$(PLUGIN_VERSION).zip"
 	@echo "Creating MyPaShopware-$(PLUGIN_VERSION).zip..."
-	@zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip src vendor ./CHANGELOG* ./README.md ./composer.json ./composer.lock
+	@zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip src vendor ./CHANGELOG* ./README.md ./composer.json ./composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
 	@php update-composer-require.php --env=dev --shopware=^6.4.1 --admin --storefront
