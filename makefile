@@ -13,7 +13,7 @@ help:
 # ------------------------------------------------------------------------------------------------------------
 
 install-prod: ## Installs only production dependencies
-	@composer install --no-dev --no-autoloader --no-scripts --no-suggest --no-interaction
+	@composer install --no-dev --no-scripts --no-suggest --no-interaction --optimize-autoloader
 	@yarn workspaces focus
 	@yarn install --immutable
 
