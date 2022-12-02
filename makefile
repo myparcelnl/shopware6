@@ -21,8 +21,9 @@ install: ## Installs dev dependencies
 	@composer install
 	@yarn install
 
-clean: ## Cleans dist folders
+clean: ## Cleans dist folders and vendor
 	@rm -rf src/**/dist
+	@rm -rf vendor
 
 # ------------------------------------------------------------------------------------------------------------
 
