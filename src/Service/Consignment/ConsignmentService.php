@@ -175,7 +175,7 @@ class ConsignmentService
             ->setFullStreet(
                 sprintf('%s %s %s', $parsedAddress['street'], $parsedAddress['houseNumber'], $parsedAddress['houseNumberAddition'])
             )
-            ->setPostalCode($shippingAddress->getZipcode())
+            ->setPostalCode(trim($shippingAddress->getZipcode()))
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
@@ -386,7 +386,7 @@ class ConsignmentService
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
-                $consignment->getPostalCode(),
+                trim($consignment->getPostalCode()),
                 $consignment->getCountry()
             );
 
