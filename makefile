@@ -5,7 +5,7 @@
 .PHONY: help
 .DEFAULT_GOAL := help
 
-PLUGIN_VERSION=`php -r 'echo json_decode(file_get_contents("./composer.json"))->version;'`
+PLUGIN_VERSION=`php -r 'echo json_decode(file_get_contents("MyPaShopware/composer.json"))->version;'`
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -46,7 +46,7 @@ release: ## Create a new release
 
 zip: ## Create a zip file
 	@php update-composer-require.php --env=prod --shopware=^6.4.1 --release
-	@rm -rf "MyPaShopware-$(PLUGIN_VERSION).zip"
-	@echo "Creating MyPaShopware-$(PLUGIN_VERSION).zip..."
-	@zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip src vendor ./CHANGELOG* ./README.md ./composer.json ./composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
+	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
+	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
+	@cd .. && zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/src MyPaShopware/vendor MyPaShopware/CHANGELOG* MyPaShopware/README.md MyPaShopware/composer.json MyPaShopware/composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
 	@php update-composer-require.php --env=dev --shopware=^6.4.1
