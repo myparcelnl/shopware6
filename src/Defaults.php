@@ -13,7 +13,6 @@ class Defaults
         'bpost' => 2,
         'cheapcargo' => 3,
         'dpd' => 4,
-        'instabox' => 5,
         'dhl' => 6,
     ];
 }
