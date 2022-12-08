@@ -34,12 +34,13 @@
         "refreshMessage":'myparcel.shipping_selector.refreshMessage' | trans,
     } %}
 
+    {{ dump(page.extensions) }}
     {% set deliveryOptionsPluginOptions =
         {
             url:path('frontend.checkout.myparcel.add-to-cart') ,
             csrfToken: sw_csrf('frontend.checkout.myparcel.add-to-cart', {"mode": "token"}),
             config:page.extensions.myparcel.config,
-            translations:translations,
+            translations:page.extensions.myparcel.strings,
             address: {
             cc: page.cart.deliveries.elements[0].location.country.iso,
             city: page.cart.deliveries.elements[0].location.address.city,
