@@ -130,10 +130,15 @@ class ConfigGenerator
      */
     public function generateConfigForPackage(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        $config                    = [];
-        $config                    = array_merge($config, $this->getGeneralSettings($salesChannelContext, $locale));
-        $config['carrierSettings'] = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
-        $config['translations']    = $this->getDeliveryOptionsStrings($salesChannelContext->getSalesChannelId());
+        $config                             = [];
+        $config                             = array_merge(
+            $config,
+            $this->getGeneralSettings($salesChannelContext, $locale)
+        );
+        $config['carrierSettings']          = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
+        $config['translationsFromSettings'] = $this->getDeliveryOptionsStrings(
+            $salesChannelContext->getSalesChannelId()
+        );
         return $config;
     }
 

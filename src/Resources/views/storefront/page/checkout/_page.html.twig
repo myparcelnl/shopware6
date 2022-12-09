@@ -39,7 +39,7 @@
             url:path('frontend.checkout.myparcel.add-to-cart') ,
             csrfToken: sw_csrf('frontend.checkout.myparcel.add-to-cart', {"mode": "token"}),
             config:page.extensions.myparcel.config,
-            strings:page.extensions.myparcel.config.translations,
+            translations:page.extensions.myparcel.config.translationsFromSettings,
             address: {
             cc: page.cart.deliveries.elements[0].location.country.iso,
             city: page.cart.deliveries.elements[0].location.address.city,
