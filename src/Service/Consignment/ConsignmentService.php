@@ -175,10 +175,9 @@ class ConsignmentService
             ->setFullStreet(
                 sprintf('%s %s %s', $parsedAddress['street'], $parsedAddress['houseNumber'], $parsedAddress['houseNumberAddition'])
             )
-            ->setPostalCode($shippingAddress->getZipcode())
+            ->setPostalCode(trim($shippingAddress->getZipcode()))
             ->setCity($shippingAddress->getCity())
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
-
 
         //Set invoice number to the latest invoice document number or order number if none is available
         $invoice = $orderEntity->getDocuments()->filter(function ($document) {
@@ -192,22 +191,6 @@ class ConsignmentService
             $invoiceNumber = $orderEntity->getOrderNumber();
         }
         $consignment->setInvoice($invoiceNumber);
-
-
-        if ($shippingOptions->getCarrierId() == Defaults::CARRIER_TO_ID['instabox']) {
-            //Add drop off point if instabox
-            $dropOffJson = $this->systemConfigService->getString('MyPaShopware.config.dropOffInstabox');
-            if (!empty($dropOffJson)) {
-                $dropOffStruct = new DropOffPointStruct();
-                $dropOffStruct->assign(json_decode($dropOffJson, true));
-                $consignment->setDropOffPoint($dropOffStruct->getDropOffPoint());
-            }
-            $this->logger->error('Instabox drop off location not set while trying to make an instabox consignment',
-                [
-                    'order' => $orderEntity,
-                    'shippingOptions' => $shippingOptions
-                ]);
-        }
 
         if ($shippingOptions->getDeliveryDate() !== null) {
 
@@ -386,7 +369,7 @@ class ConsignmentService
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
-                $consignment->getPostalCode(),
+                trim($consignment->getPostalCode()),
                 $consignment->getCountry()
             );
 
