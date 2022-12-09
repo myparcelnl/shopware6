@@ -3,7 +3,6 @@
 vendor
 node_modules
 dist
-.reports
 *.zip
 
 .yarn/*
@@ -13,4 +12,4 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
-src/Resources/public/administration/
+src/Resources/public/administration
