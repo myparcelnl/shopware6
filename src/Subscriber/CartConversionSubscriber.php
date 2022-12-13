@@ -6,6 +6,7 @@ use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Config\MyParcelCarriers;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Cart\Order\CartConvertedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -81,7 +82,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
             foreach ($deliveryData as $key => $value) {
                 switch ($key) {
                     case 'deliveryType':
-                        $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = $this->deliveryTypeToInt($value);
+                        $options[ShippingOptionEntity::FIELD_DELIVERY_TYPE] = AbstractConsignment::DELIVERY_TYPES_NAMES_IDS_MAP[$value ?? 'standard'];
                         break;
 
                     case 'date':
@@ -130,7 +131,7 @@ class CartConversionSubscriber implements EventSubscriberInterface
                         $options[ShippingOptionEntity::FIELD_RETAIL_NETWORK_ID] = $value['retail_network_id'];
                         break;
                     case 'packageType':
-                        $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = $this->convertPackageTypeToInt($value);
+                        $options[ShippingOptionEntity::FIELD_PACKAGE_TYPE] = AbstractConsignment::PACKAGE_TYPES_NAMES_IDS_MAP[$value ?? 'package'];
                 }
             }
         }
@@ -176,42 +177,5 @@ class CartConversionSubscriber implements EventSubscriberInterface
             }
         }
         return $options;
-    }
-
-    /**
-     * @param string $type
-     * @return int
-     */
-    private function deliveryTypeToInt(string $type): int
-    {
-        switch ($type) {
-            case 'morning':
-                return 1;
-            case 'evening':
-                return 3;
-            case 'pickup':
-                return 4;
-            default:
-                return 2;
-        }
-    }
-
-    /**
-     * @param string $packageType
-     * @return int
-     */
-    private function convertPackageTypeToInt(string $packageType): int
-    {
-        switch ($packageType) {
-            case 'mailbox':
-                return 2;
-            case 'letter':
-                return 3;
-            case 'digital_stamp':
-                return 4;
-            default:
-                //package and unknown values
-                return 1;
-        }
     }
 }
