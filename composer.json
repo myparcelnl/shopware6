@@ -56,11 +56,6 @@
         "composer-runtime-api": "^2.0",
         "myparcelnl/sdk": "^7"
     },
-    "require-dev": {
-        "shopware/core": "^6.4.1",
-        "shopware/administration": "^6.4.1",
-        "shopware/storefront": "^6.4.1"
-    },
     "scripts": {
         "post-install-cmd": [
             "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
@@ -68,8 +63,5 @@
         "post-update-cmd": [
             "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
         ]
-    },
-    "config": {
-        "optimize-autoloader": true
     }
 }

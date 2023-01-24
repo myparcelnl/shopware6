@@ -12,48 +12,41 @@ help:
 
 # ------------------------------------------------------------------------------------------------------------
 
-install: ## Installs all production dependencies
-	@composer install --no-dev
-	@cd src/Resources/app/administration && npm install --production
-	@cd src/Resources/app/storefront && npm install --production
+install-prod: ## Installs only production dependencies
+	@composer install --no-dev --no-scripts --no-suggest --no-interaction --optimize-autoloader
+	@yarn workspaces focus
+	@yarn install --immutable
 
-dev: ## Installs all dev dependencies
+install: ## Installs dev dependencies
 	@composer install
-	@cd src/Resources/app/administration && npm install
-	@cd src/Resources/app/storefront && npm install
+	@yarn install
 
-clean: ## Cleans all dependencies
-	rm -rf vendor
-	rm -rf .reports | true
-	@make clean-node
-
-clean-node: ## Removes node_modules
-	rm -rf src/Resources/app/administration/node_modules
-	rm -rf src/Resources/app/storefront/node_modules
+clean: ## Cleans dist folders and vendor
+	@rm -rf src/**/dist
+	@rm -rf vendor
 
 # ------------------------------------------------------------------------------------------------------------
 
+install-plugin: ## Builds the package and installs the plugin
+	@php "$$PROJECT_ROOT/bin/console" plugin:refresh
+	make build
+	@php "$$PROJECT_ROOT/bin/console" plugin:install MyPaShopware --activate --clearCache
+
 build: ## Builds the package
-	@rm -rf src/Resources/app/storefront/dist
-	@cd ../../.. && php bin/console plugin:refresh
-	@cd ../../.. && php bin/console plugin:install MyPaShopware --activate --clearCache | true
-	@cd ../../.. && php bin/console plugin:refresh
-	@cd ../../.. && php bin/console theme:dump
-	@cd ../../.. && PUPPETEER_SKIP_DOWNLOAD=1 ./bin/build-js.sh
-	@cd src/Resources/app/storefront && cp 'node_modules/@myparcel/delivery-options/dist/myparcel.js' 'dist/storefront/js/myparcel.js'
-	@cd ../../.. && php bin/console theme:refresh
-	@cd ../../.. && php bin/console theme:compile
-	@cd ../../.. && php bin/console theme:refresh
+	@rm -rf "src/Resources/app/storefront/dist"
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar administration:build
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php psh.phar storefront:build
+	@cp 'node_modules/@myparcel/delivery-options/dist/myparcel.js' 'src/Resources/app/storefront/dist/storefront/js/myparcel.js'
 
 release: ## Create a new release
-	@make clean
-	@make install
-	@make build
-	@make zip
+	make clean
+	make install-prod
+	make build
+	make zip
 
-zip: ## Creates a new ZIP package
-	@php update-composer-require.php --env=prod --shopware=^6.4.1 --admin --storefront
-	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
+zip: ## Create a zip file
+	@php update-composer-require.php --env=prod --shopware=^6.4.1 --release
 	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
-	@cd .. && zip -qq -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/ -x '*.editorconfig' '*.git*' '*.reports*' '*.travis.yml*' '*/tests*' '*/makefile' '*.DS_Store' '*/phpunit.xml' '*/.phpstan.neon' '*/.php_cs.php' '*/phpinsights.php' '*node_modules*' '*administration/build*' '*storefront/build*' '*/update-composer-require.php'
-	@php update-composer-require.php --env=dev --shopware=^6.4.1 --admin --storefront
+	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
+	@cd .. && zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/src MyPaShopware/vendor MyPaShopware/CHANGELOG* MyPaShopware/README.md MyPaShopware/composer.json MyPaShopware/composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
+	@php update-composer-require.php --env=dev --shopware=^6.4.1

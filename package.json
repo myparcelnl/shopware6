@@ -1,0 +1,16 @@
+{
+  "name": "@myparcel/shopware-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "src/Resources/app/**"
+  ],
+  "scripts": {
+    "clean": "make clean",
+    "build": "make build",
+    "release": "make release",
+    "zip": "make zip"
+  },
+  "packageManager": "yarn@3.3.0"
+}

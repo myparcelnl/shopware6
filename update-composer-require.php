@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
-$output = new Output();
+$output        = new Output();
 $jsonFormatter = new JsonFormatter($output);
 
 $opts = getopt("", ['env::', 'shopware:', 'admin', 'storefront']);
 
-if (!$opts) {
+if (! $opts) {
     $output->error('No options set. Option "env" is required.');
     return;
 }
@@ -15,43 +16,42 @@ switch ($opts['env']) {
     case 'dev':
     case 'develop':
     case 'development':
-        $env = 'development';
+        $env     = 'development';
         $require = 'require-dev';
         break;
     case 'prod':
     case 'production':
-        $env = 'production';
+        $env     = 'production';
         $require = 'require';
         break;
 }
 
-if (!isset($require)) {
+if (! isset($require)) {
     $output->error('Env needs to be one of: dev, develop, development, prod, production');
     return;
 }
 
 // Get minimum Shopware version
-$shopware = '*';
+$shopwareVersion = '*';
 
 if (isset($opts['shopware'])) {
-    $shopware = (string)$opts['shopware'];
+    $shopwareVersion = (string) $opts['shopware'];
 }
 
 // Should admin package be added to require
-$requireAdmin = array_key_exists('admin', $opts);
-
-// Should storefront package be added to require
-$requireStorefront = array_key_exists('storefront', $opts);
+$addDependencies = array_key_exists('release', $opts);
 
 try {
     $composerContent = $jsonFormatter->read(__DIR__ . '/composer.json');
 
-    unset($composerContent['require']['shopware/core']);
-    unset($composerContent['require']['shopware/administration']);
-    unset($composerContent['require']['shopware/storefront']);
-    unset($composerContent['require-dev']['shopware/core']);
-    unset($composerContent['require-dev']['shopware/administration']);
-    unset($composerContent['require-dev']['shopware/storefront']);
+    unset(
+        $composerContent['require']['shopware/core'],
+        $composerContent['require']['shopware/administration'],
+        $composerContent['require']['shopware/storefront'],
+        $composerContent['require-dev']['shopware/core'],
+        $composerContent['require-dev']['shopware/administration'],
+        $composerContent['require-dev']['shopware/storefront']
+    );
 
     if (empty($composerContent['require'])) {
         unset($composerContent['require']);
@@ -61,24 +61,33 @@ try {
         unset($composerContent['require-dev']);
     }
 
-    $composerContent[$require]['shopware/core'] = $shopware;
-
-    if($requireAdmin) {
-        $composerContent[$require]['shopware/administration'] = $shopware;
+    if ($addDependencies) {
+        $composerContent[$require]['shopware/core']           = $shopwareVersion;
+        $composerContent[$require]['shopware/administration'] = $shopwareVersion;
+        $composerContent[$require]['shopware/storefront']     = $shopwareVersion;
     }
 
-    if($requireStorefront) {
-        $composerContent[$require]['shopware/storefront'] = $shopware;
-    }
+    $jsonFormatter->write(
+        __DIR__ . '/composer.json',
+        $jsonFormatter->sort($composerContent, [
+            "name",
+            "description",
+            "version",
+            "type",
+            "license",
+            "authors",
+            "extra",
+            "autoload",
+            "autoload-dev",
+            "require",
+            "require-dev",
+            "scripts",
+            "config",
+        ])
+    );
 
-    $jsonFormatter->write(__DIR__ . '/composer.json', $jsonFormatter->sort($composerContent, [
-        "name", "description", "version", "type", "license", "authors", "extra", "autoload", "autoload-dev", "require",
-        "require-dev", "scripts", "config",
-    ]));
-
-    $output->success(sprintf('Switched composer.json to %s requiring Shopware version %s', $env, $shopware));
-}
-catch (\Exception $e) {
+    $output->success(sprintf('Switched composer.json to %s requiring Shopware version %s', $env, $shopwareVersion));
+} catch (Exception $e) {
     $output->error($e->getMessage());
 }
 
@@ -90,26 +99,6 @@ class JsonFormatter
     public function __construct(Output $output)
     {
         $this->output = $output;
-    }
-
-    public function read(string $path)
-    {
-        $json = file_get_contents($path);
-        if (empty($json)) {
-            throw new \Exception(sprintf('Something went wrong reading %s', $path));
-        }
-
-        $json = json_decode($this->fixEncoding($json), true);
-        if (empty($json)) {
-            throw new \Exception(sprintf('Something went wrong decoding %s', $path));
-        }
-
-        return $json;
-    }
-
-    public function write(string $path, array $json): bool
-    {
-        return (bool) file_put_contents($path, json_encode($json, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
     }
 
     public function fixEncoding(string $json): string
@@ -125,7 +114,22 @@ class JsonFormatter
                 $json = mb_convert_encoding($json, 'UTF-8', 'ISO-8859-1');
                 break;
             default: // Unknown encoding, warn user they should convert manually.
-                throw new \Exception('Unable to detect current json file encoding. Please convert to UTF-8 manually.');
+                throw new Exception('Unable to detect current json file encoding. Please convert to UTF-8 manually.');
+        }
+
+        return $json;
+    }
+
+    public function read(string $path)
+    {
+        $json = file_get_contents($path);
+        if (empty($json)) {
+            throw new Exception(sprintf('Something went wrong reading %s', $path));
+        }
+
+        $json = json_decode($this->fixEncoding($json), true);
+        if (empty($json)) {
+            throw new Exception(sprintf('Something went wrong decoding %s', $path));
         }
 
         return $json;
@@ -135,21 +139,28 @@ class JsonFormatter
     {
         $sortedArray = [];
 
-        foreach($keyOrder as $key) {
-            if(isset($json[$key])) {
+        foreach ($keyOrder as $key) {
+            if (isset($json[$key])) {
                 $sortedArray[$key] = $json[$key];
                 unset($json[$key]);
             }
         }
 
-        if(!empty($json)) {
+        if (! empty($json)) {
             $sortedArray += $json;
         }
 
         return $sortedArray;
     }
-}
 
+    public function write(string $path, array $json): bool
+    {
+        return (bool) file_put_contents(
+            $path,
+            json_encode($json, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+        );
+    }
+}
 
 class Output
 {
@@ -164,6 +175,39 @@ class Output
         'white'   => 7,
         'default' => 9,
     ];
+
+    public function createBlock(iterable $messages, int $indentLength = 2)
+    {
+        $lines      = [];
+        $lineLength = 80;
+
+        $lineIndentation = str_repeat(' ', $indentLength);
+
+        foreach ($messages as $message) {
+            $messageLineLength = $lineLength - ($indentLength * 2);
+            $messageLines      = explode(PHP_EOL, wordwrap($message, $messageLineLength, PHP_EOL, true));
+
+            foreach ($messageLines as $messageLine) {
+                $lines[] = $messageLine;
+            }
+        }
+
+        array_unshift($lines, '');
+        $lines[] = '';
+
+        foreach ($lines as &$line) {
+            $line = $lineIndentation . $line;
+            $line .= str_repeat(' ', max($lineLength - strlen($line), 0));
+        }
+
+        return $lines;
+    }
+
+    public function error($text)
+    {
+        $this->writeLn($this->createBlock([$text]), self::COLORS['white'], self::COLORS['red']);
+        $this->writeLn();
+    }
 
     public function info($text)
     {
@@ -183,15 +227,9 @@ class Output
         $this->writeLn();
     }
 
-    public function error($text)
-    {
-        $this->writeLn($this->createBlock([$text]), self::COLORS['white'], self::COLORS['red']);
-        $this->writeLn();
-    }
-
     public function writeLn($messages = "", $fg = self::COLORS['default'], $bg = self::COLORS['default'])
     {
-        if (!is_iterable($messages)) {
+        if (! is_iterable($messages)) {
             $messages = [$messages];
         }
 
@@ -201,32 +239,5 @@ class Output
         foreach ($messages as $message) {
             echo sprintf("\033[%s;%sm%s\033[0m%s", $fg, $bg, $message, PHP_EOL);
         }
-    }
-
-    public function createBlock(iterable $messages, int $indentLength = 2)
-    {
-        $lines = [];
-        $lineLength = 80;
-
-        $lineIndentation = str_repeat(' ', $indentLength);
-
-        foreach ($messages as $message) {
-            $messageLineLength = $lineLength - ($indentLength * 2);
-            $messageLines = explode(\PHP_EOL, wordwrap($message, $messageLineLength, \PHP_EOL, true));
-
-            foreach ($messageLines as $messageLine) {
-                $lines[] = $messageLine;
-            }
-        }
-
-        array_unshift($lines, '');
-        $lines[] = '';
-
-        foreach ($lines as &$line) {
-            $line = $lineIndentation . $line;
-            $line .= str_repeat(' ', max($lineLength - strlen($line), 0));
-        }
-
-        return $lines;
     }
 }
