@@ -4,6 +4,6 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@myparcel/delivery-options": "^5.1.1"
+    "@myparcel/delivery-options": "^5.6.0"
   }
 }
