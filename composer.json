@@ -1,7 +1,7 @@
 {
     "name": "mypashopware/myparcel",
     "description": "MyParcel integration for Shopware 6",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
     "authors": [
@@ -63,5 +63,8 @@
         "post-update-cmd": [
             "[ ! -f vendor/bin/phpcs ] || vendor/bin/phpcs --config-set installed_paths vendor/phpcompatibility/php-compatibility"
         ]
+    },
+    "config": {
+        "optimize-autoloader": true
     }
 }

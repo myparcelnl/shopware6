@@ -1,3 +1,8 @@
+# Versie 2.1.0
+
+- Vertalingen van leveringsopties toevoegen in config
+- Postcodes met volgspaties toestaan
+
 # Versie 2.0.0
 
 #### Brekende veranderingen

@@ -1,3 +1,8 @@
+# Version 2.1.0
+
+- Fügen Sie Übersetzungen für Lieferoptionen in der Konfiguration hinzu
+- Postleitzahlen mit nachgestellten Leerzeichen zulassen
+
 # Version 2.0.0
 
 #### Einschneidende Änderungen

@@ -1,3 +1,8 @@
+# Version 2.1.0
+
+- Add delivery options translations in config
+- Allow postal codes with trailing spaces
+
 # Version 2.0.0
 
 #### Breaking changes
