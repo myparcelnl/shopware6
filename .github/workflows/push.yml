@@ -1,0 +1,44 @@
+name: '🚀 Release'
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rebase-develop:
+    name: 'Rebase develop onto main'
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/rebase.yml
+    secrets: inherit
+    with:
+      base: 'main'
+      target: 'develop'
+      force: true
+
+  rebase-prs:
+    name: 'Rebase pull requests'
+    needs:
+      - rebase-develop
+    if: always()
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: myparcelnl/actions/setup-app-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - uses: peter-evans/rebase@v2
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+          base: ${{ github.ref_name }}
+          exclude-drafts: true
+          exclude-labels: 'hotfix'

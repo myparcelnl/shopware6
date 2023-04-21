@@ -1,0 +1,57 @@
+name: '🧩 Rebase branches'
+
+on:
+  workflow_call:
+    inputs:
+      base:
+        type: string
+        required: true
+
+      target:
+        type: string
+        required: true
+
+      force:
+        type: boolean
+        required: false
+        default: false
+
+  workflow_dispatch:
+    inputs:
+      base:
+        type: string
+        description: 'Base branch'
+        required: true
+        default: 'develop'
+
+      target:
+        type: string
+        description: 'Target branch to update'
+        required: true
+        default: 'main'
+
+      force:
+        type: boolean
+        description: 'Force push target branch'
+        required: false
+        default: false
+
+  repository_dispatch:
+    types: [ rebase-command ]
+
+jobs:
+  rebase:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: myparcelnl/actions/setup-git-credentials@v3
+        id: credentials
+        with:
+          app-id: ${{ secrets.MYPARCEL_APP_ID }}
+          private-key: ${{ secrets.MYPARCEL_APP_PRIVATE_KEY }}
+
+      - uses: myparcelnl/actions/rebase@v3
+        with:
+          token: ${{ steps.credentials.outputs.token }}
+          base: ${{ github.event.client_payload.base || inputs.base || github.ref_name }}
+          target: ${{ github.event.client_payload.target || inputs.target }}
+          force: ${{ inputs.force }}
