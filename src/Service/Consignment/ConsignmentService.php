@@ -278,6 +278,10 @@ class ConsignmentService
             $consignment->setTotalWeight($totalWeight);
         }
 
+        if ($consignment->country !== AbstractConsignment::CC_NL) {
+            $consignment->setPackageType(AbstractConsignment::PACKAGE_TYPE_PACKAGE);
+        }
+
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
             if ($consignment instanceof DPDConsignment) {
                 $consignment->setAgeCheck(false);
