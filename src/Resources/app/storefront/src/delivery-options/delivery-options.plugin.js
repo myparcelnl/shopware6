@@ -24,15 +24,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     init() {
         //Register elements
         this._registerElements();
-        if (! document.getElementById('myparcel-js-script')) {
-          const script = document.createElement('script');
-          script.src = 'https://unpkg.com/@myparcel/delivery-options@5.8.0/dist/myparcel.js';
-          script.id = 'myparcel-js-script';
-          document.head.appendChild(script);
-          script.onload = () => {
-            document.dispatchEvent(new Event('myparcel_update_delivery_options'));
-          }
-        }
+
         //Add mutation listener
         this._addMutationListener();
 
@@ -46,7 +38,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         window.MyParcelConfig.address = this.options.address;
 
         // Tell the plugin to re-render
-        //document.dispatchEvent(new Event('myparcel_update_delivery_options'));
+        document.dispatchEvent(new Event('myparcel_update_delivery_options'));
     };
 
     _disableButton(disable) {

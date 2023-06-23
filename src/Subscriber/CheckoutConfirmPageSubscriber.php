@@ -3,6 +3,7 @@
 namespace MyPa\Shopware\Subscriber;
 
 use MyPa\Shopware\Service\Config\ConfigGenerator;
+use MyPa\Shopware\Service\Config\ScriptService;
 use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
@@ -16,12 +17,18 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
     private $configGenerator;
 
     /**
-     * @param SystemConfigService $configService
-     * @param ConfigGenerator     $configGenerator
+     * @var ScriptService
      */
-    public function __construct(ConfigGenerator $configGenerator)
+    private ScriptService $scriptService;
+
+    /**
+     * @param  ConfigGenerator $configGenerator
+     * @param  ScriptService   $scriptService
+     */
+    public function __construct(ConfigGenerator $configGenerator, ScriptService $scriptService)
     {
         $this->configGenerator = $configGenerator;
+        $this->scriptService   = $scriptService;
     }
 
     /**
@@ -55,6 +62,7 @@ class CheckoutConfirmPageSubscriber implements EventSubscriberInterface
                         $event->getRequest()
                             ->getLocale()
                     ),
+                    'deliveryOptionsCdnUrl' => $this->scriptService->getDeliveryOptionsCdnUrl(),
                 ])
             );
     }
