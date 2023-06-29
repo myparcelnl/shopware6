@@ -3,6 +3,7 @@
 namespace MyPa\Shopware\Service\Config;
 
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Str;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -103,6 +104,7 @@ class ConfigGenerator
                     $totalPrice);
             }
         }
+
         return $totalPrice;
     }
 
@@ -120,9 +122,11 @@ class ConfigGenerator
         if ($this->isSettingEnabled($salesChannelId, $field, '')) {
             $price += $this->getConfigFloat($salesChannelId, $field, '');
         }
+
         if ($this->isSettingEnabled($salesChannelId, $field, $carrier)) {
             $price += $this->getConfigFloat($salesChannelId, $field, $carrier);
         }
+
         return $price;
     }
 
@@ -140,6 +144,7 @@ class ConfigGenerator
         $config['translationsFromSettings'] = $this->getDeliveryOptionsStrings(
             $salesChannelContext->getSalesChannelId()
         );
+
         return $config;
     }
 
@@ -198,6 +203,7 @@ class ConfigGenerator
             'currency'    => $salesChannelContext->getCurrency()->getIsoCode(),
             'locale'      => $locale,
         ];
+
         return array_merge($settings, $this->generateConfig($salesChannelContext->getSalesChannelId()));
     }
 
@@ -231,7 +237,7 @@ class ConfigGenerator
             'dropOffDays',
         ];
 
-        $settings = [];
+        $settings = ['allowDeliveryOptions' => true];
 
         foreach ($settingsToRetrieve as $settingToRetrieve) {
 
@@ -248,7 +254,6 @@ class ConfigGenerator
         ) {
             $settings['cutoffTime'] = substr($this->getConfigString($salesChannelId, 'cutoffTime', $carrier), 0, -3);
         }
-        $settings['allowDeliveryOptions'] = true;
 
         return $settings;
     }
@@ -286,9 +291,11 @@ class ConfigGenerator
         if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
             return true;
         }
-        if (0 !== strpos($field, 'allow')) {
+
+        if (Str::startsWith($field, 'allow')) {
             $carrier = "Enabled$carrier";
         }
+
         return $this->systemConfigService->getBool("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 

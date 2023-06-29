@@ -7,17 +7,19 @@ class ScriptService
     /**
      * @return string
      */
-    private function getDeliveryOptionsVersion() {
-        return '5.8.0';
+    private function getDeliveryOptionsVersion(): string
+    {
+        return '^5';
     }
 
     /**
      * @return string
      */
-    public function getDeliveryOptionsCdnUrl() {
+    public function getDeliveryOptionsCdnUrl(): string
+    {
         return sprintf(
             'https://unpkg.com/@myparcel/delivery-options@%s/dist/myparcel.js',
-            $this->getDeliveryOptionsVersion()
+            urlencode($this->getDeliveryOptionsVersion())
         );
     }
 }
