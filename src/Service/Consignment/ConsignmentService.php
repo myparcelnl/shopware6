@@ -20,6 +20,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\BpostConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
+use MyParcelNL\Sdk\src\Support\Str;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Document\DocumentGenerator\InvoiceGenerator;
@@ -123,6 +124,37 @@ class ConsignmentService
         ];
     }
 
+    private function createLabelDescription(OrderEntity $order, string $shippingDate): string {
+        $description  = $this->systemConfigService->get('MyPaShopware.config.labelDescription') ?? '';
+        $quantities   = [];
+        $productSkus  = [];
+        $productNames = [];
+        $productIds   = [];
+
+        if (Str::contains($description, '[PRODUCT')) {
+            $orderLineItems = $order->getLineItems();
+            foreach ($orderLineItems as $orderLineItem) {
+                $quantities[]   = $orderLineItem->getQuantity();
+                $productSkus[]  = $orderLineItem->getPayload()['productNumber'];
+                $productNames[] = $orderLineItem->getLabel();
+                $productIds[]   = $orderLineItem->getProductId();
+            }
+
+        }
+
+        $formattedDescription = strtr($description, [
+            '[ORDER_NR]'      => $order->getOrderNumber(),
+            '[CUSTOMER_NOTE]' => $order->getCustomerComment(),
+            '[DELIVERY_DATE]' => $shippingDate,
+            '[PRODUCT_QTY]'   => implode(', ', $quantities),
+            '[PRODUCT_SKU]'   => implode(', ', $productSkus),
+            '[PRODUCT_NAME]'  => implode(', ', $productNames),
+            '[PRODUCT_ID]'    => implode(', ', $productIds),
+        ]);
+
+        return Str::limit($formattedDescription, AbstractConsignment::LABEL_DESCRIPTION_MAX_LENGTH);
+    }
+
     /**
      * @param  Context     $context
      * @param  OrderEntity $orderEntity
@@ -167,7 +199,7 @@ class ConsignmentService
 
         $consignment = (ConsignmentFactory::createByCarrierId($shippingOptions->getCarrierId()))
             ->setApiKey($this->apiKey)
-            ->setReferenceId($orderEntity->getOrderNumber() . '-' . Uuid::randomHex())
+            ->setReferenceIdentifier($orderEntity->getOrderNumber() . '-' . Uuid::randomHex())
             ->setCountry($shippingAddress->getCountry()->getIso())
             ->setPerson(
                 sprintf('%s %s', $shippingAddress->getFirstName(), $shippingAddress->getLastName())
@@ -201,6 +233,8 @@ class ConsignmentService
             }
             $consignment->setDeliveryDate($shippingDate);
         }
+
+        $consignment->setLabelDescription($this->createLabelDescription($orderEntity, $shippingDate));
 
         // Not in europe
         if (!in_array($shippingAddress->getCountry()->getIso(),AbstractConsignment::EURO_COUNTRIES)) {

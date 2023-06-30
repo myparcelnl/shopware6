@@ -2590,5 +2590,15 @@
                 </option>
             </options>
         </input-field>
+
+        <input-field type="text">
+            <name>labelDescription</name>
+            <label>Label Description</label>
+            <label lang="de-DE">Etikettenbeschreibung</label>
+            <label lang="nl-NL">Label omschrijving</label>
+            <helpText>Available variables: [DELIVERY_DATE]: Delivery date, [ORDER_NR]: Order number, [PRODUCT_ID]: Product ID, [PRODUCT_NAME]: Productn name, [PRODUCT_QTY]: Product quantity, [PRODUCT_SKU]: Product SKU, [CUSTOMER_NOTE]: Customer note</helpText>
+            <helpText lang="nl-NL">Beschikbare variabelen: [DELIVERY_DATE]: Bezorgdatum, [ORDER_NR]: Ordernummer, [PRODUCT_ID]: Product ID, [PRODUCT_NAME]: Productnaam, [PRODUCT_QTY]: Productaantal, [PRODUCT_SKU]: Product SKU, [CUSTOMER_NOTE]: Opmerking klant</helpText>
+            <helpText lang="de-DE">Verfügbare Variablen: [DELIVERY_DATE]: Lieferdatum, [ORDER_NR]: Bestellnummer, [PRODUCT_ID]: Produkt-ID, [PRODUCT_NAME]: Produktname, [PRODUCT_QTY]: Produktmenge, [PRODUCT_SKU]: Produkt-SKU, [CUSTOMER_NOTE]: Kundennotiz</helpText>
+        </input-field>
     </card>
 </config>
