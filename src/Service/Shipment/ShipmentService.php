@@ -6,7 +6,7 @@ use MyPa\Shopware\Core\Content\Shipment\ShipmentCollection;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -19,19 +19,19 @@ class ShipmentService
     private $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $shipmentRepository;
 
     /**
      * Creates a new instance of the shipment service
      *
-     * @param LoggerInterface           $logger
-     * @param EntityRepositoryInterface $shipmentRepository
+     * @param LoggerInterface  $logger
+     * @param EntityRepository $shipmentRepository
      */
     public function __construct(
-        LoggerInterface           $logger,
-        EntityRepositoryInterface $shipmentRepository
+        LoggerInterface  $logger,
+        EntityRepository $shipmentRepository
     )
     {
         $this->logger = $logger;

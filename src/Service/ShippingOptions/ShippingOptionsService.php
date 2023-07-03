@@ -7,7 +7,7 @@ use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -28,7 +28,7 @@ class ShippingOptionsService
     private $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $shippingOptionsRepository;
 
@@ -40,13 +40,13 @@ class ShippingOptionsService
     /**
      * ShippingOptionsService constructor.
      *
-     * @param LoggerInterface           $logger
-     * @param EntityRepositoryInterface $shippingOptionsRepository
-     * @param SystemConfigService       $systemConfigService
+     * @param LoggerInterface $logger
+     * @param EntityRepository $shippingOptionsRepository
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
-        LoggerInterface           $logger,
-        EntityRepositoryInterface $shippingOptionsRepository,
+        LoggerInterface $logger,
+        EntityRepository $shippingOptionsRepository,
         SystemConfigService       $systemConfigService
     )
     {
