@@ -40,14 +40,14 @@ class ShippingOptionsService
     /**
      * ShippingOptionsService constructor.
      *
-     * @param LoggerInterface $logger
-     * @param EntityRepository $shippingOptionsRepository
+     * @param LoggerInterface     $logger
+     * @param EntityRepository    $shippingOptionsRepository
      * @param SystemConfigService $systemConfigService
      */
     public function __construct(
-        LoggerInterface $logger,
-        EntityRepository $shippingOptionsRepository,
-        SystemConfigService       $systemConfigService
+        LoggerInterface     $logger,
+        EntityRepository    $shippingOptionsRepository,
+        SystemConfigService $systemConfigService
     )
     {
         $this->logger = $logger;

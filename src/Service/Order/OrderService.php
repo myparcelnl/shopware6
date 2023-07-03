@@ -29,7 +29,7 @@ class OrderService
      * @param EntityRepository $orderRepository
      */
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface  $logger,
         EntityRepository $orderRepository
     )
     {
