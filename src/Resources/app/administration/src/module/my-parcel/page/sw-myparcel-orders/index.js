@@ -102,16 +102,6 @@ Component.register('sw-myparcel-orders', {
         };
     },
 
-    mounted() {
-        const criteria = new Criteria(this.page, this.limit);
-
-        criteria.addAggregation(Criteria.count('countTotal', 'id'));
-
-        this.shippingOptionRepository.search(criteria, Shopware.Context.api).then((response) => {
-            this.total = response.aggregations.countTotal.count;
-        });
-    },
-
     computed: {
         orderColumns() {
             return this.getOrderColumns();
@@ -136,6 +126,11 @@ Component.register('sw-myparcel-orders', {
             if (this.campaignCodeFilter.length > 0) {
                 criteria.addFilter(Criteria.equalsAny('campaignCode', this.campaignCodeFilter));
             }
+
+            criteria.addFilter(Criteria.contains('order.deliveries.shippingMethod.customFields', 'myparcel'));
+            criteria.addFilter(Criteria.equals('order.deliveries.stateMachineState.name', 'open'));
+
+            criteria.addAggregation(Criteria.count('countTotal', 'id'));
 
             criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection));
             criteria.addAssociation('order');
@@ -184,9 +179,9 @@ Component.register('sw-myparcel-orders', {
                 label: 'sw-order.list.columnTransactionState',
                 allowResize: true
             }, {
-                property: 'order.deliveries[0].stateMachineState.name',
-                label: 'sw-order.list.columnDeliveryState',
-                allowResize: true
+              property: 'order.deliveries[0].stateMachineState.name',
+              label: 'sw-order.list.columnDeliveryState',
+              allowResize: true
             }, {
                 property: 'deliveryDate',
                 label: 'sw-myparcel.columns.deliveryDateColumn',
@@ -408,25 +403,9 @@ Component.register('sw-myparcel-orders', {
         getList() {
             this.isLoading = true;
             return this.shippingOptionRepository.search(this.shippingOptionCriteria, Shopware.Context.api).then((response) => {
-                this.shippingOptions = [];
-                response.forEach(item => {
-                    if (
-                        !!item.order.deliveries
-                        && item.order.deliveries.length !== 0
-                        && !!item.order.deliveries[0].stateMachineState.name
-                        && item.order.deliveries[0].stateMachineState.name.toLowerCase() === 'open'
-                    ) {
-                        this.shippingOptions.push(item);
-                    }
+                this.shippingOptions = response;
 
-                    if (
-                        !item.order.deliveries
-                        || item.order.deliveries.length === 0
-                        || !item.order.deliveries[0].stateMachineState.name
-                    ) {
-                        this.shippingOptions.push(item);
-                    }
-                });
+                this.total = response.aggregations.countTotal.count;
 
                 this.isLoading = false;
 
@@ -521,14 +500,6 @@ Component.register('sw-myparcel-orders', {
 
         onCreateMultipleConsignments() {
             this.saveMultipleConsignments(this.createMultipleConsignments);
-        },
-
-        onPageChange({page = 1, limit = 25}) {
-            this.page = page;
-            this.limit = limit;
-            this.isLoading = true;
-
-            this.getList();
         },
     }
 });
