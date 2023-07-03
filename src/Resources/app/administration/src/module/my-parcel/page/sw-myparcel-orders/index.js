@@ -221,6 +221,12 @@ Component.register('sw-myparcel-orders', {
         },
 
         getNumberOfConsignments(shippingOptionId) {
+            if (0 === Object.entries(this.$refs).length) {
+                setTimeout(() => {
+                    this.getNumberOfConsignments(shippingOptionId);
+                }, 250);
+            }
+
             const gridItem = this.$refs[shippingOptionId];
 
             if (!!gridItem) {
