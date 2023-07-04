@@ -9,18 +9,19 @@ namespace MyPa\Shopware\Storefront\Controller;
 use Exception;
 use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
+use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
+use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ConsignmentController extends StorefrontController
 {
@@ -63,33 +64,49 @@ class ConsignmentController extends StorefrontController
     /**
      * @var ConsignmentService
      */
-    private $consignmentService;
+    private ConsignmentService $consignmentService;
+
+    /**
+     * @var \MyPa\Shopware\Service\Order\OrderService
+     */
+    private OrderService $orderService;
 
     /**
      * @var ShipmentService
      */
-    private $shipmentService;
+    private ShipmentService $shipmentService;
+
+    /**
+     * @var \MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService
+     */
+    private ShippingOptionsService $shippingOptionsService;
 
     /**
      * @var SystemConfigService
      */
-    private $systemConfigService;
+    private SystemConfigService $systemConfigService;
 
     /**
      * ConsignmentController constructor.
      *
-     * @param ConsignmentService  $consignmentService
-     * @param ShipmentService     $shipmentService
-     * @param SystemConfigService $systemConfigService
+     * @param  ConsignmentService     $consignmentService
+     * @param  ShipmentService        $shipmentService
+     * @param  OrderService           $orderService
+     * @param  ShippingOptionsService $shippingOptionsService
+     * @param  SystemConfigService    $systemConfigService
      */
     public function __construct(
-        ConsignmentService  $consignmentService,
-        ShipmentService     $shipmentService,
-        SystemConfigService $systemConfigService
+        ConsignmentService     $consignmentService,
+        ShipmentService        $shipmentService,
+        OrderService           $orderService,
+        ShippingOptionsService $shippingOptionsService,
+        SystemConfigService    $systemConfigService
     )
     {
         $this->consignmentService = $consignmentService;
         $this->shipmentService = $shipmentService;
+        $this->orderService = $orderService;
+        $this->shippingOptionsService = $shippingOptionsService;
         $this->systemConfigService = $systemConfigService;
     }
 
@@ -123,6 +140,23 @@ class ConsignmentController extends StorefrontController
             $shippingOptionId,
             new Context(new SystemSource())
         );
+
+        if (!$consignments->getElements()) {
+            $order = $this->consignmentService->getFullOrderByShippingOptionId($shippingOptionId);
+
+            try {
+                $this->consignmentService->createConsignment(
+                    new Context(new SystemSource()),
+                    $order ?? new OrderEntity(),
+                    null
+                );
+            } catch (\Exception $e) {
+                return new JsonResponse([
+                    self::RESPONSE_KEY_SUCCESS => false,
+                    self::RESPONSE_KEY_ERROR   => $e->getMessage(),
+                ]);
+            }
+        }
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS      => true,
@@ -211,7 +245,7 @@ class ConsignmentController extends StorefrontController
 
 
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS   => $consignments !== null,
+            self::RESPONSE_KEY_SUCCESS   => $consignments->isNotEmpty(),
             self::RESPONSE_KEY_LABEL_URL => $consignments->getLinkOfLabels(),
         ]);
     }

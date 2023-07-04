@@ -115,6 +115,8 @@
             </call>
             <argument type="service" id="MyPa\Shopware\Service\Consignment\ConsignmentService"/>
             <argument type="service" id="MyPa\Shopware\Service\Shipment\ShipmentService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
+            <argument type="service" id="MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
