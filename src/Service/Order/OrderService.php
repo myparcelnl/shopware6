@@ -5,7 +5,7 @@ namespace MyPa\Shopware\Service\Order;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -18,19 +18,19 @@ class OrderService
     private $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $orderRepository;
 
     /**
      * Creates a new instance of the shipment service
      *
-     * @param LoggerInterface           $logger
-     * @param EntityRepositoryInterface $orderRepository
+     * @param LoggerInterface  $logger
+     * @param EntityRepository $orderRepository
      */
     public function __construct(
-        LoggerInterface $logger,
-        EntityRepositoryInterface $orderRepository
+        LoggerInterface  $logger,
+        EntityRepository $orderRepository
     )
     {
         $this->logger = $logger;
