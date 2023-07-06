@@ -80,9 +80,9 @@ class ConsignmentController extends StorefrontController
     /**
      * ConsignmentController constructor.
      *
-     * @param  ConsignmentService  $consignmentService
-     * @param  ShipmentService     $shipmentService
-     * @param  SystemConfigService $systemConfigService
+     * @param ConsignmentService  $consignmentService
+     * @param ShipmentService     $shipmentService
+     * @param SystemConfigService $systemConfigService
      */
     public function __construct(
         ConsignmentService  $consignmentService,
