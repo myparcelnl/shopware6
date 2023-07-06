@@ -492,7 +492,7 @@ class ConsignmentService
                 for ($i = 1; $i <= $numberOfLabels; $i++) {
                     try {
                         $consignment = $this->createConsignment($context, $order, $packageType);
-                    } catch(\Exception $e) {
+                    } catch(\Throwable $e) {
                         $message = "{$order->getOrderNumber()}: could not create consignment";
                         $this->logger->warning($message, ['error'=>$e->getMessage()]);
 
@@ -583,7 +583,7 @@ class ConsignmentService
             new Context(new SystemSource())
         );
 
-        if (!$options) {
+        if (! $options) {
             return null;
         }
 
