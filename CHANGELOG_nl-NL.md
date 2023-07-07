@@ -1,5 +1,11 @@
 # Versie 2.1.0
 
+#### New features
+- Etiket omschrijving toevoegen
+
+#### Improvements
+- MyParcel order grid verbeteren
+- Internationale verzendingen toestaan wanneer brievenbuspakket standaard is
 - Vertalingen van leveringsopties toevoegen in config
 - Postcodes met volgspaties toestaan
 
