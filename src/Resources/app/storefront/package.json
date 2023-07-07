@@ -2,8 +2,5 @@
   "name": "storefront",
   "version": "1.0.0",
   "private": true,
-  "license": "MIT",
-  "dependencies": {
-    "@myparcel/delivery-options": "^5.1.1"
-  }
+  "license": "MIT"
 }
