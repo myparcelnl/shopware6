@@ -12,7 +12,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
             cc: '',
             city: '',
             postalCode: '',
-            number: ''
+            street: ''
         },
         translations: {},
         config: {}
@@ -24,6 +24,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     init() {
         //Register elements
         this._registerElements();
+
         //Add mutation listener
         this._addMutationListener();
 

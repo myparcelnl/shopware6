@@ -2,6 +2,8 @@
 
 namespace MyPa\Shopware\Service\Config;
 
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
+use MyParcelNL\Sdk\src\Support\Str;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -102,6 +104,7 @@ class ConfigGenerator
                     $totalPrice);
             }
         }
+
         return $totalPrice;
     }
 
@@ -119,9 +122,11 @@ class ConfigGenerator
         if ($this->isSettingEnabled($salesChannelId, $field, '')) {
             $price += $this->getConfigFloat($salesChannelId, $field, '');
         }
+
         if ($this->isSettingEnabled($salesChannelId, $field, $carrier)) {
             $price += $this->getConfigFloat($salesChannelId, $field, $carrier);
         }
+
         return $price;
     }
 
@@ -139,6 +144,7 @@ class ConfigGenerator
         $config['translationsFromSettings'] = $this->getDeliveryOptionsStrings(
             $salesChannelContext->getSalesChannelId()
         );
+
         return $config;
     }
 
@@ -187,13 +193,17 @@ class ConfigGenerator
      */
     private function getGeneralSettings(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        //These are the settings that are only valid for the main config
+        $cc          = $salesChannelContext->getShippingLocation()->getCountry()->getIso();
+        $packageType = (AbstractConsignment::CC_NL === $cc)
+            ? $this->systemConfigService->getString('MyPaShopware.config.packageType', $salesChannelContext->getSalesChannelId())
+            : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
         $settings = [
             'platform'    => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelContext->getSalesChannelId()),
-            'packageType' => $this->systemConfigService->getString('MyPaShopware.config.packageType', $salesChannelContext->getSalesChannelId()),
+            'packageType' => $packageType,
             'currency'    => $salesChannelContext->getCurrency()->getIsoCode(),
             'locale'      => $locale,
         ];
+
         return array_merge($settings, $this->generateConfig($salesChannelContext->getSalesChannelId()));
     }
 
@@ -207,6 +217,7 @@ class ConfigGenerator
     {
         $settingsToRetrieve = [
             'allowShowDeliveryDate',
+            'allowMondayDelivery',
             'allowMorningDelivery',
             'priceMorningDelivery',
             'priceStandardDelivery',
@@ -223,9 +234,10 @@ class ConfigGenerator
             'allowOnlyRecipient',
             'deliveryDaysWindow',
             'dropOffDelay',
+            'dropOffDays',
         ];
 
-        $settings = [];
+        $settings = ['allowDeliveryOptions' => true];
 
         foreach ($settingsToRetrieve as $settingToRetrieve) {
 
@@ -238,16 +250,11 @@ class ConfigGenerator
             }
         }
 
-        if (
-            $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier) !== null && $this->isSettingEnabled($salesChannelId, 'dropOffDays', $carrier)
-        ) {
-            $settings["dropOffDays"] = implode(";", $this->getConfigValue($salesChannelId, 'dropOffDays', $carrier));
-        }
-
         if (!empty($this->getConfigString($salesChannelId, 'cutoffTime', $carrier)) && $this->isSettingEnabled($salesChannelId, 'cutoffTime', $carrier)
         ) {
-            $settings["cutoffTime"] = substr($this->getConfigString($salesChannelId, 'cutoffTime', $carrier), 0, -3);
+            $settings['cutoffTime'] = substr($this->getConfigString($salesChannelId, 'cutoffTime', $carrier), 0, -3);
         }
+
         return $settings;
     }
 
@@ -284,6 +291,11 @@ class ConfigGenerator
         if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
             return true;
         }
+
+        if (Str::startsWith($field, 'allow')) {
+            $carrier = "Enabled$carrier";
+        }
+
         return $this->systemConfigService->getBool("MyPaShopware.config.$field$carrier", $salesChannelId);
     }
 

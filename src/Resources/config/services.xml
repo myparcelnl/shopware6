@@ -78,6 +78,7 @@
         <!-- Event Subscribers -->
         <service id="MyPa\Shopware\Subscriber\CheckoutConfirmPageSubscriber">
             <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
+            <argument type="service" id="MyPa\Shopware\Service\Config\ScriptService"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -143,6 +144,7 @@
         <service id="MyPa\Shopware\Service\Config\ConfigGenerator">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
+        <service id="MyPa\Shopware\Service\Config\ScriptService"/>
         <service id="MyPa\Shopware\Service\Shopware\CartService">
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
         </service>
