@@ -30,9 +30,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@myparcel/delivery-options@npm:^5.1.1":
-  version: 5.2.3
-  resolution: "@myparcel/delivery-options@npm:5.2.3"
+"@myparcel/delivery-options@npm:^5.9.3":
+  version: 5.9.3
+  resolution: "@myparcel/delivery-options@npm:5.9.3"
   dependencies:
     "@fortawesome/free-solid-svg-icons": ^5.15.4
     "@myparcel/js-sdk": ^2.0.3
@@ -45,7 +45,7 @@ __metadata:
     vue-async-computed: ^3.9.0
     vue-click-outside: ^1.1.0
     vue-fa: ^2.0.1
-  checksum: 20ace42eda7d6ee1b7f392477abb038b728a667eeea9787e6a0e932bed1b2fe18cd92e5d3dc4168d6f1694b63898501a69036e4a890fb7cc0d400212d3e91bc4
+  checksum: 5e2a72c57cdd374eceacc550768a1d079a34e8e4a0b07e76fb9d6a572a091746f8bf4a959a0e6ed0d860fd6c6d7bad10e7b43e46f00f6c067b02087d44efbe3e
   languageName: node
   linkType: hard
 
@@ -257,7 +257,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "storefront@workspace:src/Resources/app/storefront"
   dependencies:
-    "@myparcel/delivery-options": ^5.1.1
+    "@myparcel/delivery-options": ^5.9.3
   languageName: unknown
   linkType: soft
 
