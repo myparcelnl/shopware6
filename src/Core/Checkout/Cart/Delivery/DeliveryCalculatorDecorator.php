@@ -23,7 +23,7 @@ use Shopware\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
 use Shopware\Core\Checkout\Shipping\Exception\ShippingMethodNotFoundException;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Defaults;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -34,12 +34,6 @@ use stdClass;
 
 class DeliveryCalculatorDecorator extends DeliveryCalculator
 {
-    public const CALCULATION_BY_LINE_ITEM_COUNT = 1;
-
-    public const CALCULATION_BY_PRICE = 2;
-
-    public const CALCULATION_BY_WEIGHT = 3;
-
     /**
      * @var QuantityPriceCalculator
      */
@@ -56,7 +50,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $taxDetector;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $shippingMethodRepository;
 
@@ -69,14 +63,14 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
      * @param QuantityPriceCalculator   $priceCalculator
      * @param PercentageTaxRuleBuilder  $percentageTaxRuleBuilder
      * @param TaxDetector               $taxDetector
-     * @param EntityRepositoryInterface $shippingMethodRepository
+     * @param EntityRepository $shippingMethodRepository
      * @param ConfigGenerator           $configGenerator
      */
     public function __construct(
         QuantityPriceCalculator   $priceCalculator,
         PercentageTaxRuleBuilder  $percentageTaxRuleBuilder,
         TaxDetector               $taxDetector,
-        EntityRepositoryInterface $shippingMethodRepository,
+        EntityRepository $shippingMethodRepository,
         ConfigGenerator           $configGenerator
     )
     {

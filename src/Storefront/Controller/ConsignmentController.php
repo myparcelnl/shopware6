@@ -94,7 +94,6 @@ class ConsignmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/consignment/get-for-shipping-option",
      *     defaults={"auth_enabled"=true},
@@ -131,7 +130,6 @@ class ConsignmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/consignment/create-consignments",
      *     defaults={"auth_enabled"=true},
@@ -217,7 +215,6 @@ class ConsignmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/consignment/download-labels",
      *     defaults={"auth_enabled"=true},
@@ -280,7 +277,6 @@ class ConsignmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/consignment/track-and-trace",
      *     defaults={"auth_enabled"=true},
@@ -328,7 +324,6 @@ class ConsignmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
      *     defaults={"auth_enabled"=true},

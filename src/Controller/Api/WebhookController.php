@@ -3,10 +3,9 @@
 namespace MyPa\Shopware\Controller\Api;
 
 use Psr\Log\LoggerInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,22 +20,21 @@ class WebhookController extends StorefrontController
     private $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $shipmentsRepository;
 
     /**
      * @param LoggerInterface           $logger
-     * @param EntityRepositoryInterface $shipments
+     * @param EntityRepository $shipments
      */
-    public function __construct(LoggerInterface $logger, EntityRepositoryInterface $shipments)
+    public function __construct(LoggerInterface $logger, EntityRepository $shipments)
     {
         $this->logger = $logger;
         $this->shipmentsRepository = $shipments;
     }
 
     /**
-     * @RouteScope(scopes={"storefront"})
      * @Route("/myparcel/webhook", defaults={"csrf_protected"=false}, name="frontend.myparcel.webhook",
      *                                           options={"seo"="false"}, methods={"GET", "POST"})
      *

@@ -5,7 +5,6 @@ namespace MyPa\Shopware\Storefront\Controller;
 use Exception;
 use MyPa\Shopware\Facade\MyParcelFacade;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +39,6 @@ class MyParcelController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/carriers",
      *     defaults={"auth_enabled"=true},
@@ -60,7 +58,6 @@ class MyParcelController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/package_types",
      *     defaults={"auth_enabled"=true},

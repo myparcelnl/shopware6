@@ -14,7 +14,7 @@ class AnonymizeIPProcessor implements ProcessorInterface
      * @param array $record
      * @return array
      */
-    public function __invoke(array $record): array
+    public function __invoke(array $record)
     {
         if (!array_key_exists('ip', $record['extra'])) {
             return $record;

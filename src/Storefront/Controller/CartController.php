@@ -5,14 +5,13 @@ namespace MyPa\Shopware\Storefront\Controller;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Shopware\CartService;
 use Psr\Log\LoggerInterface;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @RouteScope(scopes={"storefront"})
+ * @Route(defaults={"_routeScope"={"storefront"}})
  */
 class CartController extends AbstractController
 {

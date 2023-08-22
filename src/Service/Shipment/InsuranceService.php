@@ -8,7 +8,6 @@ use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\Country\CountryEntity;
@@ -19,7 +18,7 @@ class InsuranceService
     /** @var SystemConfigService */
     private $systemConfigService;
 
-    /** @var EntityRepositoryInterface */
+    /** @var EntityRepository */
     private $countryRepository;
 
     public function __construct(

@@ -8,7 +8,6 @@ use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +56,6 @@ class ShipmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api//_action/myparcel/shipment/all",
      *     defaults={"auth_enabled"=true},
@@ -76,7 +74,6 @@ class ShipmentController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/shipment/create",
      *     defaults={"auth_enabled"=true},

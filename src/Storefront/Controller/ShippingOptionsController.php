@@ -12,7 +12,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -74,7 +73,6 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/carriers",
      *     defaults={"auth_enabled"=true},
@@ -94,7 +92,6 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/shipping-options/create",
      *     defaults={"auth_enabled"=true},
@@ -221,7 +218,6 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/shipping-options/all",
      *     defaults={"auth_enabled"=true},
@@ -240,7 +236,6 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/v{version}/_action/myparcel/shipping-options/show",
      *     defaults={"auth_enabled"=true},
