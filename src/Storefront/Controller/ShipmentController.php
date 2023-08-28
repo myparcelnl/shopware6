@@ -58,7 +58,7 @@ class ShipmentController extends StorefrontController
     /**
      * @Route(
      *     "/api//_action/myparcel/shipment/all",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShipmentController::ROUTE_NAME_ALL,
      *     methods={"GET"}
      *     )
@@ -76,7 +76,7 @@ class ShipmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/shipment/create",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShipmentController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
      *     )

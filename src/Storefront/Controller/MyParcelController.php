@@ -41,7 +41,7 @@ class MyParcelController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=MyParcelController::ROUTE_NAME_GET_CARRIERS,
      *     methods={"GET"}
      *     )
@@ -60,7 +60,7 @@ class MyParcelController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/package_types",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=MyParcelController::ROUTE_NAME_GET_PACKAGE_TYPES,
      *     methods={"GET"}
      *     )

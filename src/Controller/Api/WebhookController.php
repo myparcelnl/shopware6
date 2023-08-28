@@ -35,7 +35,7 @@ class WebhookController extends StorefrontController
     }
 
     /**
-     * @Route("/myparcel/webhook", defaults={"csrf_protected"=false}, name="frontend.myparcel.webhook",
+     * @Route("/myparcel/webhook", defaults={"csrf_protected"=false, "_routeScope"={"storefront"}}, name="frontend.myparcel.webhook",
      *                                           options={"seo"="false"}, methods={"GET", "POST"})
      *
      * @param Request             $request

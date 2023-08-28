@@ -96,7 +96,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/consignment/get-for-shipping-option",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION,
      *     methods={"POST"}
      *     )
@@ -132,7 +132,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/consignment/create-consignments",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_CREATE_CONSIGNMENTS,
      *     methods={"POST"}
      *     )
@@ -217,7 +217,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/consignment/download-labels",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_DOWNLOAD_LABELS,
      *     methods={"POST"}
      *     )
@@ -279,7 +279,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/consignment/track-and-trace",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_TRACK_AND_TRACE,
      *     methods={"POST"}
      *     )
@@ -326,7 +326,7 @@ class ConsignmentController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_GET_BY_REFERENCE_ID,
      *     methods={"POST"}
      *     )

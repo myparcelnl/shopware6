@@ -75,7 +75,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
      *     methods={"GET"}
      *     )
@@ -94,7 +94,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/shipping-options/create",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
      *     )
@@ -220,7 +220,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @Route(
      *     "/api/_action/myparcel/shipping-options/all",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_ALL,
      *     methods={"GET"}
      *     )
@@ -238,7 +238,7 @@ class ShippingOptionsController extends StorefrontController
     /**
      * @Route(
      *     "/api/v{version}/_action/myparcel/shipping-options/show",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
      *     methods={"POST"}
      *     )
