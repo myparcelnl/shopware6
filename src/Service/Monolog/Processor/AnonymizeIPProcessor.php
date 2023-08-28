@@ -11,10 +11,11 @@ class AnonymizeIPProcessor implements ProcessorInterface
      * Gets an anonymous version of the
      * provided IP address string.
      *
-     * @param array $record
+     * @param  array|\Monolog\LogRecord $record
+     *
      * @return array
      */
-    public function __invoke(array $record)
+    public function __invoke(array|\Monolog\LogRecord $record)
     {
         if (!array_key_exists('ip', $record['extra'])) {
             return $record;
