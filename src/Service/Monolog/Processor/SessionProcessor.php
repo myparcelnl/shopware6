@@ -23,7 +23,7 @@ class SessionProcessor implements ProcessorInterface
         $this->sessionId = trim($request->getSession()->getId());
     }
 
-    public function __invoke(array $record)
+    public function __invoke($record)
     {
         if (empty($this->sessionId)) {
             return $record;
