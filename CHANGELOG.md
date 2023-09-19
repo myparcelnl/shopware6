@@ -1,5 +1,11 @@
 # Version 2.1.0
 
+#### New features
+- Add label description
+
+#### Improvements
+- Improve MyParcel order grid view
+- Allow shipping international orders when mailbox is default
 - Add delivery options translations in config
 - Allow postal codes with trailing spaces
 

@@ -1,5 +1,11 @@
 # Version 2.1.0
 
+#### New features
+- Etikett Beschreibung hinzufügen
+
+#### Improvements
+- Verbessert die MyParcel -Bestellnetzansicht
+- Ermöglicht den Versand internationaler Bestellungen, wenn Mailbox Standard ist
 - Fügen Sie Übersetzungen für Lieferoptionen in der Konfiguration hinzu
 - Postleitzahlen mit nachgestellten Leerzeichen zulassen
 
