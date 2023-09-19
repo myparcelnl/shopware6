@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Service\Monolog\Factory;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use pq\Exception\RuntimeException;
 use Shopware\Core\Framework\Log\Monolog\DoctrineSQLHandler;
 use Shopware\Core\Kernel;
 
@@ -26,7 +27,8 @@ class LoggerFactory
      */
     public function createSQLHandler(): DoctrineSQLHandler
     {
-        return new DoctrineSQLHandler(Kernel::getConnection(), Level::Info);
-    }
+        $logLevel = class_exists(Level::class) ? Level::Info : Logger::INFO;
 
+        return new DoctrineSQLHandler(Kernel::getConnection(), $logLevel);
+    }
 }
