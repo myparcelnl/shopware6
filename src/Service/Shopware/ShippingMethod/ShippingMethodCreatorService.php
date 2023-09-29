@@ -5,32 +5,32 @@ namespace MyPa\Shopware\Service\Shopware\ShippingMethod;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Content\Media\MediaService;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 
 class ShippingMethodCreatorService
 {
     private MediaService $mediaService;
-    private EntityRepositoryInterface $deliveryTimeRepository;
-    private EntityRepositoryInterface $mediaRepository;
-    private EntityRepositoryInterface $ruleRepository;
-    private EntityRepositoryInterface $shippingMethodRepository;
+    private EntityRepository $deliveryTimeRepository;
+    private EntityRepository $mediaRepository;
+    private EntityRepository $ruleRepository;
+    private EntityRepository $shippingMethodRepository;
     private LoggerInterface $logger;
 
     /**
      * @param MediaService              $mediaService
-     * @param EntityRepositoryInterface $deliveryTimeRepository
-     * @param EntityRepositoryInterface $mediaRepository
-     * @param EntityRepositoryInterface $ruleRepository
-     * @param EntityRepositoryInterface $shippingMethodRepository
+     * @param EntityRepository $deliveryTimeRepository
+     * @param EntityRepository $mediaRepository
+     * @param EntityRepository $ruleRepository
+     * @param EntityRepository $shippingMethodRepository
      * @param LoggerInterface           $logger
      */
     public function __construct(
         MediaService              $mediaService,
-        EntityRepositoryInterface $deliveryTimeRepository,
-        EntityRepositoryInterface $mediaRepository,
-        EntityRepositoryInterface $ruleRepository,
-        EntityRepositoryInterface $shippingMethodRepository,
+        EntityRepository $deliveryTimeRepository,
+        EntityRepository $mediaRepository,
+        EntityRepository $ruleRepository,
+        EntityRepository $shippingMethodRepository,
         LoggerInterface           $logger
     )
     {

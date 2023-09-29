@@ -62,7 +62,7 @@
 
         <service id="myparcel.logger.processor.session"
                  class="MyPa\Shopware\Service\Monolog\Processor\SessionProcessor">
-            <argument type="service" id="session"/>
+            <argument type="service" id="request_stack"/>
         </service>
     </services>
 </container>

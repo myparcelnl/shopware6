@@ -3,7 +3,7 @@
 namespace MyPa\Shopware\Service\Monolog\Processor;
 
 use Monolog\Processor\ProcessorInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class SessionProcessor implements ProcessorInterface
 {
@@ -12,12 +12,18 @@ class SessionProcessor implements ProcessorInterface
      */
     private $sessionId;
 
-    public function __construct(Session $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->sessionId = trim($session->getId());
+        $request = $requestStack->getCurrentRequest();
+
+        if (null === $request) {
+            return;
+        }
+
+        $this->sessionId = trim($request->getSession()->getId());
     }
 
-    public function __invoke(array $record)
+    public function __invoke($record)
     {
         if (empty($this->sessionId)) {
             return $record;

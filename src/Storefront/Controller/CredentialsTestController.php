@@ -3,13 +3,12 @@
 namespace MyPa\Shopware\Storefront\Controller;
 
 use MyParcelNL\Sdk\src\Services\CheckApiKeyService;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @RouteScope(scopes={"administration"})
+ * @Route(defaults={"_routeScope"={"administration"}})
  */
 class CredentialsTestController
 {
