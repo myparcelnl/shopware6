@@ -9,7 +9,7 @@ use MyPa\Shopware\Exception\CustomField\CustomFieldSetNotExistsException;
 use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -29,12 +29,12 @@ class CustomFieldFactory
     }
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $customFieldRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $customFieldSetRepository;
 
@@ -44,13 +44,13 @@ class CustomFieldFactory
     protected $definitionInstanceRegistry;
 
     /**
-     * @param EntityRepositoryInterface  $customFieldRepository
-     * @param EntityRepositoryInterface  $customFieldSetRepository
+     * @param EntityRepository  $customFieldRepository
+     * @param EntityRepository  $customFieldSetRepository
      * @param DefinitionInstanceRegistry $definitionInstanceRegistry
      */
     public function __construct(
-        EntityRepositoryInterface  $customFieldRepository,
-        EntityRepositoryInterface  $customFieldSetRepository,
+        EntityRepository  $customFieldRepository,
+        EntityRepository  $customFieldSetRepository,
         DefinitionInstanceRegistry $definitionInstanceRegistry
     )
     {

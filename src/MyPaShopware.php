@@ -5,7 +5,7 @@ namespace MyPa\Shopware;
 use Doctrine\DBAL\Connection;
 use MyPa\Shopware\Service\Shopware\CustomField\CustomFieldInstaller;
 use MyPa\Shopware\Service\Shopware\ShippingMethod\ShippingMethodCreatorService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Plugin;
@@ -62,7 +62,7 @@ class MyPaShopware extends Plugin
 
     private function deleteCustomFields(UninstallContext $uninstallContext)
     {
-        /** @var EntityRepositoryInterface $customFieldSetRepository */
+        /** @var EntityRepository $customFieldSetRepository */
         $customFieldSetRepository = $this->container->get('custom_field_set.repository');
 
         $entityIds = $customFieldSetRepository->search(

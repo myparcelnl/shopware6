@@ -12,7 +12,6 @@ use MyParcelNL\Sdk\src\Model\Consignment\DPDConsignment;
 use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -74,10 +73,9 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
      *     methods={"GET"}
      *     )
@@ -94,10 +92,9 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/shipping-options/create",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
      *     methods={"POST"}
      *     )
@@ -221,10 +218,9 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/_action/myparcel/shipping-options/all",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_ALL,
      *     methods={"GET"}
      *     )
@@ -240,10 +236,9 @@ class ShippingOptionsController extends StorefrontController
     }
 
     /**
-     * @RouteScope(scopes={"api"})
      * @Route(
      *     "/api/v{version}/_action/myparcel/shipping-options/show",
-     *     defaults={"auth_enabled"=true},
+     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
      *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
      *     methods={"POST"}
      *     )
