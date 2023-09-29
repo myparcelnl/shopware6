@@ -251,6 +251,17 @@ Component.register('sw-myparcel-orders', {
 
                             gridItem.innerHTML = length.toString();
                         }
+                        if (response.success === false) {
+                            const content = response.error ? response.error : 'Error';
+
+                            gridItem.innerHTML = `<span class="sw-label sw-label--appearance-pill sw-label--size-default sw-label--warning">${content}</span>`;
+
+                            gridItem.firstChild.onclick = (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return false;
+                            }
+                        }
                     });
             }
         },

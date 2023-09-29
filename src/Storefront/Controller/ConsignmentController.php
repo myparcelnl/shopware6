@@ -12,9 +12,10 @@ use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
+use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -70,6 +71,7 @@ class ConsignmentController extends StorefrontController
      */
     private $shipmentService;
 
+
     /**
      * @var SystemConfigService
      */
@@ -122,6 +124,30 @@ class ConsignmentController extends StorefrontController
             $shippingOptionId,
             new Context(new SystemSource())
         );
+
+        if (! $consignments->getElements()) {
+            $order = $this->consignmentService->getFullOrderByShippingOptionId($shippingOptionId);
+
+            if (! $order) {
+                return new JsonResponse([
+                    self::RESPONSE_KEY_SUCCESS => false,
+                    self::RESPONSE_KEY_ERROR   => 'Not found',
+                ]);
+            }
+
+            try {
+                $this->consignmentService->createConsignment(
+                    new Context(new SystemSource()),
+                    $order,
+                    null
+                );
+            } catch (\Throwable $e) {
+                return new JsonResponse([
+                    self::RESPONSE_KEY_SUCCESS => false,
+                    self::RESPONSE_KEY_ERROR   => $e->getMessage(),
+                ]);
+            }
+        }
 
         return new JsonResponse([
             self::RESPONSE_KEY_SUCCESS      => true,
@@ -209,7 +235,7 @@ class ConsignmentController extends StorefrontController
 
 
         return new JsonResponse([
-            self::RESPONSE_KEY_SUCCESS   => $consignments !== null,
+            self::RESPONSE_KEY_SUCCESS   => $consignments->isNotEmpty(),
             self::RESPONSE_KEY_LABEL_URL => $consignments->getLinkOfLabels(),
         ]);
     }

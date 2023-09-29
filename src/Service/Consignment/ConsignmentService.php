@@ -4,14 +4,12 @@ namespace MyPa\Shopware\Service\Consignment;
 
 use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
-use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
 use MyPa\Shopware\Helper\AddressHelper;
 use MyPa\Shopware\Service\Order\OrderService;
 use MyPa\Shopware\Service\Shipment\InsuranceService;
 use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyPa\Shopware\Service\ShippingOptions\ShippingOptionsService;
-use MyPa\Shopware\Struct\DropOffPointStruct;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Factory\ConsignmentFactory;
 use MyParcelNL\Sdk\src\Helper\MyParcelCollection;
@@ -26,6 +24,7 @@ use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Document\DocumentGenerator\InvoiceGenerator;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -160,15 +159,15 @@ class ConsignmentService
      * @param  OrderEntity $orderEntity
      * @param  null|int    $packageType
      *
-     * @return AbstractConsignment|null
+     * @return AbstractConsignment
      * @throws MissingFieldException
      * @throws \Exception
      */
-    private function createConsignment(
+    public function createConsignment(
         Context     $context,
         OrderEntity $orderEntity,
         ?int        $packageType
-    ): ?AbstractConsignment
+    ): AbstractConsignment
     {
         if ($orderEntity->getOrderCustomer() === null) {
             throw new RuntimeException('Could not get a customer');
@@ -483,42 +482,38 @@ class ConsignmentService
             }
 
             /** @var OrderEntity $order */
-            $order = $this->orderService->getOrder($orderData[self::FIELD_ORDER_ID], $orderData[self::FIELD_ORDER_VERSION_ID], $context, [
-                'addresses',
-                'deliveries',
-                'deliveries.shippingOrderAddress',
-                'deliveries.shippingOrderAddress.country',
-                'lineItems',
-                'lineItems.product.customFields',
-                'documents.documentType'
-            ]);
+            $order = $this->getFullOrderEntity($orderData[self::FIELD_ORDER_ID], $orderData[self::FIELD_ORDER_VERSION_ID], $context);
 
-            if ($order !== null) {
-                if (!$numberOfLabels || is_null($numberOfLabels)) {
+            if (null !== $order) {
+                if (!$numberOfLabels) {
                     $numberOfLabels = 1;
                 }
 
                 for ($i = 1; $i <= $numberOfLabels; $i++) {
-                    $consignment = $this->createConsignment($context, $order, $packageType);
+                    try {
+                        $consignment = $this->createConsignment($context, $order, $packageType);
+                    } catch(\Throwable $e) {
+                        $message = "{$order->getOrderNumber()}: could not create consignment";
+                        $this->logger->warning($message, ['error'=>$e->getMessage()]);
 
-                    if ($consignment !== null) {
-                        $consignments->addConsignment($consignment);
+                        continue;
                     }
+
+                    $consignments->addConsignment($consignment);
 
                     $shipmentData[] = [
                         'context' => $context,
                         'order' => $order,
                         'shippingOptionId' => $orderData[self::FIELD_SHIPPING_OPTION_ID],
-                        'referenceId' => $consignment->getReferenceId(),
+                        'referenceId' => $consignment->getReferenceIdentifier(),
                     ];
                 }
             }
         }
 
-        if ($consignments->isEmpty() === false) {
+        if ($consignments->isNotEmpty()) {
             if (
                 isset($labelPositions)
-                && is_array($labelPositions)
                 && !empty($labelPositions)
             ) {
                 $consignments->setLinkOfLabels(count($labelPositions) === 1 ? $labelPositions[0] : $labelPositions);
@@ -574,5 +569,46 @@ class ConsignmentService
     public function findManyByReferenceId(array $referenceIds): MyParcelCollection
     {
         return MyParcelCollection::findManyByReferenceId($referenceIds, $this->apiKey);
+    }
+
+    /**
+     * @param  string $shippingOptionId
+     *
+     * @return OrderEntity|null
+     */
+    public function getFullOrderByShippingOptionId(string $shippingOptionId): ?OrderEntity
+    {
+        $options = $this->shippingOptionsService->getShippingOptions(
+            $shippingOptionId,
+            new Context(new SystemSource())
+        );
+
+        if (! $options) {
+            return null;
+        }
+
+        $order = $options->getOrder();
+
+        return $this->getFullOrderEntity($order->getId(), $order->getVersionId(), new Context(new SystemSource()));
+    }
+
+    /**
+     * @param  string  $orderId
+     * @param  string  $orderVersionId
+     * @param  Context $context
+     *
+     * @return null|OrderEntity
+     */
+    private function getFullOrderEntity(string $orderId, string $orderVersionId, Context $context): ?OrderEntity
+    {
+        return $this->orderService->getOrder($orderId, $orderVersionId, $context, [
+            'addresses',
+            'deliveries',
+            'deliveries.shippingOrderAddress',
+            'deliveries.shippingOrderAddress.country',
+            'lineItems',
+            'lineItems.product.customFields',
+            'documents.documentType'
+        ]);
     }
 }
