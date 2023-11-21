@@ -200,6 +200,7 @@ class ConsignmentService
             ->setApiKey($this->apiKey)
             ->setReferenceIdentifier($orderEntity->getOrderNumber() . '-' . Uuid::randomHex())
             ->setCountry($shippingAddress->getCountry()->getIso())
+            ->setCompany($shippingAddress->getCompany())
             ->setPerson(
                 sprintf('%s %s', $shippingAddress->getFirstName(), $shippingAddress->getLastName())
             )
