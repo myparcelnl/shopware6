@@ -1,3 +1,8 @@
+# Version 2.2.0
+
+#### New features
+- Add support for Shopware 6.5
+
 # Version 2.1.0
 
 #### New features
