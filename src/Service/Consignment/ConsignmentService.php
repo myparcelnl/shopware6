@@ -254,7 +254,7 @@ class ConsignmentService
                 $customsItem->setAmount($lineItem->getQuantity());
                 $customsItem->setDescription($lineItem->getLabel());
                 $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
-                if ("myparcel" === $this->systemConfigService->getString('MyPaShopware.config.platform')) {
+                if ('myparcel' === $this->systemConfigService->getString('MyPaShopware.config.platform')) {
                     $customsItem->setCountry('NL');
                 } else {
                     $customsItem->setCountry('BE');
