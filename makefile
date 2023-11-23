@@ -47,5 +47,5 @@ zip: ## Create a zip file
 	@php update-composer-require.php --env=prod --shopware=^6.4.1 --release
 	@cd .. && rm -rf MyPaShopware-$(PLUGIN_VERSION).zip
 	@cd .. && echo "Creating Zip file MyPaShopware-$(PLUGIN_VERSION).zip\n"
-	@cd .. && zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/src MyPaShopware/vendor MyPaShopware/CHANGELOG* MyPaShopware/README.md MyPaShopware/composer.json MyPaShopware/composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
+	@cd .. && zip -q -r -0 MyPaShopware-$(PLUGIN_VERSION).zip MyPaShopware/src MyPaShopware/vendor MyPaShopware/CHANGELOG* MyPaShopware/README.md MyPaShopware/composer.json MyPaShopware/package.json MyPaShopware/composer.lock && echo "MyPaShopware-$(PLUGIN_VERSION).zip created."
 	@php update-composer-require.php --env=dev --shopware=^6.4.1
