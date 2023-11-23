@@ -43,7 +43,6 @@
     {% set deliveryOptionsPluginOptions =
         {
             url:path('frontend.checkout.myparcel.add-to-cart') ,
-            csrfToken: sw_csrf('frontend.checkout.myparcel.add-to-cart', {"mode": "token"}),
             config:page.extensions.myparcel.config,
             translations:page.extensions.myparcel.config.translationsFromSettings,
             address: {
