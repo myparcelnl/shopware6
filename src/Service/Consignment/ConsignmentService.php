@@ -20,8 +20,10 @@ use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyParcelNL\Sdk\src\Model\MyParcelCustomsItem;
 use MyParcelNL\Sdk\src\Support\Str;
 use Psr\Log\LoggerInterface;
+use Shopware\Core\Checkout\Document\DocumentCollection;
 use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Document\DocumentGenerator\InvoiceGenerator;
+use Shopware\Core\Checkout\Document\Renderer\InvoiceRenderer;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Api\Context\SystemSource;
@@ -169,21 +171,21 @@ class ConsignmentService
         ?int        $packageType
     ): AbstractConsignment
     {
-        if ($orderEntity->getOrderCustomer() === null) {
+        if (null === $orderEntity->getOrderCustomer()) {
             throw new RuntimeException('Could not get a customer');
         }
         if (
-            $orderEntity->getDeliveries() === null ||
-            $orderEntity->getDeliveries()->first() === null ||
-            $orderEntity->getDeliveries()->first()->getShippingOrderAddress() === null
+            null === $orderEntity->getDeliveries()
+            || null === $orderEntity->getDeliveries()->first()
+            || null === $orderEntity->getDeliveries()->first()->getShippingOrderAddress()
         ) {
             throw new \RuntimeException('Could not get a shipping address');
         }
 
         $shippingAddress = $orderEntity->getDeliveries()->first()->getShippingOrderAddress();
 
-        if ($shippingAddress === null ||
-            $shippingAddress->getCountry() === null
+        if (null === $shippingAddress
+            || null === $shippingAddress->getCountry()
         ) {
             throw new \RuntimeException('Shipping address is not properly formatted');
         }
@@ -192,7 +194,7 @@ class ConsignmentService
 
         $shippingOptions = $this->shippingOptionsService->getShippingOptionsForOrder($orderEntity, $context);
 
-        if ($shippingOptions === null) {
+        if (null === $shippingOptions) {
             throw new \RuntimeException('No valid Shipping Options found');
         }
 
@@ -212,9 +214,10 @@ class ConsignmentService
             ->setEmail($orderEntity->getOrderCustomer()->getEmail());
 
         //Set invoice number to the latest invoice document number or order number if none is available
-        $invoice = $orderEntity->getDocuments()->filter(function ($document) {
+        $documents = $orderEntity->getDocuments() ?? new DocumentCollection();
+        $invoice = $documents->filter(function ($document) {
             /** @var DocumentEntity $document */
-            return $document->getDocumentType()->getTechnicalName() === InvoiceGenerator::INVOICE;
+            return $document->getDocumentType() && InvoiceRenderer::TYPE === $document->getDocumentType()->getTechnicalName();
         })->last();
 
         if ($invoice instanceof DocumentEntity) {
@@ -224,7 +227,7 @@ class ConsignmentService
         }
         $consignment->setInvoice($invoiceNumber);
 
-        if ($shippingOptions->getDeliveryDate() !== null) {
+        if (null !== $shippingOptions->getDeliveryDate()) {
 
             $shippingDate = $shippingOptions->getDeliveryDate()->format('Y-m-d');
 
@@ -243,7 +246,7 @@ class ConsignmentService
             foreach ($orderEntity->getLineItems() as $lineItem) {
 
                 $customsItem = new MyParcelCustomsItem();
-                if ($lineItem->getProduct()->getWeight()) {
+                if ($lineItem->getProduct() && $lineItem->getProduct()->getWeight()) {
                     $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
                 } else {
                     $customsItem->setWeight(0.01);
@@ -251,7 +254,7 @@ class ConsignmentService
                 $customsItem->setAmount($lineItem->getQuantity());
                 $customsItem->setDescription($lineItem->getLabel());
                 $customsItem->setItemValue($lineItem->getUnitPrice() * 100);// In cents
-                if ($this->systemConfigService->getString('MyPaShopware.config.platform') === "myparcel") {
+                if ('myparcel' === $this->systemConfigService->getString('MyPaShopware.config.platform')) {
                     $customsItem->setCountry('NL');
                 } else {
                     $customsItem->setCountry('BE');
@@ -349,7 +352,7 @@ class ConsignmentService
         }
 
         if ($shippingOptions->getDeliveryType() == AbstractConsignment::DELIVERY_TYPE_PICKUP) {
-            $consignment->setPickupLocationCode(strval($shippingOptions->getLocationId()));
+            $consignment->setPickupLocationCode((string) $shippingOptions->getLocationId());
             $consignment->setPickupLocationName($shippingOptions->getLocationName());
             $consignment->setPickupStreet($shippingOptions->getLocationStreet());
             $consignment->setPickupNumber($shippingOptions->getLocationNumber());
@@ -389,7 +392,7 @@ class ConsignmentService
     ): ?ShipmentEntity
     {
         $shipmentParameters = [
-            ShipmentEntity::FIELD_CONSIGNMENT_REFERENCE => $consignment->getReferenceId(),
+            ShipmentEntity::FIELD_CONSIGNMENT_REFERENCE => $consignment->getReferenceIdentifier(),
             ShipmentEntity::FIELD_ORDER => [
                 ShipmentEntity::FIELD_ID => $orderEntity->getId(),
                 ShipmentEntity::FIELD_VERSION_ID => $orderEntity->getVersionId(),
@@ -399,7 +402,7 @@ class ConsignmentService
             ],
         ];
 
-        if ($consignment->getBarcode() !== null) {
+        if (null !== $consignment->getBarcode()) {
             $shipmentParameters[ShipmentEntity::FIELD_BAR_CODE] = $consignment->getBarcode();
             $shipmentParameters[ShipmentEntity::FIELD_TRACK_AND_TRACE_URL] = $consignment->getBarcodeUrl(
                 $consignment->getBarcode(),
@@ -408,7 +411,7 @@ class ConsignmentService
             );
 
             // Add track and trace to the custom fields
-            $customFields = json_decode($orderEntity->getCustomFields()['my_parcel'], true) ?? null;
+            $customFields = json_decode($orderEntity->getCustomFields()['my_parcel'], true);
             $trackAndTrace = $customFields['track_and_trace'] ?? [];
 
             $trackAndTrace[] = [
@@ -538,9 +541,8 @@ class ConsignmentService
                     $consignment = $foundConsignments[0];
                 }
 
-                if ($consignment !== null) {
-                    $createdShipment = $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
-                    $shipments[] = $createdShipment;
+                if (null !== $consignment) {
+                    $this->createShipment($shipment['context'], $shipment['order'], $shipment['shippingOptionId'], $consignment);
                 }
             }
         }
