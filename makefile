@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := help
 
 PLUGIN_VERSION=`php -r 'echo json_decode(file_get_contents("MyPaShopware/composer.json"))->version;'`
-SHOPWARE_COMPATIBILIY=^6.4.1
+SHOPWARE_COMPATIBILIY=^6.5
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -37,8 +37,8 @@ install-plugin: ## Builds the package and installs the plugin
 build: ## Builds the package
 	@rm -rf "src/Resources/app/storefront/dist"
 	@rm -rf "src/Resources/public/administration"
-	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php bin/build-administration.sh
-	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 php bin/build-storefront.sh
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 bin/build-administration.sh
+	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 bin/build-storefront.sh
 
 release: ## Create a new release
 	make clean
