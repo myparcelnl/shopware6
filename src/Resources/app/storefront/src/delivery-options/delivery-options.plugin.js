@@ -76,7 +76,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
                                 tomorrow.setUTCHours(0, 0, 0, 0);
                                 tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
 
-                                const data = this._getRequestData();
+                                const data = {};
                                 data['myparcel'] = JSON.stringify({
                                     "date": tomorrow.toISOString(),
                                     "carrier": carrier,
@@ -117,7 +117,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     };
 
     _submitToCart() {
-        const data = this._getRequestData();
+        const data = {};
         data['myparcel'] = JSON.stringify(event.detail);
         this._disableButton(true);
         this._submitMyparcelData(data);
@@ -134,15 +134,6 @@ export default class DeliveryOptionsPlugin extends Plugin {
                 this._showWarningAlert(this.options.translations.refreshMessage);
             }
         });
-    }
-
-    _getRequestData() {
-        const data = {};
-
-        if (window.csrf.enabled && window.csrf.mode === 'twig') {
-            data['_csrf_token'] = this.options.csrfToken;
-        }
-        return data;
     }
 
     _procesShippingCostsPage(html) {
