@@ -4,7 +4,7 @@ declare(strict_types=1);
 $output        = new Output();
 $jsonFormatter = new JsonFormatter($output);
 
-$opts = getopt("", ['env::', 'shopware:', 'admin', 'storefront']);
+$opts = getopt('', ['env::', 'shopware:', 'admin', 'storefront', 'release']);
 
 if (! $opts) {
     $output->error('No options set. Option "env" is required.');
