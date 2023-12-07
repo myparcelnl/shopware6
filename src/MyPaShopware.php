@@ -51,7 +51,8 @@ class MyPaShopware extends Plugin
 
         $connection = $this->container->get(Connection::class);
 
-        $connection->exec('SET FOREIGN_KEY_CHECKS=0;');
+        $off = 0;
+        $connection->exec("SET FOREIGN_KEY_CHECKS=$off;");
         $connection->exec('DROP TABLE IF EXISTS `myparcel_shipment`');
         $connection->exec('DROP TABLE IF EXISTS `myparcel_shipping_option`');
 
