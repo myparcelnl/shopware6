@@ -2,7 +2,6 @@
 
 namespace MyPa\Shopware\Service\Shipment;
 
-use Aws\AmplifyBackend\AmplifyBackendClient;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierBpost;
 use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
