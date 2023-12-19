@@ -239,15 +239,19 @@ class ConsignmentService
 
         $consignment->setLabelDescription($this->createLabelDescription($orderEntity, $shippingDate));
 
-        // Not in europe
-        if (!in_array($shippingAddress->getCountry()->getIso(),AbstractConsignment::EURO_COUNTRIES)) {
-            //Add weight of all items for international shipping
-            /** @var OrderLineItemEntity $lineItem */
-            foreach ($orderEntity->getLineItems() as $lineItem) {
-
+        $isRow = !in_array($shippingAddress->getCountry()->getIso(),AbstractConsignment::EURO_COUNTRIES);
+        $totalWeight = 0;
+        /** @var OrderLineItemEntity $lineItem */
+        foreach ($orderEntity->getLineItems() as $lineItem) {
+            if ($isRow) {
                 $customsItem = new MyParcelCustomsItem();
-                if ($lineItem->getProduct() && $lineItem->getProduct()->getWeight()) {
-                    $customsItem->setWeight($lineItem->getProduct()->getWeight() * 1000);
+                if ($lineItem->getProduct()
+                    && $lineItem->getProduct()
+                        ->getWeight()) {
+                    $customsItem->setWeight(
+                        $lineItem->getProduct()
+                            ->getWeight() * 1000
+                    );
                 } else {
                     $customsItem->setWeight(0.01);
                 }
@@ -261,7 +265,7 @@ class ConsignmentService
                 }
                 //Get custom field HS code
                 $customFields = $lineItem->getPayload()['customFields'];
-                $hsCode = $this->systemConfigService->getString('MyPaShopware.config.myParcelFallbackHSCode');
+                $hsCode       = $this->systemConfigService->getString('MyPaShopware.config.myParcelFallbackHSCode');
 
                 if ($customFields && array_key_exists('myparcel_product_hs_code', $customFields)) {
                     $hsCode = $customFields['myparcel_product_hs_code'];
@@ -270,11 +274,17 @@ class ConsignmentService
                     throw new ConfigFieldValueMissingException();
                 }
 
-                $customsItem->setClassification(intval($hsCode));
+                $customsItem->setClassification((int) $hsCode);
 
                 $consignment->addItem($customsItem);
+
+                $totalWeight += $customsItem->getWeight() * $customsItem->getAmount();
+            } elseif ($lineItem->getProduct()) {
+                $totalWeight += $lineItem->getQuantity() * $lineItem->getProduct()->getWeight() * 1000;
             }
         }
+
+        $consignment->setTotalWeight(min($totalWeight, 30000));
 
         if (
             $shippingOptions->getDeliveryDate() !== null
@@ -298,21 +308,6 @@ class ConsignmentService
             $consignment->setPackageType($shippingOptions->getPackageType());
         } else if ($packageType) {
             $consignment->setPackageType($packageType);
-        }
-
-        if ($consignment->getPackageType() == AbstractConsignment::PACKAGE_TYPE_DIGITAL_STAMP) {
-
-            $totalWeight = 0;
-            $lineItems = $orderEntity->getLineItems();
-            if ($lineItems) {
-                foreach ($lineItems as $lineItem) {
-                    $totalWeight += $lineItem->getProduct()->getWeight();
-                }
-                //Shopware uses KG for weight, MyParcel wants Grams
-                $totalWeight = $totalWeight * 1000;
-            }
-
-            $consignment->setTotalWeight($totalWeight);
         }
 
         if ($shippingOptions->getRequiresAgeCheck() !== null) {
