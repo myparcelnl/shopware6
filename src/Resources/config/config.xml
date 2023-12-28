@@ -106,6 +106,17 @@
                     <name lang="nl-NL">Digitale postzegel</name>
                 </option>
             </options>
+            <helpText>When you set this to other than package, you can use the fixed mailbox price setting.
+                The button text can be changed in the 'Delivery Options text' (way below).
+            </helpText>
+            <helpText lang="de-DE">Wenn Sie dies auf etwas anderes als Paket setzen, können Sie die Einstellung für den
+                festen Briefkastenpreis verwenden.
+                Der Schaltflächentext kann in den 'Delivery Options text' geändert werden (weit unten).
+            </helpText>
+            <helpText lang="nl-NL">Wanneer u dit instelt op iets anders dan pakket, kunt u de instelling voor de
+                vaste prijs van de brievenbus gebruiken.
+                De tekst van de knop kan worden gewijzigd in de 'Delivery options teksten' (helemaal onderaan).
+            </helpText>
         </input-field>
 
         <!--        Overridable settings to copy to carriers-->
@@ -518,6 +529,27 @@
             <helpText>This setting can't be disabled</helpText>
             <helpText lang="nl-NL">Deze instelling kan niet worden uitgeschakeld</helpText>
             <helpText lang="de-DE">Diese Einstellung kann nicht deaktiviert werden</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>priceMailboxEnabledPostNL</name>
+            <label>Activate fixed mailbox price</label>
+            <label lang="de-DE">Festen Postfachpreis aktivieren</label>
+            <label lang="nl-NL">Activeer vaste prijs brievenbuspakje</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="float">
+            <name>priceMailboxPostNL</name>
+            <label>Fixed mailbox Price</label>
+            <label lang="de-DE">Postfachpreis</label>
+            <label lang="nl-NL">Vaste prijs brievenbuspakje</label>
+            <helpText>In case of a mailbox package, the price will be fixed to this amount.
+            </helpText>
+            <helpText lang="de-DE">Bei einem Briefkastenpaket wird der Preis auf diesen Betrag festgelegt.
+            </helpText>
+            <helpText lang="nl-NL">Bij een brievenbuspakket wordt de prijs op dit bedrag vastgesteld.
+            </helpText>
         </input-field>
 
         <input-field type="bool">
@@ -2432,6 +2464,20 @@
         <title>Delivery options text</title>
         <title lang="de-DE">Delivery Options Text</title>
         <title lang="nl-NL">Delivery options teksten</title>
+
+        <input-field type="text">
+            <name>setPackageTypePackage</name>
+            <label>Set package type package (button)</label>
+            <label lang="de-DE">Legen Sie den Pakettyp Paket fest (button)</label>
+            <label lang="nl-NL">Pakkettype pakket instellen (button)</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>setPackageTypeDefault</name>
+            <label>Set package type default (button)</label>
+            <label lang="de-DE">Legen Sie den Standard Pakkettyp fest (button)</label>
+            <label lang="nl-NL">Stel de standaardpakkettype in (button)</label>
+        </input-field>
 
         <input-field type="text">
             <name>addressNotFound</name>

@@ -143,6 +143,7 @@
 
         <service id="MyPa\Shopware\Service\Config\ConfigGenerator">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="MyPa\Shopware\Service\Shopware\CartService"/>
         </service>
         <service id="MyPa\Shopware\Service\Config\ScriptService"/>
         <service id="MyPa\Shopware\Service\Shopware\CartService">

@@ -42,7 +42,8 @@
 
     {% set deliveryOptionsPluginOptions =
         {
-            url:path('frontend.checkout.myparcel.add-to-cart') ,
+            urlAddToCart:path('frontend.checkout.myparcel.add-to-cart'),
+            urlSetPackageType:path('frontend.checkout.myparcel.set-package-type'),
             config:page.extensions.myparcel.config,
             translations:page.extensions.myparcel.config.translationsFromSettings,
             address: {

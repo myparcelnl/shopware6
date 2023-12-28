@@ -224,11 +224,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                         /** @var stdClass $deliveryData */
                         $deliveryData = $myParcelData['myparcel']['deliveryData'];
                         $deliveryData = json_decode(json_encode($deliveryData), true);
-                        $raise = $this->configGenerator->getCostForCarrierWithOptions(
+                        $price = $this->configGenerator->getCostForCarrierWithOptions(
                             $deliveryData,
-                            $context->getSalesChannelId()
+                            $context->getSalesChannelId(),
+                            $price
                         );
-                        $price += $raise;
                     }
                 }
             }

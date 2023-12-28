@@ -42,7 +42,7 @@ class CartController extends AbstractController
     {
         $myParcelData = $data->get('myparcel');
 
-        if (($myParcelData !== null)) {
+        if (null !== $myParcelData) {
             $this->cartService->addData([
                 'myparcel' => ['deliveryData' => json_decode($myParcelData)],
             ], $context);
@@ -52,8 +52,24 @@ class CartController extends AbstractController
 
             return $this->json($html, 200);
         } else {
-            $this->logger->warning("No deliverData found", ['data' => $data]);
-            return $this->json("No delivery data found", 500);
+            $this->logger->warning('No deliverData found', ['data' => $data]);
+
+            return $this->json('No delivery data found', 500);
         }
+    }
+
+    /**
+     * @Route("/widget/checkout/myparcel/set-package-type", name="frontend.checkout.myparcel.set-package-type", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=false})
+     *
+     * @param RequestDataBag $data
+     * @param SalesChannelContext $context
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function setPackageType(RequestDataBag $data, SalesChannelContext $context)
+    {
+        $packageType = $data->get(CartService::PACKAGE_TYPE_REQUEST_KEY);
+        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY=>$packageType], $context);
+
+        return $this->json([CartService::PACKAGE_TYPE_REQUEST_KEY=>$packageType], 200);
     }
 }
