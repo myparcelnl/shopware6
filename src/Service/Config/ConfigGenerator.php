@@ -244,6 +244,10 @@ class ConfigGenerator
         return [
             'packageType' => $chosenPackageType,
             'defaultPackageType' => $defaultPackageType,
+            'allowSetPackageTypeButton' => (bool) $this->systemConfigService->getString(
+                'MyPaShopware.config.allowSetPackageTypeButton',
+                $salesChannelContext->getSalesChannelId()
+            ),
         ];
     }
 

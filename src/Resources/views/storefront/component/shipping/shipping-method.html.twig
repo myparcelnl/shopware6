@@ -6,7 +6,9 @@
         <template data-delivery-options-plugin
                   data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
         <div id="myparcel-delivery-options"></div>
-        <input type="button" id="myparcel-set-package-type-button" value="Options" class="btn btn-outline-primary
-        mt-2"/>
+        {%  if deliveryOptionsPluginOptions.config.allowSetPackageTypeButton %}
+            <input type="button" id="myparcel-set-package-type-button" value="Options" class="btn btn-outline-primary
+             mt-2"/>
+        {%  endif %}
     {% endif %}
 {% endblock %}

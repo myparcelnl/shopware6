@@ -106,17 +106,25 @@
                     <name lang="nl-NL">Digitale postzegel</name>
                 </option>
             </options>
-            <helpText>When you set this to other than package, you can use the fixed mailbox price setting.
+            <helpText>When you set this to other than package, you can use the fixed mailbox price setting, and activate the package selection button at checkout (below).
                 The button text can be changed in the 'Delivery Options text' (way below).
             </helpText>
             <helpText lang="de-DE">Wenn Sie dies auf etwas anderes als Paket setzen, können Sie die Einstellung für den
-                festen Briefkastenpreis verwenden.
+                festen Briefkastenpreis verwenden, und den Paketauswahl-Button an der Kasse aktivieren (unten)..
                 Der Schaltflächentext kann in den 'Delivery Options text' geändert werden (weit unten).
             </helpText>
             <helpText lang="nl-NL">Wanneer u dit instelt op iets anders dan pakket, kunt u de instelling voor de
-                vaste prijs van de brievenbus gebruiken.
+                vaste prijs van de brievenbus gebruiken, en de pakket keuze knop in de checkout activeren (hieronder).
                 De tekst van de knop kan worden gewijzigd in de 'Delivery options teksten' (helemaal onderaan).
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>allowSetPackageTypeButton</name>
+            <label>Allow set package type button</label>
+            <label lang="de-DE">Schaltfläche zum Festlegen des Pakettyps zulassen</label>
+            <label lang="nl-NL">Knop pakkettype instellen toestaan</label>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <!--        Overridable settings to copy to carriers-->
