@@ -12,6 +12,9 @@ class CartService
     const NAME = 'myparcel-data';
     protected $cartService;
 
+    public const PACKAGE_TYPE_REQUEST_KEY = 'packageType';
+    public const PACKAGE_TYPE_CART_DATA_KEY = 'myparcelPackageType';
+
     public function __construct(ShopwareCartService $cartService)
     {
         $this->cartService = $cartService;
@@ -21,6 +24,19 @@ class CartService
     {
         $cart = $this->cartService->getCart($context->getToken(), $context);
         return $this->cartService->recalculate($cart, $context);
+    }
+
+    public function getWeightInGrams(SalesChannelContext $context): float
+    {
+        $cart = $this->cartService->getCart($context->getToken(), $context);
+        $weight = 0.0;
+        foreach ($cart->getLineItems() as $lineItem) {
+            if (! $lineItem->getDeliveryInformation()) {
+                continue;
+            }
+            $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight();
+        }
+        return $weight * 1000;
     }
 
     public function hasData(SalesChannelContext $context, ?string $key = null): bool

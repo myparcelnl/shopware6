@@ -34,12 +34,49 @@ export default class DeliveryOptionsPlugin extends Plugin {
         this._configure();
         this._addListeners();
 
+        this._enableSetPackageType();
+
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
         // Tell the plugin to re-render
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
     };
+
+    _enableSetPackageType() {
+        const btn = document.getElementById('myparcel-set-package-type-button');
+        if (! btn) return;
+
+        const defaultPackageType = this.options.config.defaultPackageType;
+
+        if ('package' === defaultPackageType) {
+            btn.remove();
+        } else {
+            btn.addEventListener('click', () => {
+                this.disable = true;
+                const currentPackageType = this.options.config.packageType;
+                this._setPackageType(currentPackageType === defaultPackageType ? 'package' : defaultPackageType);
+            });
+        }
+    }
+
+    _setPackageTypeButtonText() {
+        const btn = document.getElementById('myparcel-set-package-type-button');
+        if (! btn) return;
+
+        const defaultPackageType = this.options.config.defaultPackageType;
+        const currentPackageType = this.options.config.packageType;
+
+        const packageText = this.options.translations.setPackageTypePackage;
+        const defaultText = this.options.translations.setPackageTypeDefault;
+
+        if (defaultPackageType === currentPackageType) {
+            btn.value = packageText ? packageText : 'Kies pakket';
+        } else {
+            btn.value = defaultText ? defaultText : 'Kies standaard';
+        }
+        btn.disable = false;
+    }
 
     _disableButton(disable) {
         //Get the submit button
@@ -108,6 +145,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     _addListeners() {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             this._submitToCart();
+            this._setPackageTypeButtonText();
         });
     };
 
@@ -124,12 +162,23 @@ export default class DeliveryOptionsPlugin extends Plugin {
     }
 
     _submitMyparcelData(data) {
-        this._client.post(this.options.url, JSON.stringify(data), (content, request) => {
+        this._client.post(this.options.urlAddToCart, JSON.stringify(data), (content, request) => {
             // Retry on error?
             if (request.status < 400) {
                 this._showWarningAlert("");
                 this._disableButton(false);
                 this._procesShippingCostsPage(JSON.parse(content));
+            } else {
+                this._showWarningAlert(this.options.translations.refreshMessage);
+            }
+        });
+    }
+
+    _setPackageType(packageType) {
+        this._client.post(this.options.urlSetPackageType, JSON.stringify({packageType: packageType}), (content, request) => {
+            if (request.status < 400) {
+                window.MyParcelConfig.config.packageType = packageType;
+                document.dispatchEvent(new Event('myparcel_update_config'));
             } else {
                 this._showWarningAlert(this.options.translations.refreshMessage);
             }
