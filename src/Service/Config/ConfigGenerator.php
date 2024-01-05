@@ -210,9 +210,10 @@ class ConfigGenerator
     private function getGeneralSettings(SalesChannelContext $salesChannelContext, string $locale): array
     {
         $settings = [
-            'platform'           => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelContext->getSalesChannelId()),
-            'currency'           => $salesChannelContext->getCurrency()->getIsoCode(),
-            'locale'             => $locale,
+            'platform'    => $this->systemConfigService->getString('MyPaShopware.config.platform', $salesChannelContext->getSalesChannelId()),
+            'currency'    => $salesChannelContext->getCurrency()->getIsoCode(),
+            'locale'      => $locale,
+            'allowRetry'  => false,
         ];
 
         return array_merge($settings, $this->getPackageTypes($salesChannelContext), $this->generateConfig($salesChannelContext->getSalesChannelId()));
