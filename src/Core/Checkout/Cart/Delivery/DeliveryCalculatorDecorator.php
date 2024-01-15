@@ -98,6 +98,46 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     ): void
     {
         foreach ($deliveries as $delivery) {
+//            /** @var ShippingMethodEntity $ship */
+//            $ship = $delivery->getShippingMethod();
+//            var_dump($ship->getPrices()->first()->getCurrencyPrice());
+//            var_dump($ship);
+//            echo '<hr/>';
+//            $this->calculateDelivery($data, $cart, $delivery, $context);
+//            continue;
+            $rules = $this->percentageTaxRuleBuilder->buildRules(
+                $delivery->getPositions()->getLineItems()->getPrices()->sum()
+            );
+
+            $costs = $this->calculateShippingCosts(
+                $delivery->getShippingMethod(),
+                new PriceCollection([
+                    new Price(
+                        Defaults::CURRENCY,
+                        0,//$delivery->getShippingCosts()->getTotalPrice(),
+                        0,//$delivery->getShippingCosts()->getTotalPrice(),
+                        false
+                    ),
+                ]),
+                $delivery->getPositions()->getLineItems(),
+                $context,
+                $cart
+            );
+
+            $price = $this->getCurrencyPrice(new PriceCollection([
+                new Price(
+                    Defaults::CURRENCY,
+                    0,//$delivery->getShippingCosts()->getTotalPrice(),
+                    0,//$delivery->getShippingCosts()->getTotalPrice(),
+                    false
+                ),
+            ]), $context);
+
+            $definition = new QuantityPriceDefinition($price, $rules, 1);
+
+            $costs = $this->priceCalculator->calculate($definition, $context);
+            $delivery->setShippingCosts($costs);
+
             $this->calculateDelivery($data, $cart, $delivery, $context);
         }
     }
@@ -117,9 +157,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     ): void
     {
         $costs = null;
+        $shippingMethod = $delivery->getShippingMethod();
 
         if ($delivery->getShippingCosts()->getUnitPrice() > 0) {
             $costs = $this->calculateShippingCosts(
+                $shippingMethod,
                 new PriceCollection([
                     new Price(
                         Defaults::CURRENCY,
@@ -140,6 +182,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         if ($this->hasDeliveryWithOnlyShippingFreeItems($delivery)) {
             $costs = $this->calculateShippingCosts(
+                $shippingMethod,
                 new PriceCollection([new Price(Defaults::CURRENCY, 0, 0, false)]),
                 $delivery->getPositions()->getLineItems(),
                 $context,
@@ -189,19 +232,21 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     }
 
     /**
-     * @param PriceCollection     $priceCollection
-     * @param LineItemCollection  $calculatedLineItems
-     * @param SalesChannelContext $context
-     * @param Cart                $cart
+     * @param  \Shopware\Core\Checkout\Shipping\ShippingMethodEntity $shippingMethod
+     * @param  PriceCollection                                       $priceCollection
+     * @param  LineItemCollection                                    $calculatedLineItems
+     * @param  SalesChannelContext                                   $context
+     * @param  Cart                                                  $cart
+     *
      * @return CalculatedPrice
      */
     private function calculateShippingCosts(
-        PriceCollection     $priceCollection,
-        LineItemCollection  $calculatedLineItems,
-        SalesChannelContext $context,
-        Cart                $cart
-    ): CalculatedPrice
-    {
+        ShippingMethodEntity $shippingMethod,
+        PriceCollection      $priceCollection,
+        LineItemCollection   $calculatedLineItems,
+        SalesChannelContext  $context,
+        Cart                 $cart
+    ): CalculatedPrice {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
             $calculatedLineItems->getPrices()->sum()
         );
@@ -211,26 +256,30 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         //Check if it is a my parcel shipping method
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('active', true));
-        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
-            new EqualsFilter('customFields.myparcel', null),
-        ]));
+        $criteria->addFilter(
+            new NotFilter(NotFilter::CONNECTION_OR, [
+                new EqualsFilter('customFields.myparcel', null),
+            ])
+        );
 
-        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
-        if ($shippingMethod instanceof ShippingMethodEntity) {
-            if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-                if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
-                    $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
-                    if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
-                        /** @var stdClass $deliveryData */
-                        $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                        $deliveryData = json_decode(json_encode($deliveryData), true);
-                        $price = $this->configGenerator->getCostForCarrierWithOptions(
-                            $deliveryData,
-                            $context->getSalesChannelId(),
-                            $price
-                        );
-                    }
+        //$shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
+        $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
+        $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
+        if (! empty($myParcelData) && $context->getShippingMethod()->getId() === $shippingMethod->getId()) {
+            //                    var_dump($myParcelData);
+            //                    die('fweropf');
+            if (! empty($myParcelData['myparcel']['deliveryData'])) {
+                if (isset($myParcelData['myparcelPackageType'])) {
+                    $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData['myparcelPackageType'];
                 }
+                /** @var stdClass $deliveryData */
+                $deliveryData = $myParcelData['myparcel']['deliveryData'];
+                $deliveryData = json_decode(json_encode($deliveryData), true);
+                $price        = $this->configGenerator->getCostForCarrierWithOptions(
+                    $deliveryData,
+                    $context->getSalesChannelId(),
+                    $price
+                );
             }
         }
         $definition = new QuantityPriceDefinition($price, $rules, 1);
@@ -322,6 +371,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             }
 
             $costs = $this->calculateShippingCosts(
+                $delivery->getShippingMethod(),
                 $price,
                 $delivery->getPositions()->getLineItems(),
                 $context,

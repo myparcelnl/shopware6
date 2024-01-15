@@ -54,6 +54,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         } else {
             btn.addEventListener('click', () => {
                 this.disable = true;
+                this.$emitter.publish('onShippingMethodChange');
                 const currentPackageType = this.options.config.packageType;
                 this._setPackageType(currentPackageType === defaultPackageType ? 'package' : defaultPackageType);
             });
@@ -177,8 +178,12 @@ export default class DeliveryOptionsPlugin extends Plugin {
     _setPackageType(packageType) {
         this._client.post(this.options.urlSetPackageType, JSON.stringify({packageType: packageType}), (content, request) => {
             if (request.status < 400) {
-                window.MyParcelConfig.config.packageType = packageType;
-                document.dispatchEvent(new Event('myparcel_update_config'));
+                const form = document.getElementById('changeShippingForm');
+                // if (! form) {
+                //     window.MyParcelConfig.config.packageType = packageType;
+                //     document.dispatchEvent(new Event('myparcel_update_config'));
+                // }
+                form && form.submit();
             } else {
                 this._showWarningAlert(this.options.translations.refreshMessage);
             }
@@ -186,6 +191,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
     }
 
     _procesShippingCostsPage(html) {
+        if (! html.content) {
+            console.warn(html);
+            return;
+        }
         ElementReplaceHelper.replaceFromMarkup(html.content, '.checkout-aside-summary-container');
     }
 
