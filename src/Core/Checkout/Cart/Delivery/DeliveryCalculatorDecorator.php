@@ -21,6 +21,7 @@ use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethod
 use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceEntity;
 use Shopware\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
 use Shopware\Core\Checkout\Shipping\Exception\ShippingMethodNotFoundException;
+use Shopware\Core\Checkout\Shipping\ShippingException;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -98,37 +99,15 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     ): void
     {
         foreach ($deliveries as $delivery) {
-//            /** @var ShippingMethodEntity $ship */
-//            $ship = $delivery->getShippingMethod();
-//            var_dump($ship->getPrices()->first()->getCurrencyPrice());
-//            var_dump($ship);
-//            echo '<hr/>';
-//            $this->calculateDelivery($data, $cart, $delivery, $context);
-//            continue;
             $rules = $this->percentageTaxRuleBuilder->buildRules(
                 $delivery->getPositions()->getLineItems()->getPrices()->sum()
-            );
-
-            $costs = $this->calculateShippingCosts(
-                $delivery->getShippingMethod(),
-                new PriceCollection([
-                    new Price(
-                        Defaults::CURRENCY,
-                        0,//$delivery->getShippingCosts()->getTotalPrice(),
-                        0,//$delivery->getShippingCosts()->getTotalPrice(),
-                        false
-                    ),
-                ]),
-                $delivery->getPositions()->getLineItems(),
-                $context,
-                $cart
             );
 
             $price = $this->getCurrencyPrice(new PriceCollection([
                 new Price(
                     Defaults::CURRENCY,
-                    0,//$delivery->getShippingCosts()->getTotalPrice(),
-                    0,//$delivery->getShippingCosts()->getTotalPrice(),
+                    $delivery->getShippingCosts()->getTotalPrice(),
+                    $delivery->getShippingCosts()->getTotalPrice(),
                     false
                 ),
             ]), $context);
@@ -197,7 +176,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $key = DeliveryProcessor::buildKey($delivery->getShippingMethod()->getId());
 
         if (!$data->has($key)) {
-            throw new ShippingMethodNotFoundException($delivery->getShippingMethod()->getId());
+            if (class_exists(ShippingMethodNotFoundException::class)) {
+                throw new ShippingMethodNotFoundException($delivery->getShippingMethod()->getId());
+            }
+            /* Shopware 6.6: */
+            throw ShippingException::shippingMethodNotFound($delivery->getShippingMethod()->getId());
         }
 
         /** @var ShippingMethodEntity $shippingMethod */
@@ -266,8 +249,8 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
         if (! empty($myParcelData) && $context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-            //                    var_dump($myParcelData);
-            //                    die('fweropf');
+//                                var_dump($myParcelData['myparcel']['deliveryData']);
+//                                die('fweropf');
             if (! empty($myParcelData['myparcel']['deliveryData'])) {
                 if (isset($myParcelData['myparcelPackageType'])) {
                     $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData['myparcelPackageType'];
