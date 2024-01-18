@@ -99,24 +99,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     ): void
     {
         foreach ($deliveries as $delivery) {
-            $rules = $this->percentageTaxRuleBuilder->buildRules(
-                $delivery->getPositions()->getLineItems()->getPrices()->sum()
-            );
-
-            $price = $this->getCurrencyPrice(new PriceCollection([
-                new Price(
-                    Defaults::CURRENCY,
-                    $delivery->getShippingCosts()->getTotalPrice(),
-                    $delivery->getShippingCosts()->getTotalPrice(),
-                    false
-                ),
-            ]), $context);
-
-            $definition = new QuantityPriceDefinition($price, $rules, 1);
-
-            $costs = $this->priceCalculator->calculate($definition, $context);
-            $delivery->setShippingCosts($costs);
-
             $this->calculateDelivery($data, $cart, $delivery, $context);
         }
     }
@@ -245,25 +227,23 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             ])
         );
 
-        //$shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
-        if (! empty($myParcelData) && $context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-//                                var_dump($myParcelData['myparcel']['deliveryData']);
-//                                die('fweropf');
-            if (! empty($myParcelData['myparcel']['deliveryData'])) {
-                if (isset($myParcelData['myparcelPackageType'])) {
-                    $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData['myparcelPackageType'];
-                }
-                /** @var stdClass $deliveryData */
-                $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                $deliveryData = json_decode(json_encode($deliveryData), true);
-                $price        = $this->configGenerator->getCostForCarrierWithOptions(
-                    $deliveryData,
-                    $context->getSalesChannelId(),
-                    $price
-                );
+        if (! empty($myParcelData)
+            && ! empty($myParcelData['myparcel']['deliveryData'])
+            && $context->getShippingMethod()->getId() === $shippingMethod->getId()
+        ) {
+            if (isset($myParcelData['myparcelPackageType'])) {
+                $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData['myparcelPackageType'];
             }
+            /** @var stdClass $deliveryData */
+            $deliveryData = $myParcelData['myparcel']['deliveryData'];
+            $deliveryData = json_decode(json_encode($deliveryData), true);
+            $price        = $this->configGenerator->getCostForCarrierWithOptions(
+                $deliveryData,
+                $context->getSalesChannelId(),
+                $price
+            );
         }
         $definition = new QuantityPriceDefinition($price, $rules, 1);
 
