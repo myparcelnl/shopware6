@@ -50,7 +50,7 @@ class CartController extends AbstractController
 
             $calculatedCart = $this->cartService->recalculate($context);
             $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCart]]);
-            $json = json_encode(['content'=>$html->getContent()], ENT_QUOTES);
+            $json = json_encode(['content' => $html->getContent()], ENT_QUOTES);
 
             return new SymfonyJsonResponse($json, 200, [], true);
         } else {
