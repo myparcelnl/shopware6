@@ -70,8 +70,8 @@ class CartController extends AbstractController
     public function setPackageType(RequestDataBag $data, SalesChannelContext $context)
     {
         $packageType = $data->get(CartService::PACKAGE_TYPE_REQUEST_KEY);
-        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY=>$packageType], $context);
+        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY => $packageType], $context);
 
-        return $this->json([CartService::PACKAGE_TYPE_REQUEST_KEY=>$packageType], 200);
+        return $this->json([CartService::PACKAGE_TYPE_REQUEST_KEY => $packageType], 200);
     }
 }

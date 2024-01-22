@@ -4,6 +4,8 @@ namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
 use MyPa\Shopware\Defaults as MyParcelDefaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
+use MyPa\Shopware\Service\Shopware\CartService;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryCalculator;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryProcessor;
@@ -233,8 +235,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             && ! empty($myParcelData['myparcel']['deliveryData'])
             && $context->getShippingMethod()->getId() === $shippingMethod->getId()
         ) {
-            if (isset($myParcelData['myparcelPackageType'])) {
-                $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData['myparcelPackageType'];
+            $cc = $context->getShippingLocation()
+                ->getCountry()
+                ->getIso();
+            if (isset($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY]) && $cc === AbstractConsignment::CC_NL) {
+                $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY];
             }
             /** @var stdClass $deliveryData */
             $deliveryData = $myParcelData['myparcel']['deliveryData'];
