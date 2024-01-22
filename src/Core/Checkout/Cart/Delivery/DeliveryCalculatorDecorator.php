@@ -100,6 +100,12 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         SalesChannelContext $context
     ): void
     {
+       if (null === $context->getShippingMethod()->getCustomFieldsValue('myparcel')) {
+           parent::calculate($data, $cart, $deliveries, $context);
+
+           return;
+       }
+
         foreach ($deliveries as $delivery) {
             $this->calculateDelivery($data, $cart, $delivery, $context);
         }
@@ -219,15 +225,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         );
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
-
-        //Check if it is a my parcel shipping method
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('active', true));
-        $criteria->addFilter(
-            new NotFilter(NotFilter::CONNECTION_OR, [
-                new EqualsFilter('customFields.myparcel', null),
-            ])
-        );
 
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
