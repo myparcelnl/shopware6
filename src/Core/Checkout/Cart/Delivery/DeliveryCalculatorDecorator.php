@@ -100,7 +100,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         SalesChannelContext $context
     ): void
     {
-       if (null === $context->getShippingMethod()->getCustomFieldsValue('myparcel')) {
+       if (!isset($context->getShippingMethod()->getTranslated()['customFields']['myparcel'])) {
            parent::calculate($data, $cart, $deliveries, $context);
 
            return;
