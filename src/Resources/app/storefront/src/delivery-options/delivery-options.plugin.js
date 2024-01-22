@@ -177,9 +177,6 @@ export default class DeliveryOptionsPlugin extends Plugin {
             if (request.status < 400) {
                 const form = document.getElementById('changeShippingForm');
                 form && form.submit();
-                /* does not currently work for the DO will not send the correct config in their 'updated' event: */
-                //window.MyParcelConfig.config.packageType = packageType;
-                //document.dispatchEvent(new Event('myparcel_update_config'));
             } else {
                 this._showWarningAlert(this.options.translations.refreshMessage);
             }
