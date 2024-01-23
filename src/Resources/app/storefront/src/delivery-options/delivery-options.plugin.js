@@ -144,7 +144,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
 
     _addListeners() {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
-            this._submitToCart();
+            this._submitToCart(event.detail);
             this._setPackageTypeButtonText();
         });
     };
@@ -154,18 +154,16 @@ export default class DeliveryOptionsPlugin extends Plugin {
         this.myparcelWarningAlert = DomAccess.querySelector(document, '#myparcel-alert');
     };
 
-    _submitToCart() {
-        const data = {};
-        data['myparcel'] = JSON.stringify(event.detail);
+    _submitToCart(deliveryOptions) {
         this._disableButton(true);
-        this._submitMyparcelData(data);
+        this._submitMyparcelData({ myparcel: JSON.stringify(deliveryOptions) });
     }
 
     _submitMyparcelData(data) {
         this._client.post(this.options.urlAddToCart, JSON.stringify(data), (content, request) => {
             // Retry on error?
             if (request.status < 400) {
-                this._showWarningAlert("");
+                this._showWarningAlert('');
                 this._disableButton(false);
                 this._procesShippingCostsPage(JSON.parse(content));
             } else {
@@ -177,8 +175,8 @@ export default class DeliveryOptionsPlugin extends Plugin {
     _setPackageType(packageType) {
         this._client.post(this.options.urlSetPackageType, JSON.stringify({packageType: packageType}), (content, request) => {
             if (request.status < 400) {
-                window.MyParcelConfig.config.packageType = packageType;
-                document.dispatchEvent(new Event('myparcel_update_config'));
+                const form = document.getElementById('changeShippingForm');
+                form && form.submit();
             } else {
                 this._showWarningAlert(this.options.translations.refreshMessage);
             }
@@ -186,6 +184,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
     }
 
     _procesShippingCostsPage(html) {
+        if (! html.content) {
+            console.warn(html);
+            return;
+        }
         ElementReplaceHelper.replaceFromMarkup(html.content, '.checkout-aside-summary-container');
     }
 

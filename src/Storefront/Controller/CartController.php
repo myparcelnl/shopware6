@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -47,10 +48,11 @@ class CartController extends AbstractController
                 'myparcel' => ['deliveryData' => json_decode($myParcelData)],
             ], $context);
 
-            $calculatedCard = $this->cartService->recalculate($context);
-            $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCard]]);
+            $calculatedCart = $this->cartService->recalculate($context);
+            $html = $this->render('@Storefront/storefront/page/checkout/summary.html.twig', ['page' => ['cart' => $calculatedCart]]);
+            $json = json_encode(['content' => $html->getContent()], ENT_QUOTES);
 
-            return $this->json($html, 200);
+            return new SymfonyJsonResponse($json, 200, [], true);
         } else {
             $this->logger->warning('No deliverData found', ['data' => $data]);
 
@@ -68,8 +70,8 @@ class CartController extends AbstractController
     public function setPackageType(RequestDataBag $data, SalesChannelContext $context)
     {
         $packageType = $data->get(CartService::PACKAGE_TYPE_REQUEST_KEY);
-        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY=>$packageType], $context);
+        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY => $packageType], $context);
 
-        return $this->json([CartService::PACKAGE_TYPE_REQUEST_KEY=>$packageType], 200);
+        return $this->json([CartService::PACKAGE_TYPE_REQUEST_KEY => $packageType], 200);
     }
 }

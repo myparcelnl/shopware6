@@ -4,6 +4,8 @@ namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 
 use MyPa\Shopware\Defaults as MyParcelDefaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
+use MyPa\Shopware\Service\Shopware\CartService;
+use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryCalculator;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryProcessor;
@@ -21,6 +23,7 @@ use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethod
 use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceEntity;
 use Shopware\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
 use Shopware\Core\Checkout\Shipping\Exception\ShippingMethodNotFoundException;
+use Shopware\Core\Checkout\Shipping\ShippingException;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -97,6 +100,12 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         SalesChannelContext $context
     ): void
     {
+       if (!isset($context->getShippingMethod()->getTranslated()['customFields']['myparcel'])) {
+           parent::calculate($data, $cart, $deliveries, $context);
+
+           return;
+       }
+
         foreach ($deliveries as $delivery) {
             $this->calculateDelivery($data, $cart, $delivery, $context);
         }
@@ -117,9 +126,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     ): void
     {
         $costs = null;
+        $shippingMethod = $delivery->getShippingMethod();
 
         if ($delivery->getShippingCosts()->getUnitPrice() > 0) {
             $costs = $this->calculateShippingCosts(
+                $shippingMethod,
                 new PriceCollection([
                     new Price(
                         Defaults::CURRENCY,
@@ -140,6 +151,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         if ($this->hasDeliveryWithOnlyShippingFreeItems($delivery)) {
             $costs = $this->calculateShippingCosts(
+                $shippingMethod,
                 new PriceCollection([new Price(Defaults::CURRENCY, 0, 0, false)]),
                 $delivery->getPositions()->getLineItems(),
                 $context,
@@ -154,7 +166,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $key = DeliveryProcessor::buildKey($delivery->getShippingMethod()->getId());
 
         if (!$data->has($key)) {
-            throw new ShippingMethodNotFoundException($delivery->getShippingMethod()->getId());
+            if (class_exists(ShippingMethodNotFoundException::class)) {
+                throw new ShippingMethodNotFoundException($delivery->getShippingMethod()->getId());
+            }
+            /* Shopware 6.6: */
+            throw ShippingException::shippingMethodNotFound($delivery->getShippingMethod()->getId());
         }
 
         /** @var ShippingMethodEntity $shippingMethod */
@@ -189,49 +205,47 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     }
 
     /**
-     * @param PriceCollection     $priceCollection
-     * @param LineItemCollection  $calculatedLineItems
-     * @param SalesChannelContext $context
-     * @param Cart                $cart
+     * @param  \Shopware\Core\Checkout\Shipping\ShippingMethodEntity $shippingMethod
+     * @param  PriceCollection                                       $priceCollection
+     * @param  LineItemCollection                                    $calculatedLineItems
+     * @param  SalesChannelContext                                   $context
+     * @param  Cart                                                  $cart
+     *
      * @return CalculatedPrice
      */
     private function calculateShippingCosts(
-        PriceCollection     $priceCollection,
-        LineItemCollection  $calculatedLineItems,
-        SalesChannelContext $context,
-        Cart                $cart
-    ): CalculatedPrice
-    {
+        ShippingMethodEntity $shippingMethod,
+        PriceCollection      $priceCollection,
+        LineItemCollection   $calculatedLineItems,
+        SalesChannelContext  $context,
+        Cart                 $cart
+    ): CalculatedPrice {
         $rules = $this->percentageTaxRuleBuilder->buildRules(
             $calculatedLineItems->getPrices()->sum()
         );
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
-        //Check if it is a my parcel shipping method
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('active', true));
-        $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
-            new EqualsFilter('customFields.myparcel', null),
-        ]));
-
-        $shippingMethod = $this->shippingMethodRepository->search($criteria, $context->getContext())->first();
-        if ($shippingMethod instanceof ShippingMethodEntity) {
-            if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
-                if ($cart->hasExtension(MyParcelDefaults::CART_EXTENSION_KEY)) {
-                    $myParcelData = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY)->getVars();
-                    if (!empty($myParcelData) && !empty($myParcelData['myparcel']['deliveryData'])) {
-                        /** @var stdClass $deliveryData */
-                        $deliveryData = $myParcelData['myparcel']['deliveryData'];
-                        $deliveryData = json_decode(json_encode($deliveryData), true);
-                        $price = $this->configGenerator->getCostForCarrierWithOptions(
-                            $deliveryData,
-                            $context->getSalesChannelId(),
-                            $price
-                        );
-                    }
-                }
+        $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
+        $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
+        if (! empty($myParcelData)
+            && ! empty($myParcelData['myparcel']['deliveryData'])
+            && $context->getShippingMethod()->getId() === $shippingMethod->getId()
+        ) {
+            $cc = $context->getShippingLocation()
+                ->getCountry()
+                ->getIso();
+            if (isset($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY]) && $cc === AbstractConsignment::CC_NL) {
+                $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY];
             }
+            /** @var stdClass $deliveryData */
+            $deliveryData = $myParcelData['myparcel']['deliveryData'];
+            $deliveryData = json_decode(json_encode($deliveryData), true);
+            $price        = $this->configGenerator->getCostForCarrierWithOptions(
+                $deliveryData,
+                $context->getSalesChannelId(),
+                $price
+            );
         }
         $definition = new QuantityPriceDefinition($price, $rules, 1);
 
@@ -322,6 +336,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             }
 
             $costs = $this->calculateShippingCosts(
+                $delivery->getShippingMethod(),
                 $price,
                 $delivery->getPositions()->getLineItems(),
                 $context,
