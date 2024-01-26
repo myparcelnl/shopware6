@@ -42,7 +42,7 @@
                 Adresszeilen für Teile der Adresse verwenden, müssen Sie diese in der Konfiguration hinzufügen, z.B.
                 wenn Sie ein separates Feld für die Telefonnummer verwenden: {street} {additionalAddressLine1}
             </helpText>
-            <helpText lang="nl-NL">In deze configuratie-instelling is het mogelijk om de opmaak van het adres in te
+            <helpText lang="nl-NL">In deze configuratie-instelling is het mogelijk de opmaak van het adres in te
                 stellen op basis van de velden die in uw checkout worden gebruikt. Standaard zijn er de volgende velden:
                 {street}, {additionalAddressLine1}, {additionalAddressLine2}. Wanneer u een van de extra adresregels
                 gebruikt voor delen van het adres, dan is het noodzakelijk om deze toe te voegen in de configuratie,
@@ -54,24 +54,25 @@
 
     <card>
         <title>General checkout settings</title>
+        <title lang="nl-NL">Algemene checkout instellingen</title>
         <input-field type="single-select">
             <name>platform</name>
             <label>Shop country</label>
             <label lang="nl-NL">Winkelland</label>
-            <label lang="de-DE">Land einkaufen</label>
+            <label lang="de-DE">Shop-Land</label>
             <defaultValue>myparcel</defaultValue>
             <options>
                 <option>
                     <id>myparcel</id>
                     <name>Netherlands</name>
-                    <name lang="nl-NL">Nederland</name>
                     <name lang="de-DE">Niederlande</name>
+                    <name lang="nl-NL">Nederland</name>
                 </option>
                 <option>
                     <id>belgie</id>
                     <name>Belgium</name>
-                    <name lang="nl-NL">België</name>
                     <name lang="de-DE">Belgien</name>
+                    <name lang="nl-NL">België</name>
                 </option>
             </options>
         </input-field>
@@ -79,6 +80,7 @@
         <input-field type="single-select">
             <name>packageType</name>
             <label>Package type</label>
+            <label lang="nl-NL">Pakkettype</label>
             <defaultValue>package</defaultValue>
             <options>
                 <option>
@@ -91,13 +93,13 @@
                     <id>mailbox</id>
                     <name>Mailbox package</name>
                     <name lang="de-DE">Mailbox-Paket</name>
-                    <name lang="nl-NL">Brievenbus pakket</name>
+                    <name lang="nl-NL">Brievenbuspakje</name>
                 </option>
                 <option>
                     <id>letter</id>
                     <name>Letter</name>
                     <name lang="de-DE">Brief</name>
-                    <name lang="nl-NL">Brief</name>
+                    <name lang="nl-NL">Ongefrankeerd</name>
                 </option>
                 <option>
                     <id>digital_stamp</id>
@@ -106,15 +108,15 @@
                     <name lang="nl-NL">Digitale postzegel</name>
                 </option>
             </options>
-            <helpText>When you set this to other than package, you can use the fixed mailbox price setting, and activate the package selection button at checkout (below).
+            <helpText>When you set this to other than package, you can use the fixed mailbox price setting and activate the package selection button at checkout (below).
                 The button text can be changed in the 'Delivery Options text' (way below).
             </helpText>
             <helpText lang="de-DE">Wenn Sie dies auf etwas anderes als Paket setzen, können Sie die Einstellung für den
-                festen Briefkastenpreis verwenden, und den Paketauswahl-Button an der Kasse aktivieren (unten)..
+                festen Mailbox-Paket Preis verwenden und den Paketauswahl-Button an der Kasse aktivieren (unten)..
                 Der Schaltflächentext kann in den 'Delivery Options text' geändert werden (weit unten).
             </helpText>
             <helpText lang="nl-NL">Wanneer u dit instelt op iets anders dan pakket, kunt u de instelling voor de
-                vaste prijs van de brievenbus gebruiken, en de pakket keuze knop in de checkout activeren (hieronder).
+                vaste prijs van brievenbuspakje gebruiken en de pakket keuze knop in de checkout activeren (hieronder).
                 De tekst van de knop kan worden gewijzigd in de 'Delivery options teksten' (helemaal onderaan).
             </helpText>
         </input-field>
@@ -127,204 +129,142 @@
             <defaultValue>true</defaultValue>
         </input-field>
 
-        <!--        Overridable settings to copy to carriers-->
-
-        <input-field type="bool">
-            <name>allowShowDeliveryDate</name>
-            <label>Show the delivery date</label>
-            <label lang="de-DE">Anzeige des Liefertermins</label>
-            <label lang="nl-NL">Toon de leveringsdatum</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowMorningDelivery</name>
-            <label>Allow morning delivery</label>
-            <label lang="nl-NL">Sta ochtendlevering toe</label>
-            <label lang="de-DE">Zustellung am Morgen zulassen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceMorningDeliveryEnabled</name>
-            <label>Activate Morning Delivery Price</label>
-            <label lang="de-DE">Morgenzustellungspreis aktivieren</label>
-            <label lang="nl-NL">Activeer Ochtendlevering Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
         <input-field type="float">
             <name>priceMorningDelivery</name>
-            <label>Morning Delivery Price</label>
-            <label lang="de-DE">Preis der Morgenlieferung</label>
-            <label lang="nl-NL">Ochtendlevering Prijs</label>
+            <label>Morning delivery fee (optional)</label>
+            <label lang="de-DE">Preis morgenzustellung (Optional)</label>
+            <label lang="nl-NL">Kosten ochtendbezorging (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
                 erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceStandardDeliveryEnabled</name>
-            <label>Activate Standard Delivery Price</label>
-            <label lang="de-DE">Standardlieferpreis aktivieren</label>
-            <label lang="nl-NL">Activeer standaard levering prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceStandardDelivery</name>
-            <label>Standard Delivery Price</label>
-            <label lang="de-DE">Standard-Lieferpreis</label>
-            <label lang="nl-NL">Standaard leveringsprijs</label>
+            <label>Standard Delivery fee</label>
+            <label lang="de-DE">Preis Standard-Lieferung</label>
+            <label lang="nl-NL">Kosten standaard bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Note, the amount will be added to the price set by the shipping method itself.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Beachten Sie, dass der Betrag zu dem durch die Versandart selbst festgelegten Preis hinzugerechnet wird.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Let op, het bedrag wordt toegevoegd aan de prijs die is ingesteld door de verzendmethode zelf.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceSameDayDeliveryEnabled</name>
-            <label>Activate Same-Day Delivery Price</label>
-            <label lang="de-DE">Zustellung am selben Tag aktivieren</label>
-            <label lang="nl-NL">Activeer dezelfde dag levering</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceSameDayDelivery</name>
-            <label>Same-Day Delivery Price</label>
-            <label lang="de-DE">Preis für Lieferung am selben Tag</label>
-            <label lang="nl-NL">Dezelfde dag levering prijs</label>
+            <label>Same-Day delivery fee</label>
+            <label lang="de-DE">Preis Lieferung am selben Tag</label>
+            <label lang="nl-NL">Kosten dezelfde dag bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
-        </input-field>
-
-
-        <input-field type="bool">
-            <name>allowEveningDelivery</name>
-            <label>Allow evening delivery</label>
-            <label lang="de-DE">Abendzustellung zulassen</label>
-            <label lang="nl-NL">Sta avondlevering toe</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceEveningDeliveryEnabled</name>
-            <label>Activate Evening Delivery Price</label>
-            <label lang="de-DE">Aktivieren Sie den Preis für die Abendzustellung</label>
-            <label lang="nl-NL">Activeer Avond levering Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceEveningDelivery</name>
-            <label>Evening Delivery Price</label>
-            <label lang="de-DE">Abendlieferung Preis</label>
-            <label lang="nl-NL">Avond levering Prijs</label>
+            <label>Evening delivery fee (optional)</label>
+            <label lang="de-DE">Preis Abendzustellung (Optional)</label>
+            <label lang="nl-NL">Kosten avondbezorging (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceSignatureEnabled</name>
-            <label>Activate Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis aktivieren</label>
-            <label lang="nl-NL">Activeer Handtekening Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceSignature</name>
-            <label>Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis</label>
-            <label lang="nl-NL">Handtekening Prijs</label>
+            <label>Signature fee (optional)</label>
+            <label lang="de-DE">Preis Unterschriftsoption (Optional)</label>
+            <label lang="nl-NL">Kosten handtekening voor ontvangst(optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceOnlyRecipientEnabled</name>
-            <label>Activate Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfängerpreis aktivieren</label>
-            <label lang="nl-NL">Activeer alleen Ontvanger Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceOnlyRecipient</name>
-            <label>Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfänger Preis</label>
-            <label lang="nl-NL">Alleen Ontvanger Prijs</label>
+            <label>Only recipient fee(optional)</label>
+            <label lang="de-DE">Preis nur Empfänger (Optional)</label>
+            <label lang="nl-NL">Kosten alleen thuisadres (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>pricePickupEnabled</name>
-            <label>Activate Pickup Price</label>
-            <label lang="nl-NL">Activeer Afhaalprijs</label>
-            <label lang="de-DE">Abholpreis aktivieren</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>pricePickup</name>
-            <label>Pickup Price</label>
-            <label lang="de-DE">Abholpreis</label>
-            <label lang="nl-NL">Ophaalprijs</label>
+            <label>Pickup fee (optional)</label>
+            <label lang="de-DE">Preis Abholen (Optional)</label>
+            <label lang="nl-NL">Kosten afhalen (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
                 wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
                 handelt.
+                Leer lassen um nichts zu berechnen.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
             </helpText>
         </input-field>
 
@@ -332,7 +272,7 @@
             <name>allowSaturdayDelivery</name>
             <label>Allow delivery on saturday</label>
             <label lang="de-DE">Lieferung am Samstag zulassen</label>
-            <label lang="nl-NL">Sta levering op zaterdag toe</label>
+            <label lang="nl-NL">Bezorging op zaterdag toestaan</label>
             <helpText>Netherlands only</helpText>
             <helpText lang="de-DE">Nur Niederlande</helpText>
             <helpText lang="nl-NL">Alleen Nederland</helpText>
@@ -343,7 +283,7 @@
             <name>allowMondayDelivery</name>
             <label>Allow delivery on monday</label>
             <label lang="de-DE">Zustellung am Montag zulassen</label>
-            <label lang="nl-NL">Sta levering toe op maandag</label>
+            <label lang="nl-NL">Bezorging toe op maandag toestaan</label>
             <helpText>Belgium only</helpText>
             <helpText lang="de-DE">Nur Belgien</helpText>
             <helpText lang="nl-NL">Alleen België</helpText>
@@ -351,88 +291,10 @@
         </input-field>
 
         <input-field type="bool">
-            <name>allowPickupLocations</name>
-            <label>Allow pickup locations</label>
-            <label lang="de-DE">Abholorte zulassen</label>
-            <label lang="nl-NL">Sta afhaallocaties toe</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowSignature</name>
-            <label>Allow signature option</label>
-            <label lang="de-DE">Unterschriftsoption zulassen</label>
-            <label lang="nl-NL">Optie handtekening toestaan</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowOnlyRecipient</name>
-            <label>Allow only recipient option</label>
-            <label lang="de-DE">Option Nur Empfänger zulassen</label>
-            <label lang="nl-NL">Alleen ontvanger optie toestaan</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="multi-select">
-            <name>dropOffDays</name>
-            <label>Drop off day</label>
-            <label lang="de-DE">Abgabetag</label>
-            <label lang="nl-NL">Afgifte dag</label>
-            <helpText>The days you usually hand over your parcels.</helpText>
-            <helpText lang="de-DE">Die Tage, an denen Sie normalerweise Ihre Pakete abgeben.</helpText>
-            <helpText lang="nl-NL">De dagen dat je gewoonlijk je pakjes aflevert.</helpText>
-            <options>
-                <option>
-                    <id>0</id>
-                    <name>Monday</name>
-                    <name lang="de-DE">Montag</name>
-                    <name lang="nl-NL">Maandag</name>
-                </option>
-                <option>
-                    <id>1</id>
-                    <name>Tuesday</name>
-                    <name lang="de-DE">Dienstag</name>
-                    <name lang="nl-NL">Dinsdag</name>
-                </option>
-                <option>
-                    <id>2</id>
-                    <name>Wednesday</name>
-                    <name lang="de-DE">Mittwoch</name>
-                    <name lang="nl-NL">Woensdag</name>
-                </option>
-                <option>
-                    <id>3</id>
-                    <name>Thursday</name>
-                    <name lang="de-DE">Donnerstag</name>
-                    <name lang="nl-NL">Donderdag</name>
-                </option>
-                <option>
-                    <id>4</id>
-                    <name>Friday</name>
-                    <name lang="de-DE">Freitag</name>
-                    <name lang="nl-NL">Vrijdag</name>
-                </option>
-                <option>
-                    <id>5</id>
-                    <name>Saturday</name>
-                    <name lang="de-DE">Samstag</name>
-                    <name lang="nl-NL">Zaterdag</name>
-                </option>
-                <option>
-                    <id>6</id>
-                    <name>Sunday</name>
-                    <name lang="de-DE">Sonntag</name>
-                    <name lang="nl-NL">Zondag</name>
-                </option>
-            </options>
-        </input-field>
-
-        <input-field type="bool">
             <name>cutoffTimeEnabled</name>
             <label>Activate Cut off Time</label>
-            <label lang="de-DE">Aktivieren Sie die Sperrzeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -461,68 +323,7 @@
                 standaardtijd is 17:00 uur. Bijvoorbeeld, als
                 cutoff tijd 17:00 is, is woensdag een leverdag en is er geen leververtraging; alle orders geplaatst
                 woensdag voor 17:00 worden afgegeven op diezelfde woensdag op tijd voor de woensdag collectie
-                en levering op donderdag.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>deliveryDaysWindowEnabled</name>
-            <label>Activate Delivery days window</label>
-            <label lang="de-DE">Fenster Liefertage aktivieren</label>
-            <label lang="nl-NL">Activeer Venster Leveringsdagen</label>
-        </input-field>
-
-        <input-field type="int">
-            <name>deliveryDaysWindow</name>
-            <label>Delivery days window</label>
-            <label lang="de-DE">Fenster der Liefertage</label>
-            <label lang="nl-NL">Venster van leveringsdagen</label>
-            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
-                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
-                Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and
-                maximum is 14 days.
-            </helpText>
-            <helpText lang="de-DE">Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum
-                Beispiel: Wenn Sie
-                auf 3 gesetzt, werden einem Kunden, der am Montag bestellt, mögliche Lieferoptionen für Dienstag,
-                Mittwoch und
-                Donnerstag (vorausgesetzt, es gibt keine Verzögerung bei der Abgabe und es liegt vor der
-                Annahmeschlusszeit). Der Mindestwert ist 1 und
-                Maximum ist 14 Tage.
-            </helpText>
-            <helpText lang="nl-NL">Het aantal dagen in de toekomst waarvoor u de leveringsdagen wilt tonen.
-                Bijvoorbeeld; Indien ingesteld
-                op 3, zal een consument die op maandag bestelt, mogelijke leveringsopties zien voor dinsdag, woensdag en
-                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en
-                maximum is 14 dagen.
-            </helpText>
-            <defaultValue>7</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>dropOffDelayEnabled</name>
-            <label>Activate Drop Off Delay</label>
-            <label lang="de-DE">Absetzverzögerung aktivieren</label>
-            <label lang="nl-NL">Activeer de afleververtraging</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="int">
-            <name>dropOffDelay</name>
-            <label>Drop Off Delay</label>
-            <label lang="de-DE">Abwurfverzögerung</label>
-            <label lang="nl-NL">Afleververtraging</label>
-            <defaultValue>0</defaultValue>
-            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if
-                ordered before the cutoff time). By default, this is 0 and the maximum is 14.
-            </helpText>
-            <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei
-                der Post abzugeben (wenn
-                vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.
-            </helpText>
-            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af
-                te leveren op het
-                postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.
+                en bezorging op donderdag.
             </helpText>
         </input-field>
     </card>
@@ -530,9 +331,11 @@
 
     <card>
         <title>PostNL checkout settings</title>
+        <title lang="nl-NL">PostNL checkout instellingen</title>
         <input-field type="bool">
             <name>enabledPostNL</name>
             <label>Activate PostNL</label>
+            <label lang="nl-NL">Activeer PostNL</label>
             <defaultValue>true</defaultValue>
             <helpText>This setting can't be disabled</helpText>
             <helpText lang="nl-NL">Deze instelling kan niet worden uitgeschakeld</helpText>
@@ -562,91 +365,83 @@
 
         <input-field type="bool">
             <name>allowShowDeliveryDatePostNL</name>
-            <label>Show the delivery date</label>
+            <label>Show delivery date</label>
             <label lang="de-DE">Anzeige des Liefertermins</label>
-            <label lang="nl-NL">Toon de leveringsdatum</label>
+            <label lang="nl-NL">Toon bezorgdatum</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>allowMorningDeliveryPostNL</name>
             <label>Allow morning delivery</label>
-            <label lang="nl-NL">Sta ochtendlevering toe</label>
-            <label lang="de-DE">Zustellung am Morgen zulassen</label>
+            <label lang="nl-NL">Ochtendbezorging toestaan</label>
+            <label lang="de-DE">Morgenzustellung zulassen</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceMorningDeliveryEnabledPostNL</name>
-            <label>Activate Morning Delivery Price</label>
-            <label lang="de-DE">Morgenzustellungspreis aktivieren</label>
-            <label lang="nl-NL">Activeer Ochtendlevering Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceMorningDeliveryPostNL</name>
-            <label>Morning Delivery Price</label>
-            <label lang="de-DE">Preis der Morgenlieferung</label>
-            <label lang="nl-NL">Ochtendlevering Prijs</label>
+            <label>Morning delivery fee</label>
+            <label lang="de-DE">Preis der Morgenzustellung</label>
+            <label lang="nl-NL">Kosten ochtendbezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
             <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
                 erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceStandardDeliveryEnabledPostNL</name>
-            <label>Activate Standard Delivery Price</label>
-            <label lang="de-DE">Standardlieferpreis aktivieren</label>
-            <label lang="nl-NL">Activeer standaard levering prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceStandardDeliveryPostNL</name>
-            <label>Standard Delivery Price</label>
-            <label lang="de-DE">Standard-Lieferpreis</label>
-            <label lang="nl-NL">Standaard leveringsprijs</label>
+            <label>Standard delivery fee</label>
+            <label lang="de-DE">Preis Standard-Lieferung</label>
+            <label lang="nl-NL">Kosten standaard bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceSameDayDeliveryEnabledPostNL</name>
-            <label>Activate Same-Day Delivery Price</label>
-            <label lang="de-DE">Zustellung am selben Tag aktivieren</label>
-            <label lang="nl-NL">Activeer dezelfde dag levering</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceSameDayDeliveryPostNL</name>
-            <label>Same-Day Delivery Price</label>
+            <label>Same-Day delivery fee</label>
             <label lang="de-DE">Preis für Lieferung am selben Tag</label>
-            <label lang="nl-NL">Dezelfde dag levering prijs</label>
+            <label lang="nl-NL">Kosten dezelfde dag bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -655,107 +450,119 @@
             <name>allowEveningDeliveryPostNL</name>
             <label>Allow evening delivery</label>
             <label lang="de-DE">Abendzustellung zulassen</label>
-            <label lang="nl-NL">Sta avondlevering toe</label>
+            <label lang="nl-NL">Avondbezorging toestaan</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceEveningDeliveryEnabledPostNL</name>
-            <label>Activate Evening Delivery Price</label>
-            <label lang="de-DE">Aktivieren Sie den Preis für die Abendzustellung</label>
-            <label lang="nl-NL">Activeer Avond levering Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceEveningDeliveryPostNL</name>
-            <label>Evening Delivery Price</label>
-            <label lang="de-DE">Abendlieferung Preis</label>
-            <label lang="nl-NL">Avond levering Prijs</label>
+            <label>Evening delivery fee (optional)</label>
+            <label lang="de-DE">Preis Abendzustellung (Optional)</label>
+            <label lang="nl-NL">Kosten avondbezorging (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>priceSignatureEnabledPostNL</name>
-            <label>Activate Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis aktivieren</label>
-            <label lang="nl-NL">Activeer Handtekening Prijs</label>
-            <defaultValue>false</defaultValue>
+            <name>allowSignaturePostNL</name>
+            <label>Allow signature option</label>
+            <label lang="de-DE">Unterschriftsoption zulassen</label>
+            <label lang="nl-NL">Handtekening voor ontvangst toestaan</label>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceSignaturePostNL</name>
-            <label>Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis</label>
-            <label lang="nl-NL">Handtekening Prijs</label>
+            <label>Signature fee (optional)</label>
+            <label lang="de-DE">Preis Unterschriftsoption (Optional)</label>
+            <label lang="nl-NL">Kosten handtekening voor ontvangst (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>priceOnlyRecipientEnabledPostNL</name>
-            <label>Activate Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfängerpreis aktivieren</label>
-            <label lang="nl-NL">Activeer alleen Ontvanger Prijs</label>
-            <defaultValue>false</defaultValue>
+            <name>allowOnlyRecipientPostNL</name>
+            <label>Allow only recipient</label>
+            <label lang="de-DE">Nur Empfänger zulassen</label>
+            <label lang="nl-NL">Alleen thuisadres toestaan</label>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceOnlyRecipientPostNL</name>
-            <label>Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfänger Preis</label>
-            <label lang="nl-NL">Alleen Ontvanger Prijs</label>
+            <label>Only recipient fee (optional)</label>
+            <label lang="de-DE">Preis nur Empfänger (Optional)</label>
+            <label lang="nl-NL">Kosten alleen thuisadres (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>pricePickupEnabledPostNL</name>
-            <label>Activate Pickup Price</label>
-            <label lang="nl-NL">Activeer Afhaalprijs</label>
-            <label lang="de-DE">Abholpreis aktivieren</label>
-            <defaultValue>false</defaultValue>
+            <name>allowPickupLocationsPostNL</name>
+            <label>Allow pickup</label>
+            <label lang="de-DE">Abholen zulassen</label>
+            <label lang="nl-NL">Afhalen toestaan</label>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>pricePickupPostNL</name>
-            <label>Pickup Price</label>
-            <label lang="de-DE">Abholpreis</label>
-            <label lang="nl-NL">Ophaalprijs</label>
+            <label>Pickup fee (optional)</label>
+            <label lang="de-DE">Preis Abholen (Optional)</label>
+            <label lang="nl-NL">Kosten afhalen (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -763,7 +570,7 @@
             <name>allowSaturdayDeliveryPostNL</name>
             <label>Allow delivery on saturday</label>
             <label lang="de-DE">Lieferung am Samstag zulassen</label>
-            <label lang="nl-NL">Sta levering op zaterdag toe</label>
+            <label lang="nl-NL">Bezorging op zaterdag toestaan</label>
             <helpText>Netherlands only</helpText>
             <helpText lang="de-DE">Nur Niederlande</helpText>
             <helpText lang="nl-NL">Alleen Nederland</helpText>
@@ -774,34 +581,10 @@
             <name>allowMondayDeliveryPostNL</name>
             <label>Allow delivery on monday</label>
             <label lang="de-DE">Zustellung am Montag zulassen</label>
-            <label lang="nl-NL">Sta levering toe op maandag</label>
+            <label lang="nl-NL">Bezorging op maandag toestaan</label>
             <helpText>Belgium only</helpText>
             <helpText lang="de-DE">Nur Belgien</helpText>
             <helpText lang="nl-NL">Alleen België</helpText>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowPickupLocationsPostNL</name>
-            <label>Allow pickup locations</label>
-            <label lang="de-DE">Abholorte zulassen</label>
-            <label lang="nl-NL">Sta afhaallocaties toe</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowSignaturePostNL</name>
-            <label>Allow signature option</label>
-            <label lang="de-DE">Unterschriftsoption zulassen</label>
-            <label lang="nl-NL">Optie handtekening toestaan</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowOnlyRecipientPostNL</name>
-            <label>Allow only recipient option</label>
-            <label lang="de-DE">Option Nur Empfänger zulassen</label>
-            <label lang="nl-NL">Alleen ontvanger optie toestaan</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
@@ -809,10 +592,10 @@
             <name>dropOffDaysPostNL</name>
             <label>Drop off day</label>
             <label lang="de-DE">Abgabetag</label>
-            <label lang="nl-NL">Afgifte dag</label>
+            <label lang="nl-NL">Afgiftedagen</label>
             <helpText>The days you usually hand over your parcels.</helpText>
             <helpText lang="de-DE">Die Tage, an denen Sie normalerweise Ihre Pakete abgeben.</helpText>
-            <helpText lang="nl-NL">De dagen dat je gewoonlijk je pakjes aflevert.</helpText>
+            <helpText lang="nl-NL">De dagen dat je gewoonlijk je pakjes afgeeft.</helpText>
             <options>
                 <option>
                     <id>0</id>
@@ -862,8 +645,8 @@
         <input-field type="bool">
             <name>cutoffTimeEnabledPostNL</name>
             <label>Activate Cut off Time</label>
-            <label lang="de-DE">Aktivieren Sie die Sperrzeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -892,39 +675,38 @@
                 standaardtijd is 17:00 uur. Bijvoorbeeld, als
                 cutoff tijd 17:00 is, is woensdag een leverdag en is er geen leververtraging; alle orders geplaatst
                 woensdag voor 17:00 worden afgegeven op diezelfde woensdag op tijd voor de woensdag collectie
-                en levering op donderdag.
+                en bezorging op donderdag.
             </helpText>
         </input-field>
 
         <input-field type="bool">
             <name>deliveryDaysWindowEnabledPostNL</name>
-            <label>Activate Delivery days window</label>
-            <label lang="de-DE">Fenster Liefertage aktivieren</label>
-            <label lang="nl-NL">Activeer Venster Leveringsdagen</label>
+            <label>Show Delivery days window</label>
+            <label lang="de-DE">Fenster Liefertage azeigen</label>
+            <label lang="nl-NL">Toon bezorgdagen venster</label>
         </input-field>
 
         <input-field type="int">
             <name>deliveryDaysWindowPostNL</name>
             <label>Delivery days window</label>
-            <label>Fenster der Liefertage</label>
-            <label>Venster van leveringsdagen</label>
-            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
+            <label lang="de-DE">Fenster der Liefertage</label>
+            <label lang="nl-NL">Bezorgdagen venster</label>
+            <helpText>Netherlands only. The number of days into the future for which you want to show delivery days. For example; If set
                 to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
                 Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and
-                maximum is 14 days.
+                the maximum is 14 days.
             </helpText>
-            <helpText lang="de-DE">Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum
+            <helpText lang="de-DE">Nur Niederlande. Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum
                 Beispiel: Wenn Sie
                 auf 3 gesetzt, werden einem Kunden, der am Montag bestellt, mögliche Lieferoptionen für Dienstag,
                 Mittwoch und
                 Donnerstag (vorausgesetzt, es gibt keine Verzögerung bei der Abgabe und es liegt vor der
-                Annahmeschlusszeit). Der Mindestwert ist 1 und
-                Maximum ist 14 Tage.
+                Annahmeschlusszeit). Der Mindestwert ist 1 und der Höchstwert ist 14 Tage.
             </helpText>
-            <helpText lang="nl-NL">Het aantal dagen in de toekomst waarvoor u de leveringsdagen wilt tonen.
+            <helpText lang="nl-NL">Alleen Nederland. Het aantal dagen in de toekomst waarvoor u de bezorgingsdagen wilt tonen.
                 Bijvoorbeeld; Indien ingesteld
-                op 3, zal een consument die op maandag bestelt, mogelijke leveringsopties zien voor dinsdag, woensdag en
-                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en
+                op 3, zal een consument die op maandag bestelt, mogelijke bezorgopties zien voor dinsdag, woensdag en
+                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en het
                 maximum is 14 dagen.
             </helpText>
             <defaultValue>7</defaultValue>
@@ -934,7 +716,7 @@
             <name>dropOffDelayEnabledPostNL</name>
             <label>Activate Drop Off Delay</label>
             <label lang="de-DE">Absetzverzögerung aktivieren</label>
-            <label lang="nl-NL">Activeer de afleververtraging</label>
+            <label lang="nl-NL">Activeer afleververtraging</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -960,207 +742,70 @@
 
     <card>
         <title>DPD checkout settings</title>
+        <title lang="nl-NL">DPD checkout instellingen</title>
         <input-field type="bool">
             <name>enabledDPD</name>
             <label>Activate DPD</label>
+            <label lang="nl-NL">Activeer DPD</label>
         </input-field>
 
         <input-field type="bool">
             <name>allowShowDeliveryDateDPD</name>
             <label>Show the delivery date</label>
             <label lang="de-DE">Anzeige des Liefertermins</label>
-            <label lang="nl-NL">Toon de leveringsdatum</label>
+            <label lang="nl-NL">Toon de bezorgdatum</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowMorningDeliveryDPD</name>
-            <label>Allow morning delivery</label>
-            <label lang="nl-NL">Sta ochtendlevering toe</label>
-            <label lang="de-DE">Zustellung am Morgen zulassen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceMorningDeliveryEnabledDPD</name>
-            <label>Activate Morning Delivery Price</label>
-            <label lang="de-DE">Morgenzustellungspreis aktivieren</label>
-            <label lang="nl-NL">Activeer Ochtendlevering Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceMorningDeliveryDPD</name>
-            <label>Morning Delivery Price</label>
-            <label lang="de-DE">Preis der Morgenlieferung</label>
-            <label lang="nl-NL">Ochtendlevering Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
-                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceStandardDeliveryEnabledDPD</name>
-            <label>Activate Standard Delivery Price</label>
-            <label lang="de-DE">Standardlieferpreis aktivieren</label>
-            <label lang="nl-NL">Activeer standaard levering prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceStandardDeliveryDPD</name>
             <label>Standard Delivery Price</label>
-            <label lang="de-DE">Standard-Lieferpreis</label>
-            <label lang="nl-NL">Standaard leveringsprijs</label>
+            <label lang="de-DE">Preis Standard-Lieferung</label>
+            <label lang="nl-NL">Kosten standaard bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>priceSameDayDeliveryEnabledDPD</name>
-            <label>Activate Same-Day Delivery Price</label>
-            <label lang="de-DE">Zustellung am selben Tag aktivieren</label>
-            <label lang="nl-NL">Activeer dezelfde dag levering</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceSameDayDeliveryDPD</name>
-            <label>Same-Day Delivery Price</label>
-            <label lang="de-DE">Preis für Lieferung am selben Tag</label>
-            <label lang="nl-NL">Dezelfde dag levering prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-
-        <input-field type="bool">
-            <name>allowEveningDeliveryDPD</name>
-            <label>Allow evening delivery</label>
-            <label lang="de-DE">Abendzustellung zulassen</label>
-            <label lang="nl-NL">Sta avondlevering toe</label>
+            <name>allowPickupLocationsDPD</name>
+            <label>Allow pickup</label>
+            <label lang="de-DE">Abholen zulassen</label>
+            <label lang="nl-NL">Afhalen toestaan</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceEveningDeliveryEnabledDPD</name>
-            <label>Activate Evening Delivery Price</label>
-            <label lang="de-DE">Aktivieren Sie den Preis für die Abendzustellung</label>
-            <label lang="nl-NL">Activeer Avond levering Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceEveningDeliveryDPD</name>
-            <label>Evening Delivery Price</label>
-            <label lang="de-DE">Abendlieferung Preis</label>
-            <label lang="nl-NL">Avond levering Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceSignatureEnabledDPD</name>
-            <label>Activate Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis aktivieren</label>
-            <label lang="nl-NL">Activeer Handtekening Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceSignatureDPD</name>
-            <label>Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis</label>
-            <label lang="nl-NL">Handtekening Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceOnlyRecipientEnabledDPD</name>
-            <label>Activate Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfängerpreis aktivieren</label>
-            <label lang="nl-NL">Activeer alleen Ontvanger Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceOnlyRecipientDPD</name>
-            <label>Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfänger Preis</label>
-            <label lang="nl-NL">Alleen Ontvanger Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>pricePickupEnabledDPD</name>
-            <label>Activate Pickup Price</label>
-            <label lang="nl-NL">Activeer Afhaalprijs</label>
-            <label lang="de-DE">Abholpreis aktivieren</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>pricePickupDPD</name>
-            <label>Pickup Price</label>
-            <label lang="de-DE">Abholpreis</label>
-            <label lang="nl-NL">Ophaalprijs</label>
+            <label>Pickup fee (optional)</label>
+            <label lang="de-DE">Preis Abholen (Optional)</label>
+            <label lang="nl-NL">Kosten afhalen (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -1168,7 +813,7 @@
             <name>allowSaturdayDeliveryDPD</name>
             <label>Allow delivery on saturday</label>
             <label lang="de-DE">Lieferung am Samstag zulassen</label>
-            <label lang="nl-NL">Sta levering op zaterdag toe</label>
+            <label lang="nl-NL">Bezorging op zaterdag toestaan</label>
             <helpText>Netherlands only</helpText>
             <helpText lang="de-DE">Nur Niederlande</helpText>
             <helpText lang="nl-NL">Alleen Nederland</helpText>
@@ -1179,34 +824,10 @@
             <name>allowMondayDeliveryDPD</name>
             <label>Allow delivery on monday</label>
             <label lang="de-DE">Zustellung am Montag zulassen</label>
-            <label lang="nl-NL">Sta levering toe op maandag</label>
+            <label lang="nl-NL">Bezorging toe op maandag toestaan</label>
             <helpText>Belgium only</helpText>
             <helpText lang="de-DE">Nur Belgien</helpText>
             <helpText lang="nl-NL">Alleen België</helpText>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowPickupLocationsDPD</name>
-            <label>Allow pickup locations</label>
-            <label lang="de-DE">Abholorte zulassen</label>
-            <label lang="nl-NL">Sta afhaallocaties toe</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowSignatureDPD</name>
-            <label>Allow signature option</label>
-            <label lang="de-DE">Unterschriftsoption zulassen</label>
-            <label lang="nl-NL">Optie handtekening toestaan</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowOnlyRecipientDPD</name>
-            <label>Allow only recipient option</label>
-            <label lang="de-DE">Option Nur Empfänger zulassen</label>
-            <label lang="nl-NL">Alleen ontvanger optie toestaan</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
@@ -1267,8 +888,8 @@
         <input-field type="bool">
             <name>cutoffTimeEnabledDPD</name>
             <label>Activate Cut off Time</label>
-            <label lang="de-DE">Aktivieren Sie die Sperrzeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -1297,49 +918,15 @@
                 standaardtijd is 17:00 uur. Bijvoorbeeld, als
                 cutoff tijd 17:00 is, is woensdag een leverdag en is er geen leververtraging; alle orders geplaatst
                 woensdag voor 17:00 worden afgegeven op diezelfde woensdag op tijd voor de woensdag collectie
-                en levering op donderdag.
+                en bezorging op donderdag.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>deliveryDaysWindowEnabledDPD</name>
-            <label>Activate Delivery days window</label>
-            <label lang="de-DE">Fenster Liefertage aktivieren</label>
-            <label lang="nl-NL">Activeer Venster Leveringsdagen</label>
-        </input-field>
-
-        <input-field type="int">
-            <name>deliveryDaysWindowDPD</name>
-            <label>Delivery days window</label>
-            <label>Fenster der Liefertage</label>
-            <label>Venster van leveringsdagen</label>
-            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
-                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
-                Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and
-                maximum is 14 days.
-            </helpText>
-            <helpText lang="de-DE">Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum
-                Beispiel: Wenn Sie
-                auf 3 gesetzt, werden einem Kunden, der am Montag bestellt, mögliche Lieferoptionen für Dienstag,
-                Mittwoch und
-                Donnerstag (vorausgesetzt, es gibt keine Verzögerung bei der Abgabe und es liegt vor der
-                Annahmeschlusszeit). Der Mindestwert ist 1 und
-                Maximum ist 14 Tage.
-            </helpText>
-            <helpText lang="nl-NL">Het aantal dagen in de toekomst waarvoor u de leveringsdagen wilt tonen.
-                Bijvoorbeeld; Indien ingesteld
-                op 3, zal een consument die op maandag bestelt, mogelijke leveringsopties zien voor dinsdag, woensdag en
-                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en
-                maximum is 14 dagen.
-            </helpText>
-            <defaultValue>7</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>dropOffDelayEnabledDPD</name>
             <label>Activate Drop Off Delay</label>
             <label lang="de-DE">Absetzverzögerung aktivieren</label>
-            <label lang="nl-NL">Activeer de afleververtraging</label>
+            <label lang="nl-NL">Activeer afleververtraging</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -1365,207 +952,100 @@
 
     <card>
         <title>BPost checkout settings</title>
+        <title lang="nl-NL">BPost checkout instellingen</title>
         <input-field type="bool">
             <name>enabledBPost</name>
             <label>Activate BPost</label>
+            <label lang="nl-NL">Activeer BPost</label>
         </input-field>
 
         <input-field type="bool">
             <name>allowShowDeliveryDateBPost</name>
-            <label>Show the delivery date</label>
-            <label lang="de-DE">Anzeige des Liefertermins</label>
-            <label lang="nl-NL">Toon de leveringsdatum</label>
+            <label>Show delivery date</label>
+            <label lang="de-DE">Lieferdatum anzeigen</label>
+            <label lang="nl-NL">Toon bezorgdatum</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowMorningDeliveryBPost</name>
-            <label>Allow morning delivery</label>
-            <label lang="nl-NL">Sta ochtendlevering toe</label>
-            <label lang="de-DE">Zustellung am Morgen zulassen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceMorningDeliveryEnabledBPost</name>
-            <label>Activate Morning Delivery Price</label>
-            <label lang="de-DE">Morgenzustellungspreis aktivieren</label>
-            <label lang="nl-NL">Activeer Ochtendlevering Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceMorningDeliveryBPost</name>
-            <label>Morning Delivery Price</label>
-            <label lang="de-DE">Preis der Morgenlieferung</label>
-            <label lang="nl-NL">Ochtendlevering Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
-                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceStandardDeliveryEnabledBPost</name>
-            <label>Activate Standard Delivery Price</label>
-            <label lang="de-DE">Standardlieferpreis aktivieren</label>
-            <label lang="nl-NL">Activeer standaard levering prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceStandardDeliveryBPost</name>
-            <label>Standard Delivery Price</label>
-            <label lang="de-DE">Standard-Lieferpreis</label>
-            <label lang="nl-NL">Standaard leveringsprijs</label>
+            <label>Standard delivery fee</label>
+            <label lang="de-DE">Preis Standard-Lieferung</label>
+            <label lang="nl-NL">Kosten standaard bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>priceSameDayDeliveryEnabledBPost</name>
-            <label>Activate Same-Day Delivery Price</label>
-            <label lang="de-DE">Zustellung am selben Tag aktivieren</label>
-            <label lang="nl-NL">Activeer dezelfde dag levering</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceSameDayDeliveryBPost</name>
-            <label>Same-Day Delivery Price</label>
-            <label lang="de-DE">Preis für Lieferung am selben Tag</label>
-            <label lang="nl-NL">Dezelfde dag levering prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-
-        <input-field type="bool">
-            <name>allowEveningDeliveryBPost</name>
-            <label>Allow evening delivery</label>
-            <label lang="de-DE">Abendzustellung zulassen</label>
-            <label lang="nl-NL">Sta avondlevering toe</label>
+            <name>allowSignatureBPost</name>
+            <label>Allow signature option</label>
+            <label lang="de-DE">Unterschriftsoptions zulassen</label>
+            <label lang="nl-NL">Handtekening voor ontvangst toestaan</label>
             <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceEveningDeliveryEnabledBPost</name>
-            <label>Activate Evening Delivery Price</label>
-            <label lang="de-DE">Aktivieren Sie den Preis für die Abendzustellung</label>
-            <label lang="nl-NL">Activeer Avond levering Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceEveningDeliveryBPost</name>
-            <label>Evening Delivery Price</label>
-            <label lang="de-DE">Abendlieferung Preis</label>
-            <label lang="nl-NL">Avond levering Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>priceSignatureEnabledBPost</name>
-            <label>Activate Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis aktivieren</label>
-            <label lang="nl-NL">Activeer Handtekening Prijs</label>
-            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>priceSignatureBPost</name>
-            <label>Signature Price</label>
-            <label lang="de-DE">Unterschrift Preis</label>
-            <label lang="nl-NL">Handtekening Prijs</label>
+            <label>Signature fee (optional)</label>
+            <label lang="de-DE">Preis Unterschriftsoption (Optional)</label>
+            <label lang="nl-NL">Kosten handtekening voor ontvangst (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
         <input-field type="bool">
-            <name>priceOnlyRecipientEnabledBPost</name>
-            <label>Activate Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfängerpreis aktivieren</label>
-            <label lang="nl-NL">Activeer alleen Ontvanger Prijs</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="float">
-            <name>priceOnlyRecipientBPost</name>
-            <label>Only Recipient Price</label>
-            <label lang="de-DE">Nur Empfänger Preis</label>
-            <label lang="nl-NL">Alleen Ontvanger Prijs</label>
-            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
-                green in the delivery options to show it's a discount.
-            </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
-            </helpText>
-            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
-            </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>pricePickupEnabledBPost</name>
-            <label>Activate Pickup Price</label>
-            <label lang="nl-NL">Activeer Afhaalprijs</label>
-            <label lang="de-DE">Abholpreis aktivieren</label>
-            <defaultValue>false</defaultValue>
+            <name>allowPickupLocationsBPost</name>
+            <label>Allow pickup</label>
+            <label lang="de-DE">Abholen zulassen</label>
+            <label lang="nl-NL">Afhalen toestaan</label>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="float">
             <name>pricePickupBPost</name>
-            <label>Pickup Price</label>
-            <label lang="de-DE">Abholpreis</label>
-            <label lang="nl-NL">Ophaalprijs</label>
+            <label>Pickup fee (optional)</label>
+            <label lang="de-DE">Preis Abholen (Optional)</label>
+            <label lang="nl-NL">Kosten afhalen (optioneel)</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
+                Leave empty to charge nothing.
+                NOTE(!) This price will be added to the price under ‘General checkout settings’.
             </helpText>
-            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,
-                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt
-                handelt.
+            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,
+                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.
+                Leer lassen um nichts zu berechnen.
+                HINWEIS(!) Dieser Preis wird dem Preis unter „General checkout setting“ hinzugefügt.
             </helpText>
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
-                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.
+                groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
+                Leeg laten om niets te rekenen.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -1573,45 +1053,10 @@
             <name>allowSaturdayDeliveryBPost</name>
             <label>Allow delivery on saturday</label>
             <label lang="de-DE">Lieferung am Samstag zulassen</label>
-            <label lang="nl-NL">Sta levering op zaterdag toe</label>
+            <label lang="nl-NL">Sta bezorging op zaterdag toe</label>
             <helpText>Netherlands only</helpText>
             <helpText lang="de-DE">Nur Niederlande</helpText>
             <helpText lang="nl-NL">Alleen Nederland</helpText>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowMondayDeliveryBPost</name>
-            <label>Allow delivery on monday</label>
-            <label lang="de-DE">Zustellung am Montag zulassen</label>
-            <label lang="nl-NL">Sta levering toe op maandag</label>
-            <helpText>Belgium only</helpText>
-            <helpText lang="de-DE">Nur Belgien</helpText>
-            <helpText lang="nl-NL">Alleen België</helpText>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowPickupLocationsBPost</name>
-            <label>Allow pickup locations</label>
-            <label lang="de-DE">Abholorte zulassen</label>
-            <label lang="nl-NL">Sta afhaallocaties toe</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowSignatureBPost</name>
-            <label>Allow signature option</label>
-            <label lang="de-DE">Unterschriftsoption zulassen</label>
-            <label lang="nl-NL">Optie handtekening toestaan</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>allowOnlyRecipientBPost</name>
-            <label>Allow only recipient option</label>
-            <label lang="de-DE">Option Nur Empfänger zulassen</label>
-            <label lang="nl-NL">Alleen ontvanger optie toestaan</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
@@ -1672,8 +1117,8 @@
         <input-field type="bool">
             <name>cutoffTimeEnabledBPost</name>
             <label>Activate Cut off Time</label>
-            <label lang="de-DE">Aktivieren Sie die Sperrzeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -1702,49 +1147,15 @@
                 standaardtijd is 17:00 uur. Bijvoorbeeld, als
                 cutoff tijd 17:00 is, is woensdag een leverdag en is er geen leververtraging; alle orders geplaatst
                 woensdag voor 17:00 worden afgegeven op diezelfde woensdag op tijd voor de woensdag collectie
-                en levering op donderdag.
+                en bezorging op donderdag.
             </helpText>
-        </input-field>
-
-        <input-field type="bool">
-            <name>deliveryDaysWindowEnabledBPost</name>
-            <label>Activate Delivery days window</label>
-            <label lang="de-DE">Fenster Liefertage aktivieren</label>
-            <label lang="nl-NL">Activeer Venster Leveringsdagen</label>
-        </input-field>
-
-        <input-field type="int">
-            <name>deliveryDaysWindowBPost</name>
-            <label>Delivery days window</label>
-            <label>Fenster der Liefertage</label>
-            <label>Venster van leveringsdagen</label>
-            <helpText>The number of days into the future for which you want to show delivery days. For example; If set
-                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and
-                Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and
-                maximum is 14 days.
-            </helpText>
-            <helpText lang="de-DE">Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum
-                Beispiel: Wenn Sie
-                auf 3 gesetzt, werden einem Kunden, der am Montag bestellt, mögliche Lieferoptionen für Dienstag,
-                Mittwoch und
-                Donnerstag (vorausgesetzt, es gibt keine Verzögerung bei der Abgabe und es liegt vor der
-                Annahmeschlusszeit). Der Mindestwert ist 1 und
-                Maximum ist 14 Tage.
-            </helpText>
-            <helpText lang="nl-NL">Het aantal dagen in de toekomst waarvoor u de leveringsdagen wilt tonen.
-                Bijvoorbeeld; Indien ingesteld
-                op 3, zal een consument die op maandag bestelt, mogelijke leveringsopties zien voor dinsdag, woensdag en
-                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en
-                maximum is 14 dagen.
-            </helpText>
-            <defaultValue>7</defaultValue>
         </input-field>
 
         <input-field type="bool">
             <name>dropOffDelayEnabledBPost</name>
             <label>Activate Drop Off Delay</label>
             <label lang="de-DE">Absetzverzögerung aktivieren</label>
-            <label lang="nl-NL">Activeer de afleververtraging</label>
+            <label lang="nl-NL">Activeer afleververtraging</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -1767,409 +1178,6 @@
             </helpText>
         </input-field>
     </card>
-
-    <!--    <card>-->
-    <!--        <title>DHL checkout settings</title>-->
-    <!--        <input-field type="bool">-->
-    <!--            <name>enabledDHL</name>-->
-    <!--            <label>Activate DHL</label>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowShowDeliveryDateDHL</name>-->
-    <!--            <label>Show the delivery date</label>-->
-    <!--            <label lang="de-DE">Anzeige des Liefertermins</label>-->
-    <!--            <label lang="nl-NL">Toon de leveringsdatum</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowMorningDeliveryDHL</name>-->
-    <!--            <label>Allow morning delivery</label>-->
-    <!--            <label lang="nl-NL">Sta ochtendlevering toe</label>-->
-    <!--            <label lang="de-DE">Zustellung am Morgen zulassen</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceMorningDeliveryEnabledDHL</name>-->
-    <!--            <label>Activate Morning Delivery Price</label>-->
-    <!--            <label lang="de-DE">Morgenzustellungspreis aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer Ochtendlevering Prijs</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceMorningDeliveryDHL</name>-->
-    <!--            <label>Morning Delivery Price</label>-->
-    <!--            <label lang="de-DE">Preis der Morgenlieferung</label>-->
-    <!--            <label lang="nl-NL">Ochtendlevering Prijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion verlangen. Wenn der Betrag negativ ist,-->
-    <!--                erscheint der Preis in den Lieferoptionen grün, um anzuzeigen, dass es sich um einen Rabatt handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceStandardDeliveryEnabledDHL</name>-->
-    <!--            <label>Activate Standard Delivery Price</label>-->
-    <!--            <label lang="de-DE">Standardlieferpreis aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer standaard levering prijs</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceStandardDeliveryDHL</name>-->
-    <!--            <label>Standard Delivery Price</label>-->
-    <!--            <label lang="de-DE">Standard-Lieferpreis</label>-->
-    <!--            <label lang="nl-NL">Standaard leveringsprijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceSameDayDeliveryEnabledDHL</name>-->
-    <!--            <label>Activate Same-Day Delivery Price</label>-->
-    <!--            <label lang="de-DE">Zustellung am selben Tag aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer dezelfde dag levering</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceSameDayDeliveryDHL</name>-->
-    <!--            <label>Same-Day Delivery Price</label>-->
-    <!--            <label lang="de-DE">Preis für Lieferung am selben Tag</label>-->
-    <!--            <label lang="nl-NL">Dezelfde dag levering prijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowEveningDeliveryDHL</name>-->
-    <!--            <label>Allow evening delivery</label>-->
-    <!--            <label lang="de-DE">Abendzustellung zulassen</label>-->
-    <!--            <label lang="nl-NL">Sta avondlevering toe</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceEveningDeliveryEnabledDHL</name>-->
-    <!--            <label>Activate Evening Delivery Price</label>-->
-    <!--            <label lang="de-DE">Aktivieren Sie den Preis für die Abendzustellung</label>-->
-    <!--            <label lang="nl-NL">Activeer Avond levering Prijs</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceEveningDeliveryDHL</name>-->
-    <!--            <label>Evening Delivery Price</label>-->
-    <!--            <label lang="de-DE">Abendlieferung Preis</label>-->
-    <!--            <label lang="nl-NL">Avond levering Prijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceSignatureEnabledDHL</name>-->
-    <!--            <label>Activate Signature Price</label>-->
-    <!--            <label lang="de-DE">Unterschrift Preis aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer Handtekening Prijs</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceSignatureDHL</name>-->
-    <!--            <label>Signature Price</label>-->
-    <!--            <label lang="de-DE">Unterschrift Preis</label>-->
-    <!--            <label lang="nl-NL">Handtekening Prijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>priceOnlyRecipientEnabledDHL</name>-->
-    <!--            <label>Activate Only Recipient Price</label>-->
-    <!--            <label lang="de-DE">Nur Empfängerpreis aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer alleen Ontvanger Prijs</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>priceOnlyRecipientDHL</name>-->
-    <!--            <label>Only Recipient Price</label>-->
-    <!--            <label lang="de-DE">Nur Empfänger Preis</label>-->
-    <!--            <label lang="nl-NL">Alleen Ontvanger Prijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>pricePickupEnabledDHL</name>-->
-    <!--            <label>Activate Pickup Price</label>-->
-    <!--            <label lang="nl-NL">Activeer Afhaalprijs</label>-->
-    <!--            <label lang="de-DE">Abholpreis aktivieren</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="float">-->
-    <!--            <name>pricePickupDHL</name>-->
-    <!--            <label>Pickup Price</label>-->
-    <!--            <label lang="de-DE">Abholpreis</label>-->
-    <!--            <label lang="nl-NL">Ophaalprijs</label>-->
-    <!--            <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear-->
-    <!--                green in the delivery options to show it's a discount.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der Geldbetrag, den Sie für diese Funktion berechnen. Wenn der Betrag negativ ist,-->
-    <!--                wird der Preis in den Lieferoptionen grün angezeigt, um zu verdeutlichen, dass es sich um einen Rabatt-->
-    <!--                handelt.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs-->
-    <!--                groen verschijnen in de leveringsopties om aan te tonen dat het om een korting gaat.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowSaturdayDeliveryDHL</name>-->
-    <!--            <label>Allow delivery on saturday</label>-->
-    <!--            <label lang="de-DE">Lieferung am Samstag zulassen</label>-->
-    <!--            <label lang="nl-NL">Sta levering op zaterdag toe</label>-->
-    <!--            <helpText>Netherlands only</helpText>-->
-    <!--            <helpText lang="de-DE">Nur Niederlande</helpText>-->
-    <!--            <helpText lang="nl-NL">Alleen Nederland</helpText>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowMondayDeliveryDHL</name>-->
-    <!--            <label>Allow delivery on monday</label>-->
-    <!--            <label lang="de-DE">Zustellung am Montag zulassen</label>-->
-    <!--            <label lang="nl-NL">Sta levering toe op maandag</label>-->
-    <!--            <helpText>Belgium only</helpText>-->
-    <!--            <helpText lang="de-DE">Nur Belgien</helpText>-->
-    <!--            <helpText lang="nl-NL">Alleen België</helpText>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowPickupLocationsDHL</name>-->
-    <!--            <label>Allow pickup locations</label>-->
-    <!--            <label lang="de-DE">Abholorte zulassen</label>-->
-    <!--            <label lang="nl-NL">Sta afhaallocaties toe</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowSignatureDHL</name>-->
-    <!--            <label>Allow signature option</label>-->
-    <!--            <label lang="de-DE">Unterschriftsoption zulassen</label>-->
-    <!--            <label lang="nl-NL">Optie handtekening toestaan</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>allowOnlyRecipientDHL</name>-->
-    <!--            <label>Allow only recipient option</label>-->
-    <!--            <label lang="de-DE">Option Nur Empfänger zulassen</label>-->
-    <!--            <label lang="nl-NL">Alleen ontvanger optie toestaan</label>-->
-    <!--            <defaultValue>true</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="multi-select">-->
-    <!--            <name>dropOffDaysDHL</name>-->
-    <!--            <label>Drop off day</label>-->
-    <!--            <label lang="de-DE">Abgabetag</label>-->
-    <!--            <label lang="nl-NL">Afgifte dag</label>-->
-    <!--            <helpText>The days you usually hand over your parcels.</helpText>-->
-    <!--            <helpText lang="de-DE">Die Tage, an denen Sie normalerweise Ihre Pakete abgeben.</helpText>-->
-    <!--            <helpText lang="nl-NL">De dagen dat je gewoonlijk je pakjes aflevert.</helpText>-->
-    <!--            <options>-->
-    <!--                <option>-->
-    <!--                    <id>0</id>-->
-    <!--                    <name>Monday</name>-->
-    <!--                    <name lang="de-DE">Montag</name>-->
-    <!--                    <name lang="nl-NL">Maandag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>1</id>-->
-    <!--                    <name>Tuesday</name>-->
-    <!--                    <name lang="de-DE">Dienstag</name>-->
-    <!--                    <name lang="nl-NL">Dinsdag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>2</id>-->
-    <!--                    <name>Wednesday</name>-->
-    <!--                    <name lang="de-DE">Mittwoch</name>-->
-    <!--                    <name lang="nl-NL">Woensdag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>3</id>-->
-    <!--                    <name>Thursday</name>-->
-    <!--                    <name lang="de-DE">Donnerstag</name>-->
-    <!--                    <name lang="nl-NL">Donderdag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>4</id>-->
-    <!--                    <name>Friday</name>-->
-    <!--                    <name lang="de-DE">Freitag</name>-->
-    <!--                    <name lang="nl-NL">Vrijdag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>5</id>-->
-    <!--                    <name>Saturday</name>-->
-    <!--                    <name lang="de-DE">Samstag</name>-->
-    <!--                    <name lang="nl-NL">Zaterdag</name>-->
-    <!--                </option>-->
-    <!--                <option>-->
-    <!--                    <id>6</id>-->
-    <!--                    <name>Sunday</name>-->
-    <!--                    <name lang="de-DE">Sonntag</name>-->
-    <!--                    <name lang="nl-NL">Zondag</name>-->
-    <!--                </option>-->
-    <!--            </options>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>cutoffTimeEnabledDHL</name>-->
-    <!--            <label>Activate Cut off Time</label>-->
-    <!--            <label lang="de-DE">Aktivieren Sie die Sperrzeit</label>-->
-    <!--            <label lang="nl-NL">Activeer Cut off Time</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="time">-->
-    <!--            <name>cutoffTimeDHL</name>-->
-    <!--            <label>Cut off Time</label>-->
-    <!--            <label lang="de-DE">Cut-off Zeit</label>-->
-    <!--            <label lang="nl-NL">Cut off tijd</label>-->
-    <!--            <helpText>The latest time an order will still be picked, packed and dispatched on the same/first set dropoff-->
-    <!--                day, taking the dropoff delay into account. (Industry standard) default time is 17:00. For example, if-->
-    <!--                cutoff time is 17:00, Wednesday is a delivery day and there's no delivery delay; all orders placed-->
-    <!--                Wednesday before 17:00 will be dropped of on that same Wednesday in time for the Wednesday collection-->
-    <!--                and delivery on Thursday.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Der späteste Zeitpunkt, zu dem eine Bestellung noch am selben/ersten festgelegten-->
-    <!--                Abgabetag kommissioniert, verpackt und versandt wird-->
-    <!--                Tag noch abgeholt, verpackt und versandt wird, unter Berücksichtigung der Ablieferungsverzögerung. Die-->
-    <!--                (branchenübliche) Standardzeit ist 17:00 Uhr. Zum Beispiel, wenn-->
-    <!--                17:00 Uhr ist, ist Mittwoch ein Liefertag und es gibt keine Lieferverzögerung; alle Bestellungen, die-->
-    <!--                Mittwoch vor 17:00 Uhr aufgegeben werden, werden noch am selben Mittwoch rechtzeitig für die Abholung am-->
-    <!--                Mittwoch-->
-    <!--                und die Zustellung am Donnerstag.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">De uiterste tijd dat een bestelling nog wordt verzameld, verpakt en verzonden op-->
-    <!--                dezelfde/eerste vastgestelde afleverdag, rekening houdend met de afleververtraging. De (standaard)-->
-    <!--                standaardtijd is 17:00 uur. Bijvoorbeeld, als-->
-    <!--                cutoff tijd 17:00 is, is woensdag een leverdag en is er geen leververtraging; alle orders geplaatst-->
-    <!--                woensdag voor 17:00 worden afgegeven op diezelfde woensdag op tijd voor de woensdag collectie-->
-    <!--                en levering op donderdag.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>deliveryDaysWindowEnabledDHL</name>-->
-    <!--            <label>Activate Delivery days window</label>-->
-    <!--            <label lang="de-DE">Fenster Liefertage aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer Venster Leveringsdagen</label>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="int">-->
-    <!--            <name>deliveryDaysWindowDHL</name>-->
-    <!--            <label>Delivery days window</label>-->
-    <!--            <label>Fenster der Liefertage</label>-->
-    <!--            <label>Venster van leveringsdagen</label>-->
-    <!--            <helpText>The number of days into the future for which you want to show delivery days. For example; If set-->
-    <!--                to 3, a consumer ordering on Monday will see possible delivery options for Tuesday, Wednesday and-->
-    <!--                Thursday (provided there is no drop-off delay, and it's before the cutoff time). The minimum is 1 and-->
-    <!--                maximum is 14 days.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Die Anzahl der Tage in der Zukunft, für die Sie die Liefertage anzeigen möchten. Zum-->
-    <!--                Beispiel: Wenn Sie-->
-    <!--                auf 3 gesetzt, werden einem Kunden, der am Montag bestellt, mögliche Lieferoptionen für Dienstag,-->
-    <!--                Mittwoch und-->
-    <!--                Donnerstag (vorausgesetzt, es gibt keine Verzögerung bei der Abgabe und es liegt vor der-->
-    <!--                Annahmeschlusszeit). Der Mindestwert ist 1 und-->
-    <!--                Maximum ist 14 Tage.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het aantal dagen in de toekomst waarvoor u de leveringsdagen wilt tonen.-->
-    <!--                Bijvoorbeeld; Indien ingesteld-->
-    <!--                op 3, zal een consument die op maandag bestelt, mogelijke leveringsopties zien voor dinsdag, woensdag en-->
-    <!--                donderdag (mits er geen afleververtraging is en het voor de cutoff tijd is). Het minimum is 1 en-->
-    <!--                maximum is 14 dagen.-->
-    <!--            </helpText>-->
-    <!--            <defaultValue>7</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="bool">-->
-    <!--            <name>dropOffDelayEnabledDHL</name>-->
-    <!--            <label>Activate Drop Off Delay</label>-->
-    <!--            <label lang="de-DE">Absetzverzögerung aktivieren</label>-->
-    <!--            <label lang="nl-NL">Activeer de afleververtraging</label>-->
-    <!--            <defaultValue>false</defaultValue>-->
-    <!--        </input-field>-->
-
-    <!--        <input-field type="int">-->
-    <!--            <name>dropOffDelayDHL</name>-->
-    <!--            <label>Drop Off Delay</label>-->
-    <!--            <label lang="de-DE">Abwurfverzögerung</label>-->
-    <!--            <label lang="nl-NL">Afleververtraging</label>-->
-    <!--            <defaultValue>0</defaultValue>-->
-    <!--            <helpText>The number of days it takes you to pick, pack and hand in your parcel at the post office (if-->
-    <!--                ordered before the cutoff time). By default, this is 0 and the maximum is 14.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="de-DE">Die Anzahl der Tage, die Sie benötigen, um Ihr Paket abzuholen, zu verpacken und bei der Post abzugeben (wenn-->
-    <!--                vor der Annahmeschlusszeit bestellt wurde). Der Standardwert ist 0 und der Höchstwert ist 14.-->
-    <!--            </helpText>-->
-    <!--            <helpText lang="nl-NL">Het aantal dagen dat u nodig heeft om uw pakket samen te stellen, in te pakken en af te leveren op het-->
-    <!--                postkantoor (indien besteld voor de cutoff tijd). Standaard is dit 0 en het maximum is 14.-->
-    <!--            </helpText>-->
-    <!--        </input-field>-->
-    <!--    </card>-->
 
     <card>
         <title>Shipment settings</title>
@@ -2257,41 +1265,12 @@
             </options>
         </input-field>
 
-        <!--Choose default delivery window-->
-        <!--        <input-field type="single-select">-->
-        <!--            <name>myParcelDefaultDeliveryWindow</name>-->
-        <!--            <label>Default delivery window</label>-->
-        <!--            <label lang="de-DE">Standard-Lieferfenster</label>-->
-        <!--            <label lang="nl-NL">Standaard afleveringsperiode</label>-->
-        <!--            <defaultValue>2</defaultValue>-->
-        <!--            <options>-->
-        <!--                <option>-->
-        <!--                    <id>2</id>-->
-        <!--                    <name>Standard</name>-->
-        <!--                    <name lang="de-DE">Standard</name>-->
-        <!--                    <name lang="nl-NL">Standaard</name>-->
-        <!--                </option>-->
-        <!--                <option>-->
-        <!--                    <id>1</id>-->
-        <!--                    <name>Morning</name>-->
-        <!--                    <name lang="de-DE">Morgen</name>-->
-        <!--                    <name lang="nl-NL">Ochtend</name>-->
-        <!--                </option>-->
-        <!--                <option>-->
-        <!--                    <id>3</id>-->
-        <!--                    <name>Evening</name>-->
-        <!--                    <name lang="de-DE">Abend</name>-->
-        <!--                    <name lang="nl-NL">Avond</name>-->
-        <!--                </option>-->
-        <!--            </options>-->
-        <!--        </input-field>-->
-
         <!--Choose default signed delivery-->
         <input-field type="single-select">
             <name>myParcelDefaultSignature</name>
             <label>Default signed delivery</label>
             <label lang="de-DE">Standardmäßige Unterschrift bei Lieferung</label>
-            <label lang="nl-NL">Standaard handtekening bij bezorging</label>
+            <label lang="nl-NL">Standaard handtekening voor ontvangst</label>
             <defaultValue>0</defaultValue>
             <options>
                 <option>
@@ -2312,9 +1291,9 @@
         <!--Choose default only house, no neighbours-->
         <input-field type="single-select">
             <name>myParcelDefaultOnlyRecipient</name>
-            <label>Default delivery at neighbours</label>
-            <label lang="de-DE">Standardlieferung bei Nachbarn</label>
-            <label lang="nl-NL">Standaard aflevering bij buren</label>
+            <label>Default only recipient</label>
+            <label lang="de-DE">Standard nur Empfänger</label>
+            <label lang="nl-NL">Standaard alleen huisadres</label>
             <defaultValue>0</defaultValue>
             <options>
                 <option>
@@ -2420,13 +1399,13 @@
                     <id>2</id>
                     <name>Mailbox package</name>
                     <name lang="de-DE">Mailbox-Paket</name>
-                    <name lang="nl-NL">Brievenbus pakket</name>
+                    <name lang="nl-NL">Brievenbuspakje</name>
                 </option>
                 <option>
                     <id>3</id>
                     <name>Letter</name>
                     <name lang="de-DE">Brief</name>
-                    <name lang="nl-NL">Brief</name>
+                    <name lang="nl-NL">Ongefrankeerd</name>
                 </option>
                 <option>
                     <id>4</id>
@@ -2471,7 +1450,7 @@
     <card>
         <title>Delivery options text</title>
         <title lang="de-DE">Delivery Options Text</title>
-        <title lang="nl-NL">Delivery options teksten</title>
+        <title lang="nl-NL">Bezorgopties teksten</title>
 
         <input-field type="text">
             <name>setPackageTypePackage</name>
@@ -2484,7 +1463,7 @@
             <name>setPackageTypeDefault</name>
             <label>Set package type default (button)</label>
             <label lang="de-DE">Legen Sie den Standard Pakkettyp fest (button)</label>
-            <label lang="nl-NL">Stel de standaardpakkettype in (button)</label>
+            <label lang="nl-NL">Standaardpakkettype instellen (button)</label>
         </input-field>
 
         <input-field type="text">
@@ -2547,7 +1526,7 @@
             <name>headerDeliveryOptions</name>
             <label>Delivery options title</label>
             <label lang="de-DE">Delivery options Titel</label>
-            <label lang="nl-NL">Delivery options titel</label>
+            <label lang="nl-NL">Bezorgopties titel</label>
         </input-field>
 
         <input-field type="text">
@@ -2560,7 +1539,7 @@
         <input-field type="text">
             <name>onlyRecipientTitle</name>
             <label>Only recipient</label>
-            <label lang="de-DE">Nur Heimatadresse</label>
+            <label lang="de-DE">Nur Empfänger</label>
             <label lang="nl-NL">Alleen huisadres</label>
         </input-field>
 
