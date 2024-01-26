@@ -1463,7 +1463,7 @@
             <name>setPackageTypeDefault</name>
             <label>Set package type default (button)</label>
             <label lang="de-DE">Legen Sie den Standard Pakkettyp fest (button)</label>
-            <label lang="nl-NL">Stel standaardpakkettype in (button)</label>
+            <label lang="nl-NL">Standaardpakkettype instellen (button)</label>
         </input-field>
 
         <input-field type="text">
