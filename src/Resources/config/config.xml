@@ -54,6 +54,7 @@
 
     <card>
         <title>General checkout settings</title>
+        <title lang="nl-NL">Algemene checkout instellingen</title>
         <input-field type="single-select">
             <name>platform</name>
             <label>Shop country</label>
@@ -79,6 +80,7 @@
         <input-field type="single-select">
             <name>packageType</name>
             <label>Package type</label>
+            <label lang="nl-NL">Pakkettype</label>
             <defaultValue>package</defaultValue>
             <options>
                 <option>
@@ -292,7 +294,7 @@
             <name>cutoffTimeEnabled</name>
             <label>Activate Cut off Time</label>
             <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -329,9 +331,11 @@
 
     <card>
         <title>PostNL checkout settings</title>
+        <title lang="nl-NL">PostNL checkout instellingen</title>
         <input-field type="bool">
             <name>enabledPostNL</name>
             <label>Activate PostNL</label>
+            <label lang="nl-NL">Activeer PostNL</label>
             <defaultValue>true</defaultValue>
             <helpText>This setting can't be disabled</helpText>
             <helpText lang="nl-NL">Deze instelling kan niet worden uitgeschakeld</helpText>
@@ -393,7 +397,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -415,7 +419,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -423,7 +427,7 @@
             <name>priceSameDayDeliveryPostNL</name>
             <label>Same-Day delivery fee</label>
             <label lang="de-DE">Preis für Lieferung am selben Tag</label>
-            <label lang="nl-NL">Kdsten dezelfde dag bezorging</label>
+            <label lang="nl-NL">Kosten dezelfde dag bezorging</label>
             <helpText>The amount of money you charge for this feature. If the amount is negative the price will appear
                 green in the delivery options to show it's a discount.
                 Leave empty to charge nothing.
@@ -437,7 +441,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -468,7 +472,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -498,7 +502,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -528,7 +532,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -558,7 +562,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -642,7 +646,7 @@
             <name>cutoffTimeEnabledPostNL</name>
             <label>Activate Cut off Time</label>
             <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -738,9 +742,11 @@
 
     <card>
         <title>DPD checkout settings</title>
+        <title lang="nl-NL">DPD checkout instellingen</title>
         <input-field type="bool">
             <name>enabledDPD</name>
             <label>Activate DPD</label>
+            <label lang="nl-NL">Activeer DPD</label>
         </input-field>
 
         <input-field type="bool">
@@ -769,7 +775,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -799,7 +805,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -883,7 +889,7 @@
             <name>cutoffTimeEnabledDPD</name>
             <label>Activate Cut off Time</label>
             <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -946,9 +952,11 @@
 
     <card>
         <title>BPost checkout settings</title>
+        <title lang="nl-NL">BPost checkout instellingen</title>
         <input-field type="bool">
             <name>enabledBPost</name>
             <label>Activate BPost</label>
+            <label lang="nl-NL">Activeer BPost</label>
         </input-field>
 
         <input-field type="bool">
@@ -977,7 +985,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -1007,7 +1015,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -1037,7 +1045,7 @@
             <helpText lang="nl-NL">Het bedrag dat u rekent voor deze functie. Als het bedrag negatief is, zal de prijs
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
-                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘General checkout settings’.
+                LET OP(!) Deze kosten worden toegevoegd aan de kosten onder ‘Algemene checkout instellingen’.
             </helpText>
         </input-field>
 
@@ -1110,7 +1118,7 @@
             <name>cutoffTimeEnabledBPost</name>
             <label>Activate Cut off Time</label>
             <label lang="de-DE">Aktivieren Sie die Cut-off Zeit</label>
-            <label lang="nl-NL">Activeer Cut off Time</label>
+            <label lang="nl-NL">Activeer cut off tijd</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
@@ -1147,7 +1155,7 @@
             <name>dropOffDelayEnabledBPost</name>
             <label>Activate Drop Off Delay</label>
             <label lang="de-DE">Absetzverzögerung aktivieren</label>
-            <label lang="nl-NL">Activeer de afleververtraging</label>
+            <label lang="nl-NL">Activeer afleververtraging</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
