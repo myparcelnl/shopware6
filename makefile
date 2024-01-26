@@ -36,6 +36,7 @@ install-plugin: ## Builds the package and installs the plugin
 
 build: ## Builds the package
 	@rm -rf "src/Resources/app/storefront/dist"
+	@mkdir -p "src/Resources/app/storefront/dist"
 	@rm -rf "src/Resources/public/administration"
 	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 bin/build-administration.sh
 	@cd "$$PROJECT_ROOT" && SHOPWARE_ADMIN_BUILD_ONLY_EXTENSIONS=1 bin/build-storefront.sh
