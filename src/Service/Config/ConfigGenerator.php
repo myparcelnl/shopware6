@@ -285,10 +285,10 @@ class ConfigGenerator
             if ($this->isSettingEnabled($salesChannelId, $settingToRetrieve, $carrier)) {
                 $setting = $this->getConfigValue($salesChannelId, $settingToRetrieve, $carrier);
 
-                if ($setting !== null) {
+                if (null !== $setting) {
                     $settings[$settingToRetrieve] = $setting;
                 }
-            } elseif (Str::startsWith('allow', $settingToRetrieve)) {
+            } elseif (Str::startsWith($settingToRetrieve, 'allow')) {
                 $settings[$settingToRetrieve] = false;
             }
         }
