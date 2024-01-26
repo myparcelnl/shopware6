@@ -10,14 +10,10 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class ConfigGenerator
 {
-    public const ALWAYS_ENABLED_SETTINGS = [
-        'allowEveningDelivery',
-        'allowMorningDelivery',
-        'allowOnlyRecipient',
-        'allowPickupLocations',
-        'allowSaturdayDelivery',
-        'allowShowDeliveryDate',
-        'allowSignature',
+    protected const FIELDS_WITH_ENABLED_PREFIX = [
+        'deliveryDaysWindow',
+        'dropOffDelay',
+        'cutoffTime',
     ];
 
     /**
@@ -57,7 +53,7 @@ class ConfigGenerator
         //convert npm carrier to config carrier
         $carrier = MyParcelCarriers::NPM_CARRIER_TO_CONFIG_CARRIER[$options['carrier']];
 
-        if (AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME === $options['packageType'] && $this->isSettingEnabled($salesChannelId, 'priceMailbox', $carrier)) {
+        if (isset($options['packageType']) && AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME === $options['packageType'] && $this->isSettingEnabled($salesChannelId, 'priceMailbox', $carrier)) {
             return $this->getConfigFloat($salesChannelId, 'priceMailbox', $carrier);
         }
 
@@ -292,7 +288,16 @@ class ConfigGenerator
                 if ($setting !== null) {
                     $settings[$settingToRetrieve] = $setting;
                 }
+            } elseif (Str::startsWith('allow', $settingToRetrieve)) {
+                $settings[$settingToRetrieve] = false;
             }
+        }
+
+        if (isset($settings['deliveryDaysWindow'])) {
+            $settings['featureShowDeliveryDate'] = true;
+        } else {
+            $settings['deliveryDaysWindow'] = $settings['allowShowDeliveryDate'] ?? false ? 1 : 0;
+            $settings['featureShowDeliveryDate'] = $settings['allowShowDeliveryDate'] ?? false;
         }
 
         if (!empty($this->getConfigString($salesChannelId, 'cutoffTime', $carrier)) && $this->isSettingEnabled($salesChannelId, 'cutoffTime', $carrier)
@@ -333,11 +338,7 @@ class ConfigGenerator
      */
     public function isSettingEnabled(string $salesChannelId, string $field, string $carrier = ""): bool
     {
-        if (in_array($field, self::ALWAYS_ENABLED_SETTINGS)) {
-            return true;
-        }
-
-        if (Str::startsWith($field, 'allow')) {
+        if (in_array($field, self::FIELDS_WITH_ENABLED_PREFIX)) {
             $carrier = "Enabled$carrier";
         }
 
