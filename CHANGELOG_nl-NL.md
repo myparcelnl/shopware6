@@ -1,3 +1,13 @@
+# Version 2.3.0
+
+#### New features
+- feat(checkout): pakkettype keuze toestaan
+
+#### Improvements
+- fix(settings): verwijder overbodige instellingen en corrigeer labels
+- fix(checkout): toon de juiste verzendprijzen
+- fix(checkout): voorkom adres aanpassingen die niet doorgegeven worden
+
 # Versie 2.2.0
 
 ### New features

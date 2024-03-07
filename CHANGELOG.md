@@ -1,3 +1,13 @@
+# Version 2.3.0
+
+#### New features
+- feat(checkout): allow package type choice
+
+#### Improvements
+- fix(settings): remove superfluous settings and correct labels
+- fix(checkout): show correct shipping prices
+- fix(checkout): prevent changes to address that are not propagated
+
 # Version 2.2.0
 
 #### New features
