@@ -1,3 +1,7 @@
+# Version 2.3.1
+
+- For Shopware 6.4
+
 # Version 2.3.0
 
 #### New features

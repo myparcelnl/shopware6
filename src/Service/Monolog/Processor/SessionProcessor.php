@@ -31,7 +31,7 @@ class SessionProcessor implements ProcessorInterface
 
         $sessionPart = substr($this->sessionId, 0, 4) . '...';
 
-        $record['formatted'] .= ' (Session: ' . $sessionPart . ')';
+        $record['message'] .= ' (Session: ' . $sessionPart . ')';
         $record['extra'] = array_merge(
             $record['extra'],
             [
