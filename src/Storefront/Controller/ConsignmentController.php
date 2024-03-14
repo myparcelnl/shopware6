@@ -47,6 +47,7 @@ class ConsignmentController extends StorefrontController
 
     private const REQUEST_KEY_ORDERS             = 'orders';
     private const REQUEST_KEY_LABEL_POSITIONS    = 'label_positions';
+    private const REQUEST_KEY_PRINT_SMALL_LABEL  = 'print_small_label';
     private const REQUEST_KEY_PACKAGE_TYPE       = 'package_type';
     private const REQUEST_KEY_NUMBER_OF_LABELS   = 'number_of_labels';
     private const REQUEST_KEY_SHIPMENT_ID        = 'shipment_id';
@@ -194,12 +195,12 @@ class ConsignmentController extends StorefrontController
             && !empty($request->get(self::REQUEST_KEY_LABEL_POSITIONS))
         ) {
             $labelPositions = $request->get(self::REQUEST_KEY_LABEL_POSITIONS);
+        } else if ('A6' === $this->systemConfigService->get('MyPaShopware.config.myParcelDefaultLabelFormat')
+            || 1 === $request->get(self::REQUEST_KEY_PRINT_SMALL_LABEL)
+        ) {
+            $labelPositions = null;
         } else {
-            if ($this->systemConfigService->get('MyPaShopware.config.myParcelDefaultLabelFormat') == 'A6') {
-                $labelPositions = null;
-            } else {
-                $labelPositions = [1];
-            }
+            $labelPositions = [1];
         }
 
         if (
