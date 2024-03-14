@@ -1,3 +1,13 @@
+# Version 2.3.0
+
+#### Neue Funktionen
+- feat(checkout): Auswahl des Pakettyps zulassen
+
+#### Verbesserungen
+- fix(settings): Überflüssige Einstellungen entfernen und Beschriftungen korrigieren
+- fix(checkout): korrekte Versandpreise anzeigen
+- fix(checkout): Verhindert Änderungen an der Adresse, die nicht weitergegeben werden
+
 # Version 2.2.0
 
 ### New features

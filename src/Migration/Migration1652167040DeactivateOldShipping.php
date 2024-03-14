@@ -23,7 +23,7 @@ class Migration1652167040DeactivateOldShipping extends MigrationStep
 
         try {
             $result = $connection->fetchFirstColumn("SELECT shipping_method_id FROM kiener_my_parcel_shipping_method");
-            if (count($result) < 0) {
+            if (count($result) === 0) {
                 return;
             }
             $myParcelShippingMethodIds = array_map($fromBytesToHex, $result);
