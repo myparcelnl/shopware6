@@ -7,8 +7,7 @@
                   data-delivery-options-plugin-options='{{ deliveryOptionsPluginOptions|json_encode }}'></template>
         <div id="myparcel-delivery-options"></div>
         {%  if deliveryOptionsPluginOptions.config.allowSetPackageTypeButton %}
-            <input type="button" id="myparcel-set-package-type-button" value="Options" class="btn btn-outline-primary
-             mt-2"/>
+            <div id="myparcel-set-package-type-button"><input type="radio" id="myparcel-set-package-type-radio" class="custom-control-input shipping-method-input"><label class="custom-control-label shipping-method-label" for="myparcel-set-package-type-radio">Options</label></div>
         {%  endif %}
     {% endif %}
 {% endblock %}

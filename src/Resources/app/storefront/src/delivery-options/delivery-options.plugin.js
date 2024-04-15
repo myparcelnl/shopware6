@@ -24,6 +24,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     init() {
         //Register elements
         this._registerElements();
+        this._setPackageTypeButton();
 
         //Add mutation listener
         this._addMutationListener();
@@ -39,43 +40,51 @@ export default class DeliveryOptionsPlugin extends Plugin {
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
+        console.warn(JSON.parse(JSON.stringify(window.MyParcelConfig)));
         // Tell the plugin to re-render
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
     };
 
     _enableSetPackageType() {
-        const btn = document.getElementById('myparcel-set-package-type-button');
-        if (! btn) return;
+        const div = document.getElementById('myparcel-set-package-type-button');
+        if (! div) return;
 
         const defaultPackageType = this.options.config.defaultPackageType;
 
         if ('package' === defaultPackageType) {
-            btn.remove();
+            div.remove();
         } else {
-            btn.addEventListener('click', () => {
-                this.disable = true;
+            div.addEventListener('click', () => {
                 const currentPackageType = this.options.config.packageType;
                 this._setPackageType(currentPackageType === defaultPackageType ? 'package' : defaultPackageType);
             });
         }
     }
 
-    _setPackageTypeButtonText() {
-        const btn = document.getElementById('myparcel-set-package-type-button');
-        if (! btn) return;
+    _setPackageTypeButton() {
+        const div = document.getElementById('myparcel-set-package-type-button');
+        if (! div) return;
+
+        const label = div.querySelector('label');
+        if (! label) return;
 
         const defaultPackageType = this.options.config.defaultPackageType;
         const currentPackageType = this.options.config.packageType;
+
+        if (defaultPackageType !== currentPackageType) {
+            // to allow only pickup, both delivery options and delivery options for postnl must be disabled
+            this.options.config.carrierSettings.postnl.allowDeliveryOptions = false;
+            this.options.config.allowDeliveryOptions = false;
+        }
 
         const packageText = this.options.translations.setPackageTypePackage;
         const defaultText = this.options.translations.setPackageTypeDefault;
 
         if (defaultPackageType === currentPackageType) {
-            btn.value = packageText ? packageText : 'Kies pakket';
+            label.innerText = packageText ? packageText : 'Kies pakket';
         } else {
-            btn.value = defaultText ? defaultText : 'Kies standaard';
+            label.innerText = defaultText ? defaultText : 'Kies standaard';
         }
-        btn.disable = false;
     }
 
     _disableButton(disable) {
