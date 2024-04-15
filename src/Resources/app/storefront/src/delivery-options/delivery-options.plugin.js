@@ -40,7 +40,6 @@ export default class DeliveryOptionsPlugin extends Plugin {
         //Set address
         window.MyParcelConfig.address = this.options.address;
 
-        console.warn(JSON.parse(JSON.stringify(window.MyParcelConfig)));
         // Tell the plugin to re-render
         document.dispatchEvent(new Event('myparcel_update_delivery_options'));
     };
@@ -71,7 +70,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
         const defaultPackageType = this.options.config.defaultPackageType;
         const currentPackageType = this.options.config.packageType;
 
-        if (defaultPackageType !== currentPackageType) {
+        if (defaultPackageType !== currentPackageType && this.options.config.allowSetPickupOnly) {
             // to allow only pickup, both delivery options and delivery options for postnl must be disabled
             this.options.config.carrierSettings.postnl.allowDeliveryOptions = false;
             this.options.config.allowDeliveryOptions = false;
@@ -154,7 +153,7 @@ export default class DeliveryOptionsPlugin extends Plugin {
     _addListeners() {
         document.addEventListener('myparcel_updated_delivery_options', (event) => {
             this._submitToCart(event.detail);
-            this._setPackageTypeButtonText();
+            this._setPackageTypeButton();
         });
     };
 

@@ -145,7 +145,7 @@ class ConfigGenerator
      */
     public function generateConfigForPackage(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        $config                             = [];
+        $config                             = $this->getPackageTypeSettings($salesChannelContext);
         $config                             = array_merge(
             $config,
             $this->getGeneralSettings($salesChannelContext, $locale)
@@ -212,15 +212,15 @@ class ConfigGenerator
             'allowRetry'  => false,
         ];
 
-        return array_merge($settings, $this->getPackageTypes($salesChannelContext), $this->generateConfig($salesChannelContext->getSalesChannelId()));
+        return array_merge($settings, $this->generateConfig($salesChannelContext->getSalesChannelId()));
     }
 
     /**
      * @param  \Shopware\Core\System\SalesChannel\SalesChannelContext $salesChannelContext
      *
-     * @return array (packageType, defaultPackageType)
+     * @return array
      */
-    private function getPackageTypes(SalesChannelContext $salesChannelContext): array
+    private function getPackageTypeSettings(SalesChannelContext $salesChannelContext): array
     {
         $cc = $salesChannelContext->getShippingLocation()
             ->getCountry()
@@ -243,6 +243,10 @@ class ConfigGenerator
             'defaultPackageType' => $defaultPackageType,
             'allowSetPackageTypeButton' => (bool) $this->systemConfigService->getString(
                 'MyPaShopware.config.allowSetPackageTypeButton',
+                $salesChannelContext->getSalesChannelId()
+            ),
+            'allowSetPickupOnly' => (bool) $this->systemConfigService->getString(
+                'MyPaShopware.config.allowSetPickupOnly',
                 $salesChannelContext->getSalesChannelId()
             ),
         ];

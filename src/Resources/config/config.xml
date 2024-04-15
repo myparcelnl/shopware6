@@ -129,6 +129,14 @@
             <defaultValue>true</defaultValue>
         </input-field>
 
+        <input-field type="bool">
+            <name>allowSetPickupOnly</name>
+            <label>When package type package is chosen, allow pickup only</label>
+            <label lang="de-DE">Wenn die Paketart „Paket“ ausgewählt ist, nur Abholung zulassen</label>
+            <label lang="nl-NL">Als u voor pakkettype pakket kiest, alleen ophalen toestaan</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
         <input-field type="float">
             <name>priceMorningDelivery</name>
             <label>Morning delivery fee (optional)</label>
