@@ -1,6 +1,6 @@
 import './init/api-service.init';
 import './module/my-parcel';
-import './module/sw-order';
+import './module/sw-order/page/sw-order-list/sw-order-list';
 import './service/myparcelApiTestService';
 import './service/myparcelDropOffService'
 import './component/myparcel-api-test-button';
