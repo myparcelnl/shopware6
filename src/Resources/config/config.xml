@@ -133,7 +133,7 @@
             <name>allowSetPickupOnly</name>
             <label>When package type package is chosen, allow pickup only</label>
             <label lang="de-DE">Wenn die Paketart „Paket“ ausgewählt ist, nur Abholung zulassen</label>
-            <label lang="nl-NL">Als u voor pakkettype pakket kiest, alleen ophalen toestaan</label>
+            <label lang="nl-NL">Wanneer pakkettype "pakket" wordt gekozen, enkel ophalen toestaan</label>
             <defaultValue>false</defaultValue>
         </input-field>
 
