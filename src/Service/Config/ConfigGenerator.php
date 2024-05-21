@@ -145,11 +145,14 @@ class ConfigGenerator
      */
     public function generateConfigForPackage(SalesChannelContext $salesChannelContext, string $locale): array
     {
-        $config                             = $this->getPackageTypeSettings($salesChannelContext);
-        $config                             = array_merge(
-            $config,
+        $config = array_merge(
+            $this->getPackageTypeSettings($salesChannelContext),
             $this->getGeneralSettings($salesChannelContext, $locale)
         );
+
+        /* set the current package type in cart, for correct calculation of shipping costs */
+        $this->cartService->addData([CartService::PACKAGE_TYPE_CART_DATA_KEY => $config['packageType']], $salesChannelContext);
+
         $config['carrierSettings']          = $this->getCarrierSettings($salesChannelContext->getSalesChannelId());
         $config['translationsFromSettings'] = $this->getDeliveryOptionsStrings(
             $salesChannelContext->getSalesChannelId()
