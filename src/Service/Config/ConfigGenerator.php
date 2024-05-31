@@ -239,8 +239,7 @@ class ConfigGenerator
                 ? $this->systemConfigService->getString(
                 'MyPaShopware.config.packageType',
                 $salesChannelContext->getSalesChannelId()
-            )
-                : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
+            ) : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
 
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
             $chosenPackageType = $this->cartService->getByKey(CartService::PACKAGE_TYPE_CART_DATA_KEY, $salesChannelContext) ?? $defaultPackageType;
