@@ -229,18 +229,18 @@ class ConfigGenerator
             ->getCountry()
             ->getIso();
         $weight = $this->cartService->getWeightInGrams($salesChannelContext);
-		$mailboxWeightLimit = (int) $this->systemConfigService->getString(
-			'MyPaShopware.config.mailboxWeightLimitGrams',
-			$salesChannelContext->getSalesChannelId()
-		) ?: 2000;
+        $mailboxWeightLimit = (int)$this->systemConfigService->getString(
+            'MyPaShopware.config.mailboxWeightLimitGrams',
+            $salesChannelContext->getSalesChannelId()
+        ) ?: 2000;
 
         $chosenPackageType = $defaultPackageType =
-			(AbstractConsignment::CC_NL === $cc && $weight <= $mailboxWeightLimit)
-            ? $this->systemConfigService->getString(
+            (AbstractConsignment::CC_NL === $cc && $weight <= $mailboxWeightLimit)
+                ? $this->systemConfigService->getString(
                 'MyPaShopware.config.packageType',
                 $salesChannelContext->getSalesChannelId()
             )
-            : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
+                : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
 
         if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
             $chosenPackageType = $this->cartService->getByKey(CartService::PACKAGE_TYPE_CART_DATA_KEY, $salesChannelContext) ?? $defaultPackageType;
@@ -278,7 +278,7 @@ class ConfigGenerator
             'allowEveningDelivery',
             'priceEveningDelivery',
             'priceSignature',
-			'showPriceSurcharge',
+            'showPriceSurcharge',
             'allowOnlyRecipient',
             'priceOnlyRecipient',
             'pricePickup',

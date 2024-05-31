@@ -23,10 +23,10 @@ class MyParcelController extends StorefrontController
      */
     private $consignmentService;
 
-	/**
-	 * @var MyParcelFacade
-	 */
-	private $myParcelFacade;
+    /**
+     * @var MyParcelFacade
+     */
+    private $myParcelFacade;
 
 	/**
      * MyParcelController constructor.

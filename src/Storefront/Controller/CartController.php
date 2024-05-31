@@ -55,10 +55,10 @@ class CartController extends AbstractController
             return new SymfonyJsonResponse($json, 200, [], true);
         }
 
-		$this->logger->warning('No deliverData found', ['data' => $data]);
+        $this->logger->warning('No deliverData found', ['data' => $data]);
 
-		return $this->json('No delivery data found', 500);
-	}
+        return $this->json('No delivery data found', 500);
+    }
 
     /**
      * @Route("/widget/checkout/myparcel/set-package-type", name="frontend.checkout.myparcel.set-package-type", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=false})
