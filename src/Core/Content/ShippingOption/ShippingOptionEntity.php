@@ -68,7 +68,7 @@ class ShippingOptionEntity extends Entity //NOSONAR
     protected $packageType;
 
     /**
-     * @var date
+     * @var \DateTimeImmutable
      */
     protected $deliveryDate;
 
@@ -378,10 +378,11 @@ class ShippingOptionEntity extends Entity //NOSONAR
         return $this->deliveryDate;
     }
 
-    /**
-     * @param date $deliveryDate
-     */
-    public function setDeliveryDate(date $deliveryDate): self
+	/**
+	 * @param \DateTimeImmutable $deliveryDate
+	 * @return ShippingOptionEntity
+	 */
+    public function setDeliveryDate(\DateTimeImmutable $deliveryDate): self
     {
         $this->deliveryDate = $deliveryDate;
         return $this;

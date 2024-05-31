@@ -121,6 +121,20 @@
             </helpText>
         </input-field>
 
+        <input-field type="int">
+            <name>mailboxWeightLimitGrams</name>
+            <label>Mailbox weight in grams</label>
+            <label lang="de-DE">Gewicht der Mailbox in Gramm</label>
+            <label lang="nl-NL">Brievenbuspakje gewicht in grammen</label>
+            <helpText>Above this weight, orders will automatically be considered package, not mailbox.
+            </helpText>
+            <helpText lang="de-DE">Über diesem Gewicht werden Bestellungen automatisch als Pakete und nicht als Briefkästen betrachtet.
+            </helpText>
+            <helpText lang="nl-NL">Boven dit gewicht worden bestellingen automatisch beschouwd als pakket, niet als
+                brievenbuspakje.
+            </helpText>
+        </input-field>
+
         <input-field type="bool">
             <name>allowSetPackageTypeButton</name>
             <label>Allow set package type button</label>

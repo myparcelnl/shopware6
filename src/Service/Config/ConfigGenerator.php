@@ -229,8 +229,13 @@ class ConfigGenerator
             ->getCountry()
             ->getIso();
         $weight = $this->cartService->getWeightInGrams($salesChannelContext);
+		$mailboxWeightLimit = (int) $this->systemConfigService->getString(
+			'MyPaShopware.config.mailboxWeightLimitGrams',
+			$salesChannelContext->getSalesChannelId()
+		) ?: 2000;
 
-        $chosenPackageType = $defaultPackageType = (AbstractConsignment::CC_NL === $cc && $weight <= 2000)
+        $chosenPackageType = $defaultPackageType =
+			(AbstractConsignment::CC_NL === $cc && $weight <= $mailboxWeightLimit)
             ? $this->systemConfigService->getString(
                 'MyPaShopware.config.packageType',
                 $salesChannelContext->getSalesChannelId()
