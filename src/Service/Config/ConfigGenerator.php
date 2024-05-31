@@ -278,6 +278,7 @@ class ConfigGenerator
             'allowEveningDelivery',
             'priceEveningDelivery',
             'priceSignature',
+			'showPriceSurcharge',
             'allowOnlyRecipient',
             'priceOnlyRecipient',
             'pricePickup',

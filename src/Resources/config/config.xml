@@ -128,11 +128,12 @@
             <label lang="nl-NL">Brievenbuspakje gewicht in grammen</label>
             <helpText>Above this weight, orders will automatically be considered package, not mailbox.
             </helpText>
-            <helpText lang="de-DE">Über diesem Gewicht werden Bestellungen automatisch als Pakete und nicht als Briefkästen betrachtet.
+            <helpText lang="de-DE">Über diesem Gewicht werden Bestellungen automatisch als Paket und nicht als Mailbox-Paket betrachtet.
             </helpText>
             <helpText lang="nl-NL">Boven dit gewicht worden bestellingen automatisch beschouwd als pakket, niet als
                 brievenbuspakje.
             </helpText>
+            <defaultValue>2000</defaultValue>
         </input-field>
 
         <input-field type="bool">
@@ -288,6 +289,14 @@
                 groen verschijnen in de bezorgopties om aan te tonen dat het om een korting gaat.
                 Leeg laten om niets te rekenen.
             </helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showPriceSurcharge</name>
+            <label>Show price as surcharge in delivery options</label>
+            <label lang="de-DE">Preis als Aufpreis in den Lieferoptionen anzeigen</label>
+            <label lang="nl-NL">Prijs als toeslag weergeven bij bezorgopties</label>
+            <defaultValue>false</defaultValue>
         </input-field>
 
         <input-field type="bool">
