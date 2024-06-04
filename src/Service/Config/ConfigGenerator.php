@@ -229,25 +229,31 @@ class ConfigGenerator
             ->getCountry()
             ->getIso();
         $weight = $this->cartService->getWeightInGrams($salesChannelContext);
+        $mailboxWeightLimit = (int) $this->systemConfigService->getString(
+            'MyPaShopware.config.mailboxWeightLimitGrams',
+            $salesChannelContext->getSalesChannelId()
+        ) ?: 2000;
 
-        $chosenPackageType = $defaultPackageType = (AbstractConsignment::CC_NL === $cc && $weight <= 2000)
-            ? $this->systemConfigService->getString(
+        $allowSetPackageTypeButton = (bool) $this->systemConfigService->getString(
+            'MyPaShopware.config.allowSetPackageTypeButton',
+            $salesChannelContext->getSalesChannelId()
+        );
+
+        $chosenPackageType = $defaultPackageType =
+            (AbstractConsignment::CC_NL === $cc && $weight <= $mailboxWeightLimit)
+                ? $this->systemConfigService->getString(
                 'MyPaShopware.config.packageType',
                 $salesChannelContext->getSalesChannelId()
-            )
-            : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
+            ) : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
 
-        if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
+        if ($allowSetPackageTypeButton && AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
             $chosenPackageType = $this->cartService->getByKey(CartService::PACKAGE_TYPE_CART_DATA_KEY, $salesChannelContext) ?? $defaultPackageType;
         }
 
         return [
             'packageType' => $chosenPackageType,
             'defaultPackageType' => $defaultPackageType,
-            'allowSetPackageTypeButton' => (bool) $this->systemConfigService->getString(
-                'MyPaShopware.config.allowSetPackageTypeButton',
-                $salesChannelContext->getSalesChannelId()
-            ),
+            'allowSetPackageTypeButton' => $allowSetPackageTypeButton,
             'allowSetPickupOnly' => (bool) $this->systemConfigService->getString(
                 'MyPaShopware.config.allowSetPickupOnly',
                 $salesChannelContext->getSalesChannelId()
@@ -273,6 +279,7 @@ class ConfigGenerator
             'allowEveningDelivery',
             'priceEveningDelivery',
             'priceSignature',
+            'showPriceSurcharge',
             'allowOnlyRecipient',
             'priceOnlyRecipient',
             'pricePickup',

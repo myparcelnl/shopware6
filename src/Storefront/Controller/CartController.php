@@ -53,11 +53,11 @@ class CartController extends AbstractController
             $json = json_encode(['content' => $html->getContent()], ENT_QUOTES);
 
             return new SymfonyJsonResponse($json, 200, [], true);
-        } else {
-            $this->logger->warning('No deliverData found', ['data' => $data]);
-
-            return $this->json('No delivery data found', 500);
         }
+
+        $this->logger->warning('No deliverData found', ['data' => $data]);
+
+        return $this->json('No delivery data found', 500);
     }
 
     /**
