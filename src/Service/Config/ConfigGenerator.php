@@ -234,6 +234,11 @@ class ConfigGenerator
             $salesChannelContext->getSalesChannelId()
         ) ?: 2000;
 
+        $allowSetPackageTypeButton = (bool) $this->systemConfigService->getString(
+            'MyPaShopware.config.allowSetPackageTypeButton',
+            $salesChannelContext->getSalesChannelId()
+        );
+
         $chosenPackageType = $defaultPackageType =
             (AbstractConsignment::CC_NL === $cc && $weight <= $mailboxWeightLimit)
                 ? $this->systemConfigService->getString(
@@ -241,17 +246,14 @@ class ConfigGenerator
                 $salesChannelContext->getSalesChannelId()
             ) : AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
 
-        if (AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
+        if ($allowSetPackageTypeButton && AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME !== $chosenPackageType) {
             $chosenPackageType = $this->cartService->getByKey(CartService::PACKAGE_TYPE_CART_DATA_KEY, $salesChannelContext) ?? $defaultPackageType;
         }
 
         return [
             'packageType' => $chosenPackageType,
             'defaultPackageType' => $defaultPackageType,
-            'allowSetPackageTypeButton' => (bool) $this->systemConfigService->getString(
-                'MyPaShopware.config.allowSetPackageTypeButton',
-                $salesChannelContext->getSalesChannelId()
-            ),
+            'allowSetPackageTypeButton' => $allowSetPackageTypeButton,
             'allowSetPickupOnly' => (bool) $this->systemConfigService->getString(
                 'MyPaShopware.config.allowSetPickupOnly',
                 $salesChannelContext->getSalesChannelId()
