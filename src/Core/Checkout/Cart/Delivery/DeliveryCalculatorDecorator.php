@@ -18,7 +18,13 @@ use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Shopware\Core\Checkout\Cart\Tax\PercentageTaxRuleBuilder;
-use Shopware\Core\Checkout\Cart\Tax\TaxDetector;
+/* AbstractTaxDetector is introduced in 6.5.8.0 and already in use */
+if (!class_exists('Shopware\Core\Checkout\Cart\Tax\AbstractTaxDetector', false)) {
+    class_alias('Shopware\Core\Checkout\Cart\Tax\AbstractTaxDetector', 'AbstractTaxDetector');
+} else {
+    class_alias('Shopware\Core\Checkout\Cart\Tax\TaxDetector', 'AbstractTaxDetector');
+}
+use AbstractTaxDetector;
 use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceCollection;
 use Shopware\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceEntity;
 use Shopware\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
@@ -29,9 +35,6 @@ use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use stdClass;
 
@@ -48,7 +51,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $percentageTaxRuleBuilder;
 
     /**
-     * @var TaxDetector
+     * @var AbstractTaxDetector
      */
     private $taxDetector;
 
@@ -65,14 +68,14 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     /**
      * @param QuantityPriceCalculator   $priceCalculator
      * @param PercentageTaxRuleBuilder  $percentageTaxRuleBuilder
-     * @param TaxDetector               $taxDetector
+     * @param AbstractTaxDetector       $taxDetector
      * @param EntityRepository $shippingMethodRepository
      * @param ConfigGenerator           $configGenerator
      */
     public function __construct(
         QuantityPriceCalculator   $priceCalculator,
         PercentageTaxRuleBuilder  $percentageTaxRuleBuilder,
-        TaxDetector               $taxDetector,
+        AbstractTaxDetector       $taxDetector,
         EntityRepository $shippingMethodRepository,
         ConfigGenerator           $configGenerator
     )
