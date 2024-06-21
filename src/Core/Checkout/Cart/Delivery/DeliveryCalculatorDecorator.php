@@ -19,7 +19,7 @@ use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Shopware\Core\Checkout\Cart\Tax\PercentageTaxRuleBuilder;
 /* AbstractTaxDetector is introduced in 6.5.8.0 and already in use */
-if (!class_exists('Shopware\Core\Checkout\Cart\Tax\AbstractTaxDetector', false)) {
+if (class_exists('Shopware\Core\Checkout\Cart\Tax\AbstractTaxDetector', false)) {
     class_alias('Shopware\Core\Checkout\Cart\Tax\AbstractTaxDetector', 'AbstractTaxDetector');
 } else {
     class_alias('Shopware\Core\Checkout\Cart\Tax\TaxDetector', 'AbstractTaxDetector');
