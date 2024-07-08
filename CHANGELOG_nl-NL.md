@@ -1,3 +1,20 @@
+# Versie 2.5.0
+
+#### Nieuwe functies
+
+- feature: sta het instellen van het maximaal brievenbusgewicht toe
+
+#### Verbeteringen
+
+- fix: voorkom type error in DeliveryCalculatorDecorator
+- fix(afrekenen): voorkom dat het winkelwagentje blijft hangen op de brievenbusprijs
+- fix(afrekenen): verander het pakkettype goed
+- fix(labels): print a6 wanneer daarom wordt gevraagd
+
+# Versie 2.4.0
+
+- Alleen voor shopware 6.4.
+
 # Version 2.3.0
 
 #### New features
