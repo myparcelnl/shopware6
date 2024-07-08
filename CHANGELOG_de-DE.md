@@ -1,3 +1,15 @@
+# Version 2.4.0
+
+#### Neue Funktionen
+
+- Feature: Maximales Postfachgewicht kann eingestellt werden
+
+#### Verbesserungen
+
+- Fix (Checkout): Verhindert, dass der Einkaufswagen beim Postfachpreis hängen bleibt
+- Fix (Checkout): Pakettyp einfach wechseln
+- Fix (Labels): A6 auf Anfrage drucken
+
 # Version 2.3.0
 
 #### Neue Funktionen

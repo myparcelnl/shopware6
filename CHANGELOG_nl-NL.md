@@ -1,3 +1,15 @@
+# Version 2.4.0
+
+#### Nieuwe functies
+
+- feat: sta het instellen van maximaal brievenbusgewicht toe
+
+#### Verbeteringen
+
+- fix(afrekenen): voorkom dat het winkelwagentje blijft hangen op de brievenbusprijs
+- fix(afrekenen): verander het pakkettype goed
+- fix(labels): print a6 wanneer daarom wordt gevraagd
+
 # Version 2.3.0
 
 #### New features

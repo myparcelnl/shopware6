@@ -1,3 +1,15 @@
+# Version 2.4.0
+
+#### New features
+
+- feat: allow setting max mailbox weight
+
+#### Improvements
+
+- fix(checkout): prevent cart getting stuck on mailbox price
+- fix(checkout): switch package type nicely
+- fix(labels): print a6 when requested
+
 # Version 2.3.0
 
 #### New features
