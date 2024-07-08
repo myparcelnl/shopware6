@@ -1,0 +1,25 @@
+{% block sw_order_list_grid_columns_billing_address %}
+    {% parent %}
+    <template #column-afbeelding="{ item }">
+        <div>Afbeelding template</div>
+    </template>
+    <template #column-quantitycount="{ item }">
+        <div>Quantity template</div>
+    </template>
+    <template #column-download="{ item }">
+        <div>Download template</div>
+    </template>
+{% endblock %}
+
+                        {% block sw_order_list_grid_columns_actions_view %}
+{#                            <sw-button :disabled="!createMultipleConsignmentsAvailable" variant="primary" :square="false" :block="false" :isLoading="false" @click="onOpenCreateMultipleConsignmentsModal">#}
+{#                                {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}#}
+{#                            </sw-button>#}
+                            <sw-context-menu-item
+                                    class="sw-order-list__order-export-action"
+                                    :router-link="{ name: 'sw.order.export', params: { id: item.id } }"
+                            >
+                                {{ $tc('sw-myparcel.orders.buttons.createConsignmentsButton') }}
+                            </sw-context-menu-item>
+                            {% parent %}
+                        {% endblock %}
