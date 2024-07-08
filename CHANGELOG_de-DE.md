@@ -1,3 +1,20 @@
+# Version 2.5.0
+
+#### Neue Funktionen
+
+- Feature: Einstellung des maximalen Postfachgewichts möglich
+
+#### Verbesserungen
+
+- Fix: Vermeidung von Typfehlern im DeliveryCalculatorDecorator
+- Fix (Checkout): Vermeidung von Hängenbleiben des Einkaufswagens beim Postfachpreis
+- Fix (Checkout): Pakettyp einfach wechseln
+- Fix (Labels): A6 auf Anfrage drucken
+
+# Version 2.4.0
+
+- Nur für Shopware 6.4.
+
 # Version 2.3.0
 
 #### Neue Funktionen
