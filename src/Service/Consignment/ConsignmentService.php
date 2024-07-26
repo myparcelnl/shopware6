@@ -2,6 +2,7 @@
 
 namespace MyPa\Shopware\Service\Consignment;
 
+use Composer\InstalledVersions;
 use Exception;
 use MyPa\Shopware\Core\Content\Shipment\ShipmentEntity;
 use MyPa\Shopware\Exception\Config\ConfigFieldValueMissingException;
@@ -467,7 +468,12 @@ class ConsignmentService
         $shipmentData = [];
         $shipments = [];
 
-        $consignments->setUserAgent('Shopware', $this->shopwareVersion);
+        $rootPackage = InstalledVersions::getRootPackage();
+
+        $consignments->setUserAgents([
+            'MyParcel-Shopware' => $rootPackage['pretty_version'],
+            'Shopware'          => $this->shopwareVersion]
+        );
 
         /** @var OrderEntity $order */
         foreach ($ordersData as $orderData) {
