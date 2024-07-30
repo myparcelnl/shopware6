@@ -5,6 +5,8 @@ namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 use MyPa\Shopware\Defaults as MyParcelDefaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Shopware\CartService;
+use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
+use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryCalculator;
@@ -32,6 +34,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use stdClass;
 
@@ -333,6 +336,21 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
             if (!$price) {
                 continue;
+            }
+
+
+            $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
+            $myParcelData = $cartExtension ? $cartExtension->getVars() : [];
+            if (empty($myParcelData)
+                || empty($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY])
+            ) {
+                $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY] = 'mailbox';
+                // todo: init 'deliveryData' thing with default delivery data (carrier, ispickup, etc.)
+                $myParcelData['myparcel'] = [];
+                $myParcelData['myparcel']['deliveryData'] = new stdClass();
+                $myParcelData['myparcel']['deliveryData']->carrier = CarrierPostNL::NAME;
+                $cartExtension = new ArrayStruct($myParcelData);
+                $cart->addExtension(MyParcelDefaults::CART_EXTENSION_KEY, $cartExtension);
             }
 
             $costs = $this->calculateShippingCosts(
