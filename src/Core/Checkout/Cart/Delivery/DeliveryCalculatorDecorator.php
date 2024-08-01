@@ -226,6 +226,18 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
+        if (!$calculatedLineItems->filter(static function($lineItem){
+            if (!$lineItem->getDeliveryInformation()) {
+                return false;
+            }
+            if ($lineItem->getDeliveryInformation()->getFreeDelivery()) {
+                return false;
+            }
+            return true;
+        })->count()) {
+            $price = 0;
+        }
+
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
         if (! empty($myParcelData)
