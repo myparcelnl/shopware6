@@ -231,7 +231,9 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             $cc = $context->getShippingLocation()
                 ->getCountry()
                 ->getIso();
-            // use default delivery options if not set
+            /**
+             * use default delivery options if not set
+             */
             if (!isset($myParcelData['myparcel']['deliveryData'])) {
                 $packageTypeName = AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
 
@@ -242,13 +244,14 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                     ) === AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME
                 ) {
                     $weight = 0.0;
+
                     foreach ($calculatedLineItems as $lineItem) {
                         if (!$lineItem->getDeliveryInformation()) {
                             continue;
                         }
-                        $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight();
+                        $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight() * 1000;
                     }
-                    $weight *= 1000;
+
                     $mailboxWeightLimit = (int)$this->systemConfigService->getString(
                         'MyPaShopware.config.mailboxWeightLimitGrams',
                         $context->getSalesChannelId()
