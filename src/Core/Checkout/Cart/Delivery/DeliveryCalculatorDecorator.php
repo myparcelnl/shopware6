@@ -226,6 +226,18 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
+        if (!$calculatedLineItems->filter(static function($lineItem){
+            if (!$lineItem->getDeliveryInformation()) {
+                return false;
+            }
+            if ($lineItem->getDeliveryInformation()->getFreeDelivery()) {
+                return false;
+            }
+            return true;
+        })->count()) {
+            $price = 0;
+        }
+
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
         if (! empty($myParcelData)
@@ -238,6 +250,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             if (isset($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY]) && $cc === AbstractConsignment::CC_NL) {
                 $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY];
             }
+
             /** @var stdClass $deliveryData */
             $deliveryData = $myParcelData['myparcel']['deliveryData'];
             $deliveryData = json_decode(json_encode($deliveryData), true);
