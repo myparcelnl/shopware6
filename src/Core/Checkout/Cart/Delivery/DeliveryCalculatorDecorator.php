@@ -258,7 +258,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                         $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight() * 1000;
                     }
 
-                    $mailboxWeightLimit = (int)$this->systemConfigService->getString(
+                    $mailboxWeightLimit = (int) $this->systemConfigService->getString(
                         'MyPaShopware.config.mailboxWeightLimitGrams',
                         $context->getSalesChannelId()
                     ) ?: 2000;
@@ -269,7 +269,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                 }
 
                 $myParcelData['myparcel'] = [];
-                $myParcelData['myparcel']['deliveryData'] = (object)DeliveryOptionsAdapterFactory::create([
+                $myParcelData['myparcel']['deliveryData'] = (object) DeliveryOptionsAdapterFactory::create([
                     'deliveryType' => 'standard',
                     'packageType' => $packageTypeName,
                     'carrier' => 'postnl',
