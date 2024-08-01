@@ -5,8 +5,7 @@ namespace MyPa\Shopware\Core\Checkout\Cart\Delivery;
 use MyPa\Shopware\Defaults as MyParcelDefaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
 use MyPa\Shopware\Service\Shopware\CartService;
-use MyParcelNL\Sdk\src\Model\Carrier\AbstractCarrier;
-use MyParcelNL\Sdk\src\Model\Carrier\CarrierPostNL;
+use MyParcelNL\Sdk\src\Factory\DeliveryOptionsAdapterFactory;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\Delivery\DeliveryCalculator;
@@ -28,14 +27,10 @@ use Shopware\Core\Checkout\Shipping\Exception\ShippingMethodNotFoundException;
 use Shopware\Core\Checkout\Shipping\ShippingException;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Defaults;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use stdClass;
 
 class DeliveryCalculatorDecorator extends DeliveryCalculator
@@ -56,34 +51,34 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
     private $taxDetector;
 
     /**
-     * @var EntityRepository
-     */
-    private $shippingMethodRepository;
-
-    /**
      * @var ConfigGenerator
      */
     private $configGenerator;
 
     /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
+
+    /**
      * @param QuantityPriceCalculator   $priceCalculator
      * @param PercentageTaxRuleBuilder  $percentageTaxRuleBuilder
      * @param TaxDetector               $taxDetector
-     * @param EntityRepository $shippingMethodRepository
+     * @param SystemConfigService $systemConfigService
      * @param ConfigGenerator           $configGenerator
      */
     public function __construct(
         QuantityPriceCalculator   $priceCalculator,
         PercentageTaxRuleBuilder  $percentageTaxRuleBuilder,
         TaxDetector               $taxDetector,
-        EntityRepository $shippingMethodRepository,
+        SystemConfigService       $systemConfigService,
         ConfigGenerator           $configGenerator
     )
     {
         $this->priceCalculator = $priceCalculator;
         $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
         $this->taxDetector = $taxDetector;
-        $this->shippingMethodRepository = $shippingMethodRepository;
+        $this->systemConfigService = $systemConfigService;
         $this->configGenerator = $configGenerator;
 
         parent::__construct($priceCalculator, $percentageTaxRuleBuilder);
@@ -231,13 +226,48 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
         $myParcelData  = $cartExtension ? $cartExtension->getVars() : [];
-        if (! empty($myParcelData)
-            && ! empty($myParcelData['myparcel']['deliveryData'])
-            && $context->getShippingMethod()->getId() === $shippingMethod->getId()
-        ) {
+
+        if ($context->getShippingMethod()->getId() === $shippingMethod->getId()) {
             $cc = $context->getShippingLocation()
                 ->getCountry()
                 ->getIso();
+            // use default delivery options if not set
+            if (!isset($myParcelData['myparcel']['deliveryData'])) {
+                $packageTypeName = AbstractConsignment::PACKAGE_TYPE_PACKAGE_NAME;
+
+                if (AbstractConsignment::CC_NL === $cc
+                    && $this->systemConfigService->getString(
+                        'MyPaShopware.config.packageType',
+                        $context->getSalesChannelId()
+                    ) === AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME
+                ) {
+                    $weight = 0.0;
+                    foreach ($calculatedLineItems as $lineItem) {
+                        if (!$lineItem->getDeliveryInformation()) {
+                            continue;
+                        }
+                        $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight();
+                    }
+                    $weight *= 1000;
+                    $mailboxWeightLimit = (int)$this->systemConfigService->getString(
+                        'MyPaShopware.config.mailboxWeightLimitGrams',
+                        $context->getSalesChannelId()
+                    ) ?: 2000;
+
+                    if ($weight <= $mailboxWeightLimit) {
+                        $packageTypeName = AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME;
+                    }
+                }
+
+                $myParcelData['myparcel'] = [];
+                $myParcelData['myparcel']['deliveryData'] = (object)DeliveryOptionsAdapterFactory::create([
+                    'deliveryType' => 'standard',
+                    'packageType' => $packageTypeName,
+                    'carrier' => 'postnl',
+                    'isPickup' => false,
+                ])->toArray();
+            }
+
             if (isset($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY]) && $cc === AbstractConsignment::CC_NL) {
                 $myParcelData['myparcel']['deliveryData']->packageType = $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY];
             }
@@ -336,21 +366,6 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
             if (!$price) {
                 continue;
-            }
-
-
-            $cartExtension = $cart->getExtension(MyParcelDefaults::CART_EXTENSION_KEY);
-            $myParcelData = $cartExtension ? $cartExtension->getVars() : [];
-            if (empty($myParcelData)
-                || empty($myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY])
-            ) {
-                $myParcelData[CartService::PACKAGE_TYPE_CART_DATA_KEY] = 'mailbox';
-                // todo: init 'deliveryData' thing with default delivery data (carrier, ispickup, etc.)
-                $myParcelData['myparcel'] = [];
-                $myParcelData['myparcel']['deliveryData'] = new stdClass();
-                $myParcelData['myparcel']['deliveryData']->carrier = CarrierPostNL::NAME;
-                $cartExtension = new ArrayStruct($myParcelData);
-                $cart->addExtension(MyParcelDefaults::CART_EXTENSION_KEY, $cartExtension);
             }
 
             $costs = $this->calculateShippingCosts(
