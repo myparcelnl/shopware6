@@ -263,6 +263,15 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                         }
                         $weight += $lineItem->getQuantity() * $lineItem->getDeliveryInformation()->getWeight() * 1000;
                     }
+//
+//                    $packageSmallWeightLimit = (int) $this->systemConfigService->getString(
+//                        'MyPaShopware.config.packageSmallWeightLimitGrams',
+//                        $context->getSalesChannelId()
+//                    ) ?: 2000;
+//
+//                    if ($weight <= $packageSmallWeightLimit) {
+//                        $packageTypeName = AbstractConsignment::PACKAGE_TYPE_PACKAGE_SMALL_NAME;
+//                    }
 
                     $mailboxWeightLimit = (int) $this->systemConfigService->getString(
                         'MyPaShopware.config.mailboxWeightLimitGrams',

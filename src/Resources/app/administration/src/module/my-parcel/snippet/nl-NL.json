@@ -93,6 +93,7 @@
           "actionTypeCreateLabel": "Maak label",
           "actionTypeCreateConsignment": "Maak zending",
           "packageTypePackageLabel": "Pakket",
+          "packageTypePackageSmallLabel": "Klein pakket",
           "packageTypeMailboxLabel": "Brievenbuspakket",
           "packageTypeLetterLabel": "Briefpost",
           "packageTypeDigitalStampLabel": "Digitale postzegel",

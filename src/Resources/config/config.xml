@@ -79,8 +79,8 @@
 
         <input-field type="single-select">
             <name>packageType</name>
-            <label>Package type</label>
-            <label lang="nl-NL">Pakkettype</label>
+            <label>Default package type</label>
+            <label lang="nl-NL">Standaard pakkettype</label>
             <defaultValue>package</defaultValue>
             <options>
                 <option>
@@ -88,6 +88,12 @@
                     <name>Package</name>
                     <name lang="de-DE">Paket</name>
                     <name lang="nl-NL">Pakket</name>
+                </option>
+                <option>
+                    <id>small_package</id>
+                    <name>Small package</name>
+                    <name lang="de-DE">Kleines Paket</name>
+                    <name lang="nl-NL">Klein pakket</name>
                 </option>
                 <option>
                     <id>mailbox</id>
@@ -132,6 +138,21 @@
             </helpText>
             <helpText lang="nl-NL">Boven dit gewicht worden bestellingen automatisch beschouwd als pakket, niet als
                 brievenbuspakje.
+            </helpText>
+            <defaultValue>2000</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>packageSmallWeightLimitGrams</name>
+            <label>Small package weight in grams</label>
+            <label lang="de-DE">Gewicht des kleines Paketes in Gramm</label>
+            <label lang="nl-NL">Klein pakket gewicht in grammen</label>
+            <helpText>Above this weight, orders will automatically be considered package, not small package.
+            </helpText>
+            <helpText lang="de-DE">Über diesem Gewicht werden Bestellungen automatisch als Paket und nicht als Kleines-Paket betrachtet.
+            </helpText>
+            <helpText lang="nl-NL">Boven dit gewicht worden bestellingen automatisch beschouwd als pakket, niet als
+                klein pakket.
             </helpText>
             <defaultValue>2000</defaultValue>
         </input-field>

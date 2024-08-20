@@ -93,6 +93,7 @@
           "actionTypeCreateLabel": "Create label",
           "actionTypeCreateConsignment": "Create shipment",
           "packageTypePackageLabel": "Package",
+          "packageTypePackageSmallLabel": "Small package",
           "packageTypeMailboxLabel": "Mailbox",
           "packageTypeLetterLabel": "Letter",
           "packageTypeDigitalStampLabel": "Digital stamp",

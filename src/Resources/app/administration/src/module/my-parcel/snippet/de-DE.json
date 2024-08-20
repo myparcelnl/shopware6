@@ -93,6 +93,7 @@
           "actionTypeCreateLabel": "Etikett erstellen",
           "actionTypeCreateConsignment": "Sendung erstellen",
           "packageTypePackageLabel": "Paket",
+          "packageTypePackageSmallLabel": "Kleines Paket",
           "packageTypeMailboxLabel": "Mailbox",
           "packageTypeLetterLabel": "Brief",
           "packageTypeDigitalStampLabel": "Digitaler Stempel",
