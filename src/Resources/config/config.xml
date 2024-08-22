@@ -142,21 +142,6 @@
             <defaultValue>2000</defaultValue>
         </input-field>
 
-        <input-field type="int">
-            <name>packageSmallWeightLimitGrams</name>
-            <label>Small package weight in grams</label>
-            <label lang="de-DE">Gewicht des kleines Paketes in Gramm</label>
-            <label lang="nl-NL">Klein pakket gewicht in grammen</label>
-            <helpText>Above this weight, orders will automatically be considered package, not small package.
-            </helpText>
-            <helpText lang="de-DE">Über diesem Gewicht werden Bestellungen automatisch als Paket und nicht als Kleines-Paket betrachtet.
-            </helpText>
-            <helpText lang="nl-NL">Boven dit gewicht worden bestellingen automatisch beschouwd als pakket, niet als
-                klein pakket.
-            </helpText>
-            <defaultValue>2000</defaultValue>
-        </input-field>
-
         <input-field type="bool">
             <name>allowSetPackageTypeButton</name>
             <label>Allow set package type button</label>
