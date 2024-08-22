@@ -54,7 +54,7 @@
     },
     "require": {
         "composer-runtime-api": "^2.0",
-        "myparcelnl/sdk": "^7",
+        "myparcelnl/sdk": "^7.15.4",
         "shopware/core": "^6.5",
         "shopware/administration": "^6.5",
         "shopware/storefront": "^6.5"
