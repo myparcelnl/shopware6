@@ -1,3 +1,10 @@
+# Version 2.6.0
+
+#### Neue Funktionen
+
+- Funktion: Kleines Paket hinzufügen
+- Funktion: Abholadresse bei Auswahl in der Bestellung registrieren
+
 # Version 2.4.0
 
 #### Neue Funktionen

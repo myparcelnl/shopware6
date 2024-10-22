@@ -1,3 +1,10 @@
+# Version 2.6.0
+
+#### Nieuwe functies
+
+- feat: klein pakket toevoegen
+- feat: registreer afhaaladres in bestelling wanneer gekozen
+
 # Version 2.4.0
 
 #### Nieuwe functies
