@@ -1,3 +1,14 @@
+# Version 2.7.0
+
+#### Nieuwe functies
+
+- feat: klein pakket toevoegen
+- feat: registreer afhaaladres in bestelling wanneer gekozen
+
+# Versie 2.6.0
+
+- Alleen voor shopware 6.4.
+
 # Versie 2.5.0
 
 #### Nieuwe functies

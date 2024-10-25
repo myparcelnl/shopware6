@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b652a9d543354d42852e8f7d894c816b",
+    "content-hash": "d14a36fa5916c3344b1057c20a7605f1",
     "packages": [
         {
             "name": "myparcelnl/sdk",
-            "version": "7.8.4",
+            "version": "7.18.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:myparcelnl/sdk.git",
-                "reference": "9436cff3f613a3ce18e18f1cd73cf65840a24b05"
+                "url": "https://github.com/myparcelnl/sdk.git",
+                "reference": "e6bacc58217c0774b6c32ef0da2028cc2cb3bf1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myparcelnl/sdk/zipball/9436cff3f613a3ce18e18f1cd73cf65840a24b05",
-                "reference": "9436cff3f613a3ce18e18f1cd73cf65840a24b05",
+                "url": "https://api.github.com/repos/myparcelnl/sdk/zipball/e6bacc58217c0774b6c32ef0da2028cc2cb3bf1f",
+                "reference": "e6bacc58217c0774b6c32ef0da2028cc2cb3bf1f",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,11 @@
                 "myparcel",
                 "postnl"
             ],
-            "time": "2023-10-26T09:01:41+00:00"
+            "support": {
+                "issues": "https://github.com/myparcelnl/sdk/issues",
+                "source": "https://github.com/myparcelnl/sdk/tree/v7.18.0"
+            },
+            "time": "2024-10-23T09:14:24+00:00"
         }
     ],
     "packages-dev": [],

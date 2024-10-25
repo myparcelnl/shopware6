@@ -1,3 +1,14 @@
+# Version 2.7.0
+
+#### Neue Funktionen
+
+- Funktion: Kleines Paket hinzufügen
+- Funktion: Abholadresse bei Auswahl in der Bestellung registrieren
+
+# Version 2.6.0
+
+- Nur für Shopware 6.4.
+
 # Version 2.5.0
 
 #### Neue Funktionen

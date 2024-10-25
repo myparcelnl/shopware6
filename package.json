@@ -1,6 +1,6 @@
 {
   "name": "@myparcel/shopware-plugin",
-  "version": "2.5.0",
+  "version": "2.7.0",
   "private": true,
   "license": "MIT",
   "workspaces": [

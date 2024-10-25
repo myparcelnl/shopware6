@@ -1,3 +1,14 @@
+# Version 2.7.0
+
+#### New features
+
+- feat: add small package
+- feat: register pickup address in order when chosen
+
+# Version 2.6.0
+
+- For shopware 6.4 only.
+
 # Version 2.5.0
 
 #### New features
