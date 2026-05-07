@@ -5,16 +5,12 @@ namespace MyPa\Shopware\Storefront\Controller;
 use MyParcelNL\Sdk\src\Services\CheckApiKeyService;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"administration"}})
- */
+#[Route(defaults: ['_routeScope' => ['administration']])]
 class CredentialsTestController
 {
-    /**
-     * @Route(path="/api/_action/myparcel-api-test/verify")
-     */
+    #[Route(path: '/api/_action/myparcel-api-test/verify')]
     public function check(RequestDataBag $dataBag): JsonResponse
     {
         $apiKey = $dataBag->get('MyPaShopware.config.myParcelApiKey');

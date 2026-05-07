@@ -11,7 +11,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ShipmentController extends StorefrontController
 {
@@ -55,16 +55,7 @@ class ShipmentController extends StorefrontController
         $this->shipmentService = $shipmentService;
     }
 
-    /**
-     * @Route(
-     *     "/api//_action/myparcel/shipment/all",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ShipmentController::ROUTE_NAME_ALL,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     */
+    #[Route('/api//_action/myparcel/shipment/all', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_ALL, methods: ['GET'])]
     public function all(): JsonResponse
     {
         return new JsonResponse([
@@ -73,19 +64,7 @@ class ShipmentController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/shipment/create",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ShipmentController::ROUTE_NAME_CREATE,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/shipment/create', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_CREATE, methods: ['POST'])]
     public function createForOrder(Request $request): JsonResponse //NOSONAR
     {
         $context = new Context(new SystemSource());

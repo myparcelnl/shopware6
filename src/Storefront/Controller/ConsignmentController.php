@@ -13,7 +13,6 @@ use MyPa\Shopware\Service\Shipment\ShipmentService;
 use MyParcelNL\Sdk\src\Exception\MissingFieldException;
 use MyParcelNL\Sdk\src\Helper\TrackTraceUrl;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -21,7 +20,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ConsignmentController extends StorefrontController
 {
@@ -96,17 +95,7 @@ class ConsignmentController extends StorefrontController
         $this->systemConfigService = $systemConfigService;
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/consignment/get-for-shipping-option",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_GET_FOR_SHIPPING_OPTION,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param RequestDataBag $request
-     * @return JsonResponse
-     */
+    #[Route('/api/_action/myparcel/consignment/get-for-shipping-option', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_GET_FOR_SHIPPING_OPTION, methods: ['POST'])]
     public function getForShippingOption(RequestDataBag $request): JsonResponse
     {
         $shippingOptionId = $request->get(self::REQUEST_KEY_SHIPPING_OPTION_ID);
@@ -156,19 +145,7 @@ class ConsignmentController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/consignment/create-consignments",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_CREATE_CONSIGNMENTS,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/consignment/create-consignments', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_CREATE_CONSIGNMENTS, methods: ['POST'])]
     public function createConsignments(Request $request): JsonResponse
     {
         /**
@@ -241,19 +218,7 @@ class ConsignmentController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/consignment/download-labels",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_DOWNLOAD_LABELS,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws MissingFieldException
-     */
+    #[Route('/api/_action/myparcel/consignment/download-labels', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_DOWNLOAD_LABELS, methods: ['POST'])]
     public function downloadLabels(Request $request): JsonResponse
     {
         if (
@@ -303,18 +268,7 @@ class ConsignmentController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/consignment/track-and-trace",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_TRACK_AND_TRACE,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws MissingFieldException
-     */
+    #[Route('/api/_action/myparcel/consignment/track-and-trace', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_TRACK_AND_TRACE, methods: ['POST'])]
     public function trackAndTrace(Request $request): JsonResponse
     {
         if (
@@ -350,19 +304,7 @@ class ConsignmentController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/consignment/get-by-reference-id/{$referenceId}",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_GET_BY_REFERENCE_ID,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param string $referenceId
-     *
-     * @return JsonResponse
-     * @throws MissingFieldException
-     */
+    #[Route('/api/_action/myparcel/consignment/get-by-reference-id/{referenceId}', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_GET_BY_REFERENCE_ID, methods: ['POST'])]
     public function getByReferenceId(string $referenceId): JsonResponse
     {
         return new JsonResponse([

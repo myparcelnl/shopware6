@@ -7,7 +7,7 @@ use MyPa\Shopware\Facade\MyParcelFacade;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class MyParcelController extends StorefrontController
 {
@@ -43,17 +43,7 @@ class MyParcelController extends StorefrontController
         $this->myParcelFacade = $myParcelFacade;
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=MyParcelController::ROUTE_NAME_GET_CARRIERS,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/carriers', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_GET_CARRIERS, methods: ['GET'])]
     public function getCarriers(): JsonResponse
     {
         return new JsonResponse([
@@ -62,17 +52,7 @@ class MyParcelController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/package_types",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=MyParcelController::ROUTE_NAME_GET_PACKAGE_TYPES,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/package_types', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_GET_PACKAGE_TYPES, methods: ['GET'])]
     public function getPackageTypes(): JsonResponse
     {
         return new JsonResponse([

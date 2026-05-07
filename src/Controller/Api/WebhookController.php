@@ -10,7 +10,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class WebhookController extends StorefrontController
 {
@@ -34,15 +34,7 @@ class WebhookController extends StorefrontController
         $this->shipmentsRepository = $shipments;
     }
 
-    /**
-     * @Route("/myparcel/webhook", defaults={"csrf_protected"=false, "_routeScope"={"storefront"}}, name="frontend.myparcel.webhook",
-     *                                           options={"seo"="false"}, methods={"GET", "POST"})
-     *
-     * @param Request             $request
-     * @param SalesChannelContext $context
-     *
-     * @return JsonResponse
-     */
+    #[Route('/myparcel/webhook', defaults: ['csrf_protected' => false, '_routeScope' => ['storefront']], name: 'frontend.myparcel.webhook', options: ['seo' => 'false'], methods: ['GET', 'POST'])]
     public function webhookCall(Request $request, SalesChannelContext $context): JsonResponse
     {
         $this->logger->debug('Webhook called:', ['request' => $request]);

@@ -6,7 +6,7 @@
     <services>
         <defaults public="true"/>
 
-        <service id="myparcel.logger" class="Symfony\Bridge\Monolog\Logger">
+        <service id="myparcel.logger" class="Monolog\Logger">
             <argument>MyParcel</argument>
 
             <argument type="collection">

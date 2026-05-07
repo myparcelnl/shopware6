@@ -16,7 +16,7 @@ use Shopware\Core\PlatformRequest;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ShippingOptionsController extends StorefrontController
 {
@@ -72,17 +72,7 @@ class ShippingOptionsController extends StorefrontController
         $this->shippingOptionsService = $shippingOptionsService;
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/carriers",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ConsignmentController::ROUTE_NAME_GET_CARRIERS,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/carriers', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: 'api.action.myparcel.carriers', methods: ['GET'])]
     public function getDeliveryTypes(): JsonResponse
     {
         return new JsonResponse([
@@ -91,19 +81,7 @@ class ShippingOptionsController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/shipping-options/create",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ShippingOptionsController::ROUTE_NAME_CREATE,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/_action/myparcel/shipping-options/create', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_CREATE, methods: ['POST'])]
     public function createForOrder(Request $request): JsonResponse
     {
         $orderId = $request->get(self::REQUEST_KEY_ORDER_ID);
@@ -217,16 +195,7 @@ class ShippingOptionsController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/_action/myparcel/shipping-options/all",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ShippingOptionsController::ROUTE_NAME_ALL,
-     *     methods={"GET"}
-     *     )
-     *
-     * @return JsonResponse
-     */
+    #[Route('/api/_action/myparcel/shipping-options/all', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_ALL, methods: ['GET'])]
     public function all(): JsonResponse
     {
         return new JsonResponse([
@@ -235,19 +204,7 @@ class ShippingOptionsController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route(
-     *     "/api/v{version}/_action/myparcel/shipping-options/show",
-     *     defaults={"auth_enabled"=true,"_routeScope"={"api"}},
-     *     name=ShippingOptionsController::ROUTE_NAME_SHOW,
-     *     methods={"POST"}
-     *     )
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     * @throws Exception
-     */
+    #[Route('/api/v{version}/_action/myparcel/shipping-options/show', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_SHOW, methods: ['POST'])]
     public function show(Request $request): JsonResponse
     {
         $shippingOptionsId = $request->get(self::REQUEST_KEY_SHIPPING_OPTIONS_ID);

@@ -9,11 +9,9 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class CartController extends AbstractController
 {
     protected CartService $cartService;
@@ -32,13 +30,7 @@ class CartController extends AbstractController
         $this->configReader = $configReader;
     }
 
-    /**
-     * @Route("/widget/checkout/myparcel/add-to-cart", name="frontend.checkout.myparcel.add-to-cart", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=false})
-     *
-     * @param RequestDataBag $data
-     * @param SalesChannelContext $context
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
+    #[Route('/widget/checkout/myparcel/add-to-cart', name: 'frontend.checkout.myparcel.add-to-cart', options: ['seo' => false], methods: ['POST'], defaults: ['XmlHttpRequest' => true, 'csrf_protected' => false])]
     public function addDataToCart(RequestDataBag $data, SalesChannelContext $context)
     {
         $myParcelData = $data->get('myparcel');
@@ -60,13 +52,7 @@ class CartController extends AbstractController
         return $this->json('No delivery data found', 500);
     }
 
-    /**
-     * @Route("/widget/checkout/myparcel/set-package-type", name="frontend.checkout.myparcel.set-package-type", options={"seo"=false}, methods={"POST"}, defaults={"XmlHttpRequest"=true, "csrf_protected"=false})
-     *
-     * @param RequestDataBag $data
-     * @param SalesChannelContext $context
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
+    #[Route('/widget/checkout/myparcel/set-package-type', name: 'frontend.checkout.myparcel.set-package-type', options: ['seo' => false], methods: ['POST'], defaults: ['XmlHttpRequest' => true, 'csrf_protected' => false])]
     public function setPackageType(RequestDataBag $data, SalesChannelContext $context)
     {
         $packageType = $data->get(CartService::PACKAGE_TYPE_REQUEST_KEY);
