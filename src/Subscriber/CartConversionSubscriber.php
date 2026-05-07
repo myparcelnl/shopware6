@@ -5,6 +5,7 @@ namespace MyPa\Shopware\Subscriber;
 use MyPa\Shopware\Core\Content\ShippingOption\ShippingOptionEntity;
 use MyPa\Shopware\Defaults;
 use MyPa\Shopware\Service\Config\ConfigGenerator;
+use MyParcelNL\Sdk\src\Model\Consignment\PostNLConsignment;
 use MyPa\Shopware\Service\Config\MyParcelCarriers;
 use MyParcelNL\Sdk\src\Model\Consignment\AbstractConsignment;
 use Psr\Log\LoggerInterface;
@@ -163,7 +164,9 @@ class CartConversionSubscriber implements EventSubscriberInterface
      */
     private function setGeneralDefaults(string $salesChannelId): array
     {
-        $options = [];
+        $options = [
+            ShippingOptionEntity::FIELD_CARRIER_ID => PostNLConsignment::CARRIER_ID,
+        ];
 
         foreach (self::SHIPPING_OPTIONS_WITH_DEFAULT as $key => $value) {
             switch ($key) {
