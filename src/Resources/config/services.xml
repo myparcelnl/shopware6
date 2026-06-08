@@ -6,15 +6,6 @@
     <services>
         <defaults public="true"/>
 
-        <!-- Snippets -->
-        <service id="MyPa\Shopware\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB">
-            <tag name="shopware.snippet.file"/>
-        </service>
-
-        <service id="MyPa\Shopware\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL">
-            <tag name="shopware.snippet.file"/>
-        </service>
-
         <!-- Services -->
         <service id="MyPa\Shopware\Service\Consignment\ConsignmentService">
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
