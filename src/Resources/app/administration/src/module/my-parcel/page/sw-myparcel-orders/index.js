@@ -127,7 +127,6 @@ Component.register('sw-myparcel-orders', {
                 criteria.addFilter(Criteria.equalsAny('campaignCode', this.campaignCodeFilter));
             }
 
-            criteria.addFilter(Criteria.contains('order.deliveries.shippingMethod.customFields', 'myparcel'));
             criteria.addFilter(Criteria.equals('order.deliveries.stateMachineState.name', 'open'));
 
             criteria.addAggregation(Criteria.count('countTotal', 'id'));
