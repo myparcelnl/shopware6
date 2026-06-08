@@ -14,7 +14,7 @@ class Migration1629277711AddShippingOptionsLocationFields extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate('
+        $connection->executeStatement('
             ALTER TABLE `kiener_my_parcel_shipping_option`
             ADD `location_id` INT(11) NULL AFTER `large_format`,
             ADD `location_name` VARCHAR(255) NULL AFTER `location_id`,

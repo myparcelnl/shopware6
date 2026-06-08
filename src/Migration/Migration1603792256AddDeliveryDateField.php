@@ -14,7 +14,7 @@ class Migration1603792256AddDeliveryDateField extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate('
+        $connection->executeStatement('
             ALTER TABLE `kiener_my_parcel_shipping_option`
             ADD `delivery_date` DATE
             AFTER `package_type`

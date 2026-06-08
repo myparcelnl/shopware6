@@ -14,7 +14,7 @@ class Migration1593609756ShippingMethodEntity extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate('
+        $connection->executeStatement('
             CREATE TABLE IF NOT EXISTS `kiener_my_parcel_shipping_method` (
                 `id` BINARY(16) NOT NULL,
                 `carrier_id` INT(11) NOT NULL,
