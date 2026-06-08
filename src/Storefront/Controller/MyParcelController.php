@@ -2,8 +2,6 @@
 
 namespace MyPa\Shopware\Storefront\Controller;
 
-use Exception;
-use MyPa\Shopware\Facade\MyParcelFacade;
 use MyPa\Shopware\Service\Consignment\ConsignmentService;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,24 +21,9 @@ class MyParcelController extends StorefrontController
      */
     private $consignmentService;
 
-    /**
-     * @var MyParcelFacade
-     */
-    private $myParcelFacade;
-
-    /**
-     * MyParcelController constructor.
-     *
-     * @param ConsignmentService $consignmentService
-     * @param MyParcelFacade     $myParcelFacade
-     */
-    public function __construct(
-        ConsignmentService $consignmentService,
-        MyParcelFacade     $myParcelFacade
-    )
+    public function __construct(ConsignmentService $consignmentService)
     {
         $this->consignmentService = $consignmentService;
-        $this->myParcelFacade = $myParcelFacade;
     }
 
     #[Route('/api/_action/myparcel/carriers', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_GET_CARRIERS, methods: ['GET'])]

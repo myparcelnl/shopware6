@@ -1,7 +1,5 @@
 import './page/sw-myparcel-orders';
 import './page/sw-myparcel-consignments';
-import './component/config/myparcel-dropoff-location'
-
 import nlNL from './snippet/nl-NL.json';
 import deDE from './snippet/de-DE.json';
 import enGB from './snippet/en-GB.json';
