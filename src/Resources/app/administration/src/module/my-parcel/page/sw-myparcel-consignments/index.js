@@ -128,6 +128,10 @@ Component.register('sw-myparcel-consignments', {
             return this.getConsignmentColumns();
         },
 
+        dateFilter() {
+            return Shopware.Filter.getByName('date');
+        },
+
         createMultipleLabelsAvailable() {
             return !!this.selectedConsignmentIds && this.selectionCount > 0 || false;
         },

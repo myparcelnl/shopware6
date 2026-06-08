@@ -107,6 +107,14 @@ Component.register('sw-myparcel-orders', {
             return this.getOrderColumns();
         },
 
+        currencyFilter() {
+            return Shopware.Filter.getByName('currency');
+        },
+
+        dateFilter() {
+            return Shopware.Filter.getByName('date');
+        },
+
         createMultipleConsignmentsAvailable() {
             return !!this.selectedShippingOptionIds && this.selectionCount > 0 || false;
         },

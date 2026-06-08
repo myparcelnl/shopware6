@@ -41,7 +41,7 @@
                 @selection-change="onSelectionChanged">
 
             <template #column-createdAt="{ item }">
-                {{ item.createdAt | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                {{ dateFilter(item.createdAt, {hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
             <template #column-order.orderNumber="{ item }">
@@ -49,7 +49,7 @@
             </template>
 
             <template #column-order.orderDateTime="{ item }">
-                {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                {{ dateFilter(item.order.orderDateTime, {hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
             <template #column-barCode="{ item }">
@@ -61,7 +61,7 @@
             </template>
 
             <template #column-shippingOption.deliveryDate="{ item }">
-                {{ item.shippingOption.deliveryDate | date() }}
+                {{ dateFilter(item.shippingOption.deliveryDate) }}
             </template>
 
             <template #column-shippingOption.carrierId="{ item }">

@@ -51,7 +51,7 @@
                     </template>
 
                     <template #column-order.amountTotal="{ item }">
-                        {{ item.order.amountTotal | currency(item.order.currency.translated.shortName) }}
+                        {{ currencyFilter(item.order.amountTotal, item.order.currency.translated.shortName) }}
                     </template>
 
                     <template #column-order.stateMachineState.name="{ item }">
@@ -77,7 +77,7 @@
                     </template>
 
                     <template #column-deliveryDate="{ item }">
-                        {{ item.deliveryDate | date() }}
+                        {{ dateFilter(item.deliveryDate) }}
                     </template>
 
                     <template #column-carrierId="{ item }">
@@ -94,7 +94,7 @@
                     </template>
 
                     <template #column-order.orderDateTime="{ item }">
-                        {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                        {{ dateFilter(item.order.orderDateTime, {hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
                     </template>
 
                     <template #column-pickupLocation="{ item }">
