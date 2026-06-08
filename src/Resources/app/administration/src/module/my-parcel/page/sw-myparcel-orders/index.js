@@ -145,8 +145,11 @@ Component.register('sw-myparcel-orders', {
             criteria.addAssociation('order.salesChannel');
             criteria.addAssociation('order.orderCustomer');
             criteria.addAssociation('order.currency');
+            criteria.addAssociation('order.stateMachineState');
             criteria.addAssociation('order.transactions');
+            criteria.addAssociation('order.transactions.stateMachineState');
             criteria.addAssociation('order.deliveries');
+            criteria.addAssociation('order.deliveries.stateMachineState');
 
             return criteria;
         },
