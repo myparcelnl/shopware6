@@ -15,8 +15,8 @@
             "deliveryTypes": {
                 "morning": "Morgenzustellung",
                 "standard": "Standardlieferung",
-                "Abend": "Abendzustellung",
-                "Abholung": "Abholpunkt"
+                "evening": "Abendzustellung",
+                "pickup": "Abholpunkt"
             },
             "carriers": {
                 "postNL": "PostNL",

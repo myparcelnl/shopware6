@@ -72,7 +72,7 @@ class ShippingOptionsController extends StorefrontController
         $this->shippingOptionsService = $shippingOptionsService;
     }
 
-    #[Route('/api/_action/myparcel/carriers', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: 'api.action.myparcel.carriers', methods: ['GET'])]
+    #[Route('/api/_action/myparcel/delivery-types', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: 'api.action.myparcel.delivery_types', methods: ['GET'])]
     public function getDeliveryTypes(): JsonResponse
     {
         return new JsonResponse([

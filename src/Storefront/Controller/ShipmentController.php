@@ -55,7 +55,7 @@ class ShipmentController extends StorefrontController
         $this->shipmentService = $shipmentService;
     }
 
-    #[Route('/api//_action/myparcel/shipment/all', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_ALL, methods: ['GET'])]
+    #[Route('/api/_action/myparcel/shipment/all', defaults: ['auth_enabled' => true, '_routeScope' => ['api']], name: self::ROUTE_NAME_ALL, methods: ['GET'])]
     public function all(): JsonResponse
     {
         return new JsonResponse([
