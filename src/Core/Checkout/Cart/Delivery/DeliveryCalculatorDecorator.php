@@ -14,6 +14,7 @@ use Shopware\Core\Checkout\Cart\Delivery\Struct\Delivery;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\DeliveryCollection;
 use Shopware\Core\Checkout\Cart\LineItem\CartDataCollection;
 use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
+use Shopware\Core\Checkout\Cart\Price\CashRounding;
 use Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
@@ -78,7 +79,8 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         PercentageTaxRuleBuilder  $percentageTaxRuleBuilder,
         AbstractTaxDetector       $taxDetector,
         SystemConfigService       $systemConfigService,
-        ConfigGenerator           $configGenerator
+        ConfigGenerator           $configGenerator,
+        ?CashRounding             $cashRounding = null
     )
     {
         $this->priceCalculator = $priceCalculator;
@@ -87,7 +89,13 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
         $this->systemConfigService = $systemConfigService;
         $this->configGenerator = $configGenerator;
 
-        parent::__construct($priceCalculator, $percentageTaxRuleBuilder);
+        // SW 6.6 added CashRounding as a third constructor argument
+        $parentParamCount = (new \ReflectionMethod(DeliveryCalculator::class, '__construct'))->getNumberOfParameters();
+        if ($parentParamCount >= 3 && $cashRounding !== null) {
+            parent::__construct($priceCalculator, $percentageTaxRuleBuilder, $cashRounding);
+        } else {
+            parent::__construct($priceCalculator, $percentageTaxRuleBuilder);
+        }
     }
 
     /**
