@@ -11,6 +11,7 @@
             <argument type="service" id="Shopware\Core\Checkout\Cart\Tax\TaxDetector"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="MyPa\Shopware\Service\Config\ConfigGenerator"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\CashRounding" on-invalid="null"/>
         </service>
     </services>
 </container>

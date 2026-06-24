@@ -14,7 +14,7 @@ class Migration1604328197AddConsignmentReferenceField extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate('
+        $connection->executeStatement('
             ALTER TABLE `kiener_my_parcel_shipment`
             ADD `consignment_reference` VARCHAR(255)
             AFTER `order_version_id`

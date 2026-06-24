@@ -197,6 +197,10 @@ export default class DeliveryOptionsPlugin extends Plugin {
             return;
         }
         ElementReplaceHelper.replaceFromMarkup(html.content, '.checkout-aside-summary-container');
+        if (html.hash) {
+            const hashInput = document.querySelector('[name="hash"]');
+            if (hashInput) hashInput.value = html.hash;
+        }
     }
 
     _showWarningAlert(innerHTML) {

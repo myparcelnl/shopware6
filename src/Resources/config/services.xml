@@ -6,15 +6,6 @@
     <services>
         <defaults public="true"/>
 
-        <!-- Snippets -->
-        <service id="MyPa\Shopware\Resources\app\storefront\src\snippets\en_GB\SnippetFile_en_GB">
-            <tag name="shopware.snippet.file"/>
-        </service>
-
-        <service id="MyPa\Shopware\Resources\app\storefront\src\snippets\nl_NL\SnippetFile_nl_NL">
-            <tag name="shopware.snippet.file"/>
-        </service>
-
         <!-- Services -->
         <service id="MyPa\Shopware\Service\Consignment\ConsignmentService">
             <argument type="service" id="MyPa\Shopware\Service\Order\OrderService"/>
@@ -98,19 +89,7 @@
             <argument type="service" id="country.repository"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-        <!-- Facade -->
-        <service id="MyPa\Shopware\Facade\MyParcelFacade">
-            <argument type="service" id="logger"/>
-        </service>
-        <!-- Controller -->
-        <service id="MyPa\Shopware\Controller\Api\DropOffController">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-            <argument type="service" id="MyPa\Shopware\Facade\MyParcelFacade"/>
-        </service>
-
-        <service id="MyPa\Shopware\Storefront\Controller\ConsignmentController">
+<service id="MyPa\Shopware\Storefront\Controller\ConsignmentController">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

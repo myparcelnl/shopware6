@@ -41,7 +41,7 @@
                 @selection-change="onSelectionChanged">
 
             <template #column-createdAt="{ item }">
-                {{ item.createdAt | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                {{ dateFilter(item.createdAt, {hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
             <template #column-order.orderNumber="{ item }">
@@ -49,7 +49,7 @@
             </template>
 
             <template #column-order.orderDateTime="{ item }">
-                {{ item.order.orderDateTime | date({hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
+                {{ dateFilter(item.order.orderDateTime, {hour: '2-digit', minute: '2-digit', second: '2-digit'}) }}
             </template>
 
             <template #column-barCode="{ item }">
@@ -61,7 +61,7 @@
             </template>
 
             <template #column-shippingOption.deliveryDate="{ item }">
-                {{ item.shippingOption.deliveryDate | date() }}
+                {{ dateFilter(item.shippingOption.deliveryDate) }}
             </template>
 
             <template #column-shippingOption.carrierId="{ item }">
@@ -132,13 +132,14 @@
             <form>
 
                 <sw-base-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printOptionsHeading')" />
-                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createSingleLabel.printSmallLabel" />
+                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" :value="createSingleLabel.printSmallLabel" @update:value="createSingleLabel.printSmallLabel = $event" />
 
                 <sw-multi-select
                         :disabled="createSingleLabel.printSmallLabel === true"
                         :label="$tc('sw-myparcel.consignments.modals.createLabels.printPositionHeading')"
                         name="myparcel[print_position]"
-                        v-model="createSingleLabel.printPosition"
+                        :value="createSingleLabel.printPosition"
+                        @update:value="createSingleLabel.printPosition = $event"
                         :options="[
                                 { value: 1, label: $tc('sw-myparcel.consignments.modals.createLabels.positionTopLeftLabel') },
                                 { value: 2, label: $tc('sw-myparcel.consignments.modals.createLabels.positionTopRightLabel') },
@@ -167,13 +168,14 @@
             <form>
 
                 <sw-base-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printOptionsHeading')" />
-                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" value="1" v-model="createMultipleLabels.printSmallLabel" />
+                <sw-checkbox-field :label="$tc('sw-myparcel.consignments.modals.createLabels.printSmallLabelLabel')" name="myparcel[print_small_label]" :value="createMultipleLabels.printSmallLabel" @update:value="createMultipleLabels.printSmallLabel = $event" />
 
                 <sw-multi-select
                         :disabled="createMultipleLabels.printSmallLabel === true"
                         :label="$tc('sw-myparcel.consignments.modals.createLabels.printPositionHeading')"
                         name="myparcel[print_position]"
-                        v-model="createMultipleLabels.printPosition"
+                        :value="createMultipleLabels.printPosition"
+                        @update:value="createMultipleLabels.printPosition = $event"
                         :options="[
                                 { value: 1, label: $tc('sw-myparcel.consignments.modals.createLabels.positionTopLeftLabel') },
                                 { value: 2, label: $tc('sw-myparcel.consignments.modals.createLabels.positionTopRightLabel') },

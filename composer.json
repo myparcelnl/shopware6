@@ -53,11 +53,12 @@
         }
     },
     "require": {
+        "php": ">=8.1",
         "composer-runtime-api": "^2.0",
         "myparcelnl/sdk": "^7.15.4",
-        "shopware/core": "^6.5",
-        "shopware/administration": "^6.5",
-        "shopware/storefront": "^6.5"
+        "shopware/core": ">=6.5.8 <6.7",
+        "shopware/administration": ">=6.5.8 <6.7",
+        "shopware/storefront": ">=6.5.8 <6.7"
     },
     "scripts": {
         "post-install-cmd": [

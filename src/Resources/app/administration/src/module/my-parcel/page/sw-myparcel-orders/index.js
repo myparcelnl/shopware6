@@ -107,6 +107,14 @@ Component.register('sw-myparcel-orders', {
             return this.getOrderColumns();
         },
 
+        currencyFilter() {
+            return Shopware.Filter.getByName('currency');
+        },
+
+        dateFilter() {
+            return Shopware.Filter.getByName('date');
+        },
+
         createMultipleConsignmentsAvailable() {
             return !!this.selectedShippingOptionIds && this.selectionCount > 0 || false;
         },
@@ -127,7 +135,6 @@ Component.register('sw-myparcel-orders', {
                 criteria.addFilter(Criteria.equalsAny('campaignCode', this.campaignCodeFilter));
             }
 
-            criteria.addFilter(Criteria.contains('order.deliveries.shippingMethod.customFields', 'myparcel'));
             criteria.addFilter(Criteria.equals('order.deliveries.stateMachineState.name', 'open'));
 
             criteria.addAggregation(Criteria.count('countTotal', 'id'));
@@ -138,8 +145,11 @@ Component.register('sw-myparcel-orders', {
             criteria.addAssociation('order.salesChannel');
             criteria.addAssociation('order.orderCustomer');
             criteria.addAssociation('order.currency');
+            criteria.addAssociation('order.stateMachineState');
             criteria.addAssociation('order.transactions');
+            criteria.addAssociation('order.transactions.stateMachineState');
             criteria.addAssociation('order.deliveries');
+            criteria.addAssociation('order.deliveries.stateMachineState');
 
             return criteria;
         },

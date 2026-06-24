@@ -14,7 +14,7 @@ class Migration1593593459ShippingOptions extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $connection->executeUpdate('
+        $connection->executeStatement('
             CREATE TABLE IF NOT EXISTS `kiener_my_parcel_shipping_option` (
                 `id` BINARY(16) NOT NULL,
                 `order_id` BINARY(16) NOT NULL,
