@@ -1,9 +1,23 @@
+# Version 2.8.0
+
+#### New features
+
+- feat: shopware 6.6 support (SW 6.5.8–6.6.x)
+
+#### Improvements
+
+- fix: route collision in ShippingOptionsController and ShipmentController
+- fix: German snippet keys (Abend/Abholung)
+- chore: remove Instabox/drop-off point functionality
+
 # Version 2.7.0
 
 #### New features
 
 - feat: add small package
 - feat: register pickup address in order when chosen
+
+:warning: This release is for Shopware 6.5, use v2.6.0 if you need Shopware 6.4 compatibility.
 
 # Version 2.6.0
 
