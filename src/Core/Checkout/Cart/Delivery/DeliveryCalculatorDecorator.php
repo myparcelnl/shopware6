@@ -238,7 +238,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
-        if (!$calculatedLineItems->filter(static function($lineItem){
+        $hasChargeableItems = $calculatedLineItems->filter(static function($lineItem){
             if (!$lineItem->getDeliveryInformation()) {
                 return false;
             }
@@ -246,7 +246,11 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
                 return false;
             }
             return true;
-        })->count()) {
+        })->count();
+
+        $shippingIsFree = 0 === $hasChargeableItems;
+
+        if ($shippingIsFree) {
             $price = 0;
         }
 
@@ -306,7 +310,8 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             $price        = $this->configGenerator->getCostForCarrierWithOptions(
                 $deliveryData,
                 $context->getSalesChannelId(),
-                $price
+                $price,
+                $shippingIsFree
             );
         }
         $definition = new QuantityPriceDefinition($price, $rules, 1);

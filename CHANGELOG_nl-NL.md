@@ -1,3 +1,10 @@
+# Versie 2.8.1
+
+#### Verbeteringen
+
+- fix: vaste prijs brievenbuspakje wordt nu altijd berekend bij een brievenbuspakje in plaats van afgetopt op de (lagere) reguliere verzendkosten; gratis verzending blijft gratis
+- fix: de knop "activeer vaste prijs brievenbuspakje" wordt nu gerespecteerd, zodat een vaste prijs van 0 kan worden ingesteld
+
 # Version 2.7.0
 
 #### Nieuwe functies
