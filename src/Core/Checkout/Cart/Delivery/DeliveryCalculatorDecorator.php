@@ -238,7 +238,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
 
         $price = $this->getCurrencyPrice($priceCollection, $context);
 
-        $hasChargeableItems = $calculatedLineItems->filter(static function($lineItem){
+        $chargeableItemCount = $calculatedLineItems->filter(static function($lineItem){
             if (!$lineItem->getDeliveryInformation()) {
                 return false;
             }
@@ -248,7 +248,7 @@ class DeliveryCalculatorDecorator extends DeliveryCalculator
             return true;
         })->count();
 
-        $shippingIsFree = 0 === $hasChargeableItems;
+        $shippingIsFree = 0 === $chargeableItemCount;
 
         if ($shippingIsFree) {
             $price = 0;

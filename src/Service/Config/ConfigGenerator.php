@@ -46,6 +46,8 @@ class ConfigGenerator
      * Calculates the cost based on the selected options
      * @param array  $options
      * @param string $salesChannelId
+     * @param float  $totalPrice
+     * @param bool   $shippingIsFree
      * @return float
      */
     public function getCostForCarrierWithOptions(array $options, string $salesChannelId, float $totalPrice, bool $shippingIsFree = false): float
