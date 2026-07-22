@@ -14,6 +14,12 @@ class ConfigGenerator
         'deliveryDaysWindow',
         'dropOffDelay',
         'cutoffTime',
+        /*
+         * The fixed mailbox price has a dedicated enable toggle (priceMailboxEnabled<carrier>) separate from
+         * the price value (priceMailbox<carrier>). Without this entry isSettingEnabled() would read the price
+         * field as the toggle, ignoring the actual toggle and never applying a configured price of 0.
+         */
+        'priceMailbox',
     ];
 
     /**
@@ -40,9 +46,11 @@ class ConfigGenerator
      * Calculates the cost based on the selected options
      * @param array  $options
      * @param string $salesChannelId
+     * @param float  $totalPrice
+     * @param bool   $shippingIsFree
      * @return float
      */
-    public function getCostForCarrierWithOptions(array $options, string $salesChannelId, float $totalPrice): float
+    public function getCostForCarrierWithOptions(array $options, string $salesChannelId, float $totalPrice, bool $shippingIsFree = false): float
     {
         /**
          * Settings with a cost:
@@ -54,7 +62,16 @@ class ConfigGenerator
         $carrier = MyParcelCarriers::NPM_CARRIER_TO_CONFIG_CARRIER[$options['carrier']];
 
         if (isset($options['packageType']) && AbstractConsignment::PACKAGE_TYPE_MAILBOX_NAME === $options['packageType'] && $this->isSettingEnabled($salesChannelId, 'priceMailbox', $carrier)) {
-            return min ($totalPrice, $this->getConfigFloat($salesChannelId, 'priceMailbox', $carrier));
+            /**
+             * The mailbox price is a fixed price: when a mailbox package is chosen it must always be charged,
+             * regardless of the (possibly lower) regular shipping costs. The only exception is free shipping
+             * (e.g. a product with the free shipping setting, see #77), which must stay free.
+             */
+            if ($shippingIsFree) {
+                return $totalPrice;
+            }
+
+            return $this->getConfigFloat($salesChannelId, 'priceMailbox', $carrier);
         }
 
         //Is it pickup?

@@ -1,3 +1,10 @@
+# Version 2.8.1
+
+#### Improvements
+
+- fix: fixed mailbox price is now always charged for a mailbox package instead of being capped by the (lower) regular shipping costs; free shipping still stays free
+- fix: the "activate fixed mailbox price" toggle is now honored, so a fixed mailbox price of 0 can be configured
+
 # Version 2.8.0
 
 #### New features

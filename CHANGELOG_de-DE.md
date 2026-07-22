@@ -1,3 +1,10 @@
+# Version 2.8.1
+
+#### Verbesserungen
+
+- fix: Der feste Mailbox-Paket-Preis wird bei einem Mailbox-Paket jetzt immer berechnet, statt auf die (niedrigeren) regulären Versandkosten begrenzt zu werden; kostenloser Versand bleibt kostenlos
+- fix: Die Schaltfläche "festen Mailbox-Paket-Preis aktivieren" wird jetzt berücksichtigt, sodass ein fester Preis von 0 konfiguriert werden kann
+
 # Version 2.7.0
 
 #### Neue Funktionen
