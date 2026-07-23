@@ -14,9 +14,9 @@ help:
 # ------------------------------------------------------------------------------------------------------------
 
 install-prod: ## Installs only production dependencies
-	@php update-composer-require.php --env=prod --shopware=$(SHOPWARE_COMPATIBILIY)
+	@php update-composer-require.php --env=prod --shopware="$(SHOPWARE_COMPATIBILIY)"
 	@composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
-	@php update-composer-require.php --env=prod --shopware=$(SHOPWARE_COMPATIBILIY) --release
+	@php update-composer-require.php --env=prod --shopware="$(SHOPWARE_COMPATIBILIY)" --release
 	@yarn workspaces focus
 	@yarn install --immutable
 
