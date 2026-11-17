@@ -17,12 +17,11 @@ install-prod: ## Installs only production dependencies
 	@php update-composer-require.php --env=prod --shopware="$(SHOPWARE_COMPATIBILIY)"
 	@composer install --no-dev --no-scripts --no-interaction --optimize-autoloader
 	@php update-composer-require.php --env=prod --shopware="$(SHOPWARE_COMPATIBILIY)" --release
-	@yarn workspaces focus
-	@yarn install --immutable
+	@pnpm install --frozen-lockfile --prod
 
 install: ## Installs dev dependencies
 	@composer install
-	@yarn install
+	@pnpm install
 
 clean: ## Cleans vendor
 	@rm -rf vendor
