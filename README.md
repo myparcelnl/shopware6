@@ -18,5 +18,14 @@ as batch exports are possible.
 
 - Shopware >= 6.5.8 or 6.6.x
 
+## Development
+
+Building the plugin needs:
+
+- Node.js 24, version 24.21 or later
+- pnpm 12, version 12.11 or later
+
+Volta must not be installed: its `yarn` ignores `packageManager` and `devEngines`.
+
 [Backoffice]: https://backoffice.myparcel.nl/
 [generate one]: https://developer.myparcel.nl/nl/documentatie/15.shopware.html
